@@ -135,7 +135,7 @@ typedef union {
 
 typedef struct{
 	u1 tag; 
-	ST_tpConstantPool *info;// Verificar se aqui convem ser um ponteiro
+	ST_tpConstantPool info;// Verificar se aqui convem ser um ponteiro
 }ST_tpCp_info;
 
 /** ******************************************************************************
@@ -167,7 +167,7 @@ typedef struct{
 	u2 attribute_name_index;
 	u4 attribute_length;
 	u1 *info;
-	struct attribute_info *next;
+//	struct attribute_info *next;
 }ST_tpAttribute_info;
 
 /** ******************************************************************************
@@ -178,8 +178,8 @@ typedef struct{
 	u2 name_index;
 	u2 descriptor_index;
 	u2 attributes_count;
-	ST_tpAttribute_info attributes;
-	struct field_info *next;
+	ST_tpAttribute_info *attributes;
+	//struct field_info *next; Paulo, não entendi o motivo de ter o ponteiro para o próximo Field já que eles estão em sequência na memória.
 	//attribute_info attributes[attributes_count];
 }ST_tpField_info; 
 
@@ -191,8 +191,8 @@ typedef struct{
 	u2 name_index;
 	u2 descriptor_index;
 	u2 attributes_count;
-	ST_tpAttribute_info attributes;
-	struct method_info *next;
+	ST_tpAttribute_info *attributes;
+	//struct method_info *next;
 	//attribute_info attributes[attributes_count];
 }ST_tpMethod_info;  
 
@@ -254,7 +254,7 @@ typedef struct{
 	u2	methods_count;				// Numero de estruturas method_info na tabela de Methods
 	ST_tpMethod_info *method_info_table;	// Tabela de Metodos
 	u2	attributes_count;			// Numero de estruturas attributes_info na tabela Atributos
-	ST_tpAttribute_info **attribute_info_table; // Tabela de Attributos
+	ST_tpAttribute_info *attribute_info_table; // Tabela de Attributos
 	//u2 code_index;
 	//u2 main_name_index;
 	//u2 start_method_index;

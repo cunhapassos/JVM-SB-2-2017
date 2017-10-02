@@ -13,9 +13,6 @@
 
 
 int main(int argc, const char * argv[]) {
-    
-    printf("Hello, World!\n");
-    
-    EX_imprimirClassFile(LE_lerArquivo("/Users/paulopassos/Documents/GitHub/JVM-SB-2-2017/LEITOR-EXIBIDOR/File.class"));
+    EX_imprimirClassFile(LE_lerArquivo("/Users/danielmatias/Documents/JVM-SB-2-2017/LEITOR-EXIBIDOR/File.class"));
     return 0;
 }
