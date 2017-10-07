@@ -13,6 +13,10 @@
  *         	Define as estruturas do bytecode.
  *
  * @author PAULO DA CUNHA PASSOS - MAT. 10/0118577
+ * @author DANIEL MATIAS
+ * @author ALON MOTA
+ * @author JURAMIR
+ *
  * @version 1.0
  * @since 07/09/2017
  *
@@ -265,4 +269,4 @@ typedef struct{
 	//struct Class_file *left;
 }ST_tpClassFile;
 
-#endif
+#endif /* structures_h */

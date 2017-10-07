@@ -1,4 +1,5 @@
 /** ********************************************************************************
+ *
  *  Universidade de Brasilia - 02/2017
  *	Software Basico - Turma A
  *
@@ -8,10 +9,14 @@
  *
  *  @file leitor.c
  *  @brief 
- *			Modulo de implementaÁ„o: Modulo Leitor-Exibidor:
- *         	Implementa o leitor de bytecode.
+ *			Modulo de implementaco: Modulo Leitor-Exibidor:
+ *         	Implementa as funcoes de leitura do bytecode.
  *
  * @author PAULO DA CUNHA PASSOS - MAT. 10/0118577
+ * @author DANIEL MATIAS
+ * @author ALON MOTA
+ * @author JURAMIR
+ *
  * @version 1.0
  * @since 07/09/2017
  *
@@ -19,7 +24,15 @@
 
 
  #include "leitor.h"
- 
+
+/**
+ *  Descrição da função:
+ *       Le um byte de um arquivo apontado por pArq
+ *
+ *  @param  pArq - Ponteiro para o arquivo a ser lido
+ *
+ *  @return retorno     - Quatro bytes lidos do bytecode
+ */
  u1 LE_lerU1(FILE *pArq){
  	u1 retorno;
 	fread(&retorno, sizeof(u1), 1, pArq);
@@ -27,6 +40,14 @@
 	return retorno;
 }
 
+/**
+ *  Descrição da função:
+ *       Le dois bytes de um arquivo apontado por pArq
+ *
+ *  @param  pArq - Ponteiro para o arquivo a ser lido
+ *
+ *  @return retorno     - Dois bytes lidos do bytecode
+ */
 u2 LE_lerU2(FILE *pArq){
  	u2 retorno;
     u1 segu = LE_lerU1(pArq);
@@ -36,7 +57,15 @@ u2 LE_lerU2(FILE *pArq){
 	return retorno;
 }
 
- u4 LE_lerU4(FILE *pArq){
+/**
+ *  Descrição da função:
+ *       Le quatro bytes de um arquivo apontado por pArq
+ *
+ *  @param  pArq        - Ponteiro para o arquivo a ser lido
+ *
+ *  @return retorno     - Quatro bytes lidos do bytecode
+ */
+u4 LE_lerU4(FILE *pArq){
      u4 retorno;
      u1 quar = LE_lerU1(pArq);
      u1 terc = LE_lerU1(pArq);
@@ -47,6 +76,15 @@ u2 LE_lerU2(FILE *pArq){
      return retorno;
 }
 
+/**
+ *  Descrição da função:
+ *       Le a Tabela de Constantes do bytecode .class
+ *
+ *  @param  pArq                - Ponteiro para o arquivo a ser lido
+ *  @param  constant_pool_count - Numero de elementos da Tabela de Constantes a ser lida
+ *
+ *  @return constantPool        - Ponteiro para a Tabela de Constantes lida
+ */
 ST_tpCp_info *LE_lerConstant_pool(FILE *pArq, u2 constant_pool_count){
 	
 	ST_tpCp_info *constantPool = (ST_tpCp_info *) malloc((constant_pool_count-1)*sizeof(ST_tpCp_info));
@@ -105,12 +143,30 @@ ST_tpCp_info *LE_lerConstant_pool(FILE *pArq, u2 constant_pool_count){
     return constantPool;
 }
 
+/**
+ *  Descrição da função:
+ *       Le Tabela de Interfaces do bytecode .class
+ *
+ *  @param  pArq            - Ponteiro para o arquivo a ser lido
+ *  @param interfaces_count - Numero de elementos da Tabela de Interfaces a ser lida
+ *
+ *  @return pinterfaces     - Ponteiro para a Tabela de Interfaces lida
+ */
 u2 *LE_lerInterfaces(FILE *pArq, u2 interfaces_count) {
     u2 *pinterfaces = (u2 *) malloc(interfaces_count*sizeof(u2));
     fread(pinterfaces, 1, interfaces_count*2, pArq); //ainda não foi testado, pois o Classe de exemplo não possui nenhuma interface
     return pinterfaces;
 }
 
+/**
+ *  Descrição da função:
+ *       Le Tabela de Fields do bytecode .class
+ *
+ *  @param  pArq        - Ponteiro para o arquivo a ser lido
+ *  @param fields_count - Numero de elementos da Tabela de Fields a ser lida
+ *
+ *  @return pfields     - Ponteiro para a Tabela de Fields lida
+ */
 ST_tpField_info *LE_lerFields(FILE *pArq, u2 fields_count) {
     ST_tpField_info *pfields = (ST_tpField_info *) malloc(fields_count*sizeof(ST_tpField_info));
     ST_tpField_info *i = NULL;
@@ -131,6 +187,15 @@ ST_tpField_info *LE_lerFields(FILE *pArq, u2 fields_count) {
     return pfields;
 }
 
+/**
+ *  Descrição da função:
+ *       Le Tabela de Metodos do bytecode .class
+ *
+ *  @param  pArq         - Ponteiro para o arquivo a ser lido
+ *  @param methods_count - Numero de elementos da Tabela de Metodos a ser lida
+ *
+ *  @return pmethods     - Ponteiro para a Tabela de Metodos lida
+ */
 ST_tpMethod_info *LE_lerMethods(FILE *pArq, u2 methods_count) {
     ST_tpMethod_info *pmethods = (ST_tpMethod_info *) malloc(methods_count*sizeof(ST_tpMethod_info));
     ST_tpMethod_info *i;
@@ -151,6 +216,15 @@ ST_tpMethod_info *LE_lerMethods(FILE *pArq, u2 methods_count) {
     return pmethods;
 }
 
+/**
+ *  Descrição da função:
+ *       Le Tabela de Atributos do bytecode .class
+ *
+ *  @param  pArq            - Ponteiro para o arquivo a ser lido
+ *  @param attributes_count - Numero de elementos da Tabela de Atributos a ser lida
+ *
+ *  @return pattributes     - Ponteiro para a Tabela de Atributos lida
+ */
 ST_tpAttribute_info *LE_lerAttributes(FILE *pArq, u2 attributes_count) {
     ST_tpAttribute_info *pattributes = (ST_tpAttribute_info *) malloc(attributes_count*sizeof(ST_tpAttribute_info));
     ST_tpAttribute_info *i;
@@ -164,7 +238,16 @@ ST_tpAttribute_info *LE_lerAttributes(FILE *pArq, u2 attributes_count) {
 }
 
 // Função que recebe o nome qualificado do arquivo .class e carrega o seu conteúdo, retornando o ponteiro para a estrutura classFile
- ST_tpClassFile *LE_lerArquivo(char *nomeArquivo){
+/**
+ *  Descrição da função:
+ *       Função que recebe o nome qualificado do arquivo .class e carrega o seu conteúdo,
+ *       retornando o ponteiro para a estrutura classFile
+ *
+ *  @param  nomeArquivo     - Nome do arquivo a ser carregado
+ *
+ *  @return arqPontoClass   - Ponteiro para a a estrutura do .class carregada em memoria
+ */
+ ST_tpClassFile *LE_carregarClasse(char *nomeArquivo){
  	ST_tpClassFile *arqPontoClass = NULL; 				/* Cria ponteiro para estrutura classFile */
  	FILE * pArq = fopen(nomeArquivo,"rb");
  	
@@ -176,7 +259,7 @@ ST_tpAttribute_info *LE_lerAttributes(FILE *pArq, u2 attributes_count) {
 	
 	arqPontoClass = (ST_tpClassFile*) malloc(sizeof(ST_tpClassFile));
 	
-	/* Verifica se o malloc n„o retornou NULL, estando a memÛria cheia */
+	/* Verifica se o malloc n„o retornou NULL, estando a memoria cheia */
 	if(arqPontoClass == NULL){							
 		printf("A memoria esta cheia e nao foi possivel carregar o arquivo .class!\n");
 		return NULL;

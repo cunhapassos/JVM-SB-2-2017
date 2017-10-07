@@ -13,6 +13,16 @@
 
 
 int main(int argc, const char * argv[]) {
-    EX_imprimirClassFile(LE_lerArquivo("/Users/danielmatias/Documents/JVM-SB-2-2017/LEITOR-EXIBIDOR/File.class"));
+    
+    //char *pNomeArquivo = malloc(200*sizeof(char));
+    
+    //printf("Insira o nome do  arquivo .class: \n");
+    //scanf("%s", pNomeArquivo);
+    //getchar();
+    
+    
+    //EX_imprimirClassFile(LE_lerArquivo(pNomeArquivo));
+    EX_imprimirClassFile(LE_carregarClasse("/Users/paulopassos/OneDrive/Documentos/13º SEMESTRE/SOFTWARE BÁSICO/TRABALHOS/JVM-SB-2-2017/File.class"));
+    // /Users/paulopassos/OneDrive/Documentos/13º SEMESTRE/SOFTWARE BÁSICO/TRABALHOS/JVM-SB-2-2017/File.class
     return 0;
 }
