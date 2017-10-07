@@ -87,60 +87,60 @@ u4 LE_lerU4(FILE *pArq){
  */
 ST_tpCp_info *LE_lerConstant_pool(FILE *pArq, u2 constant_pool_count){
 	
-	ST_tpCp_info *constantPool = (ST_tpCp_info *) malloc((constant_pool_count-1)*sizeof(ST_tpCp_info));
-	ST_tpCp_info *i = NULL;
+	ST_tpCp_info *pConstantPool = (ST_tpCp_info *) malloc((constant_pool_count-1) * sizeof(ST_tpCp_info));
+	ST_tpCp_info *pI = NULL;
 	
-	for(i = constantPool; i <  (constantPool+constant_pool_count-1); i++ ){
-		i->tag = LE_lerU1(pArq);
-		switch(i->tag) {
+	for(pI = pConstantPool; pI <  (pConstantPool + constant_pool_count-1); pI++ ){
+		pI->tag = LE_lerU1(pArq);
+		switch(pI->tag) {
 			case CONSTANT_Utf8:
-				i->info.Utf8.length = LE_lerU2(pArq);
-				i->info.Utf8.bytes = malloc(i->info.Utf8.length*sizeof(u1));
+				pI->info.Utf8.length = LE_lerU2(pArq);
+				pI->info.Utf8.bytes = malloc(pI->info.Utf8.length*sizeof(u1));
 //                for(u1 *j=i->info.Utf8.bytes;j<(i->info.Utf8.bytes+i->info.Utf8.length);j++)
 //                    *j = LE_lerU1(pArq);
-                fread(i->info.Utf8.bytes, 1, i->info.Utf8.length, pArq);
+                fread(pI->info.Utf8.bytes, 1, pI->info.Utf8.length, pArq);
 				break;
 			case CONSTANT_Float:
-				i->info.Float.bytes = LE_lerU4(pArq);
+				pI->info.Float.bytes = LE_lerU4(pArq);
 				break;
 			case CONSTANT_Integer:
-				i->info.Integer.bytes = LE_lerU4(pArq);
+				pI->info.Integer.bytes = LE_lerU4(pArq);
 				break;
 			case CONSTANT_Long:
-				i->info.Long.high_bytes = LE_lerU4(pArq);
-				i->info.Long.low_bytes = LE_lerU4(pArq);
+				pI->info.Long.high_bytes = LE_lerU4(pArq);
+				pI->info.Long.low_bytes = LE_lerU4(pArq);
 				break;
 			case CONSTANT_Double:
-				i->info.Double.high_bytes = LE_lerU4(pArq);
-				i->info.Double.low_bytes = LE_lerU4(pArq);
+				pI->info.Double.high_bytes = LE_lerU4(pArq);
+				pI->info.Double.low_bytes = LE_lerU4(pArq);
 				break;
 			case CONSTANT_Class:
-				i->info.Class.name_index = LE_lerU2(pArq);
+				pI->info.Class.name_index = LE_lerU2(pArq);
 				break;
 			case CONSTANT_String:
-				i->info.String.string_index = LE_lerU2(pArq);
+				pI->info.String.string_index = LE_lerU2(pArq);
 				break;
 			case CONSTANT_Fieldref:
-				i->info.Fieldref.class_index = LE_lerU2(pArq);
-				i->info.Fieldref.name_and_type_index = LE_lerU2(pArq);
+				pI->info.Fieldref.class_index = LE_lerU2(pArq);
+				pI->info.Fieldref.name_and_type_index = LE_lerU2(pArq);
 				break;
 			case CONSTANT_Methodref:
-				i->info.Methodref.class_index = LE_lerU2(pArq);
-				i->info.Methodref.name_and_type_index = LE_lerU2(pArq);
+				pI->info.Methodref.class_index = LE_lerU2(pArq);
+				pI->info.Methodref.name_and_type_index = LE_lerU2(pArq);
 				break;
 			case CONSTANT_InterfaceMethodref:
-				i->info.InterfaceMethodref.class_index = LE_lerU2(pArq);
-				i->info.InterfaceMethodref.name_and_type_index = LE_lerU2(pArq);
+				pI->info.InterfaceMethodref.class_index = LE_lerU2(pArq);
+				pI->info.InterfaceMethodref.name_and_type_index = LE_lerU2(pArq);
 				break;
 			case CONSTANT_NameAndType:
-				i->info.NameAndType.name_index = LE_lerU2(pArq);
-				i->info.NameAndType.descriptor_index = LE_lerU2(pArq);
+				pI->info.NameAndType.name_index = LE_lerU2(pArq);
+				pI->info.NameAndType.descriptor_index = LE_lerU2(pArq);
 				break;
 			default:
 				break;
 		}
 	}
-    return constantPool;
+    return pConstantPool;
 }
 
 /**
@@ -153,9 +153,9 @@ ST_tpCp_info *LE_lerConstant_pool(FILE *pArq, u2 constant_pool_count){
  *  @return pinterfaces     - Ponteiro para a Tabela de Interfaces lida
  */
 u2 *LE_lerInterfaces(FILE *pArq, u2 interfaces_count) {
-    u2 *pinterfaces = (u2 *) malloc(interfaces_count*sizeof(u2));
-    fread(pinterfaces, 1, interfaces_count*2, pArq); //ainda não foi testado, pois o Classe de exemplo não possui nenhuma interface
-    return pinterfaces;
+    u2 *pInterfaces = (u2 *) malloc(interfaces_count * sizeof(u2));
+    fread(pInterfaces, 1, interfaces_count * 2, pArq); //ainda não foi testado, pois o Classe de exemplo não possui nenhuma interface
+    return pInterfaces;
 }
 
 /**
@@ -168,20 +168,20 @@ u2 *LE_lerInterfaces(FILE *pArq, u2 interfaces_count) {
  *  @return pfields     - Ponteiro para a Tabela de Fields lida
  */
 ST_tpField_info *LE_lerFields(FILE *pArq, u2 fields_count) {
-    ST_tpField_info *pfields = (ST_tpField_info *) malloc(fields_count*sizeof(ST_tpField_info));
-    ST_tpField_info *i = NULL;
-    for(i = pfields; i <  (pfields+fields_count); i++ ){
-        i->access_flags = LE_lerU2(pArq);
-        i->name_index = LE_lerU2(pArq);
-        i->descriptor_index = LE_lerU2(pArq);
-        i->attributes_count = LE_lerU2(pArq);
-        i->attributes = (ST_tpAttribute_info *) malloc(i->attributes_count*sizeof(ST_tpAttribute_info));
-        ST_tpAttribute_info *j;
-        for(j = i->attributes; j <  (i->attributes+i->attributes_count); j++ ){
-            j->attribute_name_index = LE_lerU2(pArq);
-            j->attribute_length = LE_lerU4(pArq);
-            j->info = (u1 *) malloc(j->attribute_length*sizeof(u1));
-            fread(j->info, 1, j->attribute_length, pArq);
+    ST_tpField_info *pfields = (ST_tpField_info *) malloc(fields_count * sizeof(ST_tpField_info));
+    ST_tpField_info *pI = NULL;
+    for(pI = pfields; pI <  (pfields + fields_count); pI++ ){
+        pI->access_flags = LE_lerU2(pArq);
+        pI->name_index = LE_lerU2(pArq);
+        pI->descriptor_index = LE_lerU2(pArq);
+        pI->attributes_count = LE_lerU2(pArq);
+        pI->attributes = (ST_tpAttribute_info *) malloc(pI->attributes_count * sizeof(ST_tpAttribute_info));
+        ST_tpAttribute_info *pJ;
+        for(pJ = pI->attributes; pJ <  (pI->attributes + pI->attributes_count); pJ++ ){
+            pJ->attribute_name_index = LE_lerU2(pArq);
+            pJ->attribute_length = LE_lerU4(pArq);
+            pJ->info = (u1 *) malloc(pJ->attribute_length * sizeof(u1));
+            fread(pJ->info, 1, pJ->attribute_length, pArq);
         }
     }
     return pfields;
@@ -197,23 +197,23 @@ ST_tpField_info *LE_lerFields(FILE *pArq, u2 fields_count) {
  *  @return pmethods     - Ponteiro para a Tabela de Metodos lida
  */
 ST_tpMethod_info *LE_lerMethods(FILE *pArq, u2 methods_count) {
-    ST_tpMethod_info *pmethods = (ST_tpMethod_info *) malloc(methods_count*sizeof(ST_tpMethod_info));
-    ST_tpMethod_info *i;
-    for(i = pmethods; i <  (pmethods+methods_count); i++ ){
-        i->access_flags = LE_lerU2(pArq);
-        i->name_index = LE_lerU2(pArq);
-        i->descriptor_index = LE_lerU2(pArq);
-        i->attributes_count = LE_lerU2(pArq);
-        i->attributes = (ST_tpAttribute_info *) malloc(i->attributes_count*sizeof(ST_tpAttribute_info));
-        ST_tpAttribute_info *j;
-        for(j = i->attributes; j <  (i->attributes+i->attributes_count); j++ ){
-            j->attribute_name_index = LE_lerU2(pArq);
-            j->attribute_length = LE_lerU4(pArq);
-            j->info = (u1 *) malloc(j->attribute_length*sizeof(u1));
-            fread(j->info, 1, j->attribute_length, pArq);
+    ST_tpMethod_info *pMethods = (ST_tpMethod_info *) malloc(methods_count * sizeof(ST_tpMethod_info));
+    ST_tpMethod_info *pI;
+    for(pI = pMethods; pI <  (pMethods+methods_count); pI++ ){
+        pI->access_flags = LE_lerU2(pArq);
+        pI->name_index = LE_lerU2(pArq);
+        pI->descriptor_index = LE_lerU2(pArq);
+        pI->attributes_count = LE_lerU2(pArq);
+        pI->attributes = (ST_tpAttribute_info *) malloc(pI->attributes_count * sizeof(ST_tpAttribute_info));
+        ST_tpAttribute_info *pJ;
+        for(pJ = pI->attributes; pJ <  (pI->attributes + pI->attributes_count); pJ++ ){
+            pJ->attribute_name_index = LE_lerU2(pArq);
+            pJ->attribute_length = LE_lerU4(pArq);
+            pJ->info = (u1 *) malloc(pJ->attribute_length * sizeof(u1));
+            fread(pJ->info, 1, pJ->attribute_length, pArq);
         }
     }
-    return pmethods;
+    return pMethods;
 }
 
 /**
@@ -227,17 +227,16 @@ ST_tpMethod_info *LE_lerMethods(FILE *pArq, u2 methods_count) {
  */
 ST_tpAttribute_info *LE_lerAttributes(FILE *pArq, u2 attributes_count) {
     ST_tpAttribute_info *pattributes = (ST_tpAttribute_info *) malloc(attributes_count*sizeof(ST_tpAttribute_info));
-    ST_tpAttribute_info *i;
-    for(i = pattributes; i <  (pattributes+attributes_count); i++){
-        i->attribute_name_index = LE_lerU2(pArq);
-        i->attribute_length = LE_lerU4(pArq);
-        i->info = (u1 *) malloc(i->attribute_length*sizeof(u1));
-        fread(i->info, 1, i->attribute_length, pArq);
+    ST_tpAttribute_info *pI;
+    for(pI = pattributes; pI <  (pattributes+attributes_count); pI++){
+        pI->attribute_name_index = LE_lerU2(pArq);
+        pI->attribute_length = LE_lerU4(pArq);
+        pI->info = (u1 *) malloc(pI->attribute_length * sizeof(u1));
+        fread(pI->info, 1, pI->attribute_length, pArq);
     }
     return pattributes;
 }
 
-// Função que recebe o nome qualificado do arquivo .class e carrega o seu conteúdo, retornando o ponteiro para a estrutura classFile
 /**
  *  Descrição da função:
  *       Função que recebe o nome qualificado do arquivo .class e carrega o seu conteúdo,
