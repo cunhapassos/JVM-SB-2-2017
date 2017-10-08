@@ -265,8 +265,16 @@ ST_tpAttribute_info *LE_lerAttributes(FILE *pArq, u2 attributes_count) {
 	}
 	
 	arqPontoClass->magic = LE_lerU4(pArq);
+	if((arqPontoClass->magic != 0xcafebabe)) {
+		printf("Arquivo corrompido ou não referente a um .class!\n");
+		return NULL;
+	}
 	arqPontoClass->minor_version_number = LE_lerU2(pArq);
 	arqPontoClass->major_version_number = LE_lerU2(pArq);
+	if((arqPontoClass->major_version_number >= 0x35 || arqPontoClass->major_version_number <= 0x31)) {
+		printf("Versão Java incompativel!\n");
+		return NULL;
+	}
 	arqPontoClass->constant_pool_count = LE_lerU2(pArq);
 	arqPontoClass->constant_pool_table = LE_lerConstant_pool(pArq, arqPontoClass->constant_pool_count);
 	arqPontoClass->access_flags = LE_lerU2(pArq);
