@@ -483,7 +483,7 @@ ST_tpAttribute_info *LE_lerAttributes(FILE *pArq, ST_tpCp_info *cp, ST_tpAttribu
 	
 	arqPontoClass->magic = LE_lerU4(pArq);
 	if((arqPontoClass->magic != 0xcafebabe)) {
-		printf("Arquivo corrompido ou não referente a um .class!\n");
+		printf("Arquivo corrompido ou nao referente a um .class!\n");
 		return NULL;
 	}
 	arqPontoClass->minor_version_number = LE_lerU2(pArq);
