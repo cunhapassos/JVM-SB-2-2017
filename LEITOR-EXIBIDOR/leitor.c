@@ -95,7 +95,7 @@ ST_tpCp_info *LE_lerConstant_pool(FILE *pArq, u2 constant_pool_count){
 		switch(pI->tag) {
 			case CONSTANT_Utf8:
 				pI->info.Utf8.length = LE_lerU2(pArq);
-				pI->info.Utf8.bytes = malloc(pI->info.Utf8.length*sizeof(u1));
+				pI->info.Utf8.bytes = malloc(pI->info.Utf8.length * sizeof(u1));
 //                for(u1 *j=i->info.Utf8.bytes;j<(i->info.Utf8.bytes+i->info.Utf8.length);j++)
 //                    *j = LE_lerU1(pArq);
                 fread(pI->info.Utf8.bytes, 1, pI->info.Utf8.length, pArq);

@@ -40,21 +40,37 @@ typedef uint8_t u1;
 typedef uint16_t u2;
 typedef uint32_t u4;
 
+/** ******************************************************************************
+ *                                FLAGS DE ACESSO
+ ** *******************************************************************************/
+
+/**                             DEFINICOES DE TAGS                                    **/
+#define ACC_PUBLIC       0X0001
+#define ACC_PRIVATE      0X0002
+#define ACC_SUPER        0X0003
+#define ACC_PROTECTED    0X0004
+#define ACC_STATIC       0X0008
+#define ACC_FINAL        0X0010
+#define ACC_INTERFACE    0X0200
+#define ACC_ABSTRACT     0X0400
+#define ACC_SYNTHETIC    0x1000
+#define ACC_ANNOTATION   0x2000
+#define ACC_ENUM         0x4000
 
 /** ******************************************************************************
 *							TEBELA POOL DE CONSTANTES
 ** *******************************************************************************/
 
 /**							 DEFINIÇÕES DE TAGS									**/
-#define CONSTANT_Utf8 1
-#define CONSTANT_Float 4
-#define CONSTANT_Integer 3
-#define CONSTANT_Long 5
-#define CONSTANT_Double 6
-#define CONSTANT_Class 7
-#define CONSTANT_String 8
-#define CONSTANT_Fieldref 9
-#define CONSTANT_Methodref 10
+#define CONSTANT_Utf8       1
+#define CONSTANT_Float      4
+#define CONSTANT_Integer    3
+#define CONSTANT_Long       5
+#define CONSTANT_Double     6
+#define CONSTANT_Class      7
+#define CONSTANT_String     8
+#define CONSTANT_Fieldref   9
+#define CONSTANT_Methodref  10
 #define CONSTANT_InterfaceMethodref 11
 #define CONSTANT_NameAndType 12
 
@@ -143,20 +159,6 @@ typedef struct{
 }ST_tpCp_info;
 
 /** ******************************************************************************
-*								FLAGS DE ACESSO
-** *******************************************************************************/
-
-/**							 DEFINIÇÕES DE TAGS									**/
-#define ACC_PUBLIC 		0X0001
-#define ACC_FINAL 		0X0002
-#define ACC_SUPER 		0X0003
-#define ACC_INTERFACE 	0X0200
-#define ACC_ABSTRACT 	0X0400
-#define ACC_SYNTHETIC	0x1000
-#define ACC_ANNOTATION	0x2000
-#define ACC_ENUM		0x4000
-
-/** ******************************************************************************
 *								TABELA DE INTERFACE
 ** *******************************************************************************/
 typedef struct{
@@ -173,6 +175,127 @@ typedef struct{
 	u1 *info;
 //	struct attribute_info *next;
 }ST_tpAttribute_info;
+
+/** ******************************************************************************
+ *                               ATRIBUTO CONSTANTVALUE
+ ** ******************************************************************************/
+typedef struct{
+    u2 attribute_name_index;
+    u4 attribute_length;
+    u2 constantvalue_index;
+}ST_tpConstantValue_attribute;
+
+/** ******************************************************************************
+ *                                TABELA DE EXCESSAO
+ ** ******************************************************************************/
+typedef struct{
+    u2 start_pc;
+    u2 end_pc;
+    u2 handler_pc;
+    u2 catch_type;
+}ST_tpException_table;
+
+/** ******************************************************************************
+ *                                ATRIBUTO CODE
+ ** ******************************************************************************/
+typedef struct{
+    u2 attribute_name_index;
+    u4 attribute_length;
+    u2 max_stack;
+    u2 max_locals;
+    u4 code_length;
+    u1 *code;
+    u2 exception_table_length;
+    ST_tpException_table *exception_table;
+    u2 attributes_count;
+    ST_tpAttribute_info *attribute_info;
+}ST_tpCode_attribute;
+
+/** ******************************************************************************
+ *                                ATRIBUTO DEPRECATED
+ ** ******************************************************************************/
+typedef struct{
+    u2 attribute_name_index;
+    u4 attribute_length;
+}ST_tpDeprecated_attribute;
+
+/** ******************************************************************************
+ *                                ATRIBUTO EXCEPTIONS
+ ** ******************************************************************************/
+typedef struct {
+    u2 attribute_name_index;
+    u4 attribute_length;
+    u2 number_of_exceptions;
+    u2 *exception_index_table;
+}ST_tpExceptions_attribute;
+
+/** ******************************************************************************
+ *                                TABELA INNERCLASSES
+ ** ******************************************************************************/
+typedef struct {
+    u2 inner_class_info_index;
+    u2 outer_class_info_index;
+    u2 inner_name_index;
+    u2 inner_class_access_flags;
+}ST_tpInnerClasses_table;
+
+/** ******************************************************************************
+ *                                ATRIBUTO INNERCLASSES
+ ** ******************************************************************************/
+typedef struct {
+    u2 attribute_name_index;
+    u4 attribute_length;
+    u2 number_of_classes;
+    ST_tpInnerClasses_table *classes;
+}ST_tpInnerClasses_attribute;
+
+/** ******************************************************************************
+ *                                TABELA LINERNUMBER
+ ** ******************************************************************************/
+typedef struct {
+    u2 start_pc;
+    u2 line_number;
+}ST_tpLine_number_table;
+
+/** ******************************************************************************
+ *                                ATRIBUTO LINERNUMBERTABLE
+ ** ******************************************************************************/
+typedef struct {
+    u2 attribute_name_index;
+    u4 attribute_length;
+    u2 line_number_table_length;
+    ST_tpLine_number_table *line_number_table;
+}ST_tpLineNumberTable_attribute;
+
+/** ******************************************************************************
+ *                                TABELA LOCALVARIABLETABLE
+ ** ******************************************************************************/
+typedef struct {
+    u2 start_pc;
+    u2 length;
+    u2 name_index;
+    u2 descriptor_index;
+    u2 index;
+}ST_tpLocal_variable_table;
+
+/** ******************************************************************************
+ *                                ATRIBUTO LOCALVARIABLETABLE
+ ** ******************************************************************************/
+typedef struct {
+    u2 attribute_name_index;
+    u4 attribute_length;
+    u2 local_variable_table_length;
+    ST_tpLocal_variable_table *Local_variable_table;
+}ST_tpLocalVariableTable_attribute;
+
+/** ******************************************************************************
+ *                                ATRIBUTO SOURCEFILE
+ ** ******************************************************************************/
+typedef struct {
+    u2 attribute_name_index;
+    u4 attribute_length;
+    u2 sourcefile_index;
+}ST_tpSourceFile_attribute;
 
 /** ******************************************************************************
 *								TABELA DE CAMPOS (FIELD)
@@ -198,45 +321,7 @@ typedef struct{
 	ST_tpAttribute_info *attributes;
 	//struct method_info *next;
 	//attribute_info attributes[attributes_count];
-}ST_tpMethod_info;  
-
-/** ******************************************************************************
-*								TABELA DE EXCESSÃO
-** *******************************************************************************/
-typedef struct{ 		
-	u2 start_pc;
-	u2 end_pc;
-	u2 handler_pc;
-	u2 catch_type;  
-}ST_tpException_table;
-
-/** ******************************************************************************
-*								ATRIBUTO CODE
-** *******************************************************************************/
-typedef struct{
-	u2 attribute_name_index;
-	u4 attribute_length;
-	u2 max_stack;
-	u2 max_locals;
-	u4 code_length;
-	u1 *code;
-	//u1 code[code_length];
-	u2 exception_table_length;
-	ST_tpException_table exception_table;
-	u2 attributes_count;
-	ST_tpAttribute_info attribute_info;
-	//attribute_info attributes[attributes_count];
-}ST_tpCode_attribute; 
-
-/** ******************************************************************************
-*								ATRIBUTO EXCEPTIONS
-** *******************************************************************************/
-typedef struct {
-	u2 attribute_name_index;
-	u4 attribute_length;
-	u2 number_of_exceptions;
-	//u2 exception_index_table[number_of_exceptions];
-}ST_tpExceptions_attribute;
+}ST_tpMethod_info;
 
 /** ******************************************************************************
 *								ESTRUTURA CLASSFILE
