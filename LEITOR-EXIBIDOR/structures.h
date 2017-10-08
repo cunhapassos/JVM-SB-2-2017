@@ -45,7 +45,7 @@ typedef uint32_t u4;
  *                                FLAGS DE ACESSO
  ** *******************************************************************************/
 
-/**                             DEFINICOES DE TAGS                                    **/
+/**                             DEFINICOES DE TAGS                               **/
 #define ACC_PUBLIC       0X0001
 #define ACC_PRIVATE      0X0002
 #define ACC_SUPER        0X0003
@@ -62,7 +62,7 @@ typedef uint32_t u4;
 *							TEBELA POOL DE CONSTANTES
 ** *******************************************************************************/
 
-/**							 DEFINI«’ES DE TAGS									**/
+/**							 DEFINICOES DE TAGS									**/
 #define CONSTANT_Utf8       1
 #define CONSTANT_Float      4
 #define CONSTANT_Integer    3
@@ -173,8 +173,7 @@ typedef struct{
 typedef struct{
 	u2 attribute_name_index;
 	u4 attribute_length;
-	u1 *info;
-//	struct attribute_info *next;
+	void *info;
 }ST_tpAttribute_info;
 
 /** ******************************************************************************
@@ -200,8 +199,8 @@ typedef struct{
  *                                ATRIBUTO CODE
  ** ******************************************************************************/
 typedef struct{
-    u2 attribute_name_index;
-    u4 attribute_length;
+    //u2 attribute_name_index;
+    //u4 attribute_length;
     u2 max_stack;
     u2 max_locals;
     u4 code_length;
@@ -265,7 +264,7 @@ typedef struct {
     u2 attribute_name_index;
     u4 attribute_length;
     u2 line_number_table_length;
-    ST_tpLine_number_table *line_number_table;
+    ST_tpLine_number_table *info;
 }ST_tpLineNumberTable_attribute;
 
 /** ******************************************************************************
@@ -295,7 +294,7 @@ typedef struct {
 typedef struct {
     u2 attribute_name_index;
     u4 attribute_length;
-    u2 sourcefile_index;
+    u2 source_file_index;
 }ST_tpSourceFile_attribute;
 
 /** ******************************************************************************
@@ -308,7 +307,6 @@ typedef struct{
 	u2 attributes_count;
 	ST_tpAttribute_info *attributes;
 	//struct field_info *next; Paulo, não entendi o motivo de ter o ponteiro para o próximo Field já que eles estão em sequência na memória.
-	//attribute_info attributes[attributes_count];
 }ST_tpField_info; 
 
 /** ******************************************************************************
@@ -320,8 +318,6 @@ typedef struct{
 	u2 descriptor_index;
 	u2 attributes_count;
 	ST_tpAttribute_info *attributes;
-	//struct method_info *next;
-	//attribute_info attributes[attributes_count];
 }ST_tpMethod_info;
 
 /** ******************************************************************************
