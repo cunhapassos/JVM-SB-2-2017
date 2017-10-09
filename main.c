@@ -22,7 +22,7 @@ int main(int argc, const char * argv[]) {
     
     
     //EX_imprimirClassFile(LE_lerArquivo(pNomeArquivo));
-    EX_imprimirClassFile(LE_carregarClasse("/Users/paulopassos/OneDrive/Documentos/13º SEMESTRE/SOFTWARE BÁSICO/TRABALHOS/JVM-SB-2-2017/File.class"));
+    EX_imprimirClassFile(LE_carregarClasse("LEITOR-EXIBIDOR/double_aritmetica.class"));
     // /Users/paulopassos/OneDrive/Documentos/13º SEMESTRE/SOFTWARE BÁSICO/TRABALHOS/JVM-SB-2-2017/File.class
     return 0;
 }

@@ -33,6 +33,7 @@
 /* Inclusao de biblioteca para tratamento de tipo inteiro com representatividade
 alternada de acordo com a quantidade de bits*/
 #include <stdint.h>
+#include <wchar.h>
 
 
 /* Definições de tipos de dados*/
