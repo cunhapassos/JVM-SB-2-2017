@@ -406,7 +406,10 @@ ST_tpLineNumberTable_attribute *LE_lerLineNumberTable(FILE *pArq) {
 ST_tpAttribute_info *LE_lerAttribute(FILE *pArq, ST_tpCp_info *cp, ST_tpAttribute_info *pAttributes) {
     char *pAttributeName;
     
-    pAttributes->attribute_name_index = LE_lerU2(pArq);
+    u2 p = LE_lerU2(pArq);
+    pAttributes->attribute_name_index = (u2) p;
+    
+    printf("%02d", pAttributes->attribute_name_index);
     pAttributes->attribute_length = LE_lerU4(pArq);
     
     //printf("\n[%02d]\n", pAttributes->attribute_name_index);
@@ -527,9 +530,9 @@ ST_tpAttribute_info *LE_lerAttribute(FILE *pArq, ST_tpCp_info *cp, ST_tpAttribut
 	arqPontoClass->method_info_table = LE_lerMethods(pArq, arqPontoClass->constant_pool_table, arqPontoClass->methods_count);
 	arqPontoClass->attributes_count = LE_lerU2(pArq);
      
-     //for(int j = 0; j < arqPontoClass->attributes_count; j++){
-     //    LE_lerAttribute(pArq, arqPontoClass->constant_pool_table, &arqPontoClass->attribute_info_table[j]);
-     //}
+     for(int j = 0; j < arqPontoClass->attributes_count; j++){
+         LE_lerAttribute(pArq, arqPontoClass->constant_pool_table, &(arqPontoClass->attribute_info_table[j]));
+     }
 	//arqPontoClass->attribute_info_table = LE_lerAttribute(pArq, arqPontoClass->constant_pool_table, arqPontoClass->attribute_info_table);
 	//LE_lerAttributes(FILE *pArq, ST_tpCp_info *cp, ST_tpAttribute_info *pAttributes)
      // verificar qual ponteiro de contante pool passar

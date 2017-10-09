@@ -24,7 +24,7 @@ int main(int argc, const char * argv[]) {
     //EX_imprimirClassFile(LE_lerArquivo(pNomeArquivo));
     
     ST_tpClassFile *p = LE_carregarClasse("./File.class");
-    EX_imprimirClassFile(p);
+    //EX_imprimirClassFile(p);
     
     // /Users/paulopassos/OneDrive/Documentos/13º SEMESTRE/SOFTWARE BÁSICO/TRABALHOS/JVM-SB-2-2017/File.class
     return 0;
