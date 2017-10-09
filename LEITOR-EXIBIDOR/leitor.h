@@ -54,9 +54,9 @@ ST_tpInnerClasses_attribute *LE_lerInnerClassesAttribute(FILE *pArq);
 
 ST_tpSourceFile_attribute *LE_lerSourceFileAttribute(FILE * pArq);
 
-ST_tpLineNumberTable_attribute *LE_lerLineNumberTable(FILE *pArq, ST_tpCp_info *cp);
+ST_tpLineNumberTable_attribute *LE_lerLineNumberTable(FILE *pArq);
 
-ST_tpAttribute_info *LE_lerAttributes(FILE *pArq, ST_tpCp_info *cp, ST_tpAttribute_info *pAttributes);
+ST_tpAttribute_info *LE_lerAttribute(FILE *pArq, ST_tpCp_info *cp, ST_tpAttribute_info *pAttributes);
 
 ST_tpClassFile *LE_carregarClasse(char *nomeArquivo);
 

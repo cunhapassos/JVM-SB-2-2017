@@ -222,7 +222,7 @@ ST_tpMethod_info *LE_lerMethods(FILE *pArq, ST_tpCp_info *cp, u2 methods_count) 
          pMethods[i].attributes = malloc((pMethods[i].attributes_count) * sizeof(ST_tpAttribute_info));
          
          for(j = 0; j < pMethods[i].attributes_count; j++){
-             LE_lerAttributes(pArq, cp, &(pMethods[i].attributes[j]));
+             LE_lerAttribute(pArq, cp, &(pMethods[i].attributes[j]));
          }
              
         //printf("%02d\n", pI->attributes_count);
@@ -311,7 +311,7 @@ ST_tpCode_attribute *LE_lerCodeAttribute(FILE *pArq, ST_tpCp_info *cp, ST_tpAttr
     if(pCode->attributes_count > 0 ){
         pCode->attribute_info = (ST_tpAttribute_info*)malloc(pCode->attributes_count*sizeof(ST_tpAttribute_info*));
         for (i = 0; i < pCode->attributes_count; i++) {
-            LE_lerAttributes(pArq, cp, &(pCode->attribute_info[i]));
+            LE_lerAttribute(pArq, cp, &(pCode->attribute_info[i]));
         }
     }
     return pCode;
@@ -380,7 +380,7 @@ ST_tpSourceFile_attribute *LE_lerSourceFileAttribute(FILE * pArq) {
     return pSourceFile;
 }
 
-ST_tpLineNumberTable_attribute *LE_lerLineNumberTable(FILE *pArq, ST_tpCp_info *cp) {
+ST_tpLineNumberTable_attribute *LE_lerLineNumberTable(FILE *pArq) {
     ST_tpLineNumberTable_attribute *pLineNumberTable = (ST_tpLineNumberTable_attribute*)malloc(sizeof(ST_tpLineNumberTable_attribute));
     
     pLineNumberTable->line_number_table_length = LE_lerU2(pArq);
@@ -403,13 +403,13 @@ ST_tpLineNumberTable_attribute *LE_lerLineNumberTable(FILE *pArq, ST_tpCp_info *
  *  @param pAttributes      - Ponteiro para a Tabela de Atributos
  *
  */
-ST_tpAttribute_info *LE_lerAttributes(FILE *pArq, ST_tpCp_info *cp, ST_tpAttribute_info *pAttributes) {
+ST_tpAttribute_info *LE_lerAttribute(FILE *pArq, ST_tpCp_info *cp, ST_tpAttribute_info *pAttributes) {
     char *pAttributeName;
     
     pAttributes->attribute_name_index = LE_lerU2(pArq);
     pAttributes->attribute_length = LE_lerU4(pArq);
     
-    printf("\n[%02d]\n", pAttributes->attribute_name_index);
+    //printf("\n[%02d]\n", pAttributes->attribute_name_index);
 
 
     pAttributeName = malloc((cp[pAttributes->attribute_name_index-1].info.Utf8.length) * sizeof(char) + 1);
@@ -453,7 +453,8 @@ ST_tpAttribute_info *LE_lerAttributes(FILE *pArq, ST_tpCp_info *cp, ST_tpAttribu
      else if(strcmp(pAttributeName, "LineNumberTable") == 0)
     {
         ST_tpLineNumberTable_attribute *pLineNumberTable = (ST_tpLineNumberTable_attribute*) malloc(sizeof(ST_tpLineNumberTable_attribute));
-        pLineNumberTable = LE_lerLineNumberTable(pArq, cp);
+        pLineNumberTable = LE_lerLineNumberTable(pArq);
+        pAttributes->info =(ST_tpLineNumberTable_attribute*) pLineNumberTable;
     }
     /*else
     {
@@ -525,8 +526,13 @@ ST_tpAttribute_info *LE_lerAttributes(FILE *pArq, ST_tpCp_info *cp, ST_tpAttribu
 	arqPontoClass->methods_count = LE_lerU2(pArq);
 	arqPontoClass->method_info_table = LE_lerMethods(pArq, arqPontoClass->constant_pool_table, arqPontoClass->methods_count);
 	arqPontoClass->attributes_count = LE_lerU2(pArq);
-	//arqPontoClass->attribute_info_table = LE_lerAttributes(pArq, arqPontoClass->constant_pool_table, arqPontoClass->attributes_count);
-	// verificar qual ponteiro de contante pool passar
+     
+     //for(int j = 0; j < arqPontoClass->attributes_count; j++){
+     //    LE_lerAttribute(pArq, arqPontoClass->constant_pool_table, &arqPontoClass->attribute_info_table[j]);
+     //}
+	//arqPontoClass->attribute_info_table = LE_lerAttribute(pArq, arqPontoClass->constant_pool_table, arqPontoClass->attribute_info_table);
+	//LE_lerAttributes(FILE *pArq, ST_tpCp_info *cp, ST_tpAttribute_info *pAttributes)
+     // verificar qual ponteiro de contante pool passar
     return arqPontoClass;
  }
 

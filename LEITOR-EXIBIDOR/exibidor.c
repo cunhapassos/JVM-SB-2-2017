@@ -1,4 +1,4 @@
-/** ********************************************************************************
+ /** ********************************************************************************
  *
  *  Universidade de Brasilia - 02/2017
  *  Software Basico - Turma A
@@ -45,28 +45,30 @@ void EX_imprimirUtf8 (u1 *pS, int length){
  *  @param  pAttributeInfoTable - Ponteiro para a Tabela de Atributos
  *  @param  attributesCount - quantidades de atributos da Tabela de Atributos
  */
-void EX_imprimirAtributos(ST_tpAttribute_info *pAttributeInfoTable, u2 attributesCount){
-    int j = 0;
-    ST_tpAttribute_info *pN;
+void EX_imprimirAtributos(ST_tpClassFile *pClassFile, ST_tpAttribute_info *pAttributeInfoTable, u2 attributesCount){
+    int i;
+    //ST_tpAttribute_info *pN = pAttributeInfoTable;
     
-    for(pN = pAttributeInfoTable; pN <  (pAttributeInfoTable + attributesCount); pN++) {
+    //for(pN = pAttributeInfoTable; pN <  (pAttributeInfoTable + attributesCount); pN++) {
+    for(i = 0; i < attributesCount; i++ ){
         //printf("___________________________________\n");
         
         printf("\n   -----------------");
         printf("\n      Attributes");
         printf("\n   -----------------\n\n");
-        printf("\n[%02d] 0x%04x\n",j, pN->attribute_name_index);
+        printf("\n[%02d] ",i);
+        EX_imprimirUtf8(pClassFile->constant_pool_table[pAttributeInfoTable[i].attribute_name_index-1].info.Utf8.bytes, pClassFile->constant_pool_table[pAttributeInfoTable[i].attribute_name_index-1].info.Utf8.length);
+        
         printf("...................................\n\n");
         printf("\tGENERIC INFO:\n\n");
-        printf("\tAttribute name index: 0x%04x\n", pN->attribute_name_index);
-        printf("\tAttibute length: 0x%08x\n", pN->attribute_length);
+        printf("\tAttribute name index: 0x%04x\n", pAttributeInfoTable[i].attribute_name_index);
+        printf("\tAttibute length: 0x%08x\n", pAttributeInfoTable[i].attribute_length);
         // Verificar impressão do campo Info da estrutura Atribute_info (nessa implementação a impressão é feita byte a byte)
-        u1 *pQ;
+        /*u1 *pQ;
         for(pQ = pN->info; pQ <  (pN->info + pN->attribute_length); pQ++){
             printf("\n\tSpecific info:\n");
             printf("\tSource file name index: 0x%02x\n", *pQ);
-        }
-        j++;
+        }*/
     }
 }
 
@@ -155,12 +157,18 @@ void EX_imprimirMethods(ST_tpClassFile *pClassFile) {
     
     printf("\n===================================\n              METHODS\n===================================\n\n");
     for(pM = pClassFile->method_info_table; pM < (pClassFile->method_info_table + pClassFile->methods_count); pM++) {
-        printf("\n[%02d] Method: 0x%04x\n", j, pM->name_index);
+        printf("\n[%02d] Method: ", pM->name_index);
+        EX_imprimirUtf8(pClassFile->constant_pool_table[pM->name_index-1].info.Utf8.bytes, pClassFile->constant_pool_table[pM->name_index-1].info.Utf8.length);
         printf("-----------------------------------\n");
-        printf("\t Name: 0x%04x\n", pM->name_index);
-        printf("\t Descriptor: 0x%04x\n", pM->descriptor_index);
+        
+        printf("\t Name: ");
+        EX_imprimirUtf8(pClassFile->constant_pool_table[pM->name_index-1].info.Utf8.bytes, pClassFile->constant_pool_table[pM->name_index-1].info.Utf8.length);
+        
+        printf("\t Descriptor: ");
+        EX_imprimirUtf8(pClassFile->constant_pool_table[pM->descriptor_index-1].info.Utf8.bytes, pClassFile->constant_pool_table[pM->descriptor_index-1].info.Utf8.length);
+        
         printf("\t Access flags: 0x%04x\n", pM->access_flags);
-        EX_imprimirAtributos(pM->attributes, pM->attributes_count);
+        EX_imprimirAtributos(pClassFile, pM->attributes, pM->attributes_count);
         j++;
     }
 }
@@ -175,10 +183,14 @@ void EX_imprimirFields(ST_tpClassFile *pClassFile) {
     ST_tpField_info *pL;
     for(pL = pClassFile->field_info_table; pL <  (pClassFile->field_info_table+pClassFile->fields_count); pL++) {
         printf("\n===================================\n              FIELDS\n===================================\n\n");
-        printf("\tName: 0x%04x\n", pL->name_index);
-        printf("\tDescriptor: 0x%04x\n", pL->descriptor_index);
+        printf("\tName: ");
+        EX_imprimirUtf8(pClassFile->constant_pool_table[pL->name_index-1].info.Utf8.bytes, pClassFile->constant_pool_table[pL->name_index-1].info.Utf8.length);
+        
+        printf("\tDescriptor: ");
+        EX_imprimirUtf8(pClassFile->constant_pool_table[pL->descriptor_index-1].info.Utf8.bytes, pClassFile->constant_pool_table[pL->descriptor_index-1].info.Utf8.length);
+        
         printf("\tAccess flags: 0x%04x\n", pL->access_flags);
-        EX_imprimirAtributos(pL->attributes, pL->attributes_count);
+        EX_imprimirAtributos(pClassFile, pL->attributes, pL->attributes_count);
     }
 }
 
@@ -219,6 +231,6 @@ void EX_imprimirClassFile(ST_tpClassFile *pClassFile){
     EX_imprimirInterfaces(pClassFile);
     EX_imprimirFields(pClassFile);
     EX_imprimirMethods(pClassFile);
-    EX_imprimirAtributos(pClassFile->attribute_info_table,pClassFile->attributes_count);
+    EX_imprimirAtributos(pClassFile, pClassFile->attribute_info_table,pClassFile->attributes_count);
 }
 
