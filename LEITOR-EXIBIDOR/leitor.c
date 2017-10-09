@@ -202,24 +202,39 @@ ST_tpField_info *LE_lerFields(FILE *pArq, u2 fields_count) {
  *  @return pmethods     - Ponteiro para a Tabela de Metodos lida
  */
 ST_tpMethod_info *LE_lerMethods(FILE *pArq, ST_tpCp_info *cp, u2 methods_count) {
+    int i, j;
+    
     ST_tpMethod_info *pMethods = (ST_tpMethod_info *) malloc(methods_count * sizeof(ST_tpMethod_info));
-    ST_tpMethod_info *pI;
+    /*ST_tpMethod_info *pI;
     for(pI = pMethods; pI <  (pMethods+methods_count); pI++ ){
         pI->access_flags = LE_lerU2(pArq);
         pI->name_index = LE_lerU2(pArq);
         pI->descriptor_index = LE_lerU2(pArq);
         pI->attributes_count = LE_lerU2(pArq);
         pI->attributes = (ST_tpAttribute_info *) malloc(pI->attributes_count * sizeof(ST_tpAttribute_info));
-        ST_tpAttribute_info *pJ;
-        for(pJ = pI->attributes; pJ <  (pI->attributes + pI->attributes_count); pJ++ ){
+        ST_tpAttribute_info *pJ; */
+    
+     for(i = 0; i < methods_count; i++){
+         pMethods[i].access_flags = LE_lerU2(pArq);
+         pMethods[i].name_index = LE_lerU2(pArq);
+         pMethods[i].descriptor_index = LE_lerU2(pArq);
+         pMethods[i].attributes_count = LE_lerU2(pArq);
+         pMethods[i].attributes = malloc((pMethods[i].attributes_count) * sizeof(ST_tpAttribute_info));
+         
+         for(j = 0; j < pMethods[i].attributes_count; j++){
+             LE_lerAttributes(pArq, cp, &(pMethods[i].attributes[j]));
+         }
+             
+        //printf("%02d\n", pI->attributes_count);
+        
+        /*for(pJ = pI->attributes; pJ <  (pI->attributes + pI->attributes_count); pJ++ ){
+            pJ->info = LE_lerAttributes(pArq, cp, pJ);
             
-            LE_lerAttributes(pArq, cp, pJ);
-            
-            /*pJ->attribute_name_index = LE_lerU2(pArq);
+            pJ->attribute_name_index = LE_lerU2(pArq);
             pJ->attribute_length = LE_lerU4(pArq);
             pJ->info = (u1 *) malloc(pJ->attribute_length * sizeof(u1));
-            fread(pJ->info, 1, pJ->attribute_length, pArq);*/
-        }
+            fread(pJ->info, 1, pJ->attribute_length, pArq);
+        }*/
     }
     return pMethods;
 }
@@ -249,14 +264,12 @@ ST_tpConstantValue_attribute *LE_lerConstantValueAttribute(FILE *pArq){
  *  @return pExceptionTable   - Ponteiro para a ExceptionTable lida
  *
  */
-ST_tpException_table * lerExceptionTable (FILE *pArq, u2 tam) {
-    ST_tpException_table *pExceptionTable = (ST_tpException_table*)malloc(tam * sizeof(ST_tpException_table));
-    for(ST_tpException_table *pAux = pExceptionTable; pAux < pExceptionTable + tam; pAux++){
-        pAux->start_pc = LE_lerU2(pArq);
-        pAux->end_pc = LE_lerU2(pArq);
-        pAux->handler_pc = LE_lerU2(pArq);
-        pAux->catch_type = LE_lerU2(pArq);
-    }
+ST_tpException_table * LE_lerExceptionTable (FILE *pArq, ST_tpException_table *pExceptionTable) {
+    pExceptionTable->start_pc = LE_lerU2(pArq);
+    pExceptionTable->end_pc = LE_lerU2(pArq);
+    pExceptionTable->handler_pc = LE_lerU2(pArq);
+    pExceptionTable->catch_type = LE_lerU2(pArq);
+    
     return pExceptionTable;
 }
 
@@ -270,7 +283,7 @@ ST_tpException_table * lerExceptionTable (FILE *pArq, u2 tam) {
 *
 */
 ST_tpCode_attribute *LE_lerCodeAttribute(FILE *pArq, ST_tpCp_info *cp, ST_tpAttribute_info *pAttributes){
-    
+    int i;
     ST_tpCode_attribute *pCode = (ST_tpCode_attribute*) malloc(sizeof(ST_tpCode_attribute));
     // pq nao le attribute_name_index e attribute length
     pCode->max_stack = LE_lerU2(pArq);
@@ -279,24 +292,26 @@ ST_tpCode_attribute *LE_lerCodeAttribute(FILE *pArq, ST_tpCp_info *cp, ST_tpAttr
     
     if(pCode->code_length > 0 ){
         pCode->code = malloc(pCode->code_length * sizeof(u1));
-        for(u1 *pAux = pCode->code; pAux < pCode->code + pCode->code_length; pAux++){
-            *pAux = LE_lerU1(pArq);
+        for(i = 0; i < pCode->code_length; i++){
+            pCode->code[i] = LE_lerU1(pArq);
         }
     }
     
     pCode->exception_table_length = LE_lerU2(pArq);
     
-    if(pCode->exception_table_length >0 ){
-        pCode->exception_table = malloc(pCode->exception_table_length * sizeof(ST_tpException_table));
-        pCode->exception_table = lerExceptionTable(pArq, pCode->exception_table_length);
+    if(pCode->exception_table_length > 0 ){
+        pCode->exception_table = malloc((pCode->exception_table_length) * sizeof(ST_tpException_table));
+        for(i = 0; i < pCode->exception_table_length ; i++){
+            LE_lerExceptionTable(pArq, &(pCode->exception_table[i]));
+        }
     }
     
     pCode->attributes_count = LE_lerU2(pArq);
     
     if(pCode->attributes_count > 0 ){
         pCode->attribute_info = (ST_tpAttribute_info*)malloc(pCode->attributes_count*sizeof(ST_tpAttribute_info*));
-        for (ST_tpAttribute_info *pAux = pCode->attribute_info; pAux < pCode->attribute_info + pCode->attributes_count; pAux++) {
-            pAux = LE_lerAttributes(pArq, cp, pAttributes);
+        for (i = 0; i < pCode->attributes_count; i++) {
+            LE_lerAttributes(pArq, cp, &(pCode->attribute_info[i]));
         }
     }
     return pCode;
@@ -391,13 +406,19 @@ ST_tpLineNumberTable_attribute *LE_lerLineNumberTable(FILE *pArq, ST_tpCp_info *
 ST_tpAttribute_info *LE_lerAttributes(FILE *pArq, ST_tpCp_info *cp, ST_tpAttribute_info *pAttributes) {
     char *pAttributeName;
     
-    pAttributes->attribute_length = LE_lerU4(pArq);
     pAttributes->attribute_name_index = LE_lerU2(pArq);
+    pAttributes->attribute_length = LE_lerU4(pArq);
     
-    pAttributeName = malloc((cp[pAttributes->attribute_name_index].info.Utf8.length) * sizeof(char) + 1);
+    printf("\n[%02d]\n", pAttributes->attribute_name_index);
+
+
+    pAttributeName = malloc((cp[pAttributes->attribute_name_index-1].info.Utf8.length) * sizeof(char) + 1);
     
-    strcpy((char*)pAttributeName, (const char*)(cp[pAttributes->attribute_name_index].info.Utf8.bytes));
-    pAttributeName[cp[pAttributes->attribute_name_index].info.Utf8.length] = '\0'; // Toda string deve finalizar com \0
+    //printf("\n%s", cp[pAttributes->attribute_name_index-1].info.Utf8.bytes);
+    
+    strcpy((char*) pAttributeName, (const char*)(cp[(pAttributes->attribute_name_index)-1].info.Utf8.bytes));
+    
+    pAttributeName[cp[pAttributes->attribute_name_index-1].info.Utf8.length] = '\0'; // Toda string deve finalizar com \0
     
     if(strcmp(pAttributeName, "ConstantValue") == 0)
     {
@@ -489,7 +510,7 @@ ST_tpAttribute_info *LE_lerAttributes(FILE *pArq, ST_tpCp_info *cp, ST_tpAttribu
 	arqPontoClass->minor_version_number = LE_lerU2(pArq);
 	arqPontoClass->major_version_number = LE_lerU2(pArq);
 	if((arqPontoClass->major_version_number >= 0x35 || arqPontoClass->major_version_number <= 0x31)) {
-		printf("Versão Java incompativel!\n");
+		printf("Versao Java incompativel!\n");
 		return NULL;
 	}
 	arqPontoClass->constant_pool_count = LE_lerU2(pArq);
