@@ -91,61 +91,61 @@ u4 LE_lerU4(FILE *pArq){
  *  @return constantPool        - Ponteiro para a Tabela de Constantes lida
  */
 ST_tpCp_info *LE_lerConstant_pool(FILE *pArq, u2 constant_pool_count){
-	
-	ST_tpCp_info *pConstantPool = (ST_tpCp_info *) malloc((constant_pool_count-1) * sizeof(ST_tpCp_info));
-	ST_tpCp_info *pI = NULL;
-	
-	for(pI = pConstantPool; pI <  (pConstantPool + constant_pool_count-1); pI++ ){
-		pI->tag = LE_lerU1(pArq);
-		switch(pI->tag) {
-			case CONSTANT_Utf8:
-				pI->info.Utf8.length = LE_lerU2(pArq);
-				pI->info.Utf8.bytes = malloc(pI->info.Utf8.length * sizeof(u1));
-//                for(u1 *j=i->info.Utf8.bytes;j<(i->info.Utf8.bytes+i->info.Utf8.length);j++)
-//                    *j = LE_lerU1(pArq);
-                fread(pI->info.Utf8.bytes, 1, pI->info.Utf8.length, pArq);
-				break;
-			case CONSTANT_Float:
-				pI->info.Float.bytes = LE_lerU4(pArq);
-				break;
-			case CONSTANT_Integer:
-				pI->info.Integer.bytes = LE_lerU4(pArq);
-				break;
-			case CONSTANT_Long:
-				pI->info.Long.high_bytes = LE_lerU4(pArq);
-				pI->info.Long.low_bytes = LE_lerU4(pArq);
-				break;
-			case CONSTANT_Double:
-				pI->info.Double.high_bytes = LE_lerU4(pArq);
-				pI->info.Double.low_bytes = LE_lerU4(pArq);
-				break;
-			case CONSTANT_Class:
-				pI->info.Class.name_index = LE_lerU2(pArq);
-				break;
-			case CONSTANT_String:
-				pI->info.String.string_index = LE_lerU2(pArq);
-				break;
-			case CONSTANT_Fieldref:
-				pI->info.Fieldref.class_index = LE_lerU2(pArq);
-				pI->info.Fieldref.name_and_type_index = LE_lerU2(pArq);
-				break;
-			case CONSTANT_Methodref:
-				pI->info.Methodref.class_index = LE_lerU2(pArq);
-				pI->info.Methodref.name_and_type_index = LE_lerU2(pArq);
-				break;
-			case CONSTANT_InterfaceMethodref:
-				pI->info.InterfaceMethodref.class_index = LE_lerU2(pArq);
-				pI->info.InterfaceMethodref.name_and_type_index = LE_lerU2(pArq);
-				break;
-			case CONSTANT_NameAndType:
-				pI->info.NameAndType.name_index = LE_lerU2(pArq);
-				pI->info.NameAndType.descriptor_index = LE_lerU2(pArq);
-				break;
-			default:
-				break;
-		}
-	}
-    return pConstantPool;
+    
+    ST_tpCp_info *constantPool = (ST_tpCp_info *) malloc((constant_pool_count-1)*sizeof(ST_tpCp_info));
+    int i;
+    
+    for(i = 0; i <  (constant_pool_count-1); i++ ){
+        constantPool[i].tag = LE_lerU1(pArq);
+        switch(constantPool[i].tag) {
+            case CONSTANT_Utf8:
+                constantPool[i].info.Utf8.length = LE_lerU2(pArq);
+                constantPool[i].info.Utf8.bytes = malloc(constantPool[i].info.Utf8.length*sizeof(u1));
+                fread(constantPool[i].info.Utf8.bytes, 1, constantPool[i].info.Utf8.length, pArq);
+                break;
+            case CONSTANT_Float:
+                constantPool[i].info.Float.bytes = LE_lerU4(pArq);
+                break;
+            case CONSTANT_Integer:
+                constantPool[i].info.Integer.bytes = LE_lerU4(pArq);
+                break;
+            case CONSTANT_Long:
+                constantPool[i].info.Long.high_bytes = LE_lerU4(pArq);
+                constantPool[i].info.Long.low_bytes = LE_lerU4(pArq);
+                i++;
+                break;
+            case CONSTANT_Double:
+                constantPool[i].info.Double.high_bytes = LE_lerU4(pArq);
+                constantPool[i].info.Double.low_bytes = LE_lerU4(pArq);
+                i++;
+                break;
+            case CONSTANT_Class:
+                constantPool[i].info.Class.name_index = LE_lerU2(pArq);
+                break;
+            case CONSTANT_String:
+                constantPool[i].info.String.string_index = LE_lerU2(pArq);
+                break;
+            case CONSTANT_Fieldref:
+                constantPool[i].info.Fieldref.class_index = LE_lerU2(pArq);
+                constantPool[i].info.Fieldref.name_and_type_index = LE_lerU2(pArq);
+                break;
+            case CONSTANT_Methodref:
+                constantPool[i].info.Methodref.class_index = LE_lerU2(pArq);
+                constantPool[i].info.Methodref.name_and_type_index = LE_lerU2(pArq);
+                break;
+            case CONSTANT_InterfaceMethodref:
+                constantPool[i].info.InterfaceMethodref.class_index = LE_lerU2(pArq);
+                constantPool[i].info.InterfaceMethodref.name_and_type_index = LE_lerU2(pArq);
+                break;
+            case CONSTANT_NameAndType:
+                constantPool[i].info.NameAndType.name_index = LE_lerU2(pArq);
+                constantPool[i].info.NameAndType.descriptor_index = LE_lerU2(pArq);
+                break;
+            default:
+                break;
+        }
+    }
+    return constantPool;
 }
 
 /**
@@ -405,9 +405,6 @@ ST_tpLineNumberTable_attribute *LE_lerLineNumberTable(FILE *pArq) {
  */
 ST_tpAttribute_info *LE_lerAttribute(FILE *pArq, ST_tpCp_info *cp, ST_tpAttribute_info *pAttributes) {
     char *pAttributeName;
-    
-    pAttributes = (ST_tpAttribute_info*)malloc(sizeof(ST_tpAttribute_info));
-
  
     pAttributes->attribute_name_index = LE_lerU2(pArq);
     
@@ -514,10 +511,10 @@ ST_tpAttribute_info *LE_lerAttribute(FILE *pArq, ST_tpCp_info *cp, ST_tpAttribut
 	}
 	arqPontoClass->minor_version_number = LE_lerU2(pArq);
 	arqPontoClass->major_version_number = LE_lerU2(pArq);
-	if((arqPontoClass->major_version_number >= 0x35 || arqPontoClass->major_version_number <= 0x31)) {
+	/*if((arqPontoClass->major_version_number >= 0x35 || arqPontoClass->minor_version_number <= 0x31)) {
 		printf("Versao Java incompativel!\n");
 		return NULL;
-	}
+	}*/
 	arqPontoClass->constant_pool_count = LE_lerU2(pArq);
 	arqPontoClass->constant_pool_table = LE_lerConstant_pool(pArq, arqPontoClass->constant_pool_count);
 	arqPontoClass->access_flags = LE_lerU2(pArq);
@@ -530,7 +527,7 @@ ST_tpAttribute_info *LE_lerAttribute(FILE *pArq, ST_tpCp_info *cp, ST_tpAttribut
 	arqPontoClass->methods_count = LE_lerU2(pArq);
 	arqPontoClass->method_info_table = LE_lerMethods(pArq, arqPontoClass->constant_pool_table, arqPontoClass->methods_count);
 	arqPontoClass->attributes_count = LE_lerU2(pArq);
-     
+    arqPontoClass->attribute_info_table = malloc((arqPontoClass->attributes_count) * sizeof(ST_tpAttribute_info));
      for(int j = 0; j < arqPontoClass->attributes_count; j++){
          LE_lerAttribute(pArq, arqPontoClass->constant_pool_table, &(arqPontoClass->attribute_info_table[j]));
      }

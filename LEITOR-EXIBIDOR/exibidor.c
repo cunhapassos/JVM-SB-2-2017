@@ -38,6 +38,15 @@ void EX_imprimirUtf8 (u1 *pS, int length){
     printf("\n");
 }
 
+void EX_imprimirUtf8_ (u1 *s, int length)
+{
+    u1 *i;
+    printf("<");
+    for (i=s;i<s+length;i++)
+        printf("%c", *i);
+    printf(">\n");
+}
+
 /**
  *  Descrição da função:
  *       Imprime atributos contidos na Tabela de Atributos
@@ -62,7 +71,7 @@ void EX_imprimirAtributos(ST_tpClassFile *pClassFile, ST_tpAttribute_info *pAttr
         printf("...................................\n\n");
         printf("\tGENERIC INFO:\n\n");
         printf("\tAttribute name index: 0x%04x\n", pAttributeInfoTable[i].attribute_name_index);
-        printf("\tAttibute length: 0x%08x\n", pAttributeInfoTable[i].attribute_length);
+        printf("\tAttibute length: %d\n", pAttributeInfoTable[i].attribute_length);
         // Verificar impressão do campo Info da estrutura Atribute_info (nessa implementação a impressão é feita byte a byte)
         /*u1 *pQ;
         for(pQ = pN->info; pQ <  (pN->info + pN->attribute_length); pQ++){
@@ -80,68 +89,77 @@ void EX_imprimirAtributos(ST_tpClassFile *pClassFile, ST_tpAttribute_info *pAttr
  */
 void EX_imprimirConstantPool(ST_tpClassFile *pClassFile) {
     
-    int j=1;
-    ST_tpCp_info *pI;
-    printf("\n===================================\n           CONSTANT POOL\n===================================\n");
-
-    for(pI = pClassFile->constant_pool_table; pI < (pClassFile->constant_pool_table + pClassFile->constant_pool_count-1); pI++ ){
-        switch(pI->tag) {
+    int i;
+    for(i = 0; i <  (pClassFile->constant_pool_count-1); i++ ){
+        switch(pClassFile->constant_pool_table[i].tag) {
             case CONSTANT_Utf8:
-                printf("\n[%02d] CONSTANT_Utf8 INFO\n",j);
-                printf("\t Length: 0x%04x\n",pI->info.Utf8.length);
-                printf("\t String: ");
-                EX_imprimirUtf8(pI->info.Utf8.bytes, pI->info.Utf8.length);
+                printf("\n-----[%d] CONSTANT_Utf8 INFO-----\n\n",i+1);
+                printf("Length: %d\n",pClassFile->constant_pool_table[i].info.Utf8.length);
+                printf("String: ");
+                EX_imprimirUtf8(pClassFile->constant_pool_table[i].info.Utf8.bytes, pClassFile->constant_pool_table[i].info.Utf8.length);
                 break;
             case CONSTANT_Float:
-                printf("\n[%02d] CONSTANT_Float INFO-----\n",j);
-                printf("\t Float: 0x%08x\n", pI->info.Float.bytes);
+                printf("\n-----[%d] CONSTANT_Float INFO-----\n\n",i+1);
+                printf("Float: 0x%08x\n",pClassFile->constant_pool_table[i].info.Float.bytes);
                 break;
             case CONSTANT_Integer:
-                printf("\n[%02d] CONSTANT_Integer INFO\n",j);
-                printf("\t Integer: 0x%08x\n", pI->info.Integer.bytes);
+                printf("\n-----[%d] CONSTANT_Integer INFO-----\n\n",i+1);
+                printf("Integer: 0x%08x\n",pClassFile->constant_pool_table[i].info.Integer.bytes);
                 break;
             case CONSTANT_Long:
-                printf("\n[%02d] CONSTANT_Long INFO\n",j);
-                printf("\t High Bytes: 0x%08x\n", pI->info.Long.high_bytes);
-                printf("\t Low Bytes: 0x%08x\n", pI->info.Long.low_bytes);
+                printf("\n-----[%d] CONSTANT_Long INFO-----\n\n",i+1);
+                printf("High Bytes: 0x%08x\n",pClassFile->constant_pool_table[i].info.Long.high_bytes);
+                printf("Low Bytes: 0x%08x\n",pClassFile->constant_pool_table[i].info.Long.low_bytes);
+                printf("\n-----[%d] (large numeric continued)-----\n\n",i+2);
                 break;
             case CONSTANT_Double:
-                printf("\n[%02d] CONSTANT_Double INFO\n",j);
-                printf("\t High Bytes: 0x%08x\n", pI->info.Double.high_bytes);
-                printf("\t Low Bytes: 0x%08x\n", pI->info.Double.high_bytes);
+                printf("\n-----[%d] CONSTANT_Double INFO-----\n\n",i+1);
+                printf("High Bytes: 0x%08x\n",pClassFile->constant_pool_table[i].info.Double.high_bytes);
+                printf("Low Bytes: 0x%08x\n",pClassFile->constant_pool_table[i].info.Double.low_bytes);
+                printf("\n-----[%d] (large numeric continued)-----\n\n",i+2);
                 break;
             case CONSTANT_Class:
-                printf("\n[%02d] CONSTANT_Class INFO\n",j);
-                printf("\t Name Index: 0x%04x\n", pI->info.Class.name_index);
+                printf("\n-----[%d] CONSTANT_Class INFO-----\n\n",i+1);
+                printf("Name Index: cp_info #%d ",pClassFile->constant_pool_table[i].info.Class.name_index);
+                EX_imprimirUtf8_(pClassFile->constant_pool_table[pClassFile->constant_pool_table[i].info.Class.name_index-1].info.Utf8.bytes, pClassFile->constant_pool_table[pClassFile->constant_pool_table[i].info.Class.name_index-1].info.Utf8.length);
                 break;
             case CONSTANT_String:
-                printf("\n[%02d] CONSTANT_String INFO\n",j);
-                printf("\t String Index: 0x%04x\n", pI->info.String.string_index);
+                printf("\n-----[%d] CONSTANT_String INFO-----\n\n",i+1);
+                printf("String Index: cp_info #%d ",pClassFile->constant_pool_table[i].info.String.string_index);
+                EX_imprimirUtf8_(pClassFile->constant_pool_table[pClassFile->constant_pool_table[i].info.String.string_index-1].info.Utf8.bytes, pClassFile->constant_pool_table[pClassFile->constant_pool_table[i].info.String.string_index-1].info.Utf8.length);
                 break;
             case CONSTANT_Fieldref:
-                printf("\n[%02d] CONSTANT_Fieldref INFO\n",j);
-                printf("\t Class Index: 0x%04x\n", pI->info.Fieldref.class_index);
-                printf("\t Name and Type Index: 0x%04x\n", pI->info.Fieldref.name_and_type_index);
+                printf("\n-----[%d] CONSTANT_Fieldref INFO-----\n\n",i+1);
+                printf("Class Index: cp_info #%d ",pClassFile->constant_pool_table[i].info.Fieldref.class_index);
+                EX_imprimirUtf8_(pClassFile->constant_pool_table[pClassFile->constant_pool_table[pClassFile->constant_pool_table[i].info.Fieldref.class_index-1].info.Class.name_index-1].info.Utf8.bytes, pClassFile->constant_pool_table[pClassFile->constant_pool_table[pClassFile->constant_pool_table[i].info.Fieldref.class_index-1].info.Class.name_index-1].info.Utf8.length);
+                printf("Name and Type Index: cp_info #%d ",pClassFile->constant_pool_table[i].info.Fieldref.name_and_type_index);
+                EX_imprimirUtf8_(pClassFile->constant_pool_table[pClassFile->constant_pool_table[pClassFile->constant_pool_table[i].info.Fieldref.name_and_type_index-1].info.NameAndType.name_index-1].info.Utf8.bytes, pClassFile->constant_pool_table[pClassFile->constant_pool_table[pClassFile->constant_pool_table[i].info.Fieldref.name_and_type_index-1].info.NameAndType.name_index-1].info.Utf8.length);
+                EX_imprimirUtf8_(pClassFile->constant_pool_table[pClassFile->constant_pool_table[pClassFile->constant_pool_table[i].info.Fieldref.name_and_type_index-1].info.NameAndType.descriptor_index-1].info.Utf8.bytes, pClassFile->constant_pool_table[pClassFile->constant_pool_table[pClassFile->constant_pool_table[i].info.Fieldref.name_and_type_index-1].info.NameAndType.descriptor_index-1].info.Utf8.length);
                 break;
             case CONSTANT_Methodref:
-                printf("\n[%02d] CONSTANT_Methodref INFO\n", j);
-                printf("\t Class Index: 0x%04x\n", pI->info.Methodref.class_index);
-                printf("\t Name and Type Index: 0x%04x\n", pI->info.Methodref.name_and_type_index);
+                printf("\n-----[%d] CONSTANT_Methodref INFO-----\n\n",i+1);
+                printf("Class Index: cp_info #%d ",pClassFile->constant_pool_table[i].info.Methodref.class_index);
+                EX_imprimirUtf8_(pClassFile->constant_pool_table[pClassFile->constant_pool_table[pClassFile->constant_pool_table[i].info.Methodref.class_index-1].info.Class.name_index-1].info.Utf8.bytes, pClassFile->constant_pool_table[pClassFile->constant_pool_table[pClassFile->constant_pool_table[i].info.Methodref.class_index-1].info.Class.name_index-1].info.Utf8.length);
+                printf("Name and Type Index: cp_info #%d ",pClassFile->constant_pool_table[i].info.Methodref.name_and_type_index);
+                EX_imprimirUtf8_(pClassFile->constant_pool_table[pClassFile->constant_pool_table[pClassFile->constant_pool_table[i].info.Methodref.name_and_type_index-1].info.NameAndType.name_index-1].info.Utf8.bytes, pClassFile->constant_pool_table[pClassFile->constant_pool_table[pClassFile->constant_pool_table[i].info.Methodref.name_and_type_index-1].info.NameAndType.name_index-1].info.Utf8.length);
+                EX_imprimirUtf8_(pClassFile->constant_pool_table[pClassFile->constant_pool_table[pClassFile->constant_pool_table[i].info.Methodref.name_and_type_index-1].info.NameAndType.descriptor_index-1].info.Utf8.bytes, pClassFile->constant_pool_table[pClassFile->constant_pool_table[pClassFile->constant_pool_table[i].info.Methodref.name_and_type_index-1].info.NameAndType.descriptor_index-1].info.Utf8.length);
                 break;
             case CONSTANT_InterfaceMethodref:
-                printf("\n[%02d] CONSTANT_InterfaceMethodref INFO\n", j);
-                printf("\t Class Index: 0x%04x\n", pI->info.InterfaceMethodref.class_index);
-                printf("\t Name and Type Index: 0x%04x\n", pI->info.InterfaceMethodref.name_and_type_index);
+                printf("\n-----[%d] CONSTANT_InterfaceMethodref INFO-----\n\n",i+1);
+                printf("Class Index: cp_info #%d ",pClassFile->constant_pool_table[i].info.InterfaceMethodref.class_index);
+                EX_imprimirUtf8_(pClassFile->constant_pool_table[pClassFile->constant_pool_table[pClassFile->constant_pool_table[i].info.InterfaceMethodref.name_and_type_index-1].info.NameAndType.name_index-1].info.Utf8.bytes, pClassFile->constant_pool_table[pClassFile->constant_pool_table[pClassFile->constant_pool_table[i].info.InterfaceMethodref.name_and_type_index-1].info.NameAndType.name_index-1].info.Utf8.length);
+                EX_imprimirUtf8_(pClassFile->constant_pool_table[pClassFile->constant_pool_table[pClassFile->constant_pool_table[i].info.InterfaceMethodref.name_and_type_index-1].info.NameAndType.descriptor_index-1].info.Utf8.bytes, pClassFile->constant_pool_table[pClassFile->constant_pool_table[pClassFile->constant_pool_table[i].info.InterfaceMethodref.name_and_type_index-1].info.NameAndType.descriptor_index-1].info.Utf8.length);
                 break;
             case CONSTANT_NameAndType:
-                printf("\n[%02d] CONSTANT_NameAndType INFO\n", j);
-                printf("\t Name Index: 0x%04x\n", pI->info.NameAndType.name_index);
-                printf("\t Descriptor Index: 0x%04x\n", pI->info.NameAndType.descriptor_index);
+                printf("\n-----[%d] CONSTANT_NameAndType INFO-----\n\n",i+1);
+                printf("Name Index: cp_info #%d ",pClassFile->constant_pool_table[i].info.NameAndType.name_index);
+                EX_imprimirUtf8_(pClassFile->constant_pool_table[pClassFile->constant_pool_table[i].info.NameAndType.name_index-1].info.Utf8.bytes, pClassFile->constant_pool_table[pClassFile->constant_pool_table[i].info.NameAndType.name_index-1].info.Utf8.length);
+                printf("Descriptor Index: cp_info #%d ",pClassFile->constant_pool_table[i].info.NameAndType.descriptor_index);
+                EX_imprimirUtf8_(pClassFile->constant_pool_table[pClassFile->constant_pool_table[i].info.NameAndType.descriptor_index-1].info.Utf8.bytes, pClassFile->constant_pool_table[pClassFile->constant_pool_table[i].info.NameAndType.descriptor_index-1].info.Utf8.length);
                 break;
             default:
                 break;
         }
-        j++;
     }
 }
 
@@ -214,19 +232,20 @@ void EX_imprimirInterfaces(ST_tpClassFile *pClassFile) {
  */
 void EX_imprimirClassFile(ST_tpClassFile *pClassFile){
     
-    printf("\n===================================\n        GENERAL INFORMATION\n===================================\n\n");
-    printf("Magic: 0x%08x\n", pClassFile->magic);
-    printf("Minor Version: 0x%04x\n", pClassFile->minor_version_number);
-    printf("Major Version: 0x%04x\n", pClassFile->major_version_number);
-    printf("Constant Pool Count: 0x%04x\n", pClassFile->constant_pool_count);
-    printf("Access Flags: 0x%04x\n", pClassFile->access_flags);
-    printf("This Class: 0x%04x\n", pClassFile->this_class);
-    printf("Super Class: 0x%04x\n", pClassFile->super_class);
-    printf("Interfaces Count: 0x%04x\n", pClassFile->interfaces_count);
-    printf("Fields Count: 0x%04x\n", pClassFile->fields_count);
-    printf("Methods Count: 0x%04x\n", pClassFile->methods_count);
-    printf("Atributes Count: 0x%02x\n", pClassFile->attributes_count);
-    
+    printf("\n-----GENERAL INFORMATION-----\n\n");
+    printf("Magic: 0x%08x\n",pClassFile->magic);
+    printf("Minor Version: 0x%04x\n",pClassFile->minor_version_number);
+    printf("Major Version: 0x%04x\n",pClassFile->major_version_number);
+    printf("Constant Pool Count: %d\n",pClassFile->constant_pool_count);
+    printf("Access Flags: 0x%04x\n",pClassFile->access_flags);
+    printf("This Class: cp_info #%d ",pClassFile->this_class);
+    EX_imprimirUtf8_(pClassFile->constant_pool_table[pClassFile->constant_pool_table[pClassFile->this_class-1].info.Class.name_index-1].info.Utf8.bytes, pClassFile->constant_pool_table[pClassFile->constant_pool_table[pClassFile->this_class-1].info.Class.name_index-1].info.Utf8.length);
+    printf("Super Class: cp_info #%d ",pClassFile->super_class);
+    EX_imprimirUtf8_(pClassFile->constant_pool_table[pClassFile->constant_pool_table[pClassFile->super_class-1].info.Class.name_index-1].info.Utf8.bytes, pClassFile->constant_pool_table[pClassFile->constant_pool_table[pClassFile->super_class-1].info.Class.name_index-1].info.Utf8.length);
+    printf("Interfaces Count: %d\n",pClassFile->interfaces_count);
+    printf("Fields Count: %d\n",pClassFile->fields_count);
+    printf("Methods Count: %d\n",pClassFile->methods_count);
+    printf("Atributes Count: %d\n",pClassFile->attributes_count);    
     EX_imprimirConstantPool(pClassFile);
     EX_imprimirInterfaces(pClassFile);
     EX_imprimirFields(pClassFile);

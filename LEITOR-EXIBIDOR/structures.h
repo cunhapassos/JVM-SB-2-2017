@@ -180,8 +180,6 @@ typedef struct{
  *                               ATRIBUTO CONSTANTVALUE
  ** ******************************************************************************/
 typedef struct{
-    u2 attribute_name_index;
-    u4 attribute_length;
     u2 constantvalue_index;
 }ST_tpConstantValue_attribute;
 
@@ -215,16 +213,14 @@ typedef struct{
  *                                ATRIBUTO DEPRECATED
  ** ******************************************************************************/
 typedef struct{
-    u2 attribute_name_index;
-    u4 attribute_length;
+//    u2 attribute_name_index;
+//    u4 attribute_length;
 }ST_tpDeprecated_attribute;
 
 /** ******************************************************************************
  *                                ATRIBUTO EXCEPTIONS
  ** ******************************************************************************/
 typedef struct {
-    u2 attribute_name_index;
-    u4 attribute_length;
     u2 number_of_exceptions;
     u2 *exception_index_table;
 }ST_tpExceptions_attribute;
@@ -243,8 +239,6 @@ typedef struct {
  *                                ATRIBUTO INNERCLASSES
  ** ******************************************************************************/
 typedef struct {
-    u2 attribute_name_index;
-    u4 attribute_length;
     u2 number_of_classes;
     ST_tpInnerClasses_table *classes;
 }ST_tpInnerClasses_attribute;
@@ -261,8 +255,6 @@ typedef struct {
  *                                ATRIBUTO LINERNUMBERTABLE
  ** ******************************************************************************/
 typedef struct {
-    u2 attribute_name_index;
-    u4 attribute_length;
     u2 line_number_table_length;
     ST_tpLine_number_table *info;
 }ST_tpLineNumberTable_attribute;
@@ -282,8 +274,6 @@ typedef struct {
  *                                ATRIBUTO LOCALVARIABLETABLE
  ** ******************************************************************************/
 typedef struct {
-    u2 attribute_name_index;
-    u4 attribute_length;
     u2 local_variable_table_length;
     ST_tpLocal_variable_table *Local_variable_table;
 }ST_tpLocalVariableTable_attribute;
@@ -292,8 +282,6 @@ typedef struct {
  *                                ATRIBUTO SOURCEFILE
  ** ******************************************************************************/
 typedef struct {
-    u2 attribute_name_index;
-    u4 attribute_length;
     u2 source_file_index;
 }ST_tpSourceFile_attribute;
 
