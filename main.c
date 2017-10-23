@@ -24,9 +24,11 @@ int main(int argc, const char * argv[]) {
     //EX_imprimirClassFile(LE_lerArquivo(pNomeArquivo));
     
     ST_tpClassFile *p =
-    p = LE_carregarClasse("/Users/danielmatias/Desktop/JVM-SB-2-2018/LEITOR-EXIBIDOR/double_aritmetica.class");
+    p = LE_carregarClasse("/Users/paulopassos/OneDrive/Documentos/13º SEMESTRE/SOFTWARE BÁSICO/TRABALHOS/JVM-SB-2-2017/LEITOR-EXIBIDOR/File.class");
     EX_imprimirClassFile(p);
-    
+    free(p);
+    p = NULL;
     // /Users/paulopassos/OneDrive/Documentos/13º SEMESTRE/SOFTWARE BÁSICO/TRABALHOS/JVM-SB-2-2017/File.class
+    // /Users/danielmatias/Desktop/JVM-SB-2-2018/LEITOR-EXIBIDOR/double_aritmetica.class
     return 0;
 }

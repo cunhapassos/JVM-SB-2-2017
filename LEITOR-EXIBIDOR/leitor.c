@@ -27,6 +27,7 @@
  *                             Inclusao do compilador 
  ** *******************************************************************************/
 
+ #include <stdio.h>
  #include <string.h>
  #include "leitor.h"
 
@@ -309,7 +310,8 @@ ST_tpCode_attribute *LE_lerCodeAttribute(FILE *pArq, ST_tpCp_info *cp, ST_tpAttr
     pCode->attributes_count = LE_lerU2(pArq);
     
     if(pCode->attributes_count > 0 ){
-        pCode->attribute_info = (ST_tpAttribute_info*)malloc(pCode->attributes_count*sizeof(ST_tpAttribute_info*));
+        //pCode->attribute_info = (ST_tpAttribute_info*)malloc(pCode->attributes_count*sizeof(ST_tpAttribute_info*));
+        pCode->attribute_info = (ST_tpAttribute_info*)malloc(pCode->attributes_count*sizeof(ST_tpAttribute_info));
         for (i = 0; i < pCode->attributes_count; i++) {
             LE_lerAttribute(pArq, cp, &(pCode->attribute_info[i]));
         }
@@ -405,7 +407,7 @@ ST_tpLineNumberTable_attribute *LE_lerLineNumberTable(FILE *pArq) {
  */
 ST_tpAttribute_info *LE_lerAttribute(FILE *pArq, ST_tpCp_info *cp, ST_tpAttribute_info *pAttributes) {
     char *pAttributeName;
- 
+    int aux, i;
     pAttributes->attribute_name_index = LE_lerU2(pArq);
     
     pAttributes->attribute_length = LE_lerU4(pArq);
@@ -413,49 +415,61 @@ ST_tpAttribute_info *LE_lerAttribute(FILE *pArq, ST_tpCp_info *cp, ST_tpAttribut
     //printf("\n[%02d]\n", pAttributes->attribute_name_index);
 
 
-    pAttributeName = malloc((cp[pAttributes->attribute_name_index-1].info.Utf8.length) * sizeof(char) + 1);
+    //pAttributeName = malloc((cp[pAttributes->attribute_name_index-1].info.Utf8.length) * sizeof(char) + 1);
+    aux = cp[pAttributes->attribute_name_index-1].info.Utf8.length;
+    pAttributeName = malloc(aux*sizeof(char) + 1 );
     
     //printf("\n%s", cp[pAttributes->attribute_name_index-1].info.Utf8.bytes);
+    //printf("\n%d", cp[pAttributes->attribute_name_index-1].info.Utf8.length);
+    //printf("\n%lu", sizeof(pAttributeName));
     
-    strcpy((char*) pAttributeName, (const char*)(cp[(pAttributes->attribute_name_index)-1].info.Utf8.bytes));
-    
-    pAttributeName[cp[pAttributes->attribute_name_index-1].info.Utf8.length] = '\0'; // Toda string deve finalizar com \0
+    /* Copia os cararteres UTF8 da constante Pool para pAttributeName e acrescenta \0 ao final */
+    for(i = 0; i < aux; i++ ){
+        pAttributeName[i] = cp[(pAttributes->attribute_name_index)-1].info.Utf8.bytes[i];
+    }
+    pAttributeName[i] = '\0';
     
     if(strcmp(pAttributeName, "ConstantValue") == 0)
     {
         ST_tpConstantValue_attribute *pConstantValue = (ST_tpConstantValue_attribute*) malloc(sizeof(ST_tpConstantValue_attribute));
         pConstantValue = LE_lerConstantValueAttribute(pArq);
         pAttributes->info = (ST_tpConstantValue_attribute*) pConstantValue;
+        pConstantValue = NULL;
     }
     else if(strcmp(pAttributeName, "Code") == 0)
     {
         ST_tpCode_attribute *pCode = (ST_tpCode_attribute*) malloc(sizeof(ST_tpCode_attribute));
         pCode = LE_lerCodeAttribute(pArq, cp, pAttributes);
         pAttributes->info = (ST_tpCode_attribute*) pCode;
+        pCode = NULL;
     }
     else if(strcmp(pAttributeName, "Exceptions") == 0)
     {
         ST_tpExceptions_attribute *pExceptions = (ST_tpExceptions_attribute*) malloc(sizeof(ST_tpExceptions_attribute));
         pExceptions = LE_lerExceptionsAttribute(pArq);
         pAttributes->info = (ST_tpExceptions_attribute*) pExceptions;
+        pExceptions = NULL;
     }
     else if(strcmp(pAttributeName, "InnerClasses") == 0)
     {
         ST_tpInnerClasses_attribute *pInnerClasses =  (ST_tpInnerClasses_attribute*) malloc(sizeof(ST_tpInnerClasses_attribute));
         pInnerClasses = LE_lerInnerClassesAttribute(pArq);
         pAttributes->info = (ST_tpInnerClasses_attribute*) pInnerClasses;
+        pInnerClasses = NULL;
     }
    else if(strcmp(pAttributeName, "SourceFile") == 0)
     {
         ST_tpSourceFile_attribute *pSourceFile = (ST_tpSourceFile_attribute*) malloc(sizeof(ST_tpSourceFile_attribute));
         pSourceFile = LE_lerSourceFileAttribute(pArq);
         pAttributes->info = (ST_tpSourceFile_attribute*) pSourceFile;
+        pSourceFile = NULL;
     }
      else if(strcmp(pAttributeName, "LineNumberTable") == 0)
     {
         ST_tpLineNumberTable_attribute *pLineNumberTable = (ST_tpLineNumberTable_attribute*) malloc(sizeof(ST_tpLineNumberTable_attribute));
         pLineNumberTable = LE_lerLineNumberTable(pArq);
-        pAttributes->info =(ST_tpLineNumberTable_attribute*) pLineNumberTable;
+        pAttributes->info = (ST_tpLineNumberTable_attribute*) pLineNumberTable;
+        pLineNumberTable = NULL;
     }
     /*else
     {
