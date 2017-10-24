@@ -429,6 +429,26 @@ ST_tpLineNumberTable_attribute *LE_lerLineNumberAttribute(FILE *pArq) {
     }
     return pLineNumberTable;
 }
+
+
+ST_tpLocalVariableTable_attribute *LE_lerLocalVariableAttribute(FILE *pArq){
+    ST_tpLocalVariableTable_attribute *pLocalVariableTable = (ST_tpLocalVariableTable_attribute*) malloc(sizeof(ST_tpLocalVariableTable_attribute));
+    
+    pLocalVariableTable->local_variable_table_length = LE_lerU2(pArq);
+    
+    if(pLocalVariableTable->local_variable_table_length > 0){
+        pLocalVariableTable->Local_variable_table = (ST_tpLocal_variable_table*) malloc(sizeof(ST_tpLocal_variable_table));
+        
+        for(int i = 0; i < pLocalVariableTable->local_variable_table_length; i++){
+            pLocalVariableTable->Local_variable_table[i].start_pc = LE_lerU2(pArq);
+            pLocalVariableTable->Local_variable_table[i].length = LE_lerU2(pArq);
+            pLocalVariableTable->Local_variable_table[i].name_index = LE_lerU2(pArq);
+            pLocalVariableTable->Local_variable_table[i].descriptor_index = LE_lerU2(pArq);
+            pLocalVariableTable->Local_variable_table[i].index = LE_lerU2(pArq);
+        }
+    }
+    return pLocalVariableTable;
+}
 /**
  *  Descri��o da fun��o:
  *       Le Tabela de Atributos do bytecode .class
@@ -503,6 +523,12 @@ ST_tpAttribute_info *LE_lerAttribute(FILE *pArq, ST_tpCp_info *cp, ST_tpAttribut
         pAttributes->info = (ST_tpLineNumberTable_attribute*) pLineNumberTable;
         pLineNumberTable = NULL;
     }
+     else if (strcmp(pAttributeName, "LocalVariableTable") == 0){
+         ST_tpLocalVariableTable_attribute *pLocalVariableAttribute = (ST_tpLocalVariableTable_attribute*) malloc(sizeof(ST_tpLocalVariableTable_attribute));
+         pLocalVariableAttribute = LE_lerLocalVariableAttribute(pArq);
+         pAttributes->info = (ST_tpLocalVariableTable_attribute*) pLocalVariableAttribute;
+         pLocalVariableAttribute = NULL;
+     }
     /*else
     {
         readUnknownAttribute(fp, pAttributes);

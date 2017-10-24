@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "LEITOR-EXIBIDOR/leitor.c"
-            timestampString = "530502492.401551"
+            timestampString = "530504870.992156"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "232"
-            endingLineNumber = "232"
+            startingLineNumber = "233"
+            endingLineNumber = "233"
             landmarkName = "LE_lerMethods"
             landmarkType = "9">
          </BreakpointContent>
@@ -74,11 +74,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "LEITOR-EXIBIDOR/leitor.c"
-            timestampString = "530502492.401862"
+            timestampString = "530504870.992458"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "575"
-            endingLineNumber = "575"
+            startingLineNumber = "602"
+            endingLineNumber = "602"
             landmarkName = "LE_carregarClasse"
             landmarkType = "9">
          </BreakpointContent>

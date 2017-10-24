@@ -56,6 +56,8 @@ ST_tpSourceFile_attribute *LE_lerSourceFileAttribute(FILE * pArq);
 
 ST_tpLineNumberTable_attribute *LE_lerLineNumberAttribute(FILE *pArq);
 
+ST_tpLocalVariableTable_attribute *LE_lerLocalVariableAttribute(FILE *pArq);
+
 ST_tpAttribute_info *LE_lerAttribute(FILE *pArq, ST_tpCp_info *cp, ST_tpAttribute_info *pAttributes);
 
 ST_tpClassFile *LE_carregarClasse(char *nomeArquivo);
