@@ -173,10 +173,13 @@ u2 *LE_lerInterfaces(FILE *pArq, u2 interfaces_count) {
  *
  *  @return pfields     - Ponteiro para a Tabela de Fields lida
  */
-ST_tpField_info *LE_lerFields(FILE *pArq, u2 fields_count) {
-    ST_tpField_info *pfields = (ST_tpField_info *) malloc(fields_count * sizeof(ST_tpField_info));
-    ST_tpField_info *pI = NULL;
-    for(pI = pfields; pI <  (pfields + fields_count); pI++ ){
+ST_tpField_info *LE_lerFields(FILE *pArq, ST_tpCp_info *cp, u2 fields_count) {
+    int i, j;
+    ST_tpField_info *pFields = (ST_tpField_info *) malloc(fields_count * sizeof(ST_tpField_info));
+    /*
+     ST_tpField_info *pI = NULL;
+    
+    for(pI = pFields; pI <  (pFields + fields_count); pI++ ){
         pI->access_flags = LE_lerU2(pArq);
         pI->name_index = LE_lerU2(pArq);
         pI->descriptor_index = LE_lerU2(pArq);
@@ -186,11 +189,22 @@ ST_tpField_info *LE_lerFields(FILE *pArq, u2 fields_count) {
         for(pJ = pI->attributes; pJ <  (pI->attributes + pI->attributes_count); pJ++ ){
             pJ->attribute_name_index = LE_lerU2(pArq);
             pJ->attribute_length = LE_lerU4(pArq);
-            pJ->info = (u1 *) malloc(pJ->attribute_length * sizeof(u1));
+            pJ->info = (u1 *) malloc(pJ->attribute_length * sizeof(u1)); // !!!!! VERIFICAR ISSO MELHOR LER ATRIBUTO COMO FOI FEITO NA FUNCAO *LE_lerMethods
             fread(pJ->info, 1, pJ->attribute_length, pArq);
         }
+    
+
+    }*/
+    for(i = 0; i < fields_count; i++){
+        pFields[i].access_flags     = LE_lerU2(pArq);
+        pFields[i].name_index       = LE_lerU2(pArq);
+        pFields[i].descriptor_index = LE_lerU2(pArq);
+        pFields[i].attributes_count = LE_lerU2(pArq);
+        for (j = 0 ; j < pFields[i].attributes_count; j++) {
+             LE_lerAttribute(pArq, cp, &(pFields[i].attributes[j]));
+        }
     }
-    return pfields;
+    return pFields;
 }
 
 /**
@@ -206,7 +220,8 @@ ST_tpMethod_info *LE_lerMethods(FILE *pArq, ST_tpCp_info *cp, u2 methods_count) 
     int i, j;
     
     ST_tpMethod_info *pMethods = (ST_tpMethod_info *) malloc(methods_count * sizeof(ST_tpMethod_info));
-    /*ST_tpMethod_info *pI;
+    /*
+     ST_tpMethod_info *pI;
     for(pI = pMethods; pI <  (pMethods+methods_count); pI++ ){
         pI->access_flags = LE_lerU2(pArq);
         pI->name_index = LE_lerU2(pArq);
@@ -265,7 +280,8 @@ ST_tpConstantValue_attribute *LE_lerConstantValueAttribute(FILE *pArq){
  *  @return pExceptionTable   - Ponteiro para a ExceptionTable lida
  *
  */
-ST_tpException_table * LE_lerExceptionTable (FILE *pArq, ST_tpException_table *pExceptionTable) {
+/* RETIRAR ESSE TECHO DE CODIGO COAMENTADO
+ ST_tpException_table * LE_lerExceptionTable (FILE *pArq, ST_tpException_table *pExceptionTable) {
     pExceptionTable->start_pc = LE_lerU2(pArq);
     pExceptionTable->end_pc = LE_lerU2(pArq);
     pExceptionTable->handler_pc = LE_lerU2(pArq);
@@ -273,7 +289,7 @@ ST_tpException_table * LE_lerExceptionTable (FILE *pArq, ST_tpException_table *p
     
     return pExceptionTable;
 }
-
+*/
 /**
 *  Descri��o da fun��o:
 *       Le um atributo CodeAttribute
@@ -303,7 +319,11 @@ ST_tpCode_attribute *LE_lerCodeAttribute(FILE *pArq, ST_tpCp_info *cp, ST_tpAttr
     if(pCode->exception_table_length > 0 ){
         pCode->exception_table = malloc((pCode->exception_table_length) * sizeof(ST_tpException_table));
         for(i = 0; i < pCode->exception_table_length ; i++){
-            LE_lerExceptionTable(pArq, &(pCode->exception_table[i]));
+            //LE_lerExceptionTable(pArq, &(pCode->exception_table[i]));
+            pCode->exception_table[i].start_pc = LE_lerU2(pArq);
+            pCode->exception_table[i].end_pc = LE_lerU2(pArq);
+            pCode->exception_table[i].handler_pc = LE_lerU2(pArq);
+            pCode->exception_table[i].catch_type = LE_lerU2(pArq);
         }
     }
     
@@ -336,15 +356,19 @@ ST_tpExceptions_attribute *LE_lerExceptionsAttribute(FILE *pArq){
     
     if (pExceptions->number_of_exceptions > 0) {
         pExceptions->exception_index_table = (u2*)malloc(pExceptions->number_of_exceptions * sizeof(u2));
-        for (u2 *pAux = pExceptions->exception_index_table; pAux < pExceptions->exception_index_table + pExceptions->number_of_exceptions; pAux++) {
+        /*for (u2 *pAux = pExceptions->exception_index_table; pAux < pExceptions->exception_index_table + pExceptions->number_of_exceptions; pAux++) {
             *pAux = LE_lerU2(pArq);
+        }*/
+        for(int i = 0; i < pExceptions->number_of_exceptions; i++){
+            pExceptions->exception_index_table[i] = LE_lerU2(pArq);
         }
+     
     }
     return pExceptions;
 }
-
-ST_tpInnerClasses_table *LE_lerInnerClasses_table(FILE * pArq) {
-    ST_tpInnerClasses_table *pClasse = (ST_tpInnerClasses_table*)malloc(sizeof(ST_tpInnerClasses_table));
+/*      RETIRAR ESSE TRECHO DE CODIGO COMENTADO
+ST_tpInnerClasses_table *LE_lerInnerClasses_table(FILE * pArq, ST_tpInnerClasses_table *pClasse) {
+    //ST_tpInnerClasses_table *pClasse = (ST_tpInnerClasses_table*)malloc(sizeof(ST_tpInnerClasses_table));
     pClasse->inner_class_info_index = LE_lerU2(pArq);
     pClasse->outer_class_info_index = LE_lerU2(pArq);
     pClasse->inner_name_index = LE_lerU2(pArq);
@@ -352,15 +376,23 @@ ST_tpInnerClasses_table *LE_lerInnerClasses_table(FILE * pArq) {
     
     return pClasse;
 }
-
+*/
 ST_tpInnerClasses_attribute *LE_lerInnerClassesAttribute(FILE *pArq){
 
     ST_tpInnerClasses_attribute *pInnerClasses = (ST_tpInnerClasses_attribute*)malloc(sizeof(ST_tpInnerClasses_attribute));
     pInnerClasses->number_of_classes = LE_lerU2(pArq);
+    
     if (pInnerClasses->number_of_classes > 0) {
         pInnerClasses->classes = (ST_tpInnerClasses_table*)malloc(pInnerClasses->number_of_classes * sizeof(ST_tpInnerClasses_table));
-        for (ST_tpInnerClasses_table *pAux = pInnerClasses->classes; pAux < pInnerClasses->classes + pInnerClasses->number_of_classes; pAux++) {
+        /*for (ST_tpInnerClasses_table *pAux = pInnerClasses->classes; pAux < pInnerClasses->classes + pInnerClasses->number_of_classes; pAux++) {
             pAux = LE_lerInnerClasses_table(pArq);
+        } */
+        for(int i = 0; i < pInnerClasses->number_of_classes; i++){
+             //LE_lerInnerClasses_table(pArq, &(pInnerClasses->classes[i]));
+            pInnerClasses->classes[i].inner_class_info_index   = LE_lerU2(pArq);
+            pInnerClasses->classes[i].outer_class_info_index   = LE_lerU2(pArq);
+            pInnerClasses->classes[i].inner_name_index         = LE_lerU2(pArq);
+            pInnerClasses->classes[i].inner_class_access_flags = LE_lerU2(pArq);
         }
     }
     return pInnerClasses;
@@ -382,7 +414,7 @@ ST_tpSourceFile_attribute *LE_lerSourceFileAttribute(FILE * pArq) {
     return pSourceFile;
 }
 
-ST_tpLineNumberTable_attribute *LE_lerLineNumberTable(FILE *pArq) {
+ST_tpLineNumberTable_attribute *LE_lerLineNumberAttribute(FILE *pArq) {
     ST_tpLineNumberTable_attribute *pLineNumberTable = (ST_tpLineNumberTable_attribute*)malloc(sizeof(ST_tpLineNumberTable_attribute));
     
     pLineNumberTable->line_number_table_length = LE_lerU2(pArq);
@@ -390,9 +422,9 @@ ST_tpLineNumberTable_attribute *LE_lerLineNumberTable(FILE *pArq) {
     if (pLineNumberTable->line_number_table_length > 0) {
         pLineNumberTable->info = (ST_tpLine_number_table*)malloc(pLineNumberTable->line_number_table_length*sizeof(ST_tpLine_number_table));
         
-        for (ST_tpLine_number_table *pLinfo = pLineNumberTable->info; pLinfo < pLineNumberTable->info + pLineNumberTable->line_number_table_length; pLinfo++) {
-            pLinfo->start_pc = LE_lerU2(pArq);
-            pLinfo->line_number = LE_lerU2(pArq);
+        for (int i = 0; i < pLineNumberTable->line_number_table_length; i++) {
+            pLineNumberTable->info[i].start_pc = LE_lerU2(pArq);
+            pLineNumberTable->info[i].line_number = LE_lerU2(pArq);
         }
     }
     return pLineNumberTable;
@@ -467,7 +499,7 @@ ST_tpAttribute_info *LE_lerAttribute(FILE *pArq, ST_tpCp_info *cp, ST_tpAttribut
      else if(strcmp(pAttributeName, "LineNumberTable") == 0)
     {
         ST_tpLineNumberTable_attribute *pLineNumberTable = (ST_tpLineNumberTable_attribute*) malloc(sizeof(ST_tpLineNumberTable_attribute));
-        pLineNumberTable = LE_lerLineNumberTable(pArq);
+        pLineNumberTable = LE_lerLineNumberAttribute(pArq);
         pAttributes->info = (ST_tpLineNumberTable_attribute*) pLineNumberTable;
         pLineNumberTable = NULL;
     }
@@ -537,7 +569,7 @@ ST_tpAttribute_info *LE_lerAttribute(FILE *pArq, ST_tpCp_info *cp, ST_tpAttribut
 	arqPontoClass->interfaces_count = LE_lerU2(pArq);
 	arqPontoClass->interfaces_table = LE_lerInterfaces(pArq, arqPontoClass->interfaces_count);
 	arqPontoClass->fields_count = LE_lerU2(pArq);
-	arqPontoClass->field_info_table = LE_lerFields(pArq, arqPontoClass->fields_count);
+	arqPontoClass->field_info_table = LE_lerFields(pArq, arqPontoClass->constant_pool_table, arqPontoClass->fields_count);
 	arqPontoClass->methods_count = LE_lerU2(pArq);
 	arqPontoClass->method_info_table = LE_lerMethods(pArq, arqPontoClass->constant_pool_table, arqPontoClass->methods_count);
 	arqPontoClass->attributes_count = LE_lerU2(pArq);

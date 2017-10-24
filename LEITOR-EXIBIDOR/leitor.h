@@ -40,7 +40,7 @@ ST_tpCp_info *LE_lerConstant_pool(FILE *pArq, u2 constant_pool_count);
 
 u2 *LE_lerInterfaces(FILE *pArq, u2 interfaces_count);
 
-ST_tpField_info *LE_lerFields(FILE *pArq, u2 fields_count);
+ST_tpField_info *LE_lerFields(FILE *pArq, ST_tpCp_info *cp, u2 fields_count);
 
 ST_tpMethod_info *LE_lerMethods(FILE *pArq, ST_tpCp_info *cp, u2 methods_count);
 
@@ -54,7 +54,7 @@ ST_tpInnerClasses_attribute *LE_lerInnerClassesAttribute(FILE *pArq);
 
 ST_tpSourceFile_attribute *LE_lerSourceFileAttribute(FILE * pArq);
 
-ST_tpLineNumberTable_attribute *LE_lerLineNumberTable(FILE *pArq);
+ST_tpLineNumberTable_attribute *LE_lerLineNumberAttribute(FILE *pArq);
 
 ST_tpAttribute_info *LE_lerAttribute(FILE *pArq, ST_tpCp_info *cp, ST_tpAttribute_info *pAttributes);
 
