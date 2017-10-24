@@ -38,7 +38,7 @@ u4 LE_lerU4(FILE *pArq);
 
 ST_tpCp_info *LE_lerConstant_pool(FILE *pArq, u2 constant_pool_count);
 
-u2 *LE_lerInterfaces(FILE *pArq, u2 interfaces_count);
+u2 *LE_lerInterfaces(FILE *pArq, ST_tpCp_info *cp, u2 interfaces_count);
 
 ST_tpField_info *LE_lerFields(FILE *pArq, ST_tpCp_info *cp, u2 fields_count);
 

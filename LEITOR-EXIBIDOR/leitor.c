@@ -158,10 +158,14 @@ ST_tpCp_info *LE_lerConstant_pool(FILE *pArq, u2 constant_pool_count){
  *
  *  @return pinterfaces     - Ponteiro para a Tabela de Interfaces lida
  */
-u2 *LE_lerInterfaces(FILE *pArq, u2 interfaces_count) {
-    u2 *pInterfaces = (u2 *) malloc(interfaces_count * sizeof(u2));
-    fread(pInterfaces, 1, interfaces_count * 2, pArq); //ainda n�o foi testado, pois o Classe de exemplo n�o possui nenhuma interface
-    return pInterfaces;
+u2 *LE_lerInterfaces(FILE *pArq, ST_tpCp_info *cp, u2 interfaces_count) {
+    
+    ST_tpInterface_list *pInterfaces = (ST_tpInterface_list*) malloc(interfaces_count * sizeof(ST_tpInterface_list));
+    for(int i = 0; i < interfaces_count; i++){
+        pInterfaces[i].constant_pool_index = LE_lerU2(pArq);
+    }
+
+    return (u2*) pInterfaces;
 }
 
 /**
@@ -593,12 +597,13 @@ ST_tpAttribute_info *LE_lerAttribute(FILE *pArq, ST_tpCp_info *cp, ST_tpAttribut
 	arqPontoClass->this_class = LE_lerU2(pArq);
 	arqPontoClass->super_class = LE_lerU2(pArq);
 	arqPontoClass->interfaces_count = LE_lerU2(pArq);
-	arqPontoClass->interfaces_table = LE_lerInterfaces(pArq, arqPontoClass->interfaces_count);
+	arqPontoClass->interfaces_table = LE_lerInterfaces(pArq, arqPontoClass->constant_pool_table, arqPontoClass->interfaces_count);
 	arqPontoClass->fields_count = LE_lerU2(pArq);
 	arqPontoClass->field_info_table = LE_lerFields(pArq, arqPontoClass->constant_pool_table, arqPontoClass->fields_count);
 	arqPontoClass->methods_count = LE_lerU2(pArq);
 	arqPontoClass->method_info_table = LE_lerMethods(pArq, arqPontoClass->constant_pool_table, arqPontoClass->methods_count);
 	arqPontoClass->attributes_count = LE_lerU2(pArq);
+     
     arqPontoClass->attribute_info_table = malloc((arqPontoClass->attributes_count) * sizeof(ST_tpAttribute_info));
      for(int j = 0; j < arqPontoClass->attributes_count; j++){
          LE_lerAttribute(pArq, arqPontoClass->constant_pool_table, &(arqPontoClass->attribute_info_table[j]));

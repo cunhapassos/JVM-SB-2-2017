@@ -164,7 +164,6 @@ typedef struct{
 ** *******************************************************************************/
 typedef struct{
 	u2 constant_pool_index;
-	struct interface_list *next;
 }ST_tpInterface_list;
 
 /** ******************************************************************************
