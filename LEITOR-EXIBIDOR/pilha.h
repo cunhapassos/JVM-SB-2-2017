@@ -27,9 +27,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct {
+typedef struct tpPilha{
     void *dado;
-    PI_tpPilha *prox;
+    struct tpPilha *prox;
 }PI_tpPilha;
 
 void PI_inicializarPilha(PI_tpPilha **ePilha);
