@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2F7A49271FA7DC29001BD8FD /* pilha.c in Sources */ = {isa = PBXBuildFile; fileRef = 2F7A49261FA7DC29001BD8FD /* pilha.c */; };
 		7DA420561F81B05000815CCF /* exibidor.c in Sources */ = {isa = PBXBuildFile; fileRef = 7DA420521F81B04F00815CCF /* exibidor.c */; };
 		7DA420571F81B05000815CCF /* leitor.c in Sources */ = {isa = PBXBuildFile; fileRef = 7DA420531F81B04F00815CCF /* leitor.c */; };
 		7DA4205A1F81B0B700815CCF /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 7DA420591F81B0B700815CCF /* main.c */; };
@@ -27,6 +28,8 @@
 /* Begin PBXFileReference section */
 		2F1DF0941F6F2FB3007063B8 /* JVM-SB-2-2017 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "JVM-SB-2-2017"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F1DF0A21F6F3540007063B8 /* project.xcworkspace */ = {isa = PBXFileReference; lastKnownFileType = wrapper.workspace; name = project.xcworkspace; path = "JVM-SB-2-2017.xcodeproj/project.xcworkspace"; sourceTree = "<group>"; };
+		2F7A49251FA7DC29001BD8FD /* pilha.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pilha.h; path = "LEITOR-EXIBIDOR/pilha.h"; sourceTree = SOURCE_ROOT; };
+		2F7A49261FA7DC29001BD8FD /* pilha.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pilha.c; path = "LEITOR-EXIBIDOR/pilha.c"; sourceTree = SOURCE_ROOT; };
 		2FB92CD91F72C00600A4D382 /* exibidor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = exibidor.h; path = "LEITOR-EXIBIDOR/exibidor.h"; sourceTree = SOURCE_ROOT; };
 		2FB92CDD1F72C00600A4D382 /* leitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = leitor.h; path = "LEITOR-EXIBIDOR/leitor.h"; sourceTree = SOURCE_ROOT; };
 		7DA420521F81B04F00815CCF /* exibidor.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = exibidor.c; path = "LEITOR-EXIBIDOR/exibidor.c"; sourceTree = SOURCE_ROOT; };
@@ -66,6 +69,8 @@
 		2F1DF0961F6F2FB3007063B8 /* JVM-SB-2-2017 */ = {
 			isa = PBXGroup;
 			children = (
+				2F7A49261FA7DC29001BD8FD /* pilha.c */,
+				2F7A49251FA7DC29001BD8FD /* pilha.h */,
 				7DA420591F81B0B700815CCF /* main.c */,
 				7DA420521F81B04F00815CCF /* exibidor.c */,
 				7DA420531F81B04F00815CCF /* leitor.c */,
@@ -143,6 +148,7 @@
 			files = (
 				7DA420571F81B05000815CCF /* leitor.c in Sources */,
 				7DA420561F81B05000815CCF /* exibidor.c in Sources */,
+				2F7A49271FA7DC29001BD8FD /* pilha.c in Sources */,
 				7DA4205A1F81B0B700815CCF /* main.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
