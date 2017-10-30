@@ -1,4 +1,16 @@
-# JVM-SB-2-2017
+# Projeto da Máquina Virtual Java - Grupo 03
+
+####Professor Marcelo Ladeira
+
+####Semestre: 2017/2
+
+####Integrantes:
+
+* Alon Mota		
+
+* Daniel Matias
+
+* Paulo Passos
 
 ##Diagrama de estruturas utilizadas
 
