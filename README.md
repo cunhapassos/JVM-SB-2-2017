@@ -1,10 +1,10 @@
 # Projeto da Máquina Virtual Java - Grupo 03
 
-####Professor Marcelo Ladeira
+Professor Marcelo Ladeira
 
-####Semestre: 2017/2
+Semestre: 2017/2
 
-####Integrantes:
+Integrantes:
 
 * Alon Mota		
 
