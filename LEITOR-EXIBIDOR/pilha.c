@@ -3,10 +3,10 @@
  *  Universidade de Brasilia - 02/2017
  *    Software Basico - Turma A
  *
+ *  MODULO: PI_
  *  @file pilha.c
  *  @brief
- *            Modulo de implementaco: Modulo Pilha:
- *             Implementa as funcoes de pilha.
+ *            Descricao:  Implementa as funcoes de pilha.
  *
  * @author PAULO DA CUNHA PASSOS - MAT. 10/0118577
  * @author DANIEL MATIAS

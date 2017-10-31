@@ -3,10 +3,10 @@
  *  Universidade de Brasilia - 02/2017
  *  Software Basico - Turma A
  *
+ *  MODULO: PI_
  *  @file pilha.h
  *  @brief
- *            Modulo de definicao: Modulo Pilha
- *            Define a assinatura de funcoes e estruturas de pilha
+ *            Descricao:  Definicao das funcoes de pilha.
  *
  * @author PAULO DA CUNHA PASSOS - MAT. 10/0118577
  * @author DANIEL MATIAS

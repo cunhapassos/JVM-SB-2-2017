@@ -3,6 +3,7 @@
  *  Universidade de Brasilia - 02/2017
  *	Software Basico - Turma A
  *
+ *  MODULO: ST_
  *  @file structures.h
  *  @brief 
  *			Modulo de definicao: Modulo Estruturas:

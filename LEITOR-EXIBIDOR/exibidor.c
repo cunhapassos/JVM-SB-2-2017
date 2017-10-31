@@ -3,6 +3,7 @@
  *  Universidade de Brasilia - 02/2017
  *  Software Basico - Turma A
  *
+ *  MODULO: EX_
  *  @file exibidor.c
  *  @brief
  *            Modulo de implementacao: Modulo Exibidor

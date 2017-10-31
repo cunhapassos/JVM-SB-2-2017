@@ -3,10 +3,10 @@
  *  Universidade de Brasilia - 02/2017
  *    Software Basico - Turma A
  *
+ *  MODULO: VM_
  *  @file virtualMachine
  *  @brief
- *            Descricao:
- *            ??????.
+ *            Descricao: Implementacao das estruturas de incicializacao da JVM
  *
  * @author ALON MOTA     - MAT. 13/0005002
  * @author DANIEL MATIAS - MAT. 12/0139804
