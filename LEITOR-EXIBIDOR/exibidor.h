@@ -3,10 +3,6 @@
  *  Universidade de Brasilia - 02/2017
  *  Software Basico - Turma A
  *
- *  @defgroup MODULO EXIBIDOR
- *  @{
- *  @ingroup MOD_ES
- *
  *  @file exibidor.h
  *  @brief
  *            Modulo de definicao: Modulo EXIBIDOR

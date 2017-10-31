@@ -3,10 +3,6 @@
  *  Universidade de Brasilia - 02/2017
  *  Software Basico - Turma A
  *
- *  @defgroup MODULO LEITURA
- *  @{
- *  @ingroup MOD_LE
- *
  *  @file leitor.h
  *  @brief
  *            Modulo de definicao: Modulo LEITOR

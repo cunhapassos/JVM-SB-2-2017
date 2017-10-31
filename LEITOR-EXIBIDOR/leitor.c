@@ -3,10 +3,6 @@
  *  Universidade de Brasilia - 02/2017
  *	Software Basico - Turma A
  *
- *	@addgroup MODULO LEITOR_EXIBIDOR
- *  @{
- *  @ingroup MOD_LE
- *
  *  @file leitor.c
  *  @brief 
  *			Modulo de implementaco: Modulo Leitor-Exibidor:

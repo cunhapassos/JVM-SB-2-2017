@@ -3,10 +3,6 @@
  *  Universidade de Brasilia - 02/2017
  *  Software Basico - Turma A
  *
- *  @defgroup MODULO PILHA
- *  @{
- *  @ingroup MOD_PI
- *
  *  @file pilha.h
  *  @brief
  *            Modulo de definicao: Modulo Pilha

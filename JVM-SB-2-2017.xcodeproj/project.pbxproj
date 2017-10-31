@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2F3736711FA8D80100AA2CC9 /* virtualMachine.c in Sources */ = {isa = PBXBuildFile; fileRef = 2F37366F1FA8D80100AA2CC9 /* virtualMachine.c */; };
 		2F7A49271FA7DC29001BD8FD /* pilha.c in Sources */ = {isa = PBXBuildFile; fileRef = 2F7A49261FA7DC29001BD8FD /* pilha.c */; };
 		7DA420561F81B05000815CCF /* exibidor.c in Sources */ = {isa = PBXBuildFile; fileRef = 7DA420521F81B04F00815CCF /* exibidor.c */; };
 		7DA420571F81B05000815CCF /* leitor.c in Sources */ = {isa = PBXBuildFile; fileRef = 7DA420531F81B04F00815CCF /* leitor.c */; };
@@ -28,6 +29,9 @@
 /* Begin PBXFileReference section */
 		2F1DF0941F6F2FB3007063B8 /* JVM-SB-2-2017 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "JVM-SB-2-2017"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F1DF0A21F6F3540007063B8 /* project.xcworkspace */ = {isa = PBXFileReference; lastKnownFileType = wrapper.workspace; name = project.xcworkspace; path = "JVM-SB-2-2017.xcodeproj/project.xcworkspace"; sourceTree = "<group>"; };
+		2F3736601FA8D30B00AA2CC9 /* IDETemplateMacros.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = IDETemplateMacros.plist; path = "LEITOR-EXIBIDOR/IDETemplateMacros.plist"; sourceTree = SOURCE_ROOT; };
+		2F37366F1FA8D80100AA2CC9 /* virtualMachine.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = virtualMachine.c; path = "LEITOR-EXIBIDOR/virtualMachine.c"; sourceTree = SOURCE_ROOT; };
+		2F3736701FA8D80100AA2CC9 /* virtualMachine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = virtualMachine.h; path = "LEITOR-EXIBIDOR/virtualMachine.h"; sourceTree = SOURCE_ROOT; };
 		2F7A49251FA7DC29001BD8FD /* pilha.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pilha.h; path = "LEITOR-EXIBIDOR/pilha.h"; sourceTree = SOURCE_ROOT; };
 		2F7A49261FA7DC29001BD8FD /* pilha.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pilha.c; path = "LEITOR-EXIBIDOR/pilha.c"; sourceTree = SOURCE_ROOT; };
 		2FB92CD91F72C00600A4D382 /* exibidor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = exibidor.h; path = "LEITOR-EXIBIDOR/exibidor.h"; sourceTree = SOURCE_ROOT; };
@@ -57,6 +61,7 @@
 				2F1DF0A11F6F3540007063B8 /* Frameworks */,
 			);
 			sourceTree = "<group>";
+			usesTabs = 0;
 		};
 		2F1DF0951F6F2FB3007063B8 /* Products */ = {
 			isa = PBXGroup;
@@ -77,6 +82,9 @@
 				7DA420551F81B05000815CCF /* structures.h */,
 				2FB92CD91F72C00600A4D382 /* exibidor.h */,
 				2FB92CDD1F72C00600A4D382 /* leitor.h */,
+				2F3736601FA8D30B00AA2CC9 /* IDETemplateMacros.plist */,
+				2F37366F1FA8D80100AA2CC9 /* virtualMachine.c */,
+				2F3736701FA8D80100AA2CC9 /* virtualMachine.h */,
 			);
 			path = "JVM-SB-2-2017";
 			sourceTree = "<group>";
@@ -146,6 +154,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2F3736711FA8D80100AA2CC9 /* virtualMachine.c in Sources */,
 				7DA420571F81B05000815CCF /* leitor.c in Sources */,
 				7DA420561F81B05000815CCF /* exibidor.c in Sources */,
 				2F7A49271FA7DC29001BD8FD /* pilha.c in Sources */,

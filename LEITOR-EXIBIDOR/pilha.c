@@ -3,10 +3,6 @@
  *  Universidade de Brasilia - 02/2017
  *    Software Basico - Turma A
  *
- *    @addgroup MODULO PILHA
- *  @{
- *  @ingroup MOD_PI
- *
  *  @file pilha.c
  *  @brief
  *            Modulo de implementaco: Modulo Pilha:
