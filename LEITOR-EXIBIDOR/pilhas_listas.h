@@ -47,4 +47,10 @@ void *PL_pop(PI_tpPilha **ePilha);
  *                      ESTRUTURAS E FUNCOES DE LISTA
  ** ******************************************************************************/
 
+void PL_inserirClasseTopo(ST_tpJVM *pJvm, ST_tpClassFile *pClasse);
+
+int PL_removerClasseTopo(ST_tpJVM *pJVM);
+
+ST_tpClassFile *PL_buscarClasse(ST_tpJVM *pJVM, char *nomeClasse);
+
 #endif /* pilhas_listas_h */

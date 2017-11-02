@@ -17,23 +17,26 @@
  *
  @}********************************************************************************/
 
-#include "virtualMachine.h"
-#include "leitor.h"
 #include <stdlib.h>
+#include <string.h>
 
-VM_tpMethodArea *VM_criarAreaMetodo(){
-    VM_tpMethodArea *pAreaMetodo;
+#include "leitor.h"
+#include "pilhas_listas.h"
+#include "virtualMachine.h"
+
+ST_tpMethodArea *VM_criarAreaMetodo(){
+    ST_tpMethodArea *pAreaMetodo;
     
-    pAreaMetodo = malloc(sizeof(VM_tpMethodArea));
+    pAreaMetodo = malloc(sizeof(ST_tpMethodArea));
     pAreaMetodo->classFile = NULL;
     
     return pAreaMetodo;
 }
 
-VM_tpHeap *VM_criarHeap(){
-    VM_tpHeap *pHeap;
+ST_tpHeap *VM_criarHeap(){
+    ST_tpHeap *pHeap;
     
-    pHeap = malloc(sizeof(VM_tpHeap));
+    pHeap = malloc(sizeof(ST_tpHeap));
     pHeap->array = NULL;
     pHeap->classes = NULL;
     pHeap->objects = NULL;
@@ -41,20 +44,20 @@ VM_tpHeap *VM_criarHeap(){
     return pHeap;
 }
 
-VM_tpThread *VM_criarThread(){
-    VM_tpThread *pThread;
+ST_tpThread *VM_criarThread(){
+    ST_tpThread *pThread;
     
-    pThread = malloc(sizeof(VM_tpThread));
+    pThread = malloc(sizeof(ST_tpThread));
     pThread->JVMStack = NULL;
     pThread->PC = 0;
     
     return pThread;
 }
 
-VM_tpJVM *VM_criarJVM(){
-    VM_tpJVM *pJvm;
+ST_tpJVM *VM_criarJVM(){
+    ST_tpJVM *pJvm;
     
-    pJvm = malloc(sizeof(VM_tpJVM));
+    pJvm = malloc(sizeof(ST_tpJVM));
     pJvm->heap = VM_criarHeap();
     pJvm->methodArea = VM_criarAreaMetodo();
     pJvm->thread = VM_criarThread();
@@ -62,21 +65,61 @@ VM_tpJVM *VM_criarJVM(){
     return pJvm;
 }
 
-void VM_inserirClasseCarregada(VM_tpJVM *pJvm, ST_tpClassFile *pClasse){
-    
-    if(pJvm->methodArea->classFile == NULL){
-         pJvm->methodArea->classFile = pClasse;
-    }
-    else{
-        pJvm->methodArea->classFile->right = pClasse->left;
-        pJvm->methodArea->classFile = pClasse;
-    }
-}
 
-void VM_exucutarJVM(VM_tpJVM *pJvm, void *listaDeNomesdeArquivosComClasses){ // verificar se precisar carregar mais de um .class
+ST_tpJVM *VM_exucutarJVM(int numeroClasses, char *nomeClasses[]){
+    int i, flag1, flag2;
+    char *name, *descritor;
+    u2 nameIndex, descritorIndex;
+    ST_tpJVM *pJVM;
+    ST_tpClassFile *pClasse;
     
-    for(int i = 0;...;...){ // fazer for com a quantidade de .class a serem lidos
-        ST_tpClassFile *pClasse= LE_carregarClasse(listaDeNomesdeArquivosComClasses[i]);
-        VM_inserirClasseCarregada(pJvm, pClasse);
+    /* Cria a maquina virtual, a area de metodos, o heap e uma thread*/
+    pJVM = VM_criarJVM();
+    
+    /* Carregando classes na JVM */
+    for(i = 0; i < numeroClasses; i++){
+        ST_tpClassFile *pClasse= LE_carregarClasse(nomeClasses[i]);
+        /* Insere classe carregada na lista de classes carregadas da JVM */
+        PL_inserirClasseTopo(pJVM, pClasse);
     }
+    flag1 = 0;
+    flag2 = 0;
+    /* Procurando a primeira classe que tem o main */
+    for(pClasse = pJVM->methodArea->classFile; pClasse != NULL; pClasse = pClasse->next){
+        
+        /* Procura metodo <init> e o executa */
+        for(i = 0; i < pClasse->methods_count; i++){
+            nameIndex = pClasse->method_info_table[i].name_index-1;
+            descritorIndex = pClasse->method_info_table[i].descriptor_index-1;
+            name = (char *) pClasse->constant_pool_table[nameIndex].info.Utf8.bytes;
+            descritor = (char *)  pClasse->constant_pool_table[descritorIndex].info.Utf8.bytes;
+            
+            if(strcmp(name, "<init>") == 0 && strcmp(descritor, "()V") == 0 && pClasse->method_info_table[i].access_flags == ACC_PUBLIC){
+                printf("\n Executa metodo <init>\n");
+                // chamar funcao que executa metodo aqui
+                flag1 = 1;
+                break;
+            }
+        }
+        /* Procura metodo main e o executa */
+        for(i = 0; i < pClasse->methods_count; i++){
+            nameIndex = pClasse->method_info_table[i].name_index-1;
+            descritorIndex = pClasse->method_info_table[i].descriptor_index-1;
+            name = (char *) pClasse->constant_pool_table[nameIndex].info.Utf8.bytes;
+            descritor = (char *)  pClasse->constant_pool_table[descritorIndex].info.Utf8.bytes;
+            
+            if(strcmp(name, "main") == 0 && strcmp(descritor, "([Ljava/lang/String;)V") == 0 && pClasse->method_info_table[i].access_flags == ACC_PUBLIC_STATIC){
+                printf("\n Executa metodo main\n");
+                // chamar funcao que executa metodo aqui
+                flag1 = 1;
+                break;
+            }
+        }
+        
+        if(flag1 && flag2){
+            break;
+        }
+    }
+    
+    return pJVM;
 }
