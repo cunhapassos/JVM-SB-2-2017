@@ -3,7 +3,7 @@
  *  Universidade de Brasilia - 02/2017
  *    Software Basico - Turma A
  *
- *  MODULO: PI_
+ *  MODULO: PL_
  *  @file pilha.c
  *  @brief
  *            Descricao:  Implementa as funcoes de pilha.
@@ -18,8 +18,11 @@
  @}********************************************************************************/
 
 
-#include "pilha.h"
+#include "pilhas_listas.h"
 
+/** ******************************************************************************
+ *                      ESTRUTURAS E FUNCOES DE PILHA
+ ** ******************************************************************************/
 
 /**
  *  Descricao da funcao:
@@ -28,7 +31,7 @@
  *  @param  ePilha - Ponteiro para a cabeça da pilha
  *
  */
-void PI_inicializarPilha(PI_tpPilha **ePilha){
+void PL_inicializarPilha(PI_tpPilha **ePilha){
     *ePilha = NULL;
 }
 
@@ -41,7 +44,7 @@ void PI_inicializarPilha(PI_tpPilha **ePilha){
  *  @return       - 0 se a pilha nao esta vazia
  *                  1 se a pilha esta vazia
  */
-int PI_pilhaVazia(PI_tpPilha *pPilha){
+int PL_pilhaVazia(PI_tpPilha *pPilha){
     return (pPilha == NULL);
 }
 
@@ -53,7 +56,7 @@ int PI_pilhaVazia(PI_tpPilha *pPilha){
  *
  *  @return       - ponteiro para o elemento do topo da pilha
  */
-void *PI_topoPilha(PI_tpPilha *pPilha){
+void *PL_topoPilha(PI_tpPilha *pPilha){
     return pPilha->dado;
 }
 
@@ -64,7 +67,7 @@ void *PI_topoPilha(PI_tpPilha *pPilha){
  *  @param  ePilha   - Ponteiro para a cabeça da pilha
  *  @param  dadoNovo - Novo elemento da pilha
  */
-void PI_push(PI_tpPilha **ePilha, void *dadoNovo){
+void PL_push(PI_tpPilha **ePilha, void *dadoNovo){
     PI_tpPilha *p1;
     
     p1 = malloc(sizeof(PI_tpPilha));
@@ -81,7 +84,7 @@ void PI_push(PI_tpPilha **ePilha, void *dadoNovo){
  *
  *  @return   dado - Ponteiro para o elemento retirado do topo da pilha
  */
-void *PI_pop(PI_tpPilha **ePilha){
+void *PL_pop(PI_tpPilha **ePilha){
     PI_tpPilha *p1;
     void *dado;
     p1 = *ePilha;
@@ -91,3 +94,7 @@ void *PI_pop(PI_tpPilha **ePilha){
     
     return dado;
 }
+
+/** ******************************************************************************
+ *                      ESTRUTURAS E FUNCOES DE LISTA
+ ** ******************************************************************************/

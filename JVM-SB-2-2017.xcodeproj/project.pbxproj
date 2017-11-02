@@ -8,7 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		2F3736711FA8D80100AA2CC9 /* virtualMachine.c in Sources */ = {isa = PBXBuildFile; fileRef = 2F37366F1FA8D80100AA2CC9 /* virtualMachine.c */; };
-		2F7A49271FA7DC29001BD8FD /* pilha.c in Sources */ = {isa = PBXBuildFile; fileRef = 2F7A49261FA7DC29001BD8FD /* pilha.c */; };
+		2F50DF011FAB3C0E00EB92AB /* funcoes.c in Sources */ = {isa = PBXBuildFile; fileRef = 2F50DEFF1FAB3C0E00EB92AB /* funcoes.c */; };
+		2F7A49271FA7DC29001BD8FD /* pilhas_listas.c in Sources */ = {isa = PBXBuildFile; fileRef = 2F7A49261FA7DC29001BD8FD /* pilhas_listas.c */; };
 		7DA420561F81B05000815CCF /* exibidor.c in Sources */ = {isa = PBXBuildFile; fileRef = 7DA420521F81B04F00815CCF /* exibidor.c */; };
 		7DA420571F81B05000815CCF /* leitor.c in Sources */ = {isa = PBXBuildFile; fileRef = 7DA420531F81B04F00815CCF /* leitor.c */; };
 		7DA4205A1F81B0B700815CCF /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 7DA420591F81B0B700815CCF /* main.c */; };
@@ -32,8 +33,10 @@
 		2F3736601FA8D30B00AA2CC9 /* IDETemplateMacros.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = IDETemplateMacros.plist; path = "LEITOR-EXIBIDOR/IDETemplateMacros.plist"; sourceTree = SOURCE_ROOT; };
 		2F37366F1FA8D80100AA2CC9 /* virtualMachine.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = virtualMachine.c; path = "LEITOR-EXIBIDOR/virtualMachine.c"; sourceTree = SOURCE_ROOT; };
 		2F3736701FA8D80100AA2CC9 /* virtualMachine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = virtualMachine.h; path = "LEITOR-EXIBIDOR/virtualMachine.h"; sourceTree = SOURCE_ROOT; };
-		2F7A49251FA7DC29001BD8FD /* pilha.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pilha.h; path = "LEITOR-EXIBIDOR/pilha.h"; sourceTree = SOURCE_ROOT; };
-		2F7A49261FA7DC29001BD8FD /* pilha.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pilha.c; path = "LEITOR-EXIBIDOR/pilha.c"; sourceTree = SOURCE_ROOT; };
+		2F50DEFF1FAB3C0E00EB92AB /* funcoes.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = funcoes.c; path = "LEITOR-EXIBIDOR/funcoes.c"; sourceTree = SOURCE_ROOT; };
+		2F50DF001FAB3C0E00EB92AB /* funcoes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = funcoes.h; path = "LEITOR-EXIBIDOR/funcoes.h"; sourceTree = SOURCE_ROOT; };
+		2F7A49251FA7DC29001BD8FD /* pilhas_listas.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pilhas_listas.h; path = "LEITOR-EXIBIDOR/pilhas_listas.h"; sourceTree = SOURCE_ROOT; };
+		2F7A49261FA7DC29001BD8FD /* pilhas_listas.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pilhas_listas.c; path = "LEITOR-EXIBIDOR/pilhas_listas.c"; sourceTree = SOURCE_ROOT; };
 		2FB92CD91F72C00600A4D382 /* exibidor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = exibidor.h; path = "LEITOR-EXIBIDOR/exibidor.h"; sourceTree = SOURCE_ROOT; };
 		2FB92CDD1F72C00600A4D382 /* leitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = leitor.h; path = "LEITOR-EXIBIDOR/leitor.h"; sourceTree = SOURCE_ROOT; };
 		7DA420521F81B04F00815CCF /* exibidor.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = exibidor.c; path = "LEITOR-EXIBIDOR/exibidor.c"; sourceTree = SOURCE_ROOT; };
@@ -74,8 +77,10 @@
 		2F1DF0961F6F2FB3007063B8 /* JVM-SB-2-2017 */ = {
 			isa = PBXGroup;
 			children = (
-				2F7A49261FA7DC29001BD8FD /* pilha.c */,
-				2F7A49251FA7DC29001BD8FD /* pilha.h */,
+				2F50DEFF1FAB3C0E00EB92AB /* funcoes.c */,
+				2F50DF001FAB3C0E00EB92AB /* funcoes.h */,
+				2F7A49261FA7DC29001BD8FD /* pilhas_listas.c */,
+				2F7A49251FA7DC29001BD8FD /* pilhas_listas.h */,
 				7DA420591F81B0B700815CCF /* main.c */,
 				7DA420521F81B04F00815CCF /* exibidor.c */,
 				7DA420531F81B04F00815CCF /* leitor.c */,
@@ -157,8 +162,9 @@
 				2F3736711FA8D80100AA2CC9 /* virtualMachine.c in Sources */,
 				7DA420571F81B05000815CCF /* leitor.c in Sources */,
 				7DA420561F81B05000815CCF /* exibidor.c in Sources */,
-				2F7A49271FA7DC29001BD8FD /* pilha.c in Sources */,
+				2F7A49271FA7DC29001BD8FD /* pilhas_listas.c in Sources */,
 				7DA4205A1F81B0B700815CCF /* main.c in Sources */,
+				2F50DF011FAB3C0E00EB92AB /* funcoes.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
