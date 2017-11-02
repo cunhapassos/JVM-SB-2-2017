@@ -23,95 +23,17 @@
 #include <stdio.h>
 #include "structures.h"
 
-union variable{
-    char Byte;
-    u2 Char;
-    short int Short;
-    int Int;
-    __int64_t Long;
-    float Float;
-    double Double;
-    char Boolean;
-    // GLOBAL_HEAP obj_ref;
-    // ARRAY_HEAP array_ref;
-    // RETADDRESS retAddres;
-};
+ST_tpMethodArea *VM_criarAreaMetodo(void);
 
-typedef struct {
-    ST_tpClassFile *classFile; /* lista de classe carregadas */
-}VM_tpMethodArea;
+ST_tpHeap *VM_criarHeap(void);
 
-/** ******************************************************************************
- *                         ESTRUTURAS DE PILHA JVM E FRAMES
- ** *******************************************************************************/
+ST_tpThread *VM_criarThread(void);
 
-typedef struct {
-    u1 type;
-    union variable variable;
-    struct VM_tpLocalVariables *next;
-}VM_tpLocalVariables;
+ST_tpJVM *VM_criarJVM(void);
 
-typedef struct {
-    u1 type;
-    union variable variable;
-    struct VM_tpOperandStack *next;
-}VM_tpOperandStack;
+void VM_inserirClasseCarregada(ST_tpJVM *pJvm, ST_tpClassFile *pClasse);
 
-typedef struct {
-    VM_tpLocalVariables *localVariables;
-    VM_tpOperandStack   *operandes;
-    /* ReferenceConstantPoll */
-}VM_tpFrameStack;
-
-typedef struct {
-    u1 PC;
-    VM_tpFrameStack *JVMStack; /* Ponteiro para lista de frames da Pilha */
-    //VM_tpNativeMethodStack NativeStack;
-}VM_tpThread;
-
-
-/** ******************************************************************************
- *                                ESTRUTURAS DO HEAP
- ** *******************************************************************************/
-
-typedef struct {
-    wchar_t *pClasseName;
-    union variable *field_area;
-    struct VM_tpClassHeap *next;
-}VM_tpClassHeap;
-
-typedef struct {
-    wchar_t *pClasseName;
-    union variable *field_area;
-    VM_tpThread thread;
-    u4 ref_count;
-    u2 max_var;
-    struct VM_tpObjectHeap *next;
-}VM_tpObjectHeap;
-
-typedef struct {
-    u1 type;
-    wchar_t *pClasseName;
-    int length;
-    void *area;
-    u4 ref_count;
-    struct VM_tpArrayHeap *next;
-}VM_tpArrayHeap;
-
-typedef struct {
-    VM_tpClassHeap *classes;
-    VM_tpObjectHeap *objects;
-    VM_tpArrayHeap   *array;
-}VM_tpHeap;
-
-
-typedef struct {
-    VM_tpMethodArea *methodArea;
-    VM_tpHeap *heap;
-    VM_tpThread *thread;
-}VM_tpJVM;
-
-
+ST_tpJVM *VM_exucutarJVM(int numeroClasses, char *nomeClasses[]);
 
 #endif /* virtualMachine_h */
 

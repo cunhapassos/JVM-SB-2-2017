@@ -3947,7 +3947,7 @@ void* executa(void* instrucao, void* pilhaDeExecucao, void* exceptions) {
 		default:
 	
 
-
+*/
 	}
 
 }

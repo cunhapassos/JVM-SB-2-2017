@@ -608,6 +608,10 @@ ST_tpAttribute_info *LE_lerAttribute(FILE *pArq, ST_tpCp_info *cp, ST_tpAttribut
 	//arqPontoClass->attribute_info_table = LE_lerAttribute(pArq, arqPontoClass->constant_pool_table, arqPontoClass->attribute_info_table);
 	//LE_lerAttributes(FILE *pArq, ST_tpCp_info *cp, ST_tpAttribute_info *pAttributes)
      // verificar qual ponteiro de contante pool passar
+     
+     arqPontoClass->next = NULL;
+     arqPontoClass->prev = NULL;
+     
     return arqPontoClass;
  }
 
