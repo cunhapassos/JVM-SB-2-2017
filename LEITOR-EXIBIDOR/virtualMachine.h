@@ -20,6 +20,7 @@
 #ifndef virtualMachine_h
 #define virtualMachine_h
 
+#include <stdio.h>
 #include "structures.h"
 
 union variable{
@@ -105,12 +106,12 @@ typedef struct {
 
 
 typedef struct {
-    VM_tpMethodArea methodArea;
-    VM_tpHeap heap;
-    VM_tpThread thread;
+    VM_tpMethodArea *methodArea;
+    VM_tpHeap *heap;
+    VM_tpThread *thread;
 }VM_tpJVM;
 
-#include <stdio.h>
+
 
 #endif /* virtualMachine_h */
 

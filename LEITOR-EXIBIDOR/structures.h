@@ -307,7 +307,7 @@ typedef struct{
 /** ******************************************************************************
 *								ESTRUTURA CLASSFILE
 ** *******************************************************************************/
-typedef struct{
+typedef struct ClassFile{
 	wchar_t *fully_qualified_name;	
 	u4	magic;						// Assinatura de um arquivo .class
 	u2 	minor_version_number;		// Versao minima do arquivo - Relacao com a versao do Java
@@ -331,8 +331,8 @@ typedef struct{
 	//CACHE_FIELD_LOCATION cache_field_loc;
 	//CACHE_FIELD_LOCATION cache_curr_loc;
 	//METHOD_HASH_TABLE method_hash_table;
-	//struct Class_file *right;
-	//struct Class_file *left;
+	struct ClassFile *right;
+	struct ClassFile *left;
 }ST_tpClassFile;
 
 #endif /* structures_h */
