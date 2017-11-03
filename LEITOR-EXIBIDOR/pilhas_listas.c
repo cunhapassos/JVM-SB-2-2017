@@ -31,7 +31,7 @@
  *  @param  ePilha - Ponteiro para a cabeça da pilha
  *
  */
-void PL_inicializarPilha(PI_tpPilha **ePilha){
+void PL_inicializarPilha(ST_tpPilha **ePilha){
     *ePilha = NULL;
 }
 
@@ -44,7 +44,7 @@ void PL_inicializarPilha(PI_tpPilha **ePilha){
  *  @return       - 0 se a pilha nao esta vazia
  *                  1 se a pilha esta vazia
  */
-int PL_pilhaVazia(PI_tpPilha *pPilha){
+int PL_pilhaVazia(ST_tpPilha *pPilha){
     return (pPilha == NULL);
 }
 
@@ -56,7 +56,7 @@ int PL_pilhaVazia(PI_tpPilha *pPilha){
  *
  *  @return       - ponteiro para o elemento do topo da pilha
  */
-void *PL_topoPilha(PI_tpPilha *pPilha){
+void *PL_topoPilha(ST_tpPilha *pPilha){
     return pPilha->dado;
 }
 
@@ -67,10 +67,13 @@ void *PL_topoPilha(PI_tpPilha *pPilha){
  *  @param  ePilha   - Ponteiro para a cabeça da pilha
  *  @param  dadoNovo - Novo elemento da pilha
  */
-void PL_push(PI_tpPilha **ePilha, void *dadoNovo){
-    PI_tpPilha *p1;
+void PL_push(ST_tpPilha **ePilha, void *dadoNovo){
+    ST_tpPilha *p1;
     
-    p1 = malloc(sizeof(PI_tpPilha));
+    if(*ePilha == NULL){
+        p1 = malloc(sizeof(ST_tpPilha));
+    }
+    p1 = malloc(sizeof(ST_tpPilha));
     p1->dado = dadoNovo;
     p1->prox = *ePilha;
     *ePilha = p1;
@@ -84,8 +87,8 @@ void PL_push(PI_tpPilha **ePilha, void *dadoNovo){
  *
  *  @return   dado - Ponteiro para o elemento retirado do topo da pilha
  */
-void *PL_pop(PI_tpPilha **ePilha){
-    PI_tpPilha *p1;
+void *PL_pop(ST_tpPilha **ePilha){
+    ST_tpPilha *p1;
     void *dado;
     p1 = *ePilha;
     *ePilha = p1->prox;
@@ -95,6 +98,21 @@ void *PL_pop(PI_tpPilha **ePilha){
     return dado;
 }
 
+ST_tpOperandStack *PL_criarPilhaOperandos(){
+    ST_tpOperandStack *pOperandStack;
+    
+    pOperandStack = (ST_tpOperandStack *) malloc(sizeof(ST_tpOperandStack));
+    pOperandStack->next = NULL;
+    return pOperandStack;
+}
+
+ST_tpLocalVariables *PL_criarPilhaVariaveisLocais(){
+    ST_tpLocalVariables *pLocalVariablesStack;
+    
+    pLocalVariablesStack = (ST_tpLocalVariables *) malloc(sizeof(ST_tpLocalVariables));
+    pLocalVariablesStack->next = NULL;
+    return pLocalVariablesStack;
+}
 /** ******************************************************************************
  *                      ESTRUTURAS E FUNCOES DE LISTA
  ** ******************************************************************************/

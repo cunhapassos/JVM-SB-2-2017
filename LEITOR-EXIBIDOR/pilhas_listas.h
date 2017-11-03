@@ -28,20 +28,20 @@
  *                      ESTRUTURAS E FUNCOES DE PILHA
  ** ******************************************************************************/
 
-typedef struct tpPilha{
-    void *dado;
-    struct tpPilha *prox;
-}PI_tpPilha;
 
-void PL_inicializarPilha(PI_tpPilha **ePilha);
+void PL_inicializarPilha(ST_tpPilha **ePilha);
 
-int PL_pilhaVazia(PI_tpPilha *pPilha);
+int PL_pilhaVazia(ST_tpPilha *pPilha);
 
-void *PL_topoPilha(PI_tpPilha *pPilha);
+void *PL_topoPilha(ST_tpPilha *pPilha);
 
-void PL_push(PI_tpPilha **ePilha, void *dadoNovo);
+void PL_push(ST_tpPilha **ePilha, void *dadoNovo);
 
-void *PL_pop(PI_tpPilha **ePilha);
+void *PL_pop(ST_tpPilha **ePilha);
+
+ST_tpOperandStack *PL_criarPilhaOperandos(void);
+
+ST_tpLocalVariables *PL_criarPilhaVariaveisLocais(void);
 
 /** ******************************************************************************
  *                      ESTRUTURAS E FUNCOES DE LISTA

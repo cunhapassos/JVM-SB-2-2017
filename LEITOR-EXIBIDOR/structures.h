@@ -32,7 +32,6 @@ alternada de acordo com a quantidade de bits*/
 #include <stdint.h>
 #include <wchar.h>
 
-
 /* Definições de tipos de dados*/
 typedef uint8_t u1;
 typedef uint16_t u2;
@@ -336,8 +335,48 @@ typedef struct ClassFile{
     struct ClassFile *next;
 }ST_tpClassFile;
 
+
 /** ******************************************************************************
- *                         TIPOS DE DADOS DE ARMAZENAMENTO
+ *                                ESTRUTURAS DO HEAP
+ ** ******************************************************************************/
+typedef struct thread ST_tpThread;
+
+/**  Estrutura que representa o Heap de classes */
+typedef struct {
+    wchar_t *pClasseName;
+    union variable *field_area;
+    struct VM_tpClassHeap *next;
+}ST_tpClassHeap;
+
+/**  Estrutura que representa o Heap para objetos */
+typedef struct{
+    wchar_t *pClasseName;
+    union variable *field_area;
+    ST_tpThread *thread;
+    u4 ref_count;
+    u2 max_var;
+    struct VM_tpObjectHeap *next;
+}ST_tpObjectHeap;
+
+/**  Estrutura que representa o Heap para array */
+typedef struct{
+    u1 type;
+    wchar_t *pClasseName;
+    int length;
+    void *area;
+    u4 ref_count;
+    struct VM_tpArrayHeap *next;
+}ST_tpArrayHeap;
+
+/**  Estrutura que representa o Heap Geral */
+typedef struct {
+    ST_tpClassHeap *classes;
+    ST_tpObjectHeap *objects;
+    ST_tpArrayHeap   *array;
+}ST_tpHeap;
+
+/** ******************************************************************************
+ *                                  TIPOS DE DADOS
  ** ******************************************************************************/
 
 union variable{
@@ -349,10 +388,15 @@ union variable{
     float Float;
     double Double;
     char Boolean;
-    // GLOBAL_HEAP obj_ref;
-    // ARRAY_HEAP array_ref;
+    ST_tpObjectHeap obj_ref;
+    ST_tpArrayHeap array_ref;
     // RETADDRESS retAddres;
 };
+
+typedef struct {
+    u1 tipo;                /* Tipo da variavel */
+    union variable valor;   /* Valor da variavel */
+}ST_tpVariable;
 
 /** ******************************************************************************
  *                         ESTRUTURAS DA AREA DE METODOS
@@ -365,6 +409,11 @@ typedef struct {
 /** ******************************************************************************
  *                         ESTRUTURAS DE PILHA JVM E FRAMES
  ** ******************************************************************************/
+
+typedef struct tpPilha{
+    void *dado;
+    struct tpPilha *prox;
+}ST_tpPilha;
 
 /**  Estrutura que representa a pilha de variaveis locais */
 typedef struct {
@@ -382,56 +431,18 @@ typedef struct {
 
 /**  Estrutura que representa um Frame */
 typedef struct {
-    ST_tpLocalVariables *localVariables;
-    ST_tpOperandStack   *operandes;
+    ST_tpLocalVariables *localVariablesStack;
+    ST_tpOperandStack   *operandStack;
+    ST_tpClassFile *cp;
     /* ReferenceConstantPoll */
-}ST_tpFrameStack;
+}ST_tpFrame;
 
 /**  Estrutura que representa uma thread */
-typedef struct {
+typedef struct thread{
     u1 PC;
-    ST_tpFrameStack *JVMStack; /* Ponteiro para lista de frames da Pilha */
+    ST_tpPilha *pFrameStack; /* Ponteiro para lista de frames da Thread */
     //VM_tpNativeMethodStack NativeStack;
 }ST_tpThread;
-
-
-/** ******************************************************************************
- *                                ESTRUTURAS DO HEAP
- ** ******************************************************************************/
-
-/**  Estrutura que representa o Heap de classes */
-typedef struct {
-    wchar_t *pClasseName;
-    union variable *field_area;
-    struct VM_tpClassHeap *next;
-}ST_tpClassHeap;
-
-/**  Estrutura que representa o Heap para objetos */
-typedef struct {
-    wchar_t *pClasseName;
-    union variable *field_area;
-    ST_tpThread thread;
-    u4 ref_count;
-    u2 max_var;
-    struct VM_tpObjectHeap *next;
-}ST_tpObjectHeap;
-
-/**  Estrutura que representa o Heap para array */
-typedef struct {
-    u1 type;
-    wchar_t *pClasseName;
-    int length;
-    void *area;
-    u4 ref_count;
-    struct VM_tpArrayHeap *next;
-}ST_tpArrayHeap;
-
-/**  Estrutura que representa o Heap Geral */
-typedef struct {
-    ST_tpClassHeap *classes;
-    ST_tpObjectHeap *objects;
-    ST_tpArrayHeap   *array;
-}ST_tpHeap;
 
 /** ******************************************************************************
  *                                ESTRUTURAS Da JVM
