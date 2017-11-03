@@ -65,6 +65,22 @@ ST_tpJVM *VM_criarJVM(){
     return pJvm;
 }
 
+void VM_executarMetodo(ST_tpJVM *pJVM, ST_tpClassFile *pClasse, ST_tpMethod_info *pMetodo){
+    int i;
+    u2 nameIndex;
+    char *name;
+    ST_tpCode_attribute *pCode;
+    
+    for(i = 0; i < pMetodo->attributes_count; i++){
+        nameIndex = pMetodo->attributes[i].attribute_name_index-1;
+        name = (char *) pClasse->constant_pool_table[nameIndex].info.Utf8.bytes;
+        
+        if(strcmp(name, "Code") == 0){
+            pCode = pMetodo->attributes[i].info;
+            // CRIAR FRAME
+        }
+    }
+}
 
 ST_tpJVM *VM_exucutarJVM(int numeroClasses, char *nomeClasses[]){
     int i, flag1, flag2;
@@ -96,7 +112,7 @@ ST_tpJVM *VM_exucutarJVM(int numeroClasses, char *nomeClasses[]){
             
             if(strcmp(name, "<init>") == 0 && strcmp(descritor, "()V") == 0 && pClasse->method_info_table[i].access_flags == ACC_PUBLIC){
                 printf("\n Executa metodo <init>\n");
-                // chamar funcao que executa metodo aqui
+                VM_executarMetodo(pJVM, pClasse, &pClasse->method_info_table[i]);
                 flag1 = 1;
                 break;
             }
@@ -110,7 +126,7 @@ ST_tpJVM *VM_exucutarJVM(int numeroClasses, char *nomeClasses[]){
             
             if(strcmp(name, "main") == 0 && strcmp(descritor, "([Ljava/lang/String;)V") == 0 && pClasse->method_info_table[i].access_flags == ACC_PUBLIC_STATIC){
                 printf("\n Executa metodo main\n");
-                // chamar funcao que executa metodo aqui
+                VM_executarMetodo(pJVM, pClasse, &pClasse->method_info_table[i]);
                 flag1 = 1;
                 break;
             }
