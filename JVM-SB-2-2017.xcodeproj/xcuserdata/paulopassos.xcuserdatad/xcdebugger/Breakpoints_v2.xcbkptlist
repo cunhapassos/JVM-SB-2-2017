@@ -26,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "LEITOR-EXIBIDOR/exibidor.c"
-            timestampString = "531336350.366695"
+            timestampString = "531464949.332542"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "232"
-            endingLineNumber = "232"
+            startingLineNumber = "290"
+            endingLineNumber = "290"
             landmarkName = "EX_imprimirClassFile"
             landmarkType = "9">
          </BreakpointContent>
@@ -42,11 +42,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "LEITOR-EXIBIDOR/exibidor.c"
-            timestampString = "531336350.36675"
+            timestampString = "531464949.333344"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "60"
-            endingLineNumber = "60"
+            startingLineNumber = "61"
+            endingLineNumber = "61"
             landmarkName = "EX_imprimirAtributos"
             landmarkType = "9">
          </BreakpointContent>
@@ -58,11 +58,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "LEITOR-EXIBIDOR/exibidor.c"
-            timestampString = "531336350.366797"
+            timestampString = "531464949.33406"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "233"
-            endingLineNumber = "233"
+            startingLineNumber = "291"
+            endingLineNumber = "291"
             landmarkName = "EX_imprimirClassFile"
             landmarkType = "9">
          </BreakpointContent>
@@ -93,9 +93,9 @@
             timestampString = "531440245.607817"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "46"
-            endingLineNumber = "46"
-            landmarkName = "main"
+            startingLineNumber = "194"
+            endingLineNumber = "194"
+            landmarkName = "PL_buscarClasse"
             landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
@@ -109,10 +109,42 @@
             timestampString = "531440245.607864"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "194"
-            endingLineNumber = "194"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            startingLineNumber = "79"
+            endingLineNumber = "79"
+            landmarkName = "VM_executarMetodo"
+            landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "LEITOR-EXIBIDOR/virtualMachine.c"
+            timestampString = "531464949.33486"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "111"
+            endingLineNumber = "111"
+            landmarkName = "VM_executarMetodo"
+            landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "LEITOR-EXIBIDOR/leitor.c"
+            timestampString = "531464949.334947"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "335"
+            endingLineNumber = "335"
+            landmarkName = "LE_lerCodeAttribute"
+            landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -134,16 +166,32 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "No"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "LEITOR-EXIBIDOR/virtualMachine.c"
             timestampString = "531440245.608113"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "79"
-            endingLineNumber = "79"
-            landmarkName = "VM_executarMetodo"
+            startingLineNumber = "155"
+            endingLineNumber = "155"
+            landmarkName = "VM_exucutarJVM"
+            landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "LEITOR-EXIBIDOR/leitor.c"
+            timestampString = "531464949.335282"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "318"
+            endingLineNumber = "318"
+            landmarkName = "LE_lerCodeAttribute"
             landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
@@ -157,9 +205,9 @@
             timestampString = "531440245.608156"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "111"
-            endingLineNumber = "111"
-            landmarkName = "VM_executarMetodo"
+            startingLineNumber = "96"
+            endingLineNumber = "96"
+            landmarkName = "EX_imprimirAtributos"
             landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
