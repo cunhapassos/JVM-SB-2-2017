@@ -24,6 +24,8 @@
 #define exibidor_h
 
 #include <stdio.h>
+#include <stdlib.h>
+
 #include "structures.h"
 
 void EX_imprimirUtf8 (u1 *pS, int length);

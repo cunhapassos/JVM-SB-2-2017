@@ -327,6 +327,9 @@ ST_tpCode_attribute *LE_lerCodeAttribute(FILE *pArq, ST_tpCp_info *cp, ST_tpAttr
             pCode->exception_table[i].catch_type = LE_lerU2(pArq);
         }
     }
+    else{
+        pCode->exception_table = NULL;
+    }
     
     pCode->attributes_count = LE_lerU2(pArq);
     

@@ -20,6 +20,7 @@
  @}********************************************************************************/
 
 #include "exibidor.h"
+#include <string.h>
 
 /**
  *  Descrição da função:
@@ -69,6 +70,63 @@ void EX_imprimirAtributos(ST_tpClassFile *pClassFile, ST_tpAttribute_info *pAttr
         printf("\tGENERIC INFO:\n\n");
         printf("\tAttribute name index: 0x%04x\n", pAttributeInfoTable[i].attribute_name_index);
         printf("\tAttibute length: %d\n", pAttributeInfoTable[i].attribute_length);
+        
+        char *pAttributeName = NULL;
+        int aux;
+        
+        aux = pClassFile->constant_pool_table[pAttributeInfoTable[i].attribute_name_index-1].info.Utf8.length;
+        pAttributeName = malloc(aux*sizeof(char) + 1 );
+        
+        //printf("\n%s", cp[pAttributes->attribute_name_index-1].info.Utf8.bytes);
+        //printf("\n%d", cp[pAttributes->attribute_name_index-1].info.Utf8.length);
+        //printf("\n%lu", sizeof(pAttributeName));
+        
+        /* Copia os cararteres UTF8 da constante Pool para pAttributeName e acrescenta \0 ao final */
+        
+        memcpy(pAttributeName, pClassFile->constant_pool_table[(pAttributeInfoTable[i].attribute_name_index)-1].info.Utf8.bytes, aux);
+        //for(i = 0; i < aux; i++ ){
+         //   pAttributeName[i] = pClassFile->constant_pool_table[(pAttributeInfoTable[i].attribute_name_index)-1].info.Utf8.bytes[i];
+        //}
+        pAttributeName[aux] = '\0';
+        
+        if(strcmp(pAttributeName, "ConstantValue") == 0)
+        {
+
+        }
+        else if(strcmp(pAttributeName, "Code") == 0)
+        {
+            ST_tpCode_attribute *pCode = pAttributeInfoTable[i].info;
+            printf("\tMinor vesion: %d\n", pCode->max_stack);
+            printf("\tMaximum local variables: %d\n", pCode->max_locals);
+            printf("\tCode length: %d\n", pCode->code_length);
+            for(int i = 0; i < pCode->code_length; i++){
+                printf("%d", pCode->code[i]);
+            }
+            printf("\tException Table length: %d\n", pCode->exception_table_length);
+            //COLOCAR PARA IMPRIMIR EXECESSOES
+            printf("\tAttributes count: %d\n", pCode->attributes_count);
+        }
+        else if(strcmp(pAttributeName, "Exceptions") == 0)
+        {
+
+        }
+        else if(strcmp(pAttributeName, "InnerClasses") == 0)
+        {
+
+        }
+        else if(strcmp(pAttributeName, "SourceFile") == 0)
+        {
+            
+        }
+        else if(strcmp(pAttributeName, "LineNumberTable") == 0)
+        {
+
+        }
+        else if (strcmp(pAttributeName, "LocalVariableTable") == 0){
+
+        }
+        
+        
         // Verificar impressão do campo Info da estrutura Atribute_info (nessa implementação a impressão é feita byte a byte)
         /*u1 *pQ;
         for(pQ = pN->info; pQ <  (pN->info + pN->attribute_length); pQ++){
