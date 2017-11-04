@@ -28,7 +28,7 @@ int main(int argc, const char * argv[]) {
     
     
     ST_tpClassFile *p;
-    p = LE_carregarClasse("/Users/paulopassos/Documents/GitHub/JVM-SB-2-2017/LEITOR-EXIBIDOR/File.class");
+    p = LE_carregarClasse("/Users/paulopassos/Documents/JVM-SB-2-2017/LEITOR-EXIBIDOR/File.class");
     EX_imprimirClassFile(p);
     free(p);
     p = NULL;

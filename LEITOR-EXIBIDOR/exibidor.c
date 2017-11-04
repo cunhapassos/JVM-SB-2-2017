@@ -84,10 +84,7 @@ void EX_imprimirAtributos(ST_tpClassFile *pClassFile, ST_tpAttribute_info *pAttr
         /* Copia os cararteres UTF8 da constante Pool para pAttributeName e acrescenta \0 ao final */
         
         memcpy(pAttributeName, pClassFile->constant_pool_table[(pAttributeInfoTable[i].attribute_name_index)-1].info.Utf8.bytes, aux);
-        //for(i = 0; i < aux; i++ ){
-         //   pAttributeName[i] = pClassFile->constant_pool_table[(pAttributeInfoTable[i].attribute_name_index)-1].info.Utf8.bytes[i];
-        //}
-        pAttributeName[aux] = '\0';
+        pAttributeName[aux] = '\0'; // Eh necessário para indicar o final de uma string
         
         if(strcmp(pAttributeName, "ConstantValue") == 0)
         {
@@ -100,7 +97,7 @@ void EX_imprimirAtributos(ST_tpClassFile *pClassFile, ST_tpAttribute_info *pAttr
             printf("\tMaximum local variables: %d\n", pCode->max_locals);
             printf("\tCode length: %d\n", pCode->code_length);
             for(int i = 0; i < pCode->code_length; i++){
-                printf("%d", pCode->code[i]);
+                printf("0x%04x\n", pCode->code[i]);
             }
             printf("\tException Table length: %d\n", pCode->exception_table_length);
             //COLOCAR PARA IMPRIMIR EXECESSOES
