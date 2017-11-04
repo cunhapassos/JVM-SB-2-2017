@@ -308,6 +308,7 @@ ST_tpCode_attribute *LE_lerCodeAttribute(FILE *pArq, ST_tpCp_info *cp, ST_tpAttr
     pCode->max_locals = LE_lerU2(pArq);
     pCode->code_length = LE_lerU4(pArq);
     
+    //FICAR ATENTO ESSA LEITURA PODE ESTAR ERRADA
     if(pCode->code_length > 0 ){
         pCode->code = malloc(pCode->code_length * sizeof(u1));
         for(i = 0; i < pCode->code_length; i++){
