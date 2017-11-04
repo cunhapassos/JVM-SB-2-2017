@@ -77,7 +77,8 @@ ST_tpFrame *VM_criarFrame(ST_tpClassFile *pClasse){
 }
 
 void VM_executarMetodo(ST_tpJVM *pJVM, ST_tpClassFile *pClasse, ST_tpMethod_info *pMetodo){
-    int i;
+    int i, j;
+    u1 opcode;
     u2 nameIndex;
     char *name;
     ST_tpCode_attribute *pCode;
@@ -126,6 +127,11 @@ void VM_executarMetodo(ST_tpJVM *pJVM, ST_tpClassFile *pClasse, ST_tpMethod_info
             pCode->attribute_info = (ST_tpAttribute_info *) malloc(pCode->attributes_count); // VERIFICAR SE TEM A MULTIPLICACAO MESMO?
             
             pJVM->thread->PC = (u1 *)pCode->code;
+            for(j = 0; j < pCode->code_length; j++ ){
+                memcpy(&opcode, pJVM->thread->PC, 1);
+                IT_executaInstrucao(opcode, pJVM->thread->pFrameStack, );
+                pJVM->thread->PC++;
+            }
         }
     }
 }

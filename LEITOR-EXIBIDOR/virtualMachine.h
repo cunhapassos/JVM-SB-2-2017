@@ -22,6 +22,7 @@
 
 #include <stdio.h>
 #include "structures.h"
+#include "funcoes.h"
 
 ST_tpMethodArea *VM_criarAreaMetodo(void);
 

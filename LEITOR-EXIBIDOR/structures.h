@@ -439,7 +439,7 @@ typedef struct {
 
 /**  Estrutura que representa uma thread */
 typedef struct thread{
-    u1 PC;
+    u1 *PC;
     ST_tpPilha *pFrameStack; /* Ponteiro para lista de frames da Thread */
     //VM_tpNativeMethodStack NativeStack;
 }ST_tpThread;
