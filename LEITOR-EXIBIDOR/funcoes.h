@@ -2,4 +2,4 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void* IT_executaInstrucao(void* instrucao, void* pilhaDeExecucao, void* exceptions);
+void* IT_executaInstrucao(u1 opcode, void* pilhaDeExecucao, void* exceptions);
