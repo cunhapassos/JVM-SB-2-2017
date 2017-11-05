@@ -316,8 +316,6 @@ ST_tpCode_attribute *LE_lerCodeAttribute(FILE *pArq, ST_tpCp_info *cp, ST_tpAttr
         pCode->code = malloc(pCode->code_length * sizeof(u1));
         for(i = 0; i < pCode->code_length; i++){
             pCode->code[i] = LE_lerU1(pArq);
-            printf("teste de leitura do code\n");
-            printf("%i -> x%0x \n", i , pCode->code[i]);
         }
     }
     

@@ -119,11 +119,9 @@ void EX_imprimirAtributos(ST_tpClassFile *pClassFile, ST_tpAttribute_info *pAttr
                 printf("\tmax_stack: %d\n",((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->max_stack);
                 printf("\tmax_locals: %d\n",((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->max_locals);
                 printf("\tcode_length: %d\n",((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->code_length);
-                
-               /* for (int i=0; i < ((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->code_length; i++)
-                    printf("%d\n", i);
-                    printf("%c ", ((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->code[i]);
-                printf("\n");*/
+                printf("\n\tBytecode:\n");
+               for (int j=0; j < ((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->code_length; j++)
+                   printf("\t%d -> x%0x \n", j , ((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->code[j]);
                 
                 /*u2 max_stack;
                 u2 max_locals;
