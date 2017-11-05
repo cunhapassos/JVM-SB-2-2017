@@ -72,6 +72,15 @@ typedef uint32_t u4;
 #define CONSTANT_InterfaceMethodref 11
 #define CONSTANT_NameAndType 12
 
+/**                             DEFINICOES DE TAGS PARA ATRIBUTOS                                    **/
+#define CONSTANTVALUE       1
+#define CODE       2
+#define EXCEPTIONS       3
+#define INNERCLASSES       4
+#define SOURCEFILE       5
+#define LINENUMBERTABLE       6
+#define LOCALVARIABLETABLE       7
+
 /**                             ESTRUTURAS                                         **/
 
 /* Representa valores strings constantes, inclusive Unicode */
@@ -169,6 +178,7 @@ typedef struct{
 typedef struct{
     u2 attribute_name_index;
     u4 attribute_length;
+    u1 tag;
     void *info;
 }ST_tpAttribute_info;
 

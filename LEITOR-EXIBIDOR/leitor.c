@@ -3,7 +3,10 @@
  *  Universidade de Brasilia - 02/2017
  *	Software Basico - Turma A
  *
- *  MODULO: LE_
+ *	@addgroup MODULO LEITOR_EXIBIDOR
+ *  @{
+ *  @ingroup MOD_LE
+ *
  *  @file leitor.c
  *  @brief 
  *			Modulo de implementaco: Modulo Leitor-Exibidor:
@@ -98,8 +101,9 @@ ST_tpCp_info *LE_lerConstant_pool(FILE *pArq, u2 constant_pool_count){
         switch(constantPool[i].tag) {
             case CONSTANT_Utf8:
                 constantPool[i].info.Utf8.length = LE_lerU2(pArq);
-                constantPool[i].info.Utf8.bytes = malloc(constantPool[i].info.Utf8.length*sizeof(u1));
+                constantPool[i].info.Utf8.bytes = malloc((constantPool[i].info.Utf8.length+1)*sizeof(u1));
                 fread(constantPool[i].info.Utf8.bytes, 1, constantPool[i].info.Utf8.length, pArq);
+                constantPool[i].info.Utf8.bytes[constantPool[i].info.Utf8.length] = '\0';
                 break;
             case CONSTANT_Float:
                 constantPool[i].info.Float.bytes = LE_lerU4(pArq);
@@ -308,11 +312,12 @@ ST_tpCode_attribute *LE_lerCodeAttribute(FILE *pArq, ST_tpCp_info *cp, ST_tpAttr
     pCode->max_locals = LE_lerU2(pArq);
     pCode->code_length = LE_lerU4(pArq);
     
-    //FICAR ATENTO ESSA LEITURA PODE ESTAR ERRADA
     if(pCode->code_length > 0 ){
         pCode->code = malloc(pCode->code_length * sizeof(u1));
         for(i = 0; i < pCode->code_length; i++){
             pCode->code[i] = LE_lerU1(pArq);
+            printf("teste de leitura do code\n");
+            printf("%i -> x%0x \n", i , pCode->code[i]);
         }
     }
     
@@ -327,9 +332,6 @@ ST_tpCode_attribute *LE_lerCodeAttribute(FILE *pArq, ST_tpCp_info *cp, ST_tpAttr
             pCode->exception_table[i].handler_pc = LE_lerU2(pArq);
             pCode->exception_table[i].catch_type = LE_lerU2(pArq);
         }
-    }
-    else{
-        pCode->exception_table = NULL;
     }
     
     pCode->attributes_count = LE_lerU2(pArq);
@@ -463,76 +465,65 @@ ST_tpLocalVariableTable_attribute *LE_lerLocalVariableAttribute(FILE *pArq){
  *
  */
 ST_tpAttribute_info *LE_lerAttribute(FILE *pArq, ST_tpCp_info *cp, ST_tpAttribute_info *pAttributes) {
-    char *pAttributeName;
-    int aux, i;
+   
     pAttributes->attribute_name_index = LE_lerU2(pArq);
     
     pAttributes->attribute_length = LE_lerU4(pArq);
     
-    //printf("\n[%02d]\n", pAttributes->attribute_name_index);
-
-
-    //pAttributeName = malloc((cp[pAttributes->attribute_name_index-1].info.Utf8.length) * sizeof(char) + 1);
-    aux = cp[pAttributes->attribute_name_index-1].info.Utf8.length;
-    pAttributeName = malloc(aux*sizeof(char) + 1 );
-    
-    //printf("\n%s", cp[pAttributes->attribute_name_index-1].info.Utf8.bytes);
-    //printf("\n%d", cp[pAttributes->attribute_name_index-1].info.Utf8.length);
-    //printf("\n%lu", sizeof(pAttributeName));
-    
-    /* Copia os cararteres UTF8 da constante Pool para pAttributeName e acrescenta \0 ao final */
-    for(i = 0; i < aux; i++ ){
-        pAttributeName[i] = cp[(pAttributes->attribute_name_index)-1].info.Utf8.bytes[i];
-    }
-    pAttributeName[i] = '\0';
-    
-    if(strcmp(pAttributeName, "ConstantValue") == 0)
+    if(strcmp((char *) cp[(pAttributes->attribute_name_index)-1].info.Utf8.bytes, "ConstantValue") == 0)
     {
         ST_tpConstantValue_attribute *pConstantValue = (ST_tpConstantValue_attribute*) malloc(sizeof(ST_tpConstantValue_attribute));
         pConstantValue = LE_lerConstantValueAttribute(pArq);
         pAttributes->info = (ST_tpConstantValue_attribute*) pConstantValue;
         pConstantValue = NULL;
+        pAttributes->tag = 1;
     }
-    else if(strcmp(pAttributeName, "Code") == 0)
+    else if(strcmp((char *) cp[(pAttributes->attribute_name_index)-1].info.Utf8.bytes, "Code") == 0)
     {
         ST_tpCode_attribute *pCode = (ST_tpCode_attribute*) malloc(sizeof(ST_tpCode_attribute));
         pCode = LE_lerCodeAttribute(pArq, cp, pAttributes);
         pAttributes->info = (ST_tpCode_attribute*) pCode;
         pCode = NULL;
+        pAttributes->tag = 2;
     }
-    else if(strcmp(pAttributeName, "Exceptions") == 0)
+    else if(strcmp((char *) cp[(pAttributes->attribute_name_index)-1].info.Utf8.bytes, "Exceptions") == 0)
     {
         ST_tpExceptions_attribute *pExceptions = (ST_tpExceptions_attribute*) malloc(sizeof(ST_tpExceptions_attribute));
         pExceptions = LE_lerExceptionsAttribute(pArq);
         pAttributes->info = (ST_tpExceptions_attribute*) pExceptions;
         pExceptions = NULL;
+        pAttributes->tag = 3;
     }
-    else if(strcmp(pAttributeName, "InnerClasses") == 0)
+    else if(strcmp((char *) cp[(pAttributes->attribute_name_index)-1].info.Utf8.bytes, "InnerClasses") == 0)
     {
         ST_tpInnerClasses_attribute *pInnerClasses =  (ST_tpInnerClasses_attribute*) malloc(sizeof(ST_tpInnerClasses_attribute));
         pInnerClasses = LE_lerInnerClassesAttribute(pArq);
         pAttributes->info = (ST_tpInnerClasses_attribute*) pInnerClasses;
         pInnerClasses = NULL;
+        pAttributes->tag = 4;
     }
-   else if(strcmp(pAttributeName, "SourceFile") == 0)
+   else if(strcmp((char *) cp[(pAttributes->attribute_name_index)-1].info.Utf8.bytes, "SourceFile") == 0)
     {
         ST_tpSourceFile_attribute *pSourceFile = (ST_tpSourceFile_attribute*) malloc(sizeof(ST_tpSourceFile_attribute));
         pSourceFile = LE_lerSourceFileAttribute(pArq);
         pAttributes->info = (ST_tpSourceFile_attribute*) pSourceFile;
         pSourceFile = NULL;
+        pAttributes->tag = 5;
     }
-     else if(strcmp(pAttributeName, "LineNumberTable") == 0)
+     else if(strcmp((char *) cp[(pAttributes->attribute_name_index)-1].info.Utf8.bytes, "LineNumberTable") == 0)
     {
         ST_tpLineNumberTable_attribute *pLineNumberTable = (ST_tpLineNumberTable_attribute*) malloc(sizeof(ST_tpLineNumberTable_attribute));
         pLineNumberTable = LE_lerLineNumberAttribute(pArq);
         pAttributes->info = (ST_tpLineNumberTable_attribute*) pLineNumberTable;
         pLineNumberTable = NULL;
+        pAttributes->tag = 6;
     }
-     else if (strcmp(pAttributeName, "LocalVariableTable") == 0){
+     else if (strcmp((char *) cp[(pAttributes->attribute_name_index)-1].info.Utf8.bytes, "LocalVariableTable") == 0){
          ST_tpLocalVariableTable_attribute *pLocalVariableAttribute = (ST_tpLocalVariableTable_attribute*) malloc(sizeof(ST_tpLocalVariableTable_attribute));
          pLocalVariableAttribute = LE_lerLocalVariableAttribute(pArq);
          pAttributes->info = (ST_tpLocalVariableTable_attribute*) pLocalVariableAttribute;
          pLocalVariableAttribute = NULL;
+         pAttributes->tag = 7;
      }
     /*else
     {
@@ -612,10 +603,6 @@ ST_tpAttribute_info *LE_lerAttribute(FILE *pArq, ST_tpCp_info *cp, ST_tpAttribut
 	//arqPontoClass->attribute_info_table = LE_lerAttribute(pArq, arqPontoClass->constant_pool_table, arqPontoClass->attribute_info_table);
 	//LE_lerAttributes(FILE *pArq, ST_tpCp_info *cp, ST_tpAttribute_info *pAttributes)
      // verificar qual ponteiro de contante pool passar
-     
-     arqPontoClass->next = NULL;
-     arqPontoClass->prev = NULL;
-     
     return arqPontoClass;
  }
 
