@@ -36,6 +36,7 @@
 		2F7A49261FA7DC29001BD8FD /* pilhas_listas.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pilhas_listas.c; path = "LEITOR-EXIBIDOR/pilhas_listas.c"; sourceTree = SOURCE_ROOT; };
 		2FB92CD91F72C00600A4D382 /* exibidor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = exibidor.h; path = "LEITOR-EXIBIDOR/exibidor.h"; sourceTree = SOURCE_ROOT; };
 		2FB92CDD1F72C00600A4D382 /* leitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = leitor.h; path = "LEITOR-EXIBIDOR/leitor.h"; sourceTree = SOURCE_ROOT; };
+		7D17B5FE1FAFCFA3003F775C /* decoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = decoder.h; path = "LEITOR-EXIBIDOR/decoder.h"; sourceTree = SOURCE_ROOT; };
 		7DA420521F81B04F00815CCF /* exibidor.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = exibidor.c; path = "LEITOR-EXIBIDOR/exibidor.c"; sourceTree = SOURCE_ROOT; };
 		7DA420531F81B04F00815CCF /* leitor.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = leitor.c; path = "LEITOR-EXIBIDOR/leitor.c"; sourceTree = SOURCE_ROOT; };
 		7DA420551F81B05000815CCF /* structures.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = structures.h; path = "LEITOR-EXIBIDOR/structures.h"; sourceTree = SOURCE_ROOT; };
@@ -77,6 +78,7 @@
 				2F7A49261FA7DC29001BD8FD /* pilhas_listas.c */,
 				2F7A49251FA7DC29001BD8FD /* pilhas_listas.h */,
 				7DA420591F81B0B700815CCF /* main.c */,
+				7D17B5FE1FAFCFA3003F775C /* decoder.h */,
 				7DA420551F81B05000815CCF /* structures.h */,
 				7DA420521F81B04F00815CCF /* exibidor.c */,
 				2FB92CD91F72C00600A4D382 /* exibidor.h */,
