@@ -41,6 +41,6 @@ int main(int argc, const char * argv[]) {
     }
 
 	// /Users/paulopassos/OneDrive/Documentos/13º SEMESTRE/SOFTWARE BÁSICO/TRABALHOS/JVM-SB-2-2017/File.class
-	// /Users/danielmatias/Desktop/JVM-SB-2-2018/LEITOR-EXIBIDOR/double_aritmetica.class
+	// /Users/danielmatias/Desktop/JVM-SB-2-2018/double_aritmetica.class
 	return 0;
 }
