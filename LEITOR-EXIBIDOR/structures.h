@@ -394,7 +394,7 @@ union variable{
     u2 Char;
     short int Short;
     int Int;
-    __int64_t Long;
+    int64_t Long;
     float Float;
     double Double;
     char Boolean;

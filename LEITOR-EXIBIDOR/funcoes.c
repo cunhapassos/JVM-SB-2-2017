@@ -9,8 +9,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+void* IT_executaInstrucao(u1 opcode, ST_tpThread* thread) {
+	printf("break!\n");
 
-void* IT_executaInstrucao(u1 opcode, void* pilhaDeExecucao, void* exceptions) {
+}
+
+void* IT_executaInstrucao1(u1 opcode, void* pilhaDeExecucao, void* exceptions) {
 
 
 	switch(opcode) {
@@ -29,8 +33,7 @@ void* IT_executaInstrucao(u1 opcode, void* pilhaDeExecucao, void* exceptions) {
 
 		*******************************************************************************************/
 		case 0x00:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+
 			break;
 
 		
@@ -3971,7 +3974,7 @@ void* IT_executaInstrucao(u1 opcode, void* pilhaDeExecucao, void* exceptions) {
 
 		*******************************************************************************************/
 		default:
-			printf("Opcode %x não encontrado", opcode);
+			printf("Opcode não encontrado");
 	
 	}
 

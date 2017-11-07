@@ -1,14 +1,15 @@
+OBJ = LEITOR-EXIBIDOR/exibidor.o LEITOR-EXIBIDOR/leitor.o LEITOR-EXIBIDOR/funcoes.o LEITOR-EXIBIDOR/virtualMachine.o LEITOR-EXIBIDOR/pilhas_listas.o
 run:
 	./main
 
 clean:
 	rm -rf *.o ./main LEITOR-EXIBIDOR/*.o
 
-bild:
-	gcc -std=c99 -g -c -o LEITOR-EXIBIDOR/exibidor.o LEITOR-EXIBIDOR/exibidor.c
-	gcc -std=c99 -g -c -o LEITOR-EXIBIDOR/leitor.o LEITOR-EXIBIDOR/leitor.c
-	gcc -std=c99 -g -c -o LEITOR-EXIBIDOR/funcoes.o LEITOR-EXIBIDOR/funcoes.c
-	gcc -std=c99 -g -o main main.c LEITOR-EXIBIDOR/exibidor.o LEITOR-EXIBIDOR/leitor.o LEITOR-EXIBIDOR/funcoes.o
+bild: $(OBJ)
+	gcc -std=c99 -g -o main main.c $(OBJ)
+
+LEITOR-EXIBIDOR/%.o: %.c
+	gcc -std=c99 -g -c -o $@ $<R-EXIBIDOR/funcoes.o LEITOR-EXIBIDOR/funcoes.c
 
 debug:
 	gdb ./main
