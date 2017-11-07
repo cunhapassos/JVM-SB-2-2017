@@ -24,7 +24,7 @@ int main(int argc, const char * argv[]) {
     //EX_imprimirClassFile(LE_lerArquivo(pNomeArquivo));
     
     ST_tpClassFile *p;
-    p = LE_carregarClasse("/Users/danielmatias/Desktop/JVM-SB-2-2017/LEITOR-EXIBIDOR/double_aritmetica.class");
+    p = LE_carregarClasse("/Users/danielmatias/Desktop/JVM-SB-2-2017/ArquivosTestesLadeira/arrays/multi.class");
     EX_imprimirClassFile(p);
     free(p);
     p = NULL;

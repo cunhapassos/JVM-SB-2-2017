@@ -523,25 +523,15 @@ ST_tpAttribute_info *LE_lerAttribute(FILE *pArq, ST_tpCp_info *cp, ST_tpAttribut
          pLocalVariableAttribute = NULL;
          pAttributes->tag = 7;
      }
-    /*else
+    //faz a leitura dos atributos desconhecidos
+     else
     {
-        readUnknownAttribute(fp, pAttributes);
-    }*/
+        pAttributes->info = (u1 *) malloc(pAttributes->attribute_length * sizeof(u1));
+        fread(pAttributes->info, 1, pAttributes->attribute_length, pArq);
+    }
     
     return pAttributes;
 }
-
-/*ST_tpAttribute_info *LE_lerAttributes(FILE *pArq, u2 attributes_count) {
-    ST_tpAttribute_info *pattributes = (ST_tpAttribute_info *) malloc(attributes_count*sizeof(ST_tpAttribute_info));
-    ST_tpAttribute_info *pI;
-    for(pI = pattributes; pI <  (pattributes + attributes_count); pI++){
-        pI->attribute_name_index = LE_lerU2(pArq);
-        pI->attribute_length = LE_lerU4(pArq);
-        pI->info = (u1 *) malloc(pI->attribute_length * sizeof(u1));
-        fread(pI->info, 1, pI->attribute_length, pArq);
-    }
-    return pattributes;
-} */
 
 /**
  *  Descri��o da fun��o:
