@@ -31,7 +31,7 @@ int main(int argc, const char * argv[]) {
 	// free(p);
 	// p = NULL;
 
-	char *aux[] = {"LEITOR-EXIBIDOR/File.class"};
+	char *aux[] = {"File.class"};
     ST_tpJVM *pJVM = VM_exucutarJVM(1, aux);
 
     if(PL_buscarClasse(pJVM, "File") != NULL) {
