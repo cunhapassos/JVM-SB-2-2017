@@ -112,25 +112,38 @@ void VM_executarMetodo(ST_tpJVM *pJVM, ST_tpClassFile *pClasse, ST_tpMethod_info
             
             /* Ler informacoes do Atributo Code na sequencia da memoria */
             memset(pCode, 0, sizeof(ST_tpCode_attribute));/* Preenche os n (do tamanho de ST_tpCode_attribute) primeiros carcteres de pCode com 0 */
-            memcpy((u1 *)&pCode->max_stack, (u1 *)pMetodo->attributes->info, 2); // VErificar se precisa reverter os bytes (creio que nao pq fizemos isso na leitura do .class*/
-            memcpy((u1 *)&pCode->max_locals, (u1 *)pMetodo->attributes->info + 2, 2);
-            memcpy((u1 *)&pCode->code_length, (u1 *)pMetodo->attributes->info + 4, 4);
+            memcpy((u1 *)&pCode->max_stack, (u2 *)&((ST_tpCode_attribute*) pMetodo->attributes->info)->max_stack, 2);
+            memcpy((u1 *)&pCode->max_locals, (u2 *)&((ST_tpCode_attribute*) pMetodo->attributes->info)->max_locals, 2);
+            memcpy((u1 *)&pCode->code_length, (u2 *)&((ST_tpCode_attribute*) pMetodo->attributes->info)->code_length, 4);
             
             pCode->code = (u1 *) malloc(pCode->code_length);
             memcpy((u1 *)pCode->code, (u1*)((ST_tpCode_attribute*)pMetodo->attributes->info)->code, pCode->code_length);
-            memcpy((u1 *)&pCode->exception_table_length, (u1 *)pMetodo->attributes->info+8+pCode->code_length, 2);
+            memcpy((u2 *)&pCode->exception_table_length, (u2 *)&((ST_tpCode_attribute*) pMetodo->attributes->info)->exception_table_length , 2);
+            
             
             if(pCode->exception_table_length != 0){
-                // INSERIR LEITURA DA TABELA DE EXCECOES
+                ST_tpException_table *pExeptionTable = ((ST_tpCode_attribute*) pMetodo->attributes->info)->exception_table;
+                pCode->exception_table = (ST_tpException_table *) malloc(pCode->exception_table_length * sizeof(ST_tpException_table));
+                
+                for(int k = 0; k < pCode->exception_table_length; k++){
+                    memcpy((u1 *)&pCode->exception_table[i].end_pc , (u1 *)&pExeptionTable[i].end_pc, 2);
+                    memcpy((u1 *)&pCode->exception_table[i].start_pc , (u1 *)&pExeptionTable[i].start_pc, 2);
+                    memcpy((u1 *)&pCode->exception_table[i].handler_pc , (u1 *)&pExeptionTable[i].handler_pc, 2);
+                    memcpy((u1 *)&pCode->exception_table[i].catch_type , (u1 *)&pExeptionTable[i].catch_type, 2);
+                }
             }
-            memcpy((u1 *)&pCode->attributes_count, (u1 *)pMetodo->attributes->info+10+pCode->code_length+pCode->exception_table_length, 2);
+            else{
+                pCode->exception_table = NULL;
+            }
+            
+            memcpy((u1 *)&pCode->attributes_count, (u2 *)&((ST_tpCode_attribute*) pMetodo->attributes->info)->attributes_count, 2);
             
             pCode->attribute_info = (ST_tpAttribute_info *) malloc(pCode->attributes_count); // VERIFICAR SE TEM A MULTIPLICACAO MESMO?
             
             pJVM->thread->PC = (u1 *)pCode->code;
             for(j = 0; j < pCode->code_length; j++ ){
                 memcpy(&opcode, pJVM->thread->PC, 1);
-                IT_executaInstrucao(pJVM->thread); // VERIFICAR ONDE EXECUTA AS EXCESSOES
+                //IT_executaInstrucao(pJVM->thread); // VERIFICAR ONDE EXECUTA AS EXCESSOES
                 pJVM->thread->PC++;
             }
         }
@@ -165,7 +178,8 @@ ST_tpJVM *VM_exucutarJVM(int numeroClasses, char *nomeClasses[]){
             name = (char *) pClasse->constant_pool_table[nameIndex].info.Utf8.bytes;
             descritor = (char *)  pClasse->constant_pool_table[descritorIndex].info.Utf8.bytes;
             // Duvida, o descritor deve ser ()V ou deve ser (I)V?
-            if(strcmp(name, "<init>") == 0 && strcmp(descritor, "(I)V") == 0 && pClasse->method_info_table[i].access_flags == ACC_PUBLIC){
+            //if(strcmp(name, "<init>") == 0 && strcmp(descritor, "(I)V") == 0 && pClasse->method_info_table[i].access_flags == ACC_PUBLIC){
+            if(strcmp(name, "dividir") == 0 && strcmp(descritor, "(II)I") == 0 && pClasse->method_info_table[i].access_flags == ACC_PUBLIC_STATIC){
                 printf("\n Executa metodo <init>\n");
                 VM_executarMetodo(pJVM, pClasse, &pClasse->method_info_table[i]);
                 flag1 = 1;

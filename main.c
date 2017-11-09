@@ -26,7 +26,7 @@ int main(int argc, const char * argv[]) {
     
     ST_tpClassFile *p;
     //p = LE_carregarClasse("/Users/danielmatias/Desktop/JVM-SB-2-2017/LEITOR-EXIBIDOR/double_aritmetica.class");
-    p = LE_carregarClasse("/Users/paulopassos/Documents/JVM-SB-2-2017/LEITOR-EXIBIDOR/double_aritmetica.class");
+    p = LE_carregarClasse("/Users/paulopassos/Documents/JVM-SB-2-2017/ARQUIVOS PARA TESTES/TesteExcecao.class");
     EX_imprimirClassFile(p);
     free(p);
     p = NULL;
@@ -35,7 +35,7 @@ int main(int argc, const char * argv[]) {
      *                            PARA CARREGAR MAIS DE UMA CLASSE
      ** ******************************************************************************/
     //char *aux[] = {"/Users/paulopassos/Documents/JVM-SB-2-2017/LEITOR-EXIBIDOR/File.class", "/Users/paulopassos/Documents/JVM-SB-2-2017/LEITOR-EXIBIDOR/double_aritmetica.class"};
-    char *aux[] = {"/Users/paulopassos/Documents/JVM-SB-2-2017/LEITOR-EXIBIDOR/File.class"};
+    char *aux[] = {"/Users/paulopassos/Documents/JVM-SB-2-2017/ARQUIVOS PARA TESTES/TesteExcecao.class"};
      // LEMBRAR DE INSERIR O NUMERO DE CLASSES A SEREM LIDA CONFORME O NUMERO DE STRINGS PASSADAS PARA aux[]
      ST_tpJVM *pJVM = VM_exucutarJVM(1, aux);
      

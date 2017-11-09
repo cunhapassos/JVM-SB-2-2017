@@ -1,0 +1,587 @@
+
+-----GENERAL INFORMATION-----
+
+Magic: cafebabe
+Minor Version: 0
+Major Version: 46 [1.200000]
+Constant Pool Count: 58
+Access Flags: 0020
+This Class: cp_info#26 <vetor>
+Super Class: cp_info#27 <java/lang/Object>
+Interfaces Count: 0
+Fields Count: 0
+Methods Count: 2
+Atributes Count: 1
+
+
+-----CONSTANT POOL-----
+
+--------------Entrada [1]--------------
+TAG: 10: CONSTANT_Methodref_Info
+Class Name: cp_info#27 <java/lang/Object>
+Name and Type: cp_info#36 <<init>:()V>
+--------------Entrada [2]--------------
+TAG: 06: CONSTANT_Double_Info
+Double High Bytes: 0x40000000
+Double Low Bytes: 0x00000000
+Double: 2.000000
+--------------Entrada [3]--------------
+TAG: 00: (null)
+DefaultImpressao
+--------------Entrada [4]--------------
+TAG: 06: CONSTANT_Double_Info
+Double High Bytes: 0x40080000
+Double Low Bytes: 0x00000000
+Double: 3.000000
+--------------Entrada [5]--------------
+TAG: 00: (null)
+DefaultImpressao
+--------------Entrada [6]--------------
+TAG: 06: CONSTANT_Double_Info
+Double High Bytes: 0xc0140000
+Double Low Bytes: 0x00000000
+Double: -5.000000
+--------------Entrada [7]--------------
+TAG: 00: (null)
+DefaultImpressao
+--------------Entrada [8]--------------
+TAG: 05: CONSTANT_Long_Info
+Long High Bytes: 0xffffffff
+Long Low Bytes: 0xfffffffb
+Long: -5
+--------------Entrada [9]--------------
+TAG: 00: (null)
+DefaultImpressao
+--------------Entrada [10]--------------
+TAG: 05: CONSTANT_Long_Info
+Long High Bytes: 0x00000000
+Long Low Bytes: 0x00000003
+Long: 3
+--------------Entrada [11]--------------
+TAG: 00: (null)
+DefaultImpressao
+--------------Entrada [12]--------------
+TAG: 05: CONSTANT_Long_Info
+Long High Bytes: 0x00000000
+Long Low Bytes: 0x00620e86
+Long: 6426246
+--------------Entrada [13]--------------
+TAG: 00: (null)
+DefaultImpressao
+--------------Entrada [14]--------------
+TAG: 05: CONSTANT_Long_Info
+Long High Bytes: 0xffffffff
+Long Low Bytes: 0xfff963a6
+Long: -433242
+--------------Entrada [15]--------------
+TAG: 00: (null)
+DefaultImpressao
+--------------Entrada [16]--------------
+TAG: 04: CONSTANT_Float_Info
+Bytes: 40400000
+Float: 3.000000
+--------------Entrada [17]--------------
+TAG: 04: CONSTANT_Float_Info
+Bytes: c0a00000
+Float: -5.000000
+--------------Entrada [18]--------------
+TAG: 03: CONSTANT_Integer_Info
+Bytes: 186a0
+Integer: 100000
+--------------Entrada [19]--------------
+TAG: 09: CONSTANT_Fieldref_Info
+Class Name: cp_info#37 <java/lang/System>
+Name and Type: cp_info#38 <out:Ljava/io/PrintStream;>
+--------------Entrada [20]--------------
+TAG: 10: CONSTANT_Methodref_Info
+Class Name: cp_info#39 <java/io/PrintStream>
+Name and Type: cp_info#40 <println:(I)V>
+--------------Entrada [21]--------------
+TAG: 10: CONSTANT_Methodref_Info
+Class Name: cp_info#39 <java/io/PrintStream>
+Name and Type: cp_info#41 <println:()V>
+--------------Entrada [22]--------------
+TAG: 10: CONSTANT_Methodref_Info
+Class Name: cp_info#39 <java/io/PrintStream>
+Name and Type: cp_info#42 <println:(D)V>
+--------------Entrada [23]--------------
+TAG: 10: CONSTANT_Methodref_Info
+Class Name: cp_info#39 <java/io/PrintStream>
+Name and Type: cp_info#43 <println:(J)V>
+--------------Entrada [24]--------------
+TAG: 10: CONSTANT_Methodref_Info
+Class Name: cp_info#39 <java/io/PrintStream>
+Name and Type: cp_info#44 <println:(F)V>
+--------------Entrada [25]--------------
+TAG: 10: CONSTANT_Methodref_Info
+Class Name: cp_info#39 <java/io/PrintStream>
+Name and Type: cp_info#45 <println:(C)V>
+--------------Entrada [26]--------------
+TAG: 07: CONSTANT_Class_Info
+Class Name: cp_info#46 <vetor>
+--------------Entrada [27]--------------
+TAG: 07: CONSTANT_Class_Info
+Class Name: cp_info#47 <java/lang/Object>
+--------------Entrada [28]--------------
+TAG: 01: CONSTANT_Utf8_Info
+Length of byte array: 6
+Length of string: 6
+String: <init>
+--------------Entrada [29]--------------
+TAG: 01: CONSTANT_Utf8_Info
+Length of byte array: 3
+Length of string: 3
+String: ()V
+--------------Entrada [30]--------------
+TAG: 01: CONSTANT_Utf8_Info
+Length of byte array: 4
+Length of string: 4
+String: Code
+--------------Entrada [31]--------------
+TAG: 01: CONSTANT_Utf8_Info
+Length of byte array: 15
+Length of string: 15
+String: LineNumberTable
+--------------Entrada [32]--------------
+TAG: 01: CONSTANT_Utf8_Info
+Length of byte array: 4
+Length of string: 4
+String: main
+--------------Entrada [33]--------------
+TAG: 01: CONSTANT_Utf8_Info
+Length of byte array: 22
+Length of string: 22
+String: ([Ljava/lang/String;)V
+--------------Entrada [34]--------------
+TAG: 01: CONSTANT_Utf8_Info
+Length of byte array: 10
+Length of string: 10
+String: SourceFile
+--------------Entrada [35]--------------
+TAG: 01: CONSTANT_Utf8_Info
+Length of byte array: 10
+Length of string: 10
+String: vetor.java
+--------------Entrada [36]--------------
+TAG: 12: CONSTANT_NameAndType_Info
+Name: cp_info#28 <<init>>
+Descriptor: cp_info#29 <()V>
+--------------Entrada [37]--------------
+TAG: 07: CONSTANT_Class_Info
+Class Name: cp_info#48 <java/lang/System>
+--------------Entrada [38]--------------
+TAG: 12: CONSTANT_NameAndType_Info
+Name: cp_info#49 <out>
+Descriptor: cp_info#50 <Ljava/io/PrintStream;>
+--------------Entrada [39]--------------
+TAG: 07: CONSTANT_Class_Info
+Class Name: cp_info#51 <java/io/PrintStream>
+--------------Entrada [40]--------------
+TAG: 12: CONSTANT_NameAndType_Info
+Name: cp_info#52 <println>
+Descriptor: cp_info#53 <(I)V>
+--------------Entrada [41]--------------
+TAG: 12: CONSTANT_NameAndType_Info
+Name: cp_info#52 <println>
+Descriptor: cp_info#29 <()V>
+--------------Entrada [42]--------------
+TAG: 12: CONSTANT_NameAndType_Info
+Name: cp_info#52 <println>
+Descriptor: cp_info#54 <(D)V>
+--------------Entrada [43]--------------
+TAG: 12: CONSTANT_NameAndType_Info
+Name: cp_info#52 <println>
+Descriptor: cp_info#55 <(J)V>
+--------------Entrada [44]--------------
+TAG: 12: CONSTANT_NameAndType_Info
+Name: cp_info#52 <println>
+Descriptor: cp_info#56 <(F)V>
+--------------Entrada [45]--------------
+TAG: 12: CONSTANT_NameAndType_Info
+Name: cp_info#52 <println>
+Descriptor: cp_info#57 <(C)V>
+--------------Entrada [46]--------------
+TAG: 01: CONSTANT_Utf8_Info
+Length of byte array: 5
+Length of string: 5
+String: vetor
+--------------Entrada [47]--------------
+TAG: 01: CONSTANT_Utf8_Info
+Length of byte array: 16
+Length of string: 16
+String: java/lang/Object
+--------------Entrada [48]--------------
+TAG: 01: CONSTANT_Utf8_Info
+Length of byte array: 16
+Length of string: 16
+String: java/lang/System
+--------------Entrada [49]--------------
+TAG: 01: CONSTANT_Utf8_Info
+Length of byte array: 3
+Length of string: 3
+String: out
+--------------Entrada [50]--------------
+TAG: 01: CONSTANT_Utf8_Info
+Length of byte array: 21
+Length of string: 21
+String: Ljava/io/PrintStream;
+--------------Entrada [51]--------------
+TAG: 01: CONSTANT_Utf8_Info
+Length of byte array: 19
+Length of string: 19
+String: java/io/PrintStream
+--------------Entrada [52]--------------
+TAG: 01: CONSTANT_Utf8_Info
+Length of byte array: 7
+Length of string: 7
+String: println
+--------------Entrada [53]--------------
+TAG: 01: CONSTANT_Utf8_Info
+Length of byte array: 4
+Length of string: 4
+String: (I)V
+--------------Entrada [54]--------------
+TAG: 01: CONSTANT_Utf8_Info
+Length of byte array: 4
+Length of string: 4
+String: (D)V
+--------------Entrada [55]--------------
+TAG: 01: CONSTANT_Utf8_Info
+Length of byte array: 4
+Length of string: 4
+String: (J)V
+--------------Entrada [56]--------------
+TAG: 01: CONSTANT_Utf8_Info
+Length of byte array: 4
+Length of string: 4
+String: (F)V
+--------------Entrada [57]--------------
+TAG: 01: CONSTANT_Utf8_Info
+Length of byte array: 4
+Length of string: 4
+String: (C)V
+
+
+-----INTERFACES-----
+
+
+
+-----FIELDS-----
+
+
+
+-----MÉTODOS-----
+
+--------------Método [0]--------------
+
+Name: cp_info#28 <<init>>
+Descriptor: cp_info#29 <()V>
+Access Flags: 0x0000 []
+Attributes Count: 1
+Atributos:
+Attribute Name Index: cp_info#30 <Code>
+Attribute Length: 29
+Max Stack: 1
+Max Locals: 1
+Code length: 5
+
+
+----Code----
+
+aload_0
+invokespecial #1 <java/lang/Object.<init>>
+return
+
+Attributes Count: 1
+Attribute Name Index: cp_info#31 <LineNumberTable>
+Attribute Length: 6
+Line Number Table Length: 1
+Attribute Info: 
+Nr.		StartPC		LineNumber
+0		0		33
+
+--------------Método [1]--------------
+
+Name: cp_info#32 <main>
+Descriptor: cp_info#33 <([Ljava/lang/String;)V>
+Access Flags: 0x0009 [PUBLIC STATIC]
+Attributes Count: 1
+Atributos:
+Attribute Name Index: cp_info#30 <Code>
+Attribute Length: 566
+Max Stack: 5
+Max Locals: 9
+Code length: 386
+
+
+----Code----
+
+bipush #10 undefined
+newarray #10 undefined
+astore_1
+iconst_3
+newarray #7 undefined
+dup
+iconst_0
+ldc2_w #2 undefined
+dastore
+dup
+iconst_1
+ldc2_w #4 undefined
+dastore
+dup
+iconst_2
+ldc2_w #6 undefined
+dastore
+astore_2
+iconst_4
+newarray #11 undefined
+dup
+iconst_0
+ldc2_w #8 undefined
+lastore
+dup
+iconst_1
+ldc2_w #10 undefined
+lastore
+dup
+iconst_2
+ldc2_w #12 undefined
+lastore
+dup
+iconst_3
+ldc2_w #14 undefined
+lastore
+astore_3
+iconst_3
+newarray #6 undefined
+dup
+iconst_0
+fconst_2
+fastore
+dup
+iconst_1
+ldc #16 undefined
+fastore
+dup
+iconst_2
+ldc #17 undefined
+fastore
+astore #4 undefined
+iconst_3
+newarray #8 undefined
+dup
+iconst_0
+bipush #254 254
+bastore
+dup
+iconst_1
+iconst_4
+bastore
+dup
+iconst_2
+iconst_0
+bastore
+astore #5 undefined
+iconst_3
+newarray #5 undefined
+dup
+iconst_0
+bipush #97 97
+castore
+dup
+iconst_1
+bipush #48 undefined
+castore
+dup
+iconst_2
+bipush #41 undefined
+castore
+astore #6 undefined
+iconst_3
+newarray #9 undefined
+dup
+iconst_0
+bipush #15 undefined
+sastore
+dup
+iconst_1
+sipush #1000 1000
+sastore
+dup
+iconst_2
+bipush #254 254
+sastore
+astore #7 undefined
+iconst_0
+istore #8 undefined
+iload #8 undefined
+bipush #10 undefined
+if_icmpge #15 undefined
+aload_1
+iload #8 undefined
+iload #8 undefined
+iastore
+iinc #2049 2049
+goto #65520 65520
+aload_1
+iconst_0
+dup2
+iaload
+ldc #18 undefined
+iadd
+iastore
+iconst_0
+istore #8 undefined
+iload #8 undefined
+bipush #10 undefined
+if_icmpge #19 <java/lang/System.out>
+getstatic #19 <java/lang/System.out>
+aload_1
+iload #8 undefined
+iaload
+invokevirtual #20 <java/io/PrintStream.println>
+iinc #2049 2049
+goto #65516 65516
+getstatic #19 <java/lang/System.out>
+invokevirtual #21 <java/io/PrintStream.println>
+iconst_0
+istore #8 undefined
+iload #8 undefined
+iconst_3
+if_icmpge #19 <java/lang/System.out>
+getstatic #19 <java/lang/System.out>
+aload_2
+iload #8 undefined
+daload
+invokevirtual #22 <java/io/PrintStream.println>
+iinc #2049 2049
+goto #65517 65517
+getstatic #19 <java/lang/System.out>
+invokevirtual #21 <java/io/PrintStream.println>
+iconst_0
+istore #8 undefined
+iload #8 undefined
+iconst_4
+if_icmpge #19 <java/lang/System.out>
+getstatic #19 <java/lang/System.out>
+aload_3
+iload #8 undefined
+laload
+invokevirtual #23 <java/io/PrintStream.println>
+iinc #2049 2049
+goto #65517 65517
+getstatic #19 <java/lang/System.out>
+invokevirtual #21 <java/io/PrintStream.println>
+iconst_0
+istore #8 undefined
+iload #8 undefined
+iconst_3
+if_icmpge #20 <java/io/PrintStream.println>
+getstatic #19 <java/lang/System.out>
+alod #4 undefined
+iload #8 undefined
+faload
+invokevirtual #24 <java/io/PrintStream.println>
+iinc #2049 2049
+goto #65516 65516
+getstatic #19 <java/lang/System.out>
+invokevirtual #21 <java/io/PrintStream.println>
+iconst_0
+istore #8 undefined
+iload #8 undefined
+iconst_3
+if_icmpge #20 <java/io/PrintStream.println>
+getstatic #19 <java/lang/System.out>
+alod #5 undefined
+iload #8 undefined
+baload
+invokevirtual #20 <java/io/PrintStream.println>
+iinc #2049 2049
+goto #65516 65516
+getstatic #19 <java/lang/System.out>
+invokevirtual #21 <java/io/PrintStream.println>
+iconst_0
+istore #8 undefined
+iload #8 undefined
+iconst_3
+if_icmpge #20 <java/io/PrintStream.println>
+getstatic #19 <java/lang/System.out>
+alod #6 undefined
+iload #8 undefined
+caload
+invokevirtual #25 <java/io/PrintStream.println>
+iinc #2049 2049
+goto #65516 65516
+getstatic #19 <java/lang/System.out>
+invokevirtual #21 <java/io/PrintStream.println>
+iconst_0
+istore #8 undefined
+iload #8 undefined
+iconst_3
+if_icmpge #20 <java/io/PrintStream.println>
+getstatic #19 <java/lang/System.out>
+alod #7 undefined
+iload #8 undefined
+saload
+invokevirtual #20 <java/io/PrintStream.println>
+iinc #2049 2049
+goto #65516 65516
+getstatic #19 <java/lang/System.out>
+invokevirtual #21 <java/io/PrintStream.println>
+return
+
+Attributes Count: 1
+Attribute Name Index: cp_info#31 <LineNumberTable>
+Attribute Length: 162
+Line Number Table Length: 40
+Attribute Info: 
+Nr.		StartPC		LineNumber
+0		0		36
+1		5		37
+2		27		38
+3		55		39
+4		74		40
+5		92		41
+6		112		42
+7		133		44
+8		143		45
+9		149		44
+10		155		47
+11		163		48
+12		173		49
+13		183		48
+14		189		51
+15		195		54
+16		204		55
+17		214		54
+18		220		57
+19		226		59
+20		235		60
+21		245		59
+22		251		62
+23		257		64
+24		266		65
+25		277		64
+26		283		67
+27		289		69
+28		298		70
+29		309		69
+30		315		72
+31		321		74
+32		330		75
+33		341		74
+34		347		77
+35		353		79
+36		362		80
+37		373		79
+38		379		82
+39		385		83
+
+
+
+-----ATRIBUTOS DA CLASSE-----
+
+Attribute Name Index: cp_info#34 <SourceFile>
+Attribute Length: 2
+Source File Name Index: cp_info#35 <vetor.java>

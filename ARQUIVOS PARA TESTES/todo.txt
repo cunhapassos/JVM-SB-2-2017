@@ -1,0 +1,7 @@
+Criar um .h diferente para a interpretação.
+
+interpretador.h
+interpretador.c
+
+push_pilha_operandos(vetorvariaveis[index])
+
