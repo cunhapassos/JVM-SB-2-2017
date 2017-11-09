@@ -1,13 +1,19 @@
+OBJ = LEITOR-EXIBIDOR/exibidor.o LEITOR-EXIBIDOR/leitor.o LEITOR-EXIBIDOR/funcoes.o LEITOR-EXIBIDOR/virtualMachine.o LEITOR-EXIBIDOR/pilhas_listas.o
+DEP = LEITOR-EXIBIDOR/exibidor.h LEITOR-EXIBIDOR/leitor.h LEITOR-EXIBIDOR/funcoes.h LEITOR-EXIBIDOR/virtualMachine.h LEITOR-EXIBIDOR/pilhas_listas.h
+CC = gcc
+CFLAGS = -std=c99 -g
+
 run:
 	./main
 
 clean:
-	rm -rf *.o ./main
+	rm -rf *.o ./main LEITOR-EXIBIDOR/*.o
 
-bild:
-	gcc -std=c99 -g -c -o LEITOR-EXIBIDOR/exibidor.o LEITOR-EXIBIDOR/exibidor.c
-	gcc -std=c99 -g -c -o LEITOR-EXIBIDOR/leitor.o LEITOR-EXIBIDOR/leitor.c
-	gcc -std=c99 -g -o main main.c LEITOR-EXIBIDOR/exibidor.o LEITOR-EXIBIDOR/leitor.o
+bild: $(OBJ)
+	$(CC) $(CFLAGS) -o main main.c $(OBJ) -I LEITOR-EXIBIDOR
+
+LEITOR-EXIBIDOR/%.o: %.c
+	$(CC) $(CFLAGS) -o $@ $<
 
 debug:
 	gdb ./main

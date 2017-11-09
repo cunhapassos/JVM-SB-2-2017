@@ -23,6 +23,7 @@
 #include "leitor.h"
 #include "pilhas_listas.h"
 #include "virtualMachine.h"
+#include "funcoes.h"
 
 ST_tpMethodArea *VM_criarAreaMetodo(){
     ST_tpMethodArea *pAreaMetodo;
@@ -129,7 +130,7 @@ void VM_executarMetodo(ST_tpJVM *pJVM, ST_tpClassFile *pClasse, ST_tpMethod_info
             pJVM->thread->PC = (u1 *)pCode->code;
             for(j = 0; j < pCode->code_length; j++ ){
                 memcpy(&opcode, pJVM->thread->PC, 1);
-                //IT_executaInstrucao(opcode, pJVM->thread->pFrameStack, ); // VERIFICAR ONDE EXECUTA AS EXCESSOES
+                IT_executaInstrucao(opcode, pJVM->thread); // VERIFICAR ONDE EXECUTA AS EXCESSOES
                 pJVM->thread->PC++;
             }
         }

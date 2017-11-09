@@ -10,8 +10,9 @@
 #include <stdlib.h>
 
 
-void* IT_executaInstrucao(u1 opcode, void* pilhaDeExecucao, void* exceptions) {
+void* IT_executaInstrucao(u1 opcode, ST_tpThread* thread) {
 
+	printf("%d \n", opcode);
 
 	switch(opcode) {
 
@@ -29,8 +30,7 @@ void* IT_executaInstrucao(u1 opcode, void* pilhaDeExecucao, void* exceptions) {
 
 		*******************************************************************************************/
 		case 0x00:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+
 			break;
 
 		
@@ -163,6 +163,7 @@ void* IT_executaInstrucao(u1 opcode, void* pilhaDeExecucao, void* exceptions) {
 		case 0x07:
 //////////////////////////////////////////////
 //////////////////////////////////////////////
+		printf("piui\n");
 			break;
 
 
@@ -819,7 +820,7 @@ void* IT_executaInstrucao(u1 opcode, void* pilhaDeExecucao, void* exceptions) {
 
 		/********************************************************************************************
 		
-			aload_1: Load the first index from reference from local variable
+			aload_0: Load the 0 index from reference from local variable
 			page: 374
 			
 			@inputs: 
@@ -838,7 +839,7 @@ void* IT_executaInstrucao(u1 opcode, void* pilhaDeExecucao, void* exceptions) {
 
 		/********************************************************************************************
 		
-			aload_2: Load the second index from reference from local variable
+			aload_1: Load the 1 index from reference from local variable
 			page: 374
 
 			@inputs: 
@@ -857,7 +858,7 @@ void* IT_executaInstrucao(u1 opcode, void* pilhaDeExecucao, void* exceptions) {
 
 		/********************************************************************************************
 		
-			aload_3: Load the third index from reference from local variable
+			aload_2: Load the 2 index from reference from local variable
 			page: 374
 
 			@inputs: 
@@ -876,7 +877,7 @@ void* IT_executaInstrucao(u1 opcode, void* pilhaDeExecucao, void* exceptions) {
 
 		/********************************************************************************************
 		
-			aload_4: Load the fourth index from reference from local variable
+			aload_3: Load the 3 index from reference from local variable
 			page: 374
 
 			@inputs: 
@@ -3971,7 +3972,7 @@ void* IT_executaInstrucao(u1 opcode, void* pilhaDeExecucao, void* exceptions) {
 
 		*******************************************************************************************/
 		default:
-			printf("Opcode %x não encontrado", opcode);
+			printf("Opcode não encontrado");
 	
 	}
 

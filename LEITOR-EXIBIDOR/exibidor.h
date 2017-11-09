@@ -28,7 +28,8 @@
 
 #include "structures.h"
 
-void EX_imprimirUtf8 (u1 *pS, int length);
+
+void EX_imprimirStringPool(ST_tpCp_info* cp, int index);
 
 void EX_imprimirAtributos(ST_tpClassFile *pClassFile, ST_tpAttribute_info *attribute_info_table,u2 attributes_count);
 

@@ -119,11 +119,19 @@ void EX_imprimirAtributos(ST_tpClassFile *pClassFile, ST_tpAttribute_info *pAttr
                 printf("\tmax_stack: %d\n",((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->max_stack);
                 printf("\tmax_locals: %d\n",((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->max_locals);
                 printf("\tcode_length: %d\n",((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->code_length);
-                
-               /* for (int i=0; i < ((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->code_length; i++)
-                    printf("%d\n", i);
-                    printf("%c ", ((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->code[i]);
-                printf("\n");*/
+                printf("\n\tBytecode:\n");
+               for (int j=0; j < ((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->code_length; j++)
+                   printf("\t%d -> x%0x \n", j , ((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->code[j]);
+               printf("\n\texception_table_length: %d\n",((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->exception_table_length);
+                for (int j=0; j < ((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->exception_table_length; j++) {
+                    printf("\t%d -> x%0x \n", j , ((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->exception_table[j].start_pc);
+                    printf("\t%d -> x%0x \n", j , ((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->exception_table[j].end_pc);
+                    printf("\t%d -> x%0x \n", j , ((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->exception_table[j].handler_pc);
+                    printf("\t%d -> x%0x \n", j , ((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->exception_table[j].catch_type);
+                }
+                printf("\n\tattributes_count: %d\n",((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->attributes_count);
+                /*for (int j=0; j < ((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->code_length; j++)
+                    printf("\t%d -> x%0x \n", j , ((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->code[j]);*/
                 
                 /*u2 max_stack;
                 u2 max_locals;
@@ -147,6 +155,7 @@ void EX_imprimirAtributos(ST_tpClassFile *pClassFile, ST_tpAttribute_info *pAttr
 void EX_imprimirConstantPool(ST_tpClassFile *pClassFile) {
     
     int i;
+    printf("\n\n-----CONSTANT POOL-----\n\n");
     for(i = 0; i <  (pClassFile->constant_pool_count-1); i++ ){
         switch(pClassFile->constant_pool_table[i].tag) {
             case CONSTANT_Utf8:
