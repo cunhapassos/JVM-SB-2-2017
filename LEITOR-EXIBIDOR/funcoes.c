@@ -9,10 +9,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-
+/*
+*	Para ler algum argumento do code incremente o PC usando 
+	thread->PC ++;
+*/
 void* IT_executaInstrucao(ST_tpThread* thread) {
 	u1 opcode = *(thread->PC);
-	printf("%d \n", opcode);
+	printf("%d \t", opcode);
 
 	switch(opcode) {
 
@@ -546,6 +549,7 @@ void* IT_executaInstrucao(ST_tpThread* thread) {
 
 		*******************************************************************************************/
 		case 0x1b:
+			printf("iload_1 \n");
 //////////////////////////////////////////////
 //////////////////////////////////////////////
 			break;
@@ -831,6 +835,7 @@ void* IT_executaInstrucao(ST_tpThread* thread) {
 
 		*******************************************************************************************/
 		case 0x2a:
+			printf("aload_0 \n");
 //////////////////////////////////////////////
 //////////////////////////////////////////////
 			break;
@@ -3448,6 +3453,7 @@ void* IT_executaInstrucao(ST_tpThread* thread) {
 
 		*******************************************************************************************/
 		case 0xb1:
+			printf("return \n");
 //////////////////////////////////////////////
 //////////////////////////////////////////////
 			break;
@@ -3537,6 +3543,8 @@ void* IT_executaInstrucao(ST_tpThread* thread) {
 
 		*******************************************************************************************/
 		case 0xb5:
+			printf("putfield \n");
+			thread->PC += 2;
 //////////////////////////////////////////////
 //////////////////////////////////////////////
 			break;
@@ -3580,6 +3588,8 @@ void* IT_executaInstrucao(ST_tpThread* thread) {
 
 		*******************************************************************************************/
 		case 0xb7:
+			printf("invokespecial \n");
+			thread->PC += 2; 
 //////////////////////////////////////////////
 //////////////////////////////////////////////
 			break;
@@ -3587,7 +3597,7 @@ void* IT_executaInstrucao(ST_tpThread* thread) {
 
 		/********************************************************************************************
 		
-			invokespecial: Invoke a class static method
+			invokestatic: Invoke a class static method
 			page: 486
 			
 			## TODO nao entendi essa funcao

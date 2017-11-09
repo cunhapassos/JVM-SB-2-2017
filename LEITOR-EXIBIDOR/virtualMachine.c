@@ -79,7 +79,7 @@ ST_tpFrame *VM_criarFrame(ST_tpClassFile *pClasse){
 
 void VM_executarMetodo(ST_tpJVM *pJVM, ST_tpClassFile *pClasse, ST_tpMethod_info *pMetodo){
     int i, j;
-    u1* opcode;
+    u1* end;
     u2 nameIndex;
     char *name;
     ST_tpCode_attribute *pCode;
@@ -141,9 +141,9 @@ void VM_executarMetodo(ST_tpJVM *pJVM, ST_tpClassFile *pClasse, ST_tpMethod_info
             pCode->attribute_info = (ST_tpAttribute_info *) malloc(pCode->attributes_count); // VERIFICAR SE TEM A MULTIPLICACAO MESMO?
             
             pJVM->thread->PC = (u1 *)pCode->code;
-            for(j = 0; j < pCode->code_length; j++ ){
-                memcpy(&opcode, pJVM->thread->PC, 1);
-                //IT_executaInstrucao(pJVM->thread); // VERIFICAR ONDE EXECUTA AS EXCESSOES
+            end = pJVM->thread->PC + pCode->code_length;
+            while(pJVM->thread->PC < end){
+                IT_executaInstrucao(pJVM->thread); // VERIFICAR ONDE EXECUTA AS EXCESSOES
                 pJVM->thread->PC++;
             }
             
@@ -163,7 +163,7 @@ ST_tpMethod_info *VM_procuraMetodo(ST_tpClassFile *pClassFile, char *descritorMe
         descritor = (char *)  pClassFile->constant_pool_table[descritorIndex].info.Utf8.bytes;
         
         if(strcmp(name, nomeMetodo) == 0 && strcmp(descritor, descritorMetodo) == 0 && pClassFile->method_info_table[i].access_flags == ACC_PUBLIC_STATIC){ // VERIFICAR SOBRE A FLAG DE ACESSO
-            return &pClassFile->method_info_table[i];
+            return &pClassFile->method_info_table[i];    
         }
     }
     return NULL;
