@@ -71,7 +71,7 @@ ST_tpFrame *VM_criarFrame(ST_tpClassFile *pClasse){
     ST_tpFrame *pFrame = (ST_tpFrame *) malloc(sizeof(ST_tpFrame));
     
     pFrame->operandStack = PL_criarPilhaOperandos();
-    pFrame->localVariablesStack = PL_criarPilhaVariaveisLocais();
+    pFrame->localVariablesStack = PL_criarPilhaParametros();
     pFrame->cp = pClasse;
     
     return pFrame;
@@ -146,6 +146,8 @@ void VM_executarMetodo(ST_tpJVM *pJVM, ST_tpClassFile *pClasse, ST_tpMethod_info
                 //IT_executaInstrucao(pJVM->thread); // VERIFICAR ONDE EXECUTA AS EXCESSOES
                 pJVM->thread->PC++;
             }
+            
+            // VERIFICAR COMO FAZER O RETORNO DA FUNCAO
         }
     }
 }

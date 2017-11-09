@@ -24,80 +24,6 @@
  *                      ESTRUTURAS E FUNCOES DE PILHA
  ** ******************************************************************************/
 
-/**
- *  Descricao da funcao:
- *       Inicializa a pilha
- *
- *  @param  ePilha - Ponteiro para a cabeça da pilha
- *
- */
-void PL_inicializarPilha(ST_tpPilha **ePilha){
-    *ePilha = NULL;
-}
-
-/**
- *  Descricao da funcao:
- *       Verifica se uma pilha esta vazia
- *
- *  @param  pPilha - Ponteiro para a cabeça da pilha
- *
- *  @return       - 0 se a pilha nao esta vazia
- *                  1 se a pilha esta vazia
- */
-int PL_pilhaVazia(ST_tpPilha *pPilha){
-    return (pPilha == NULL);
-}
-
-/**
- *  Descricao da funcao:
- *       Retorna o elemento do topo da pilha
- *
- *  @param  pPilha - Ponteiro para a cabeça da pilha
- *
- *  @return       - ponteiro para o elemento do topo da pilha
- */
-void *PL_topoPilha(ST_tpPilha *pPilha){
-    return pPilha->dado;
-}
-
-/**
- *  Descricao da funcao:
- *       Insere elemento no topo da pilha
- *
- *  @param  ePilha   - Ponteiro para a cabeça da pilha
- *  @param  dadoNovo - Novo elemento da pilha
- */
-void PL_push(ST_tpPilha **ePilha, void *dadoNovo){
-    ST_tpPilha *p1;
-    
-    if(*ePilha == NULL){
-        p1 = malloc(sizeof(ST_tpPilha));
-    }
-    p1 = malloc(sizeof(ST_tpPilha));
-    p1->dado = dadoNovo;
-    p1->prox = *ePilha;
-    *ePilha = p1;
-}
-
-/**
- *  Descricao da funcao:
- *       Retira um elemento do topo da pilha
- *
- *  @param  ePilha - Ponteiro para a cabeça da pilha
- *
- *  @return   dado - Ponteiro para o elemento retirado do topo da pilha
- */
-void *PL_pop(ST_tpPilha **ePilha){
-    ST_tpPilha *p1;
-    void *dado;
-    p1 = *ePilha;
-    *ePilha = p1->prox;
-    dado = p1->dado;
-    free(p1);
-    
-    return dado;
-}
-
 ST_tpOperandStack *PL_criarPilhaOperandos(){
     ST_tpOperandStack *pOperandStack;
     
@@ -106,12 +32,75 @@ ST_tpOperandStack *PL_criarPilhaOperandos(){
     return pOperandStack;
 }
 
-ST_tpLocalVariables *PL_criarPilhaVariaveisLocais(){
-    ST_tpLocalVariables *pLocalVariablesStack;
+void PL_pushOperando(ST_tpOperandStack *pPilhaOperandos, ST_tpVariable var){
+    ST_tpOperandStack *pAux = (ST_tpOperandStack*)malloc(sizeof(ST_tpOperandStack));
     
-    pLocalVariablesStack = (ST_tpLocalVariables *) malloc(sizeof(ST_tpLocalVariables));
-    pLocalVariablesStack->next = NULL;
-    return pLocalVariablesStack;
+    pAux->next = NULL;
+    pAux->variable = var;
+    
+    if(pPilhaOperandos == NULL){
+        pPilhaOperandos = pAux;
+    }
+    else{
+        pAux->next = pPilhaOperandos;
+        pPilhaOperandos = pAux;
+    }
+}
+
+ST_tpVariable PL_popOperando(ST_tpOperandStack *pPilhaOperandos){
+    ST_tpVariable var;
+    ST_tpOperandStack *pAux;
+    
+    // VERIFICAR COMO FAZER QUANDO A PILHA FOR VAZIA
+    //if (pPilhaOperandos == NULL){
+    
+    var.tipo =  pPilhaOperandos->variable.tipo;
+    var.valor = pPilhaOperandos->variable.valor;
+    pAux =  pPilhaOperandos;
+    pPilhaOperandos = pPilhaOperandos->next;
+    
+    free(pAux);
+    pAux = NULL;
+    
+    return var;
+}
+
+ST_tpParameterStack *PL_criarPilhaParametros(){
+    ST_tpParameterStack *pParameterStack;
+    
+    pParameterStack = (ST_tpParameterStack *) malloc(sizeof(ST_tpParameterStack));
+    pParameterStack->next = NULL;
+    return pParameterStack;
+}
+
+void PL_pushParametro(ST_tpParameterStack *pPilhaParametros, ST_tpVariable var){
+    ST_tpParameterStack *pAux = (ST_tpParameterStack *)malloc(sizeof(ST_tpParameterStack));
+    
+    pAux->next      = NULL;
+    pAux->variable  = var;
+    
+    if(pPilhaParametros == NULL){
+        pPilhaParametros = pAux;
+    }
+    else{
+        pAux->next = pPilhaParametros;
+        pPilhaParametros = pAux;
+    }
+}
+
+ST_tpVariable PL_popParametro(ST_tpParameterStack *pPilhaParametros){
+    ST_tpVariable var;
+    ST_tpParameterStack *pAux;
+    
+    var.tipo = pPilhaParametros->variable.tipo;
+    var.valor = pPilhaParametros->variable.valor;
+    
+    pAux = pPilhaParametros;
+    pPilhaParametros = pPilhaParametros->next;
+    free(pAux);
+    pAux = NULL;
+    
+    return var;
 }
 /** ******************************************************************************
  *                      ESTRUTURAS E FUNCOES DE LISTA

@@ -426,22 +426,20 @@ typedef struct tpPilha{
 }ST_tpPilha;
 
 /**  Estrutura que representa a pilha de variaveis locais */
-typedef struct {
-    u1 type;
-    union variable variable;
-    struct VM_tpLocalVariables *next;
-}ST_tpLocalVariables;
+typedef struct LocalVariables{
+    ST_tpVariable variable;
+    struct LocalVariables *next;
+}ST_tpParameterStack;
 
 /**  Estrutura que representa a pilha de Operandos */
-typedef struct {
-    u1 type;
-    union variable variable;
-    struct VM_tpOperandStack *next;
+typedef struct OperandStack{
+    ST_tpVariable variable;
+    struct OperandStack *next;
 }ST_tpOperandStack;
 
 /**  Estrutura que representa um Frame */
 typedef struct {
-    ST_tpLocalVariables *localVariablesStack;
+    ST_tpParameterStack *localVariablesStack;
     ST_tpOperandStack   *operandStack;
     ST_tpClassFile *cp;
     /* ReferenceConstantPoll */
