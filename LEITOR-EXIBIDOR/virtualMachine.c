@@ -152,12 +152,29 @@ void VM_executarMetodo(ST_tpJVM *pJVM, ST_tpClassFile *pClasse, ST_tpMethod_info
     }
 }
 
-ST_tpJVM *VM_exucutarJVM(int numeroClasses, char *nomeClasses[]){
-    int i, flag1, flag2;
+ST_tpMethod_info *VM_procuraMetodo(ST_tpClassFile *pClassFile, char *descritorMetodo, char *nomeMetodo) {
     char *name, *descritor;
     u2 nameIndex, descritorIndex;
+    
+    for(int i = 0; i < pClassFile->methods_count; i++){
+        nameIndex = pClassFile->method_info_table[i].name_index-1;
+        descritorIndex = pClassFile->method_info_table[i].descriptor_index-1;
+        name = (char *) pClassFile->constant_pool_table[nameIndex].info.Utf8.bytes;
+        descritor = (char *)  pClassFile->constant_pool_table[descritorIndex].info.Utf8.bytes;
+        
+        if(strcmp(name, nomeMetodo) == 0 && strcmp(descritor, descritorMetodo) == 0 && pClassFile->method_info_table[i].access_flags == ACC_PUBLIC_STATIC){ // VERIFICAR SOBRE A FLAG DE ACESSO
+            return &pClassFile->method_info_table[i];
+        }
+    }
+    return NULL;
+}
+
+ST_tpJVM *VM_exucutarJVM(int numeroClasses, char *nomeClasses[]){
+    int i, flag1, flag2;
+
     ST_tpJVM *pJVM;
     ST_tpClassFile *pClasse;
+    ST_tpMethod_info *pMetodo;
     
     /* Cria a maquina virtual, a area de metodos, o heap e uma thread*/
     pJVM = VM_criarJVM();
@@ -173,7 +190,11 @@ ST_tpJVM *VM_exucutarJVM(int numeroClasses, char *nomeClasses[]){
     /* Procurando a primeira classe que tem o main */
     for(pClasse = pJVM->methodArea->classFile; pClasse != NULL; pClasse = pClasse->next){
         
-        /* Procura metodo <init> e o executa */
+        pMetodo = VM_procuraMetodo( pClasse, "(I)V", "<init>");
+        if (pMetodo != NULL){
+            VM_executarMetodo(pJVM, pClasse, pMetodo);
+        }
+        /* Procura metodo <init> e o executa
         for(i = 0; i < pClasse->methods_count; i++){
             nameIndex = pClasse->method_info_table[i].name_index-1;
             descritorIndex = pClasse->method_info_table[i].descriptor_index-1;
@@ -187,21 +208,9 @@ ST_tpJVM *VM_exucutarJVM(int numeroClasses, char *nomeClasses[]){
                 flag1 = 1;
                 break;
             }
-        }
+        } */
         /* Procura metodo main e o executa */
-        for(i = 0; i < pClasse->methods_count; i++){
-            nameIndex = pClasse->method_info_table[i].name_index-1;
-            descritorIndex = pClasse->method_info_table[i].descriptor_index-1;
-            name = (char *) pClasse->constant_pool_table[nameIndex].info.Utf8.bytes;
-            descritor = (char *)  pClasse->constant_pool_table[descritorIndex].info.Utf8.bytes;
-            
-            if(strcmp(name, "main") == 0 && strcmp(descritor, "([Ljava/lang/String;)V") == 0 && pClasse->method_info_table[i].access_flags == ACC_PUBLIC_STATIC){
-                printf("\n Executa metodo main\n");
-                VM_executarMetodo(pJVM, pClasse, &pClasse->method_info_table[i]);
-                flag1 = 1;
-                break;
-            }
-        }
+        
         
         if(flag1 && flag2){
             break;
