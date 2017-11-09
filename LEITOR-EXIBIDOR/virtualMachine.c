@@ -79,7 +79,7 @@ ST_tpFrame *VM_criarFrame(ST_tpClassFile *pClasse){
 
 void VM_executarMetodo(ST_tpJVM *pJVM, ST_tpClassFile *pClasse, ST_tpMethod_info *pMetodo){
     int i, j;
-    u1 opcode;
+    u1* opcode;
     u2 nameIndex;
     char *name;
     ST_tpCode_attribute *pCode;
@@ -117,7 +117,7 @@ void VM_executarMetodo(ST_tpJVM *pJVM, ST_tpClassFile *pClasse, ST_tpMethod_info
             memcpy((u1 *)&pCode->code_length, (u1 *)pMetodo->attributes->info + 4, 4);
             
             pCode->code = (u1 *) malloc(pCode->code_length);
-            memcpy((u1 *)pCode->code, (u1 *)pMetodo->attributes->info + 8, pCode->code_length);
+            memcpy((u1 *)pCode->code, (u1*)((ST_tpCode_attribute*)pMetodo->attributes->info)->code, pCode->code_length);
             memcpy((u1 *)&pCode->exception_table_length, (u1 *)pMetodo->attributes->info+8+pCode->code_length, 2);
             
             if(pCode->exception_table_length != 0){
@@ -130,7 +130,7 @@ void VM_executarMetodo(ST_tpJVM *pJVM, ST_tpClassFile *pClasse, ST_tpMethod_info
             pJVM->thread->PC = (u1 *)pCode->code;
             for(j = 0; j < pCode->code_length; j++ ){
                 memcpy(&opcode, pJVM->thread->PC, 1);
-                IT_executaInstrucao(opcode, pJVM->thread); // VERIFICAR ONDE EXECUTA AS EXCESSOES
+                IT_executaInstrucao(pJVM->thread); // VERIFICAR ONDE EXECUTA AS EXCESSOES
                 pJVM->thread->PC++;
             }
         }

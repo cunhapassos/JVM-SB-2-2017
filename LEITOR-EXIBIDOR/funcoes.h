@@ -2,4 +2,4 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void* IT_executaInstrucao(u1 opcode, ST_tpThread* thread);
+void* IT_executaInstrucao(ST_tpThread* thread);
