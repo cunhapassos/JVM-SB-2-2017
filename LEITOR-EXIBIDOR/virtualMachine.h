@@ -36,7 +36,7 @@ void VM_inserirClasseCarregada(ST_tpJVM *pJvm, ST_tpClassFile *pClasse);
 
 ST_tpJVM *VM_exucutarJVM(int numeroClasses, char *nomeClasses[]);
 
-void VM_executarMetodo(ST_tpJVM *pJVM, ST_tpClassFile *pClasse, ST_tpMethod_info *pMetodo);
+void VM_executarMetodo(ST_tpThread *pThread, ST_tpClassFile *pClasse, ST_tpMethod_info *pMetodo);
 
 #endif /* virtualMachine_h */
 

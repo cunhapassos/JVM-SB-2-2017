@@ -13,7 +13,7 @@
 *	Para ler algum argumento do code incremente o PC usando 
 	thread->PC ++;
 */
-void* IT_executaInstrucao(ST_tpThread* thread) {
+void IT_executaInstrucao(ST_tpThread* thread) {
 	u1 opcode = *(thread->PC);
 	printf("%d \t", opcode);
 

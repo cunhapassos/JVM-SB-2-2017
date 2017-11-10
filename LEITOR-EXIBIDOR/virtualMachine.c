@@ -49,7 +49,7 @@ ST_tpThread *VM_criarThread(){
     ST_tpThread *pThread;
     
     pThread = malloc(sizeof(ST_tpThread));
-    pThread->pFrameStack = NULL;
+    pThread->pJVMStack = NULL;
     pThread->PC = 0;
     
     return pThread;
@@ -66,24 +66,52 @@ ST_tpJVM *VM_criarJVM(){
     return pJvm;
 }
 
-ST_tpFrame *VM_criarFrame(ST_tpClassFile *pClasse){
-
-    ST_tpFrame *pFrame = (ST_tpFrame *) malloc(sizeof(ST_tpFrame));
-    
-    pFrame->operandStack = PL_criarPilhaOperandos();
-    pFrame->localVariablesStack = PL_criarPilhaParametros();
-    pFrame->cp = pClasse;
-    
-    return pFrame;
+void VM_armazenarVariavel(ST_tpVariable *pVariaveisLocais, ST_tpVariable variavel, int posicao){
+    memcpy((void *)(pVariaveisLocais + posicao), (void *) &variavel, sizeof(variavel));
 }
 
-void VM_executarMetodo(ST_tpJVM *pJVM, ST_tpClassFile *pClasse, ST_tpMethod_info *pMetodo){
-    int i, j;
+
+ST_tpVariable VM_recuperarVariavel(ST_tpVariable *pVariaveisLocais, int posicao){
+    ST_tpVariable varTemporaria;
+    
+    memcpy((void *)&varTemporaria, (void*)(pVariaveisLocais + posicao), sizeof(varTemporaria));
+    
+    return varTemporaria;
+}
+
+
+ST_tpStackFrame *VM_criarStackFrame(ST_tpStackFrame *pJVMStack, long maxStackSize){
+    int i;
+    ST_tpVariable varTemporaria;
+    
+    pJVMStack = (ST_tpStackFrame *) malloc(sizeof(ST_tpStackFrame));
+    pJVMStack->operandStack     = PL_criarPilhaOperandos();
+    pJVMStack->parameterStack   = PL_criarPilhaParametros(); // AINDA NAO ESTA RECEBENDO OS PARAMETROS PASSADOS PELO METODO
+    pJVMStack->localVariables   = (ST_tpVariable *) malloc(sizeof(ST_tpVariable)*(maxStackSize));
+    
+    varTemporaria.tipo          = JREF;
+    varTemporaria.valor.obj_ref = NULL;
+    VM_armazenarVariavel(pJVMStack->localVariables, varTemporaria, 0);
+    
+    i = 0;
+    while(pJVMStack->parameterStack != NULL){
+        
+        varTemporaria = PL_popParametro(pJVMStack->parameterStack);
+        VM_armazenarVariavel(pJVMStack->localVariables, varTemporaria, i);
+        i++;
+        if(varTemporaria.tipo == JLONG || varTemporaria.tipo == JDOUBLE) i++;
+    }
+    
+    return pJVMStack;
+}
+
+void VM_executarMetodo(ST_tpThread *pThread, ST_tpClassFile *pClasse, ST_tpMethod_info *pMetodo){
+    int i;
     u1* end;
     u2 nameIndex;
     char *name;
     ST_tpCode_attribute *pCode;
-    ST_tpFrame *pFrame;
+    ST_tpStackFrame *pFrame;
     
     for(i = 0; i < pMetodo->attributes_count; i++){
         nameIndex = pMetodo->attributes[i].attribute_name_index-1;
@@ -91,18 +119,18 @@ void VM_executarMetodo(ST_tpJVM *pJVM, ST_tpClassFile *pClasse, ST_tpMethod_info
         
         if(strcmp(name, "Code") == 0){
             
-            /* Cria uma Frame para ser inserido na lista de Frames da thread */
-            pFrame = VM_criarFrame(pClasse);
+            /* Cria uma Stack Frame */
+            pFrame = VM_criarStackFrame(pThread->pJVMStack, ((ST_tpCode_attribute*)pMetodo->attributes[i].info)->max_locals);
             
-            /* Se a pilha de Frames da Thread ainda estiver vazia */
+            /* Se a pilha de Frames da Thread ainda estiver vazia
             if(pJVM->thread->pFrameStack == NULL){
                 pJVM->thread->pFrameStack = (ST_tpPilha *) malloc(sizeof(ST_tpPilha));
                 pJVM->thread->pFrameStack->dado = pFrame;
                 pJVM->thread->pFrameStack->prox = NULL;
             }
-            else{ /* Caso a pilha de Frames da Thread ainda nao estijavazia */
-                PL_push(&pJVM->thread->pFrameStack, pFrame); /* Insere Frame na lista de Frames da Thread */
-            }
+            else{  Caso a pilha de Frames da Thread ainda nao estijavazia
+                PL_push(&pJVM->thread->pFrameStack, pFrame);  Insere Frame na lista de Frames da Thread
+            } */
             // EXECUTAR CODIGO
             /* Carregando codigos */
             pCode = (ST_tpCode_attribute *) malloc(sizeof(ST_tpCode_attribute));
@@ -140,11 +168,11 @@ void VM_executarMetodo(ST_tpJVM *pJVM, ST_tpClassFile *pClasse, ST_tpMethod_info
             
             pCode->attribute_info = (ST_tpAttribute_info *) malloc(pCode->attributes_count); // VERIFICAR SE TEM A MULTIPLICACAO MESMO?
             
-            pJVM->thread->PC = (u1 *)pCode->code;
-            end = pJVM->thread->PC + pCode->code_length;
-            while(pJVM->thread->PC < end){
-                IT_executaInstrucao(pJVM->thread); // VERIFICAR ONDE EXECUTA AS EXCESSOES
-                pJVM->thread->PC++;
+            pThread->PC = (u1 *)pCode->code;
+            end = pThread->PC + pCode->code_length;
+            while(pThread->PC < end){
+                IT_executaInstrucao(pThread); // VERIFICAR ONDE EXECUTA AS EXCESSOES
+                pThread->PC++;
             }
             
             // VERIFICAR COMO FAZER O RETORNO DA FUNCAO
@@ -152,7 +180,7 @@ void VM_executarMetodo(ST_tpJVM *pJVM, ST_tpClassFile *pClasse, ST_tpMethod_info
     }
 }
 
-ST_tpMethod_info *VM_procuraMetodo(ST_tpClassFile *pClassFile, char *descritorMetodo, char *nomeMetodo) {
+ST_tpMethod_info *VM_procurarMetodo(ST_tpClassFile *pClassFile, char *descritorMetodo, char *nomeMetodo) {
     char *name, *descritor;
     u2 nameIndex, descritorIndex;
     
@@ -168,12 +196,42 @@ ST_tpMethod_info *VM_procuraMetodo(ST_tpClassFile *pClassFile, char *descritorMe
     }
     return NULL;
 }
+ST_tpObjectHeap *VM_criarObjeto(ST_tpJVM *pJVM, ST_tpClassFile *pClassFile){
+    int maxVariaveis;
+    char *nome;
+    ST_tpClassFile *pClasseAux;
+    ST_tpObjectHeap *pObjeto = (ST_tpObjectHeap *)malloc(sizeof(ST_tpObjectHeap));
+    
+    maxVariaveis = pClassFile->fields_count;
+    
+    while(pClassFile->super_class != 0 ){
+        nome = (char*) pClassFile->constant_pool_table[pClassFile->super_class].info.Utf8.bytes;
+        pClasseAux = PL_buscarClasse(pJVM, nome);
+        
+        /* Carregar Super Classe */
+        if(pClasseAux == NULL){
+            pClasseAux = LE_carregarClasse(nome);
+            /* Insere classe carregada na lista de classes carregadas da JVM */
+            PL_inserirClasseTopo(pJVM, pClasseAux);
+        }
+        maxVariaveis += pClasseAux->fields_count;
+    }
+    wcscpy(pObjeto->pClasseName, (wchar_t *)pClassFile->constant_pool_table[pClassFile->this_class].info.Utf8.bytes);
+    pObjeto->field_area = (ST_tpVariable *)malloc(sizeof(ST_tpVariable) * (maxVariaveis + 1));
+    pObjeto->thread = pJVM->thread;
+    pObjeto->max_var = maxVariaveis;
+    pObjeto->ref_count = 0;
+    pObjeto->next = NULL;
+    
+    return pObjeto;
+}
 
 ST_tpJVM *VM_exucutarJVM(int numeroClasses, char *nomeClasses[]){
     int i, flag1, flag2;
 
     ST_tpJVM *pJVM;
     ST_tpClassFile *pClasse;
+    ST_tpObjectHeap *pObjeto;
     ST_tpMethod_info *pMetodo;
     
     /* Cria a maquina virtual, a area de metodos, o heap e uma thread*/
@@ -190,9 +248,13 @@ ST_tpJVM *VM_exucutarJVM(int numeroClasses, char *nomeClasses[]){
     /* Procurando a primeira classe que tem o main */
     for(pClasse = pJVM->methodArea->classFile; pClasse != NULL; pClasse = pClasse->next){
         
-        pMetodo = VM_procuraMetodo( pClasse, "(I)V", "<init>");
+        pMetodo = VM_procurarMetodo( pClasse, "(I)V", "<init>");
         if (pMetodo != NULL){
-            VM_executarMetodo(pJVM, pClasse, pMetodo);
+            pObjeto = VM_criarObjeto(pJVM, pClasse);
+            
+            // FALTA INSERIR OBJETO NA PILHA DE HEAP
+            
+            VM_executarMetodo(pJVM->thread, pClasse, pMetodo);
         }
         /* Procura metodo <init> e o executa
         for(i = 0; i < pClasse->methods_count; i++){

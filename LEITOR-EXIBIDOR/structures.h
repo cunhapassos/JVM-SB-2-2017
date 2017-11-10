@@ -56,6 +56,23 @@ typedef uint32_t u4;
 #define ACC_ENUM            0x4000
 
 /** ******************************************************************************
+ *                            JVM DATA TYPES
+ ** ******************************************************************************/
+
+#define JBOOL   0X00
+#define JBYTE   0X01
+#define JCHAR   0X02
+#define JSTRING 0X03
+#define JSHORT  0X04
+#define JVOID   0X05
+#define JREF    0X06
+#define JAREF   0X07
+#define JINT    0X08
+#define JLONG   0X16
+#define JFLOAT  0X32
+#define JDOUBLE 0X64
+
+/** ******************************************************************************
 *                            TEBELA POOL DE CONSTANTES
 ** *******************************************************************************/
 
@@ -74,12 +91,12 @@ typedef uint32_t u4;
 
 /**                             DEFINICOES DE TAGS PARA ATRIBUTOS                                    **/
 #define CONSTANTVALUE       1
-#define CODE       2
-#define EXCEPTIONS       3
-#define INNERCLASSES       4
-#define SOURCEFILE       5
-#define LINENUMBERTABLE       6
-#define LOCALVARIABLETABLE       7
+#define CODE                2
+#define EXCEPTIONS          3
+#define INNERCLASSES        4
+#define SOURCEFILE          5
+#define LINENUMBERTABLE     6
+#define LOCALVARIABLETABLE  7
 
 /**                             ESTRUTURAS                                         **/
 
@@ -317,8 +334,7 @@ typedef struct{
 /** ******************************************************************************
 *                                ESTRUTURA CLASSFILE
 ** *******************************************************************************/
-typedef struct ClassFile{
-    wchar_t *fully_qualified_name;    
+typedef struct ClassFile{   
     u4    magic;                        // Assinatura de um arquivo .class
     u2    minor_version_number;         // Versao minima do arquivo - Relacao com a versao do Java
     u2    major_version_number;         // Versao manima do arquivo - Relacao com a versao do Java
@@ -352,30 +368,30 @@ typedef struct ClassFile{
 typedef struct thread ST_tpThread;
 
 /**  Estrutura que representa o Heap de classes */
-typedef struct {
+typedef struct ClassHea{
     wchar_t *pClasseName;
-    union variable *field_area;
-    struct VM_tpClassHeap *next;
+    struct Variable *field_area;
+    struct ClassHeap *next;
 }ST_tpClassHeap;
 
 /**  Estrutura que representa o Heap para objetos */
-typedef struct{
+typedef struct ObjectHeap{
     wchar_t *pClasseName;
-    union variable *field_area;
+    struct Variable *field_area;
     ST_tpThread *thread;
     u4 ref_count;
     u2 max_var;
-    struct VM_tpObjectHeap *next;
+    struct ObjectHeap *next;
 }ST_tpObjectHeap;
 
 /**  Estrutura que representa o Heap para array */
-typedef struct{
+typedef struct ArrayHeap{
     u1 type;
     wchar_t *pClasseName;
     int length;
     void *area;
     u4 ref_count;
-    struct VM_tpArrayHeap *next;
+    struct ArrayHeap *next;
 }ST_tpArrayHeap;
 
 /**  Estrutura que representa o Heap Geral */
@@ -398,12 +414,12 @@ union variable{
     float Float;
     double Double;
     char Boolean;
-    ST_tpObjectHeap obj_ref;
-    ST_tpArrayHeap array_ref;
+    ST_tpObjectHeap *obj_ref;
+    ST_tpArrayHeap *array_ref;
     // RETADDRESS retAddres;
 };
 
-typedef struct {
+typedef struct Variable{
     u1 tipo;                /* Tipo da variavel */
     union variable valor;   /* Valor da variavel */
 }ST_tpVariable;
@@ -439,17 +455,18 @@ typedef struct OperandStack{
 
 /**  Estrutura que representa um Frame */
 typedef struct {
-    ST_tpParameterStack *localVariablesStack;
+    ST_tpParameterStack *parameterStack;
     ST_tpOperandStack   *operandStack;
+    ST_tpVariable *localVariables;
     ST_tpClassFile *cp;
     /* ReferenceConstantPoll */
-}ST_tpFrame;
+}ST_tpStackFrame;
 
 /**  Estrutura que representa uma thread */
 typedef struct thread{
     u1 *PC;
-    ST_tpPilha *pFrameStack; /* Ponteiro para lista de frames da Thread */
-    //VM_tpNativeMethodStack NativeStack;
+    ST_tpStackFrame *pJVMStack; /* Ponteiro para lista de frames da Thread */
+    //ST_tpNativeMethodStack NativeStack;
 }ST_tpThread;
 
 /** ******************************************************************************
