@@ -838,7 +838,7 @@ void IT_executaInstrucao(ST_tpThread *thread) {
 		case 0x2a:
 			printf("aload_0 \n");
             ST_tpVariable var = VM_recuperarVariavel(thread->pJVMStack->localVariables, 0);
-            PL_pushOperando(thread->pJVMStack->operandStack, var);
+            PL_pushOperando(&thread->pJVMStack->operandStack, var);
 			break;
 
 

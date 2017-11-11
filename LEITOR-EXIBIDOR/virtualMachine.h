@@ -38,7 +38,7 @@ void VM_armazenarVariavel(ST_tpVariable *pVariaveisLocais, ST_tpVariable variave
 
 ST_tpVariable VM_recuperarVariavel(ST_tpVariable *pVariaveisLocais, int posicao);
 
-ST_tpStackFrame *VM_criarStackFrame(ST_tpStackFrame *pJVMStack, long maxStackSize, ST_tpObjectHeap *thisClass);
+ST_tpStackFrame *VM_criarStackFrame(ST_tpStackFrame **pJVMStack, long maxStackSize, ST_tpObjectHeap *thisClass);
 
 ST_tpMethod_info *VM_procurarMetodo(ST_tpClassFile *pClassFile, char *descritorMetodo, char *nomeMetodo);
 

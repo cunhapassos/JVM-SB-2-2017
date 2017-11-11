@@ -98,40 +98,33 @@ void *PL_pop(ST_tpPilha **ePilha){
     return dado;
 }
 
-ST_tpOperandStack *PL_criarPilhaOperandos(){
-    ST_tpOperandStack *pOperandStack;
-    
-    pOperandStack = (ST_tpOperandStack *) malloc(sizeof(ST_tpOperandStack));
-    pOperandStack->next = NULL;
-    return pOperandStack;
-}
 
-void PL_pushOperando(ST_tpOperandStack *pPilhaOperandos, ST_tpVariable var){
+void PL_pushOperando(ST_tpOperandStack **pPilhaOperandos, ST_tpVariable var){
     ST_tpOperandStack *pAux = (ST_tpOperandStack*)malloc(sizeof(ST_tpOperandStack));
     
     pAux->next = NULL;
     pAux->variable = var;
     
-    if(pPilhaOperandos == NULL){
-        pPilhaOperandos = pAux;
+    if(*pPilhaOperandos == NULL){
+        *pPilhaOperandos = pAux;
     }
     else{
-        pAux->next = pPilhaOperandos;
-        pPilhaOperandos = pAux;
+        pAux->next = *pPilhaOperandos;
+        *pPilhaOperandos = pAux;
     }
 }
 
-ST_tpVariable PL_popOperando(ST_tpOperandStack *pPilhaOperandos){
+ST_tpVariable PL_popOperando(ST_tpOperandStack **pPilhaOperandos){
     ST_tpVariable var;
     ST_tpOperandStack *pAux;
     
     // VERIFICAR COMO FAZER QUANDO A PILHA FOR VAZIA
     //if (pPilhaOperandos == NULL){
     
-    var.tipo =  pPilhaOperandos->variable.tipo;
-    var.valor = pPilhaOperandos->variable.valor;
-    pAux =  pPilhaOperandos;
-    pPilhaOperandos = pPilhaOperandos->next;
+    var.tipo =  (*pPilhaOperandos)->variable.tipo;
+    var.valor = (*pPilhaOperandos)->variable.valor;
+    pAux =  *pPilhaOperandos;
+    *pPilhaOperandos = (*pPilhaOperandos)->next;
     
     free(pAux);
     pAux = NULL;
@@ -139,40 +132,32 @@ ST_tpVariable PL_popOperando(ST_tpOperandStack *pPilhaOperandos){
     return var;
 }
 
-ST_tpParameterStack *PL_criarPilhaParametros(){
-    ST_tpParameterStack *pParameterStack;
-    
-    pParameterStack = (ST_tpParameterStack *) malloc(sizeof(ST_tpParameterStack));
-    pParameterStack->next = NULL;
-    return pParameterStack;
-}
 
-void PL_pushParametro(ST_tpParameterStack *pPilhaParametros, ST_tpVariable var){
+void PL_pushParametro(ST_tpParameterStack **pPilhaParametros, ST_tpVariable var){
     ST_tpParameterStack *pAux = (ST_tpParameterStack *)malloc(sizeof(ST_tpParameterStack));
     
     pAux->next      = NULL;
     pAux->variable  = var;
     
-    if(pPilhaParametros == NULL){
-        pPilhaParametros = pAux;
+    if(*pPilhaParametros == NULL){
+        *pPilhaParametros = pAux;
     }
     else{
-        pAux->next = pPilhaParametros;
-        pPilhaParametros = pAux;
+        pAux->next = *pPilhaParametros;
+        *pPilhaParametros = pAux;
     }
 }
 
-ST_tpVariable PL_popParametro(ST_tpParameterStack *pPilhaParametros){
+ST_tpVariable PL_popParametro(ST_tpParameterStack **pPilhaParametros){
     ST_tpVariable var;
     ST_tpParameterStack *pAux;
     
-    var.tipo = pPilhaParametros->variable.tipo;
-    var.valor = pPilhaParametros->variable.valor;
-    
-    pAux = pPilhaParametros;
-    pPilhaParametros = pPilhaParametros->next;
-    free(pAux);
+    var.tipo = (*pPilhaParametros)->variable.tipo;
+    var.valor = (*pPilhaParametros)->variable.valor;
+    pAux = (*pPilhaParametros);
+    (*pPilhaParametros) = (*pPilhaParametros)->next;
     pAux = NULL;
+    free(pAux);
     
     return var;
 }

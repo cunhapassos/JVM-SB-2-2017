@@ -80,31 +80,31 @@ ST_tpVariable VM_recuperarVariavel(ST_tpVariable *pVariaveisLocais, int posicao)
 }
 
 
-ST_tpStackFrame *VM_criarStackFrame(ST_tpStackFrame *pJVMStack, long maxStackSize, ST_tpObjectHeap *thisClass){
+ST_tpStackFrame *VM_criarStackFrame(ST_tpStackFrame **pJVMStack, long maxStackSize, ST_tpObjectHeap *thisClass){
     int i;
     ST_tpVariable varTemporaria;
     
-    pJVMStack = (ST_tpStackFrame *) malloc(sizeof(ST_tpStackFrame));
-    pJVMStack->operandStack     = PL_criarPilhaOperandos();
-    pJVMStack->parameterStack   = PL_criarPilhaParametros(); // AINDA NAO ESTA RECEBENDO OS PARAMETROS PASSADOS PELO METODO
-    pJVMStack->localVariables   = (ST_tpVariable *) malloc(sizeof(ST_tpVariable)*(maxStackSize));
+    (*pJVMStack) = (ST_tpStackFrame *) malloc(sizeof(ST_tpStackFrame));
+    (*pJVMStack)->operandStack     = NULL;
+    (*pJVMStack)->parameterStack   = NULL;
+    (*pJVMStack)->localVariables   = (ST_tpVariable *) malloc(sizeof(ST_tpVariable)*(maxStackSize));
     
     /* cria variavel this */
     varTemporaria.tipo          = JREF;
     varTemporaria.valor.obj_ref = NULL;
     //varTemporaria.valor.obj_ref = thisClass;
-    VM_armazenarVariavel(pJVMStack->localVariables, varTemporaria, 0);
+    VM_armazenarVariavel((*pJVMStack)->localVariables, varTemporaria, 0);
     
     i = 0;
-    while(pJVMStack->parameterStack != NULL){
+    while((*pJVMStack)->parameterStack != NULL){
         
-        varTemporaria = PL_popParametro(pJVMStack->parameterStack);
-        VM_armazenarVariavel(pJVMStack->localVariables, varTemporaria, i);
+        varTemporaria = PL_popParametro(&(*pJVMStack)->parameterStack);
+        VM_armazenarVariavel((*pJVMStack)->localVariables, varTemporaria, i);
         i++;
         if(varTemporaria.tipo == JLONG || varTemporaria.tipo == JDOUBLE) i++;
     }
     
-    return pJVMStack;
+    return (*pJVMStack);
 }
 
 void VM_executarMetodo(ST_tpJVM *pJVM, ST_tpClassFile *pClasse, ST_tpMethod_info *pMetodo, ST_tpObjectHeap *thisClass){
@@ -122,7 +122,7 @@ void VM_executarMetodo(ST_tpJVM *pJVM, ST_tpClassFile *pClasse, ST_tpMethod_info
         if(strcmp(name, "Code") == 0){
             
             /* Cria uma Stack Frame */
-            pFrame = VM_criarStackFrame(pJVM->thread->pJVMStack, ((ST_tpCode_attribute*)pMetodo->attributes[i].info)->max_locals, thisClass);
+            pFrame = VM_criarStackFrame(&(pJVM->thread->pJVMStack), ((ST_tpCode_attribute*)pMetodo->attributes[i].info)->max_locals, thisClass);
             
             /* Se a pilha de Frames da Thread ainda estiver vazia
             if(pJVM->thread->pFrameStack == NULL){

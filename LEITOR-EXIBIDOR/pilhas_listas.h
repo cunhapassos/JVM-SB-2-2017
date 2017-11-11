@@ -37,17 +37,13 @@ void PL_push(ST_tpPilha **ePilha, void *dadoNovo);
 
 void *PL_pop(ST_tpPilha **ePilha);
 
-ST_tpOperandStack *PL_criarPilhaOperandos(void);
+void PL_pushOperando(ST_tpOperandStack **pPilhaOperandos, ST_tpVariable var);
 
-void PL_pushOperando(ST_tpOperandStack *pPilhaOperandos, ST_tpVariable var);
+ST_tpVariable PL_popOperando(ST_tpOperandStack **pPilhaOperandos);
 
-ST_tpVariable PL_popOperando(ST_tpOperandStack *pPilhaOperandos);
+void PL_pushParametro(ST_tpParameterStack **pPilhaParametros, ST_tpVariable var);
 
-ST_tpParameterStack *PL_criarPilhaParametros(void);
-
-void PL_pushParametro(ST_tpParameterStack *pPilhaParametros, ST_tpVariable var);
-
-ST_tpVariable PL_popParametro(ST_tpParameterStack *pPilhaParametros);
+ST_tpVariable PL_popParametro(ST_tpParameterStack **pPilhaParametros);
 
 /** ******************************************************************************
  *                      ESTRUTURAS E FUNCOES DE LISTA
