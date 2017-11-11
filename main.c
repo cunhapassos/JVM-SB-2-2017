@@ -31,7 +31,7 @@ int main(int argc, const char * argv[]) {
     free(p);
     p = NULL;*/
     
-    char *aux[] = {"File.class"};
+    char *aux[] = {"/Users/paulopassos/Documents/JVM-SB-2-2017/File.class"};
     ST_tpJVM *pJVM = VM_exucutarJVM(1, aux);
  
     

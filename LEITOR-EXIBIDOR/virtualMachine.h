@@ -34,9 +34,19 @@ ST_tpJVM *VM_criarJVM(void);
 
 void VM_inserirClasseCarregada(ST_tpJVM *pJvm, ST_tpClassFile *pClasse);
 
+void VM_armazenarVariavel(ST_tpVariable *pVariaveisLocais, ST_tpVariable variavel, int posicao);
+
+ST_tpVariable VM_recuperarVariavel(ST_tpVariable *pVariaveisLocais, int posicao);
+
+ST_tpStackFrame *VM_criarStackFrame(ST_tpStackFrame *pJVMStack, long maxStackSize, ST_tpObjectHeap *thisClass);
+
+ST_tpMethod_info *VM_procurarMetodo(ST_tpClassFile *pClassFile, char *descritorMetodo, char *nomeMetodo);
+
+ST_tpObjectHeap *VM_criarObjeto(ST_tpJVM *pJVM, ST_tpClassFile *pClassFile);
+
 ST_tpJVM *VM_exucutarJVM(int numeroClasses, char *nomeClasses[]);
 
-void VM_executarMetodo(ST_tpThread *pThread, ST_tpClassFile *pClasse, ST_tpMethod_info *pMetodo);
+void VM_executarMetodo(ST_tpJVM *pJVM, ST_tpClassFile *pClasse, ST_tpMethod_info *pMetodo, ST_tpObjectHeap *thisClass);
 
 #endif /* virtualMachine_h */
 

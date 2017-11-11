@@ -8,12 +8,13 @@
 #include "structures.h"
 #include <stdio.h>
 #include <stdlib.h>
-
+#include "virtualMachine.h"
+#include "pilhas_listas.h"
 /*
 *	Para ler algum argumento do code incremente o PC usando 
 	thread->PC ++;
 */
-void IT_executaInstrucao(ST_tpThread* thread) {
+void IT_executaInstrucao(ST_tpThread *thread) {
 	u1 opcode = *(thread->PC);
 	printf("%d \t", opcode);
 
@@ -836,8 +837,8 @@ void IT_executaInstrucao(ST_tpThread* thread) {
 		*******************************************************************************************/
 		case 0x2a:
 			printf("aload_0 \n");
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+            ST_tpVariable var = VM_recuperarVariavel(thread->pJVMStack->localVariables, 0);
+            PL_pushOperando(thread->pJVMStack->operandStack, var);
 			break;
 
 
