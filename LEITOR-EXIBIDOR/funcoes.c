@@ -10,13 +10,14 @@
 #include <stdlib.h>
 #include "virtualMachine.h"
 #include "pilhas_listas.h"
+#include "instrucoes.h"
 /*
 *	Para ler algum argumento do code incremente o PC usando 
 	thread->PC ++;
 */
-void IT_executaInstrucao(ST_tpThread *thread) {
+void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpThread *thread) {
 	u1 opcode = *(thread->PC);
-	printf("%d \t", opcode);
+	printf("%d = x%0x\t", opcode, opcode);
 
 	switch(opcode) {
 
@@ -3567,8 +3568,9 @@ void IT_executaInstrucao(ST_tpThread *thread) {
 
 		*******************************************************************************************/
 		case 0xb6:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+            printf("invokevirtual \n");
+            
+            FU_invokevirtual(pJVM->methodArea->classFile->constant_pool_table, thread, thread->PC);
 			break;
 
 

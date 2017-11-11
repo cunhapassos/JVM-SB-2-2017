@@ -174,7 +174,7 @@ void VM_executarMetodo(ST_tpJVM *pJVM, ST_tpClassFile *pClasse, ST_tpMethod_info
             pJVM->thread->PC = (u1 *)pCode->code;
             end = pJVM->thread->PC + pCode->code_length;
             while(pJVM->thread->PC < end){
-                IT_executaInstrucao(pJVM->thread); // VERIFICAR ONDE EXECUTA AS EXCESSOES
+                IT_executaInstrucao(pJVM, pJVM->thread); // VERIFICAR ONDE EXECUTA AS EXCESSOES
                 pJVM->thread->PC++;
             }
             
@@ -263,7 +263,8 @@ ST_tpJVM *VM_exucutarJVM(int numeroClasses, char *nomeClasses[]){
     /* Procurando a primeira classe que tem o main */
     for(pClasse = pJVM->methodArea->classFile; pClasse != NULL; pClasse = pClasse->next){
         
-        pMetodo = VM_procurarMetodo( pClasse, "(I)V", "<init>");
+        //pMetodo = VM_procurarMetodo( pClasse, "(I)V", "<init>");
+        pMetodo = VM_procurarMetodo( pClasse, "([Ljava/lang/String;)V", "main");
         if (pMetodo != NULL){
             
             /* Cria Objeto e insere no topo da lista de objeto do Heap */
