@@ -102,63 +102,74 @@ typedef uint32_t u4;
 
 /* Representa valores strings constantes, inclusive Unicode */
 typedef struct{
+    u1 tag;
     u2 length;
     u1 *bytes;
 }ST_tpCONSTANT_Utf8_info;
 
 /* Representa uma constante de ponto flutuante de 4 bytes */
 typedef struct{
+    u1 tag;
     u4 bytes;
 }ST_tpCONSTANT_Float_info;
 
 /* Representa uma constante inteira de 4 bytes */
 typedef struct{
+    u1 tag;
     u4 bytes;
 }ST_tpCONSTANT_Integer_info;
 
 /* Representa uma constante inteira de 8 bytes */
 typedef struct{
+    u1 tag;
     u4 high_bytes;
     u4 low_bytes;
 }ST_tpCONSTANT_Long_info;
 
 /* Representa constante de ponto flutuante de 8 bytes */
 typedef struct{
+    u1 tag;
     u4 high_bytes;
     u4 low_bytes;
 }ST_tpCONSTANT_Double_info;
 
 /* Representa uma Classe ou Interface */
 typedef struct{
+    u1 tag;
     u4 name_index;
 }ST_tpCONSTANT_Class_info;
 
 /* Representa objetos constantes do tipo String */
 typedef struct{
+    u1 tag;
     u2 string_index;
     //GLOBAL_HEAP StringObject;
 }ST_tpCONSTANT_String_info;
 
 /* Representa um field */
 typedef struct{
+    u1 tag;
     u2 class_index;
     u2 name_and_type_index;
 }ST_tpCONSTANT_Fieldref_info;
 
 /* Representa um método */
 typedef struct{
+    u1 tag;
     u2 class_index;
     u2 name_and_type_index;
 }ST_tpCONSTANT_Methodref_info;
 
 /* Representa uma interface */
 typedef struct{
+    u1 tag;
     u2 class_index;
     u2 name_and_type_index;
 }ST_tpCONSTANT_InterfaceMethodref_info;
 
 /* Representa um field ou método sem indicar classe ou interface a que pertence */
 typedef struct{
+    u1 tag;
     u2 name_index;
     u2 descriptor_index;
 }ST_tpCONSTANT_NameAndType_info;

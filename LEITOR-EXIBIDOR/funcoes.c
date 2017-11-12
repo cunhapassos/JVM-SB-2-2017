@@ -418,8 +418,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpThread *thread) {
 			
 		*******************************************************************************************/
 		case 0x14:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+            FU_ldc2_w(pJVM->methodArea->classFile->constant_pool_table, thread);
 			break;
 
 

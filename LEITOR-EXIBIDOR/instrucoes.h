@@ -22,8 +22,11 @@
 #define instrucoes_h
 
 #include <stdio.h>
+#include <string.h>
 #include "structures.h"
 #include "virtualMachine.h"
+
+
 
 void FU_invokevirtual(ST_tpCp_info *pConstantPool, ST_tpThread *thread, u1 *pc);
 

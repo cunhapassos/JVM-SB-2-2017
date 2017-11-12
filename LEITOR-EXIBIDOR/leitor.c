@@ -100,46 +100,57 @@ ST_tpCp_info *LE_lerConstant_pool(FILE *pArq, u2 constant_pool_count){
         constantPool[i].tag = LE_lerU1(pArq);
         switch(constantPool[i].tag) {
             case CONSTANT_Utf8:
+                constantPool[i].info.Utf8.tag = CONSTANT_Utf8;
                 constantPool[i].info.Utf8.length = LE_lerU2(pArq);
                 constantPool[i].info.Utf8.bytes = malloc((constantPool[i].info.Utf8.length+1)*sizeof(u1));
                 fread(constantPool[i].info.Utf8.bytes, 1, constantPool[i].info.Utf8.length, pArq);
                 constantPool[i].info.Utf8.bytes[constantPool[i].info.Utf8.length] = '\0';
                 break;
             case CONSTANT_Float:
+                constantPool[i].info.Float.tag = CONSTANT_Float;
                 constantPool[i].info.Float.bytes = LE_lerU4(pArq);
                 break;
             case CONSTANT_Integer:
+                constantPool[i].info.Integer.tag = CONSTANT_Integer;
                 constantPool[i].info.Integer.bytes = LE_lerU4(pArq);
                 break;
             case CONSTANT_Long:
+                constantPool[i].info.Long.tag = CONSTANT_Long;
                 constantPool[i].info.Long.high_bytes = LE_lerU4(pArq);
                 constantPool[i].info.Long.low_bytes = LE_lerU4(pArq);
                 i++;
                 break;
             case CONSTANT_Double:
+                constantPool[i].info.Double.tag = CONSTANT_Double;
                 constantPool[i].info.Double.high_bytes = LE_lerU4(pArq);
                 constantPool[i].info.Double.low_bytes = LE_lerU4(pArq);
                 i++;
                 break;
             case CONSTANT_Class:
+                constantPool[i].info.Class.tag = CONSTANT_Class;
                 constantPool[i].info.Class.name_index = LE_lerU2(pArq);
                 break;
             case CONSTANT_String:
+                constantPool[i].info.String.tag = CONSTANT_String;
                 constantPool[i].info.String.string_index = LE_lerU2(pArq);
                 break;
             case CONSTANT_Fieldref:
+                constantPool[i].info.Fieldref.tag = CONSTANT_Fieldref;
                 constantPool[i].info.Fieldref.class_index = LE_lerU2(pArq);
                 constantPool[i].info.Fieldref.name_and_type_index = LE_lerU2(pArq);
                 break;
             case CONSTANT_Methodref:
+                constantPool[i].info.Methodref.tag = CONSTANT_Methodref;
                 constantPool[i].info.Methodref.class_index = LE_lerU2(pArq);
                 constantPool[i].info.Methodref.name_and_type_index = LE_lerU2(pArq);
                 break;
             case CONSTANT_InterfaceMethodref:
+                constantPool[i].info.InterfaceMethodref.tag = CONSTANT_InterfaceMethodref;
                 constantPool[i].info.InterfaceMethodref.class_index = LE_lerU2(pArq);
                 constantPool[i].info.InterfaceMethodref.name_and_type_index = LE_lerU2(pArq);
                 break;
             case CONSTANT_NameAndType:
+                constantPool[i].info.NameAndType.tag = CONSTANT_NameAndType;
                 constantPool[i].info.NameAndType.name_index = LE_lerU2(pArq);
                 constantPool[i].info.NameAndType.descriptor_index = LE_lerU2(pArq);
                 break;
