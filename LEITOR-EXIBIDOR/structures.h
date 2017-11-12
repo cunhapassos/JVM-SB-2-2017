@@ -181,7 +181,7 @@ typedef struct{
     u2 name_and_type_index;
 }ST_tpCONSTANT_InterfaceMethodref_info;
 
-/* Representa um field ou método sem indicar classe ou interface a que pertence */
+/* Representa um field ou metodo sem indicar classe ou interface a que pertence */
 typedef struct{
     u1 tag;
     u2 name_index;

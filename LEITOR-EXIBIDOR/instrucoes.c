@@ -43,20 +43,42 @@ void FU_invokevirtual(ST_tpCp_info *pConstantPool, ST_tpThread *thread, u1 *pc){
 }
 void FU_getstatic( ST_tpThread *thread){
     u1 parametro1, parametro2;
-    u2 temp2Byte;
+    u2 temp2Byte, nameClasseIndex, nameAndTypeIndex;
+    ST_tpVariable var;
     ST_tpConstantPool *cpIndx;
+    ST_tpCp_info *pCPInfo;
     ST_tpCONSTANT_Fieldref_info *pFieldref;
+    ST_tpCONSTANT_NameAndType_info *pNameAndType;
+    
+    pCPInfo = thread->pJVMStack->cp->constant_pool_table;
     
     thread->PC++;
+    
     memcpy(&parametro1, thread->PC, 1);
     thread->PC++;
     memcpy(&parametro2, thread->PC, 1);
     temp2Byte = (parametro1 << 8) + parametro2;
     
-    cpIndx = &thread->pJVMStack->cp->constant_pool_table[temp2Byte].info;
+    cpIndx = &pCPInfo[temp2Byte-1].info;
     pFieldref = (ST_tpCONSTANT_Fieldref_info *) malloc(sizeof(ST_tpCONSTANT_Fieldref_info));
+    
     memcpy(pFieldref, cpIndx, sizeof(ST_tpCONSTANT_Fieldref_info));
     
+    nameClasseIndex = cpIndx->Fieldref.class_index;
+    nameAndTypeIndex = cpIndx->Fieldref.name_and_type_index;
+    
+    memcpy(&pFieldref->class_index, &nameClasseIndex, sizeof(u2));
+    memcpy(&pFieldref->name_and_type_index, &nameAndTypeIndex, sizeof(u2));
+    
+    pNameAndType = (ST_tpCONSTANT_NameAndType_info *)malloc(sizeof(ST_tpCONSTANT_NameAndType_info));
+    cpIndx = &pCPInfo[nameAndTypeIndex-1].info;
+    memcpy(pNameAndType, cpIndx, sizeof(ST_tpCONSTANT_NameAndType_info));
+    
+    memcpy(pNameAndType, &cpIndx->NameAndType.name_index, sizeof(u2));
+    memcpy(pNameAndType, &cpIndx->NameAndType.descriptor_index, sizeof(u2));
+    //pegarStaticFieldVAlue();
+    
+    PL_pushOperando(&thread->pJVMStack->operandStack, var);
 }
 void FU_ldc2_w(ST_tpCp_info *pConstantPool, ST_tpThread *thread){
     u1 parametro1, parametro2;
@@ -90,8 +112,11 @@ void FU_ldc2_w(ST_tpCp_info *pConstantPool, ST_tpThread *thread){
     }
     else if (cpIndx->Double.tag == CONSTANT_Double){
         pDouble             = (ST_tpCONSTANT_Double_info *)cpIndx;
-        pVar2->valor.Double = pDouble->low_bytes;
-        pVar1->valor.Double = ((u8)pVar2->valor.Double << 32 | pDouble->low_bytes);
+        u8 aux = (u8)pDouble->high_bytes;
+        aux <<= 32;
+        aux |= pDouble->low_bytes;
+        memcpy(&pVar1->valor.Double, &aux, sizeof(int64_t));
+        pVar1->tipo = JDOUBLE;
         PL_pushOperando(&thread->pJVMStack->operandStack, *pVar1);
     }
     else if (cpIndx->Double.tag == CONSTANT_String){
@@ -109,6 +134,13 @@ void FU_dload_n(ST_tpThread *thread, int posicao){
     
     var = VM_recuperarVariavel(thread->pJVMStack->localVariables, posicao);
     PL_pushOperando(&thread->pJVMStack->operandStack, var);
+}
+
+void FU_dstore_n(ST_tpThread *thread, int posicao){
+    ST_tpVariable var;
+    
+    var = PL_popOperando(&thread->pJVMStack->operandStack);
+    VM_armazenarVariavel(thread->pJVMStack->localVariables, var, posicao);
 }
 
 void FU_dadd(ST_tpThread *thread){
