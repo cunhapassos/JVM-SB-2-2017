@@ -70,7 +70,7 @@ void FU_ldc2_w(ST_tpCp_info *pConstantPool, ST_tpThread *thread){
     else if (cpIndx->Double.tag == CONSTANT_Double){
         pDouble             = (ST_tpCONSTANT_Double_info *)cpIndx;
         pVar2->valor.Double = pDouble->high_bytes;
-        pVar1->valor.Double = (pVar2->valor.Double << 32) | pDouble->low_bytes;
+       pVar1->valor.Double = ((u8)pVar2->valor.Double << 32) | pDouble->low_bytes;
         PL_pushOperando(&thread->pJVMStack->operandStack, *pVar1);
     }
     else if (cpIndx->Double.tag == CONSTANT_String){
@@ -151,9 +151,10 @@ void FU_dneg(ST_tpThread *thread){
     PL_pushOperando(&thread->pJVMStack->operandStack, var);
 }
             
-void FU_dreturn(ST_tpThread *thread){
-    ST_tpVariable *pVarReturn;
+ST_tpVariable FU_dreturn(ST_tpThread *thread){
+    ST_tpVariable varReturn;
     
-    *pVarReturn = PL_popOperando(&thread->pJVMStack->operandStack); // VERIFICAR SE *pVarReturn TEM * MESMO
-}
+    varReturn = PL_popOperando(&thread->pJVMStack->operandStack); // VERIFICAR SE *pVarReturn TEM * MESMO
+    return varReturn;
+} 
                             

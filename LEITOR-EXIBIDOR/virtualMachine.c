@@ -179,7 +179,7 @@ void VM_executarMetodo(ST_tpJVM *pJVM, ST_tpClassFile *pClasse, ST_tpMethod_info
             }
 
             //CRIA ESSA FUNCAO
-            limparFrame(pJVM->thread->pJVMStack->localVariables);
+           // limparFrame(pJVM->thread->pJVMStack->localVariables);
             // VERIFICAR COMO FAZER O RETORNO DA FUNCAO
         }
     }
@@ -226,7 +226,7 @@ ST_tpObjectHeap *VM_criarObjeto(ST_tpJVM *pJVM, ST_tpClassFile *pClassFile){
         }
     }
     
-    u4 name = pClassFile->constant_pool_table[pClassFile->this_class-1].info.Class.name_index;
+   // u4 name = pClassFile->constant_pool_table[pClassFile->this_class-1].info.Class.name_index;
 
 
     
@@ -272,7 +272,7 @@ ST_tpArrayHeap *VM_criarArray(u1 tipo, wchar_t *nomeClasse, int tamanho){
             break;
         case T_REF:
             pArray->area = calloc(tamanho, sizeof(ST_tpObjectHeap));
-            memcpy(pArray->pClasseName, nomeClasse);
+            strcpy((char *)pArray->pClasseName, (char *)nomeClasse);
             break;
         case T_AREF:
             pArray->area = calloc(tamanho, sizeof(ST_tpObjectHeap));
@@ -280,7 +280,7 @@ ST_tpArrayHeap *VM_criarArray(u1 tipo, wchar_t *nomeClasse, int tamanho){
     }
     pArray->length = tamanho;
     pArray->type = tipo;
-    pArray->ref_count = 0
+    pArray->ref_count = 0;
     
     return pArray;
     
@@ -296,6 +296,10 @@ ST_tpJVM *VM_exucutarJVM(int numeroClasses, char *nomeClasses[]){
     
     /* Cria a maquina virtual, a area de metodos, o heap e uma thread*/
     pJVM = VM_criarJVM();
+    
+    system("echo $JAVA_HOME");
+    const char * s = getenv("JAVA_HOME");
+    printf("JAVA_HOME: %s", s);
     
     /* Carregando classes na JVM */
     for(i = 0; i < numeroClasses; i++){

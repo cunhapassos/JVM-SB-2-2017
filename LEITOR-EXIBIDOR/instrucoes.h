@@ -45,5 +45,6 @@ void FU_drem(ST_tpThread *thread);
 
 void FU_dneg(ST_tpThread *thread);
 
+ST_tpVariable FU_dreturn(ST_tpThread *thread);
 
 #endif /* instrucoes_h */
