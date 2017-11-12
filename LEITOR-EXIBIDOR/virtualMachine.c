@@ -177,7 +177,9 @@ void VM_executarMetodo(ST_tpJVM *pJVM, ST_tpClassFile *pClasse, ST_tpMethod_info
                 IT_executaInstrucao(pJVM, pJVM->thread); // VERIFICAR ONDE EXECUTA AS EXCESSOES
                 pJVM->thread->PC++;
             }
-            
+            SairMetodo:
+            //CRIA ESSA FUNCAO
+            limparFrame(pJVM->thread->pJVMStack->localVariables);
             // VERIFICAR COMO FAZER O RETORNO DA FUNCAO
         }
     }

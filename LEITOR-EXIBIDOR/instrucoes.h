@@ -26,5 +26,21 @@
 #include "virtualMachine.h"
 
 void FU_invokevirtual(ST_tpCp_info *pConstantPool, ST_tpThread *thread, u1 *pc);
+void FU_dstore_n(ST_tpThread *thread, int posicao);
+
+void FU_dload_n(ST_tpThread *thread, int posicao);
+
+void FU_dadd(ST_tpThread *thread);
+
+void FU_dsub(ST_tpThread *thread);
+
+void FU_dmul(ST_tpThread *thread);
+
+void FU_ddiv(ST_tpThread *thread);
+
+void FU_drem(ST_tpThread *thread);
+
+void FU_dneg(ST_tpThread *thread);
+
 
 #endif /* instrucoes_h */
