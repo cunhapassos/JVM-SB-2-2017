@@ -73,6 +73,20 @@ typedef uint32_t u4;
 #define JDOUBLE 0X64
 
 /** ******************************************************************************
+ *                            ARRAY TYPES
+ ** ******************************************************************************/
+
+#define T_BOOLEAN   4
+#define T_CHAR      5
+#define T_FLOAT     6
+#define T_DOUBLE    7
+#define T_BYTE      8
+#define T_SHORT     9
+#define T_INT       10
+#define T_LONG      11
+#define T_REF       12
+#define T_AREF      13
+/** ******************************************************************************
 *                            TEBELA POOL DE CONSTANTES
 ** *******************************************************************************/
 

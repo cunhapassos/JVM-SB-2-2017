@@ -177,7 +177,7 @@ void VM_executarMetodo(ST_tpJVM *pJVM, ST_tpClassFile *pClasse, ST_tpMethod_info
                 IT_executaInstrucao(pJVM, pJVM->thread); // VERIFICAR ONDE EXECUTA AS EXCESSOES
                 pJVM->thread->PC++;
             }
-            SairMetodo:
+
             //CRIA ESSA FUNCAO
             limparFrame(pJVM->thread->pJVMStack->localVariables);
             // VERIFICAR COMO FAZER O RETORNO DA FUNCAO
@@ -241,6 +241,49 @@ ST_tpObjectHeap *VM_criarObjeto(ST_tpJVM *pJVM, ST_tpClassFile *pClassFile){
     pObjeto->next = NULL;
     
     return pObjeto;
+}
+ST_tpArrayHeap *VM_criarArray(u1 tipo, wchar_t *nomeClasse, int tamanho){
+    ST_tpArrayHeap *pArray = ( ST_tpArrayHeap *) malloc(sizeof( ST_tpArrayHeap));
+    
+    switch (tipo) {
+        case T_BOOLEAN:
+            pArray->area = calloc(tamanho, sizeof(u1));
+            break;
+        case T_CHAR:
+            pArray->area = calloc(tamanho, sizeof(u2));
+            break;
+        case T_FLOAT:
+            pArray->area = calloc(tamanho, sizeof(float));
+            break;
+        case T_DOUBLE:
+            pArray->area = calloc(tamanho, sizeof(double));
+            break;
+        case T_BYTE:
+            pArray->area = calloc(tamanho, sizeof(u1));
+            break;
+        case T_SHORT:
+            pArray->area = calloc(tamanho, sizeof(short));
+            break;
+        case T_INT:
+            pArray->area = calloc(tamanho, sizeof(int));
+            break;
+        case T_LONG:
+            pArray->area = calloc(tamanho, sizeof(long));
+            break;
+        case T_REF:
+            pArray->area = calloc(tamanho, sizeof(ST_tpObjectHeap));
+            memcpy(pArray->pClasseName, nomeClasse);
+            break;
+        case T_AREF:
+            pArray->area = calloc(tamanho, sizeof(ST_tpObjectHeap));
+            break;
+    }
+    pArray->length = tamanho;
+    pArray->type = tipo;
+    pArray->ref_count = 0
+    
+    return pArray;
+    
 }
 
 ST_tpJVM *VM_exucutarJVM(int numeroClasses, char *nomeClasses[]){
