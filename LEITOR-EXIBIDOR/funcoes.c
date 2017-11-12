@@ -3987,5 +3987,4 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpThread *thread) {
 			printf("Opcode não encontrado");
 	
 	}
-
 }
