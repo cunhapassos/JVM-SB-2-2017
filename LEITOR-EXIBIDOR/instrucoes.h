@@ -29,6 +29,10 @@
 
 
 void FU_invokevirtual(ST_tpCp_info *pConstantPool, ST_tpThread *thread, u1 *pc);
+void FU_getstatic( ST_tpThread *thread);
+
+void FU_ldc2_w(ST_tpCp_info *pConstantPool, ST_tpThread *thread);
+
 void FU_dstore_n(ST_tpThread *thread, int posicao);
 
 void FU_dload_n(ST_tpThread *thread, int posicao);

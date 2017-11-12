@@ -315,7 +315,6 @@ ST_tpJVM *VM_exucutarJVM(int numeroClasses, char *nomeClasses[]){
         //pMetodo = VM_procurarMetodo( pClasse, "(I)V", "<init>");
         pMetodo = VM_procurarMetodo( pClasse, "([Ljava/lang/String;)V", "main");
         if (pMetodo != NULL){
-            
             /* Cria Objeto e insere no topo da lista de objeto do Heap */
             pObjeto = VM_criarObjeto(pJVM, pClasse);
             if(pJVM->heap->objects == NULL){
