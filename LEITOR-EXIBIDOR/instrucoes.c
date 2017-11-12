@@ -24,23 +24,68 @@
 void FU_invokevirtual(ST_tpCp_info *pConstantPool, ST_tpThread *thread, u1 *pc){
     u1 parametro1, parametro2;
     u2 temp2Byte;
+    ST_tpMethod_info *pMethodo;
     ST_tpConstantPool *cpIndx;
     ST_tpCONSTANT_Methodref_info *pMethodref;
+    ST_tpCONSTANT_Class_info *pClassRef;
+    ST_tpCONSTANT_Utf8_info *pClassName, *pMethodName, *pMethodDescriptor;
+    ST_tpCONSTANT_NameAndType_info *nameTyperef;
+    
+
     pc++;
     memcpy(&parametro1, pc, 1);
     pc++;
     memcpy(&parametro2, pc, 1);
-    temp2Byte = (parametro1 << 8) + parametro2;
     
-    cpIndx = &pConstantPool[temp2Byte].info;
+    temp2Byte = (parametro1 << 8) + parametro2;
+    cpIndx = &pConstantPool[temp2Byte -1].info;
     pMethodref = (ST_tpCONSTANT_Methodref_info *)malloc(sizeof(ST_tpCONSTANT_Methodref_info));
     memcpy(pMethodref, &(cpIndx->Methodref), sizeof(ST_tpCONSTANT_Methodref_info));
+
+    temp2Byte = pMethodref->class_index;
+    cpIndx = &pConstantPool[temp2Byte-1].info;
+    pClassRef = (ST_tpCONSTANT_Class_info *)malloc(sizeof(ST_tpCONSTANT_Class_info));
+    memcpy(pClassRef, &(cpIndx->Class), sizeof(ST_tpCONSTANT_Class_info));
+
+    temp2Byte = pClassRef->name_index;
+    cpIndx = &pConstantPool[temp2Byte-1].info;
+    pClassName = (ST_tpCONSTANT_Utf8_info *)malloc(sizeof(ST_tpCONSTANT_Utf8_info));
+    memcpy(pClassName, &(cpIndx->Utf8), sizeof(ST_tpCONSTANT_Utf8_info));
+
+    temp2Byte = pMethodref->name_and_type_index;
+    cpIndx = &pConstantPool[temp2Byte-1].info;
+    nameTyperef = (ST_tpCONSTANT_NameAndType_info *)malloc(sizeof(ST_tpCONSTANT_NameAndType_info));
+    memcpy(nameTyperef, &(cpIndx->Utf8), sizeof(ST_tpCONSTANT_NameAndType_info));
+
+    temp2Byte = nameTyperef->name_index;
+    cpIndx = &pConstantPool[temp2Byte-1].info;
+    pMethodName = (ST_tpCONSTANT_Utf8_info *)malloc(sizeof(ST_tpCONSTANT_Utf8_info));
+    memcpy(pMethodName, &(cpIndx->Utf8), sizeof(ST_tpCONSTANT_Utf8_info));
+
+    temp2Byte = nameTyperef->descriptor_index;
+    cpIndx = &pConstantPool[temp2Byte-1].info;
+    pMethodDescriptor = (ST_tpCONSTANT_Utf8_info *)malloc(sizeof(ST_tpCONSTANT_Utf8_info));
+    memcpy(pMethodDescriptor, &(cpIndx->Utf8), sizeof(ST_tpCONSTANT_Utf8_info));
+
+    
+    if(FU_resolveMethodo(pMethodName, pMethodDescriptor)) {
+
+    }
+
     
     printf("Instrucao inacabada");
-    
+    pc++;
     
     /// PAREI AQUI
 }
+
+
+//TODO resolve method
+int FU_resolveMethodo(ST_tpCONSTANT_Utf8_info *nome, ST_tpCONSTANT_Utf8_info *descricao){
+
+    return 1;
+}
+
 void FU_getstatic( ST_tpThread *thread){
     u1 parametro1, parametro2;
     u2 temp2Byte;

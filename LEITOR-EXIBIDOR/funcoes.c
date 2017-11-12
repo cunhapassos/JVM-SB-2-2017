@@ -168,7 +168,6 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpThread *thread) {
 		case 0x07:
 //////////////////////////////////////////////
 //////////////////////////////////////////////
-		printf("piui\n");
 			break;
 
 
@@ -3567,9 +3566,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpThread *thread) {
 
 		*******************************************************************************************/
 		case 0xb6:
-            printf("invokevirtual \n");
-            
-            //FU_invokevirtual(pJVM->methodArea->classFile->constant_pool_table, thread, thread->PC);
+            FU_invokevirtual(pJVM->methodArea->classFile->constant_pool_table, thread, thread->PC);
 			break;
 
 
