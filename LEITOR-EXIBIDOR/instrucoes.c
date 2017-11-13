@@ -24,7 +24,7 @@
 void FU_invokevirtual(ST_tpCp_info *pConstantPool, ST_tpThread *thread, u1 *pc){
     u1 parametro1, parametro2;
     u2 temp2Byte;
-    ST_tpMethod_info *pMethodo;
+    //ST_tpMethod_info *pMethodo;
     ST_tpConstantPool *cpIndx;
     ST_tpCONSTANT_Methodref_info *pMethodref;
     ST_tpCONSTANT_Class_info *pClassRef;
@@ -95,6 +95,7 @@ void FU_getstatic( ST_tpThread *thread){
     ST_tpCONSTANT_Fieldref_info *pFieldref;
     ST_tpCONSTANT_NameAndType_info *pNameAndType;
     
+    var.tipo = 0x99; // inicializa variavel com valor arbitrario
     pCPInfo = thread->pJVMStack->cp->constant_pool_table;
     
     thread->PC++;
@@ -125,34 +126,39 @@ void FU_getstatic( ST_tpThread *thread){
     
     PL_pushOperando(&thread->pJVMStack->operandStack, var);
 }
-void FU_ldc2_w(ST_tpCp_info *pConstantPool, ST_tpThread *thread){
-    u1 parametro1, parametro2;
+void FU_ldc2_w(ST_tpJVM *pJVM, ST_tpClassFile *pClasseFile){
+    u1 parametro1, parametro2, tipo;
     u2 temp2Byte;
+    wchar_t *nomeClasse;
     ST_tpConstantPool *cpIndx;
     ST_tpVariable *pVar1, *pVar2;
     ST_tpCONSTANT_Long_info *pLong;
     ST_tpCONSTANT_String_info *pString;
     ST_tpCONSTANT_Utf8_info *pUTF8;
     ST_tpCONSTANT_Double_info *pDouble;
+    ST_tpArrayHeap *pArrayRef;
+    ST_tpThread *pThread;
+    ST_tpObjectHeap *pObjRef;
+    
+    pThread = pJVM->thread;
     
     pVar1 = malloc(sizeof(ST_tpVariable));
     pVar2 = malloc(sizeof(ST_tpVariable));
     cpIndx = malloc(sizeof(ST_tpConstantPool));
     
-    thread->PC++;
-    memcpy(&parametro1, thread->PC, 1);
-    thread->PC++;
-    memcpy(&parametro2, thread->PC, 1);
-        pLong             = (ST_tpCONSTANT_Long_info *)cpIndx;
+    pThread->PC++;
+    memcpy(&parametro1, pThread->PC, 1);
+    pThread->PC++;
+    memcpy(&parametro2, pThread->PC, 1);
     temp2Byte = (parametro1 << 8) + parametro2;
-    
-    cpIndx = &pConstantPool[temp2Byte - 1].info;
+    cpIndx = &(pClasseFile->constant_pool_table[temp2Byte - 1].info);
 
     if(cpIndx->Long.tag == CONSTANT_Long){
         pLong             = (ST_tpCONSTANT_Long_info *)cpIndx;
         pVar2->valor.Long = pLong->high_bytes;
         pVar1->valor.Long = (pVar2->valor.Long << 32) | pLong->low_bytes;
-        PL_pushOperando(&thread->pJVMStack->operandStack, *pVar1);
+        pVar1->tipo = JLONG;
+        PL_pushOperando(&pThread->pJVMStack->operandStack, *pVar1);
         
     }
     else if (cpIndx->Double.tag == CONSTANT_Double){
@@ -162,16 +168,31 @@ void FU_ldc2_w(ST_tpCp_info *pConstantPool, ST_tpThread *thread){
         aux |= pDouble->low_bytes;
         memcpy(&pVar1->valor.Double, &aux, sizeof(int64_t));
         pVar1->tipo = JDOUBLE;
-        PL_pushOperando(&thread->pJVMStack->operandStack, *pVar1);
+        PL_pushOperando(&pThread->pJVMStack->operandStack, *pVar1);
     }
     else if (cpIndx->Double.tag == CONSTANT_String){
         pString = (ST_tpCONSTANT_String_info *) cpIndx;
-        cpIndx = &pConstantPool[pString->string_index-1].info;
-        
+        cpIndx = &(pJVM->methodArea->classFile->constant_pool_table[pString->string_index-1].info);
         pUTF8 = (ST_tpCONSTANT_Utf8_info *) cpIndx;
+        tipo = T_CHAR;
         
+        pArrayRef = VM_criarArray(tipo, L"", pUTF8->length);
+        pVar1->tipo = JREF;
+        pVar1->valor.array_ref = pArrayRef;
+        for(int i = 0; i < pUTF8->length; i++){
+            VM_armazenarValorArray(pArrayRef, i, *pVar1);
+        }
+        pObjRef = VM_criarObjeto(pJVM, pClasseFile);
+        pVar2->valor.obj_ref = pObjRef;
+        
+        /// PAREI AQUI ////
+        nomeClasse = (wchar_t *) VM_retornarNomeClasse(pClasseFile);
+        wcscpy(nomeClasse, L"java/lang/String");
+        wcscpy(field_name, L"value");
+        wcscpy(field_descritor,  L"[C");
+        VM_armazenarVAlorField();
     }
-
+        
 }
 
 void FU_dload_n(ST_tpThread *thread, int posicao){

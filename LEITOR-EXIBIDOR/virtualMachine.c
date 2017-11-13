@@ -174,7 +174,7 @@ void VM_executarMetodo(ST_tpJVM *pJVM, ST_tpClassFile *pClasse, ST_tpMethod_info
             pJVM->thread->PC = (u1 *)pCode->code;
             end = pJVM->thread->PC + pCode->code_length;
             while(pJVM->thread->PC < end){
-                IT_executaInstrucao(pJVM, pJVM->thread); // VERIFICAR ONDE EXECUTA AS EXCESSOES
+                IT_executaInstrucao(pJVM, pClasse); // VERIFICAR ONDE EXECUTA AS EXCESSOES
                 pJVM->thread->PC++;
             }
 
@@ -201,39 +201,65 @@ ST_tpMethod_info *VM_procurarMetodo(ST_tpClassFile *pClassFile, char *descritorM
     }
     return NULL;
 }
+u1 *VM_retornaNomeSuperClasse(ST_tpClassFile *pClassFile){
+    u1 *superClasseString;
+    u2 classNameIndex;
+    u2 superClassIndex;
+    
+    superClassIndex     = pClassFile->super_class;
+    classNameIndex      = pClassFile->constant_pool_table[superClassIndex -1].info.Class.name_index;
+    superClasseString   = (u1 *)pClassFile->constant_pool_table[classNameIndex - 1].info.Utf8.bytes;
+    
+    return superClasseString;
+}
+
+u1 *VM_retornarNomeClasse(ST_tpClassFile *pClassFile){
+    u1 *classeString;
+    u2 classNameIndex;
+    u2 classIndex;
+    
+    classIndex      = pClassFile->this_class;
+    classNameIndex  = pClassFile->constant_pool_table[classIndex -1].info.Class.name_index;
+    classeString   = (u1 *)pClassFile->constant_pool_table[classNameIndex - 1].info.Utf8.bytes;
+    
+    return classeString;
+}
 ST_tpObjectHeap *VM_criarObjeto(ST_tpJVM *pJVM, ST_tpClassFile *pClassFile){
     int maxVariaveis, flag = 1;
-    char *nome;
-    ST_tpClassFile *pClasseAux;
+    ST_tpClassFile *pAuxClassFile1, *pAuxClassFile2;
+    u1 *nome;
+    
     ST_tpObjectHeap *pObjeto = (ST_tpObjectHeap *)malloc(sizeof(ST_tpObjectHeap));
     
+    pAuxClassFile1 = pClassFile;
     maxVariaveis = pClassFile->fields_count;
     
-    while(pClassFile->super_class != 0 && flag == 1){
-        u4 nameIndex = pClassFile->constant_pool_table[pClassFile->super_class-1].info.Class.name_index;
-        nome = (char*) pClassFile->constant_pool_table[nameIndex-1].info.Utf8.bytes;
-        pClasseAux = PL_buscarClasse(pJVM, nome);
+    while(flag == 1 && pAuxClassFile1->super_class != 0 ){
+        nome = VM_retornaNomeSuperClasse(pClassFile);
+        /* Verifica se a SuperClasse esta carregada */
+        pAuxClassFile2 = PL_buscarClasse(pJVM, (char *)nome);
         
-        /* Carregar Super Classe */
-        if(pClasseAux == NULL){
-            pClasseAux = LE_carregarClasse(nome); // COMO CARREGAR SUPERCLASSE COMO O NOME ORIGINAL
+        /* Se nao estiver carragada, carrega */
+        if(pAuxClassFile2 == NULL){
+            
+            
+            /* ATENCAO FALTA IMPLEMENTAR !!!!!!!!!!!!!*/
+            /* BUSCAR SUPER CLASSE NO PACOTE DO JAVA */
+            pAuxClassFile2 = LE_carregarClasse((char *)nome);
             /* Insere classe carregada na lista de classes carregadas da JVM */
-            if(pClasseAux != NULL) {
-                PL_inserirClasseTopo(pJVM, pClasseAux);
-                maxVariaveis += pClasseAux->fields_count;
+            if(pAuxClassFile2 != NULL) {
+                PL_inserirClasseTopo(pJVM, pAuxClassFile2);
+                maxVariaveis += pAuxClassFile2->fields_count;
+                
+                /* Lancar erro AQUI!!!!! */
             }
+            pAuxClassFile1 = pAuxClassFile2;
             flag = 0;
+            
         }
     }
     
-   // u4 name = pClassFile->constant_pool_table[pClassFile->this_class-1].info.Class.name_index;
-
-
-    
-    // ESTA QUEBRANDO AQUI
-    //memcpy(pObjeto->pClasseName, (char*)pClassFile->constant_pool_table[name-1].info.Utf8.bytes, 1);
-    
-    
+    pObjeto->pClasse = pClassFile;
     pObjeto->field_area = (ST_tpVariable *)malloc(sizeof(ST_tpVariable) * (maxVariaveis + 1));
     pObjeto->thread = pJVM->thread;
     pObjeto->max_var = maxVariaveis;
@@ -243,7 +269,7 @@ ST_tpObjectHeap *VM_criarObjeto(ST_tpJVM *pJVM, ST_tpClassFile *pClassFile){
     return pObjeto;
 }
 ST_tpArrayHeap *VM_criarArray(u1 tipo, wchar_t *nomeClasse, int tamanho){
-    ST_tpArrayHeap *pArray = ( ST_tpArrayHeap *) malloc(sizeof( ST_tpArrayHeap));
+    ST_tpArrayHeap *pArray = ( ST_tpArrayHeap *) malloc(sizeof( ST_tpArrayHeap)); // VERIFICAR SE EH PRECISO MULTIPLICAR POR TAMANHO
     
     switch (tipo) {
         case T_BOOLEAN:
@@ -272,7 +298,6 @@ ST_tpArrayHeap *VM_criarArray(u1 tipo, wchar_t *nomeClasse, int tamanho){
             break;
         case T_REF:
             pArray->area = calloc(tamanho, sizeof(ST_tpObjectHeap));
-            strcpy((char *)pArray->pClasseName, (char *)nomeClasse);
             break;
         case T_AREF:
             pArray->area = calloc(tamanho, sizeof(ST_tpObjectHeap));
@@ -285,7 +310,151 @@ ST_tpArrayHeap *VM_criarArray(u1 tipo, wchar_t *nomeClasse, int tamanho){
     return pArray;
     
 }
+void VM_armazenarValorArray(ST_tpArrayHeap *pArray, int posicao, ST_tpVariable variavel){
+    u2 *pChar;
+    int *pInt;
+    float *pFloat;
+    double *pDouble;
+    __int64_t *pLong;
+    short int *pShort;
+    char *pByte, *pBoolean;
+    ST_tpObjectHeap *pObjRef;
+    ST_tpArrayHeap *pArrayRef;
 
+    
+    switch (pArray->type) {
+        case T_BYTE:
+            pByte  = (char*)pArray->area;
+            pByte += posicao;
+            memcpy((void *)pByte, (void *)&variavel.valor.Byte, sizeof(variavel.valor.Byte));
+            break;
+        case T_LONG:
+            pLong  = (__int64_t *)pArray->area;
+            pLong += posicao;
+            memcpy((void *)pLong, (void *)&variavel.valor.Long, sizeof(variavel.valor.Long));
+            break;
+        case T_BOOLEAN:
+            pBoolean  = (char*) pArray->area;
+            pBoolean += posicao;
+            memcpy((void *)pBoolean, (void *)&variavel.valor.Boolean, sizeof(variavel.valor.Boolean));
+            break;
+        case T_CHAR:
+            pChar  = (u2*)pArray->area;
+            pChar += posicao;
+            memcpy((void *)pChar, (void *)&variavel.valor.Char, sizeof(variavel.valor.Char));
+            break;
+        case T_SHORT:
+            pShort  = (short int  *)pArray->area;
+            pShort += posicao;
+            memcpy((void *)pShort, (void *)&variavel.valor.Short, sizeof(variavel.valor.Short));
+            break;
+        case T_FLOAT:
+            pFloat  = (float *)pArray->area;
+            pFloat += posicao;
+            memcpy((void *)pFloat, (void *)&variavel.valor.Float, sizeof(variavel.valor.Float));
+            break;
+        case T_INT:
+            pInt  = (int *)pArray->area;
+            pInt += posicao;
+            memcpy((void *)pInt, (void *)&variavel.valor.Int, sizeof(variavel.valor.Int));
+            break;
+        case T_DOUBLE:
+            pDouble  = (double *)pArray->area;
+            pDouble += posicao;
+            memcpy((void *)pDouble, (void *)&variavel.valor.Double, sizeof(variavel.valor.Double));
+            break;
+        case T_REF:
+            pObjRef  = (ST_tpObjectHeap *)pArray->area;
+            pObjRef += posicao;
+            memcpy((void *)pObjRef, (void *)&variavel.valor.obj_ref, sizeof(variavel.valor.obj_ref));
+            break;
+        case T_AREF:
+            pArrayRef  = (ST_tpArrayHeap *)pArray->area;
+            pArrayRef += posicao;
+            memcpy((void *)pArrayRef, (void *)&variavel.valor.array_ref, sizeof(variavel.valor.array_ref));
+            break;
+    }
+}
+
+ST_tpVariable VM_recuperarValorArray(ST_tpArrayHeap *pArrayHeap, int posicao){
+   
+    u2 *pChar;
+    int *pInt;
+    float *pFloat;
+    double *pDouble;
+    __int64_t *pLong;
+    short int *pShort;
+    char *pByte, *pBoolean;
+    ST_tpObjectHeap *pObjRef;
+    ST_tpArrayHeap *pArrayRef;
+    ST_tpVariable var;
+    
+    var.tipo = 0x99; // Inicia variavel com valor qualquer
+    
+    switch (pArrayHeap->type) {
+        case T_BYTE:
+            pByte  = (char*)pArrayHeap->area;
+            pByte += posicao;
+            var.tipo = JBYTE;
+            memcpy((void *)&var, (void *)pByte , sizeof(pByte));
+            break;
+        case T_LONG:
+            pLong  = (__int64_t *)pArrayHeap->area;
+            pLong += posicao;
+            var.tipo = JLONG;
+            memcpy((void *)&var, (void *)pLong, sizeof(pLong));
+            break;
+        case T_BOOLEAN:
+            pBoolean  = (char*) pArrayHeap->area;
+            pBoolean += posicao;
+            var.tipo = JBOOL;
+            memcpy((void *)&var, (void *)pBoolean, sizeof(pBoolean));
+            break;
+        case T_CHAR:
+            pChar  = (u2*)pArrayHeap->area;
+            pChar += posicao;
+            var.tipo = JCHAR;
+            memcpy((void *)&var, (void *)pChar, sizeof(pChar));
+            break;
+        case T_SHORT:
+            pShort  = (short int  *)pArrayHeap->area;
+            pShort += posicao;
+            var.tipo = JSHORT;
+            memcpy((void *)&var, (void *)pShort, sizeof(pShort));
+            break;
+        case T_FLOAT:
+            pFloat  = (float *)pArrayHeap->area;
+            pFloat += posicao;
+            var.tipo = JFLOAT;
+            memcpy((void *)&var, (void *)pFloat, sizeof(pFloat));
+            break;
+        case T_INT:
+            pInt  = (int *)pArrayHeap->area;
+            pInt += posicao;
+            memcpy((void *)&var, (void *)pInt, sizeof(pInt));
+            var.tipo = JINT;
+            break;
+        case T_DOUBLE:
+            pDouble  = (double *)pArrayHeap->area;
+            pDouble += posicao;
+            var.tipo = JDOUBLE;
+            memcpy((void *)&var, (void *)pDouble, sizeof(pDouble));
+            break;
+        case T_REF:
+            pObjRef  = (ST_tpObjectHeap *)pArrayHeap->area;
+            pObjRef += posicao;
+            var.tipo = JREF;
+            memcpy((void *)&var, (void *)pObjRef, sizeof(pObjRef));
+            break;
+        case T_AREF:
+            pArrayRef  = (ST_tpArrayHeap *)pArrayHeap->area;
+            pArrayRef += posicao;
+            var.tipo = JAREF;
+            memcpy((void *)&var, (void *)pArrayRef, sizeof(pArrayRef));
+            break;
+    }
+    return var;
+}
 ST_tpJVM *VM_exucutarJVM(int numeroClasses, char *nomeClasses[]){
     int i, flag1, flag2;
 
@@ -297,9 +466,6 @@ ST_tpJVM *VM_exucutarJVM(int numeroClasses, char *nomeClasses[]){
     /* Cria a maquina virtual, a area de metodos, o heap e uma thread*/
     pJVM = VM_criarJVM();
     
-    system("echo $JAVA_HOME");
-    const char * s = getenv("JAVA_HOME");
-    printf("JAVA_HOME: %s", s);
     
     /* Carregando classes na JVM */
     for(i = 0; i < numeroClasses; i++){

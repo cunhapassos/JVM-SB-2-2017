@@ -31,7 +31,7 @@ int main(int argc, const char * argv[]) {
     free(p);
     p = NULL;*/
     
-    char *aux[] = {"/Users/paulopassos/Documents/GitHub/JVM-SB-2-2017/double_aritmetica.class"};
+    char *aux[] = {"/Users/paulopassos/Documents/JVM-SB-2-2017/double_aritmetica.class"};
     ST_tpJVM *pJVM = VM_exucutarJVM(1, aux);
  
     

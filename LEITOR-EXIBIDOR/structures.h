@@ -401,7 +401,7 @@ typedef struct ClassHea{
 
 /**  Estrutura que representa o Heap para objetos */
 typedef struct ObjectHeap{
-    wchar_t *pClasseName;
+    ST_tpClassFile *pClasse;
     struct Variable *field_area;
     ST_tpThread *thread;
     u4 ref_count;
@@ -412,7 +412,7 @@ typedef struct ObjectHeap{
 /**  Estrutura que representa o Heap para array */
 typedef struct ArrayHeap{
     u1 type;
-    wchar_t *pClasseName;
+    ST_tpClassFile *pClasse;
     int length;
     void *area;
     u4 ref_count;

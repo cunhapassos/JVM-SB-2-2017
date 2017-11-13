@@ -42,7 +42,17 @@ ST_tpStackFrame *VM_criarStackFrame(ST_tpStackFrame **pJVMStack, long maxStackSi
 
 ST_tpMethod_info *VM_procurarMetodo(ST_tpClassFile *pClassFile, char *descritorMetodo, char *nomeMetodo);
 
+u1 *VM_retornaNomeSuperClasse(ST_tpClassFile *pClassFile);
+
+u1 *VM_retornarNomeClasse(ST_tpClassFile *pClassFile);
+
 ST_tpObjectHeap *VM_criarObjeto(ST_tpJVM *pJVM, ST_tpClassFile *pClassFile);
+
+ST_tpArrayHeap *VM_criarArray(u1 tipo, wchar_t *nomeClasse, int tamanho);
+
+void VM_armazenarValorArray(ST_tpArrayHeap *pArray, int posicao, ST_tpVariable variavel);
+
+ST_tpVariable VM_recuperarValorArray(ST_tpArrayHeap *pArrayHeap, int posicao);
 
 ST_tpJVM *VM_exucutarJVM(int numeroClasses, char *nomeClasses[]);
 
