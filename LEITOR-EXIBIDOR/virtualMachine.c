@@ -521,7 +521,7 @@ void *VM_armazenarValorField(ST_tpJVM *pJVM, wchar_t *nomeClasse, wchar_t *pFiel
     return pHeap;
 }
 
-void *VM_recuperarValorField(ST_tpJVM *pJVM, wchar_t *nomeClasse, wchar_t *pFieldName, wchar_t *pFieldDescriptor, ST_tpVariable var, ST_tpVariable objRef){
+void *VM_recuperarValorField(ST_tpJVM *pJVM, wchar_t *nomeClasse, wchar_t *pFieldName, wchar_t *pFieldDescriptor, ST_tpVariable *var, ST_tpVariable objRef){
     int i = 0;
     wchar_t *string;
     ST_tpField_info *pField;
@@ -576,9 +576,9 @@ void *VM_recuperarValorField(ST_tpJVM *pJVM, wchar_t *nomeClasse, wchar_t *pFiel
         return NULL;
     }
     pHeap = (ST_tpObjectHeap *)objRef.valor.obj_ref;
-    memcpy(&var, (pHeap->field_area + i), sizeof(pHeap->field_area + i));
+    memcpy(var, (pHeap->field_area + i), sizeof(pHeap->field_area + i));
     
-    return &var;
+    return var;
 }
 
 ST_tpJVM *VM_exucutarJVM(int numeroClasses, char *nomeClasses[]){

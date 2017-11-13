@@ -21,9 +21,10 @@
 #include "instrucoes.h"
 #include "pilhas_listas.h"
 
-void FU_invokevirtual(ST_tpCp_info *pConstantPool, ST_tpThread *thread, u1 *pc){
+void FU_invokevirtual(ST_tpCp_info *pConstantPool, ST_tpThread *thread, u1 *pc, ST_tpJVM *pJVM){
     u1 parametro1, parametro2;
     u2 temp2Byte;
+    ST_tpClassFile *pClassFile;
     ST_tpConstantPool *cpIndx;
     ST_tpCONSTANT_Methodref_info *pMethodref;
     ST_tpCONSTANT_Class_info *pClassRef;
@@ -68,11 +69,17 @@ void FU_invokevirtual(ST_tpCp_info *pConstantPool, ST_tpThread *thread, u1 *pc){
     memcpy(pMethodDescriptor, &(cpIndx->Utf8), sizeof(ST_tpCONSTANT_Utf8_info));
 
     count = FU_resolveMethodo(pMethodName, pMethodDescriptor);
+    count ++;
+
     if(count >= 0) {
-        for(int i = 0; i < count; i++) {
-            //pop da pilha
+        while( count != 0 && thread->pJVMStack->operandStack != NULL) {
+            PL_pushParametro(   &thread->pJVMStack->parameterStack, 
+                                PL_popOperando(&thread->pJVMStack->operandStack));
+            count --;
         }
-        //pop methodo da pilha
+
+        pClassFile = PL_buscarClasse(pJVM, (wchar_t *) pClassName->bytes);
+
 
         //cria stack 
 
@@ -80,7 +87,6 @@ void FU_invokevirtual(ST_tpCp_info *pConstantPool, ST_tpThread *thread, u1 *pc){
     }
     pc++;
 }
-
 
 //TODO resolve method
 int FU_resolveMethodo(ST_tpCONSTANT_Utf8_info *nome, ST_tpCONSTANT_Utf8_info *descricao){
@@ -114,7 +120,7 @@ int FU_resolveMethodo(ST_tpCONSTANT_Utf8_info *nome, ST_tpCONSTANT_Utf8_info *de
 }
 
 void FU_getstatic( ST_tpThread *thread){
-    u1 parametro1, parametro2;
+    /*u1 parametro1, parametro2;
     u2 temp2Byte, nameClasseIndex, nameAndTypeIndex;
     ST_tpVariable var;
     ST_tpConstantPool *cpIndx;
@@ -152,7 +158,8 @@ void FU_getstatic( ST_tpThread *thread){
     //pegarStaticFieldVAlue();
     
     PL_pushOperando(&thread->pJVMStack->operandStack, var);
-
+*/  
+    thread->PC++;thread->PC++;
 }
 void FU_ldc2_w(ST_tpJVM *pJVM, ST_tpClassFile *pClasseFile){
     

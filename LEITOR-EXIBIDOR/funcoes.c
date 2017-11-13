@@ -3550,7 +3550,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpClassFile *pClasseFile) {
 
 		*******************************************************************************************/
 		case 0xb6:
-            FU_invokevirtual(pJVM->methodArea->classFile->constant_pool_table, pJVM->thread, pJVM->thread->PC);
+            FU_invokevirtual(pJVM->methodArea->classFile->constant_pool_table, pJVM->thread, pJVM->thread->PC, pJVM);
 			break;
 
 
