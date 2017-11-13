@@ -24,12 +24,12 @@
 void FU_invokevirtual(ST_tpCp_info *pConstantPool, ST_tpThread *thread, u1 *pc){
     u1 parametro1, parametro2;
     u2 temp2Byte;
-    //ST_tpMethod_info *pMethodo;
     ST_tpConstantPool *cpIndx;
     ST_tpCONSTANT_Methodref_info *pMethodref;
     ST_tpCONSTANT_Class_info *pClassRef;
     ST_tpCONSTANT_Utf8_info *pClassName, *pMethodName, *pMethodDescriptor;
     ST_tpCONSTANT_NameAndType_info *nameTyperef;
+    int count = 0;
     
 
     pc++;
@@ -67,23 +67,50 @@ void FU_invokevirtual(ST_tpCp_info *pConstantPool, ST_tpThread *thread, u1 *pc){
     pMethodDescriptor = (ST_tpCONSTANT_Utf8_info *)malloc(sizeof(ST_tpCONSTANT_Utf8_info));
     memcpy(pMethodDescriptor, &(cpIndx->Utf8), sizeof(ST_tpCONSTANT_Utf8_info));
 
-    
-    if(FU_resolveMethodo(pMethodName, pMethodDescriptor)) {
+    count = FU_resolveMethodo(pMethodName, pMethodDescriptor);
+    if(count >= 0) {
+        for(int i = 0; i < count; i++) {
+            //pop da pilha
+        }
+        //pop methodo da pilha
 
+        //cria stack 
+
+        //tenta criar methodo
     }
-
-    
-    printf("Instrucao inacabada");
     pc++;
-    
-    /// PAREI AQUI
 }
 
 
 //TODO resolve method
 int FU_resolveMethodo(ST_tpCONSTANT_Utf8_info *nome, ST_tpCONSTANT_Utf8_info *descricao){
 
-    return 1;
+    int params = 0, index = -1;
+    char aux;
+
+    do {
+        index ++;
+        aux = descricao->bytes[index];
+
+        switch(aux) {
+            case 'B': case 'C': case 'D': case 'F': case 'I': case 'J': case 'S': case 'Z':
+                params ++;
+            break;
+
+            case 'L' :
+                params ++;
+                do {
+                    index ++;
+                    aux = descricao->bytes[index];
+                } while(aux != ';');
+            break;
+
+            default: break;
+        }
+
+    } while (aux != ')');
+
+    return params;
 }
 
 void FU_getstatic( ST_tpThread *thread){
@@ -125,6 +152,7 @@ void FU_getstatic( ST_tpThread *thread){
     //pegarStaticFieldVAlue();
     
     PL_pushOperando(&thread->pJVMStack->operandStack, var);
+
 }
 void FU_ldc2_w(ST_tpJVM *pJVM, ST_tpClassFile *pClasseFile){
     
@@ -229,6 +257,7 @@ void FU_dstore_n(ST_tpThread *thread, int posicao){
     
     var = PL_popOperando(&thread->pJVMStack->operandStack);
     VM_armazenarVariavel(thread->pJVMStack->localVariables, var, posicao);
+    
 }
 
 void FU_dadd(ST_tpThread *thread){

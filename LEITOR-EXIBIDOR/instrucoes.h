@@ -51,4 +51,8 @@ void FU_dneg(ST_tpThread *thread);
 
 ST_tpVariable FU_dreturn(ST_tpThread *thread);
 
+int FU_resolveMethodo(ST_tpCONSTANT_Utf8_info *nome, ST_tpCONSTANT_Utf8_info *descricao);
+
+int isValidType(char t);
+
 #endif /* instrucoes_h */
