@@ -127,27 +127,30 @@ void FU_getstatic( ST_tpThread *thread){
     PL_pushOperando(&thread->pJVMStack->operandStack, var);
 }
 void FU_ldc2_w(ST_tpJVM *pJVM, ST_tpClassFile *pClasseFile){
-    u1 parametro1, parametro2, tipo;
+    
+    int i;
     u2 temp2Byte;
-    wchar_t *nomeClasse;
-    ST_tpConstantPool *cpIndx;
-    ST_tpVariable *pVar1, *pVar2;
-    ST_tpCONSTANT_Long_info *pLong;
-    ST_tpCONSTANT_String_info *pString;
-    ST_tpCONSTANT_Utf8_info *pUTF8;
-    ST_tpCONSTANT_Double_info *pDouble;
-    ST_tpArrayHeap *pArrayRef;
     ST_tpThread *pThread;
     ST_tpObjectHeap *pObjRef;
+    ST_tpConstantPool *cpIndx;
+    ST_tpArrayHeap *pArrayRef;
+    ST_tpCONSTANT_Utf8_info *pUTF8;
+    ST_tpCONSTANT_Long_info *pLong;
+    u1 parametro1, parametro2, tipo;
+    ST_tpCONSTANT_Double_info *pDouble;
+    ST_tpCONSTANT_String_info *pString;
+    ST_tpVariable pVar, pVar1, pVar2;
+ 
+    wchar_t nomeField[] = L"value";
+    wchar_t descriptorField[] = L"[C";
+    wchar_t nomeClasse[] =  L"java/lang/String";
     
     pThread = pJVM->thread;
-    
-    pVar1 = malloc(sizeof(ST_tpVariable));
-    pVar2 = malloc(sizeof(ST_tpVariable));
     cpIndx = malloc(sizeof(ST_tpConstantPool));
     
     pThread->PC++;
     memcpy(&parametro1, pThread->PC, 1);
+    
     pThread->PC++;
     memcpy(&parametro2, pThread->PC, 1);
     temp2Byte = (parametro1 << 8) + parametro2;
@@ -155,44 +158,63 @@ void FU_ldc2_w(ST_tpJVM *pJVM, ST_tpClassFile *pClasseFile){
 
     if(cpIndx->Long.tag == CONSTANT_Long){
         pLong             = (ST_tpCONSTANT_Long_info *)cpIndx;
-        pVar2->valor.Long = pLong->high_bytes;
-        pVar1->valor.Long = (pVar2->valor.Long << 32) | pLong->low_bytes;
-        pVar1->tipo = JLONG;
-        PL_pushOperando(&pThread->pJVMStack->operandStack, *pVar1);
-        
+        pVar2.valor.Long = pLong->high_bytes;
+        pVar1.valor.Long = (pVar2.valor.Long << 32) | pLong->low_bytes;
+        pVar1.tipo = JLONG;
+        PL_pushOperando(&pThread->pJVMStack->operandStack, pVar1);
     }
+    
     else if (cpIndx->Double.tag == CONSTANT_Double){
         pDouble             = (ST_tpCONSTANT_Double_info *)cpIndx;
         u8 aux = (u8)pDouble->high_bytes;
         aux <<= 32;
         aux |= pDouble->low_bytes;
-        memcpy(&pVar1->valor.Double, &aux, sizeof(int64_t));
-        pVar1->tipo = JDOUBLE;
-        PL_pushOperando(&pThread->pJVMStack->operandStack, *pVar1);
+        memcpy(&pVar1.valor.Double, &aux, sizeof(int64_t));
+        pVar1.tipo = JDOUBLE;
+        PL_pushOperando(&pThread->pJVMStack->operandStack, pVar1);
     }
+    
     else if (cpIndx->Double.tag == CONSTANT_String){
+        
         pString = (ST_tpCONSTANT_String_info *) cpIndx;
-        cpIndx = &(pJVM->methodArea->classFile->constant_pool_table[pString->string_index-1].info);
-        pUTF8 = (ST_tpCONSTANT_Utf8_info *) cpIndx;
-        tipo = T_CHAR;
-        
-        pArrayRef = VM_criarArray(tipo, L"", pUTF8->length);
-        pVar1->tipo = JREF;
-        pVar1->valor.array_ref = pArrayRef;
-        for(int i = 0; i < pUTF8->length; i++){
-            VM_armazenarValorArray(pArrayRef, i, *pVar1);
+        if(pString->StringObject == NULL){
+            cpIndx = &(pJVM->methodArea->classFile->constant_pool_table[pString->string_index-1].info);
+            pUTF8 = (ST_tpCONSTANT_Utf8_info *) cpIndx;
+            tipo = T_CHAR;
+            
+            pArrayRef = VM_criarArray(tipo, L"", pUTF8->length);
+            pVar1.tipo = JREF;
+            pVar1.valor.array_ref = pArrayRef;
+            
+            for(i = 0; i < pUTF8->length; i++){
+                VM_armazenarValorArray(pArrayRef, i, pVar1);
+            }
+            
+            pObjRef = VM_criarObjeto(pJVM, pClasseFile);
+            pVar2.valor.obj_ref = pObjRef;
+            
+            VM_armazenarValorField(pJVM, nomeClasse, nomeField, descriptorField, pVar1, pVar2);
+            
+            pVar.valor.Int = 0;
+            wcscpy(nomeField, L"offset");
+            wcscpy(descriptorField, L"I");
+            VM_armazenarValorField(pJVM, nomeClasse, nomeField, descriptorField, pVar, pVar2);
+            
+            pVar.valor.Int = i;
+            wcscpy(nomeField, L"count");
+            wcscpy(descriptorField, L"I");
+            VM_armazenarValorField(pJVM, nomeClasse, nomeField, descriptorField, pVar, pVar2);
+            
+            
+            pString->StringObject = (ST_tpObjectHeap *) pVar2.valor.obj_ref;
         }
-        pObjRef = VM_criarObjeto(pJVM, pClasseFile);
-        pVar2->valor.obj_ref = pObjRef;
         
-        /// PAREI AQUI ////
-        nomeClasse = (wchar_t *) VM_retornarNomeClasse(pClasseFile);
-        wcscpy(nomeClasse, L"java/lang/String");
-        wcscpy(field_name, L"value");
-        wcscpy(field_descritor,  L"[C");
-        VM_armazenarVAlorField();
+        else{
+            tipo = JREF;
+            pVar2.valor.obj_ref = pString->StringObject;
+        }
+        PL_pushOperando(&pThread->pJVMStack->operandStack, pVar2);
     }
-        
 }
 
 void FU_dload_n(ST_tpThread *thread, int posicao){

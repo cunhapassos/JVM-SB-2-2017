@@ -53,6 +53,6 @@ void PL_inserirClasseTopo(ST_tpJVM *pJvm, ST_tpClassFile *pClasse);
 
 int PL_removerClasseTopo(ST_tpJVM *pJVM);
 
-ST_tpClassFile *PL_buscarClasse(ST_tpJVM *pJVM, char *nomeClasse);
+ST_tpClassFile *PL_buscarClasse(ST_tpJVM *pJVM, wchar_t *nomeClasse);
 
 #endif /* pilhas_listas_h */

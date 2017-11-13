@@ -37,6 +37,8 @@ typedef uint8_t u1;
 typedef uint16_t u2;
 typedef uint32_t u4;
 typedef uint64_t u8;
+
+#define TRUE 1
 /** ******************************************************************************
  *                                FLAGS DE ACESSO
  ** *******************************************************************************/
@@ -154,10 +156,11 @@ typedef struct{
 }ST_tpCONSTANT_Class_info;
 
 /* Representa objetos constantes do tipo String */
-typedef struct{
+
+typedef struct CONSTANT_String_info{
     u1 tag;
     u2 string_index;
-    //GLOBAL_HEAP StringObject;
+    void *StringObject;
 }ST_tpCONSTANT_String_info;
 
 /* Representa um field */
@@ -217,11 +220,12 @@ typedef struct{
 /** ******************************************************************************
 *                                TABELA DE ATRIBUTOS
 ** *******************************************************************************/
-typedef struct{
+typedef struct Attribute_info{
     u2 attribute_name_index;
     u4 attribute_length;
     u1 tag;
     void *info;
+    struct Attribute_info *next;
 }ST_tpAttribute_info;
 
 /** ******************************************************************************
@@ -336,24 +340,25 @@ typedef struct {
 /** ******************************************************************************
 *                                TABELA DE CAMPOS (FIELD)
 ** *******************************************************************************/
-typedef struct{ 
+typedef struct Field_info{
     u2 access_flags;
     u2 name_index;
     u2 descriptor_index;
     u2 attributes_count;
     ST_tpAttribute_info *attributes;
-    //struct field_info *next; Paulo, não entendi o motivo de ter o ponteiro para o próximo Field já que eles estão em sequência na memória.
+    struct Field_info *next;
 }ST_tpField_info; 
 
 /** ******************************************************************************
 *                                TABELA DE METODOS
 ** *******************************************************************************/
-typedef struct{
+typedef struct Method_info{
     u2 access_flags;
     u2 name_index;
     u2 descriptor_index;
     u2 attributes_count;
     ST_tpAttribute_info *attributes;
+    struct Method_info *next;
 }ST_tpMethod_info;
 
 /** ******************************************************************************

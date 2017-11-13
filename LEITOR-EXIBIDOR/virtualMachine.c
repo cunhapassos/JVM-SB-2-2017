@@ -25,6 +25,7 @@
 #include "virtualMachine.h"
 #include "funcoes.h"
 
+
 ST_tpMethodArea *VM_criarAreaMetodo(){
     ST_tpMethodArea *pAreaMetodo;
     
@@ -237,7 +238,7 @@ ST_tpObjectHeap *VM_criarObjeto(ST_tpJVM *pJVM, ST_tpClassFile *pClassFile){
     while(flag == 1 && pAuxClassFile1->super_class != 0 ){
         nome = VM_retornaNomeSuperClasse(pClassFile);
         /* Verifica se a SuperClasse esta carregada */
-        pAuxClassFile2 = PL_buscarClasse(pJVM, (char *)nome);
+        pAuxClassFile2 = PL_buscarClasse(pJVM, (wchar_t *)nome);
         
         /* Se nao estiver carragada, carrega */
         if(pAuxClassFile2 == NULL){
@@ -246,6 +247,9 @@ ST_tpObjectHeap *VM_criarObjeto(ST_tpJVM *pJVM, ST_tpClassFile *pClassFile){
             /* ATENCAO FALTA IMPLEMENTAR !!!!!!!!!!!!!*/
             /* BUSCAR SUPER CLASSE NO PACOTE DO JAVA */
             pAuxClassFile2 = LE_carregarClasse((char *)nome);
+            if(pAuxClassFile2){
+                PL_inserirClasseTopo(pJVM, pAuxClassFile2);
+            }
             /* Insere classe carregada na lista de classes carregadas da JVM */
             if(pAuxClassFile2 != NULL) {
                 PL_inserirClasseTopo(pJVM, pAuxClassFile2);
@@ -376,8 +380,9 @@ void VM_armazenarValorArray(ST_tpArrayHeap *pArray, int posicao, ST_tpVariable v
     }
 }
 
+
 ST_tpVariable VM_recuperarValorArray(ST_tpArrayHeap *pArrayHeap, int posicao){
-   
+    
     u2 *pChar;
     int *pInt;
     float *pFloat;
@@ -455,6 +460,127 @@ ST_tpVariable VM_recuperarValorArray(ST_tpArrayHeap *pArrayHeap, int posicao){
     }
     return var;
 }
+
+void *VM_armazenarValorField(ST_tpJVM *pJVM, wchar_t *nomeClasse, wchar_t *pFieldName, wchar_t *pFieldDescriptor, ST_tpVariable var, ST_tpVariable objRef){
+    int i = 0;
+    wchar_t *string;
+    ST_tpField_info *pField;
+    ST_tpClassFile *pClassFile;
+    ST_tpObjectHeap *pHeap;
+
+
+    if(objRef.valor.obj_ref == 0){
+        return NULL; // Lancar um erro
+    }
+    
+    while (TRUE) {
+        pClassFile = PL_buscarClasse(pJVM, nomeClasse);
+        if(pClassFile == NULL){
+            pClassFile = LE_carregarClasse((char*)nomeClasse);
+        }
+        pField = pClassFile->field_info_table;
+        while (pField != NULL) {
+            string = (wchar_t *)(pClassFile->constant_pool_table[pField->name_index - 1].info.Utf8.bytes);
+            
+            if(wcscmp(string, pFieldName) == 0){
+                i++;
+                pField = pField->next;
+                continue;
+            }
+            
+            string = (wchar_t *)pClassFile->constant_pool_table[pField->descriptor_index-1].info.Utf8.bytes;
+            if(wcscmp(string, pFieldDescriptor) == 0){
+                i++;
+                pField = pField->next;
+                continue;
+            }
+            if((pField->access_flags & ACC_STATIC) == ACC_STATIC){
+                pField = pField->next;
+                continue;
+            }
+            break;
+        }
+        if(NULL == pField){
+            if(pClassFile->super_class == 0){
+                break;
+            }
+            else{
+                //wcscpy(temp_class_name, pClassFile->super_class_name);
+            }
+        }
+        else{
+            break;
+        }
+    }
+    if(pField == NULL){
+        return NULL;
+    }
+    pHeap = (ST_tpObjectHeap *)objRef.valor.obj_ref;
+    memcpy((pHeap->field_area + i), &var, sizeof(var));
+    
+    return pHeap;
+}
+
+void *VM_recuperarValorField(ST_tpJVM *pJVM, wchar_t *nomeClasse, wchar_t *pFieldName, wchar_t *pFieldDescriptor, ST_tpVariable var, ST_tpVariable objRef){
+    int i = 0;
+    wchar_t *string;
+    ST_tpField_info *pField;
+    ST_tpClassFile *pClassFile;
+    ST_tpObjectHeap *pHeap;
+    
+    
+    if(objRef.valor.obj_ref == 0){
+        return NULL; // Lancar um erro
+    }
+    
+    while (TRUE) {
+        pClassFile = PL_buscarClasse(pJVM, nomeClasse);
+        if(pClassFile == NULL){
+            pClassFile = LE_carregarClasse((char *)nomeClasse);
+        }
+        pField = pClassFile->field_info_table;
+        while (pField != NULL) {
+            string = (wchar_t *)(pClassFile->constant_pool_table[pField->name_index - 1].info.Utf8.bytes);
+            
+            if(wcscmp(string, pFieldName) == 0){
+                i++;
+                pField = pField->next;
+                continue;
+            }
+            
+            string = (wchar_t *)pClassFile->constant_pool_table[pField->descriptor_index-1].info.Utf8.bytes;
+            if(wcscmp(string, pFieldDescriptor) == 0){
+                i++;
+                pField = pField->next;
+                continue;
+            }
+            if((pField->access_flags & ACC_STATIC) == ACC_STATIC){
+                pField = pField->next;
+                continue;
+            }
+            break;
+        }
+        if(NULL == pField){
+            if(pClassFile->super_class == 0){
+                break;
+            }
+            else{
+                //wcscpy(temp_class_name, pClassFile->super_class_name);
+            }
+        }
+        else{
+            break;
+        }
+    }
+    if(pField == NULL){
+        return NULL;
+    }
+    pHeap = (ST_tpObjectHeap *)objRef.valor.obj_ref;
+    memcpy(&var, (pHeap->field_area + i), sizeof(pHeap->field_area + i));
+    
+    return &var;
+}
+
 ST_tpJVM *VM_exucutarJVM(int numeroClasses, char *nomeClasses[]){
     int i, flag1, flag2;
 
