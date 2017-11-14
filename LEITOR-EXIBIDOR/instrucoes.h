@@ -28,7 +28,7 @@
 
 
 
-void FU_invokevirtual(ST_tpCp_info *pConstantPool, ST_tpThread *thread, u1 *pc);
+void FU_invokevirtual(ST_tpCp_info *pConstantPool, ST_tpThread *thread, u1 *pc, ST_tpJVM *pJVM);
 void FU_getstatic( ST_tpThread *thread);
 
 void FU_ldc2_w(ST_tpJVM *pJVM, ST_tpClassFile *pClasseFile);

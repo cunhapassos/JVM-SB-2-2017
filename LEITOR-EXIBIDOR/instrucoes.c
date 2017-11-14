@@ -120,8 +120,9 @@ int FU_resolveMethodo(ST_tpCONSTANT_Utf8_info *nome, ST_tpCONSTANT_Utf8_info *de
 }
 
 void FU_getstatic( ST_tpThread *thread){
-    /*u1 parametro1, parametro2;
-    u2 temp2Byte, nameClasseIndex, nameAndTypeIndex;
+    u1 parametro1, parametro2;
+    u2 temp2Byte, index1, index2;
+    wchar_t *nomeClasse, *nomeField, *descritorField;
     ST_tpVariable var;
     ST_tpConstantPool *cpIndx;
     ST_tpCp_info *pCPInfo;
@@ -130,35 +131,34 @@ void FU_getstatic( ST_tpThread *thread){
     
     var.tipo = 0x99; // inicializa variavel com valor arbitrario
     pCPInfo = thread->pJVMStack->cp->constant_pool_table;
+    index1 = pCPInfo[thread->pJVMStack->cp->this_class-1].info.Class.name_index;
+    nomeClasse = (wchar_t *)pCPInfo[index1 - 1].info.Utf8.bytes;
     
     thread->PC++;
-    
     memcpy(&parametro1, thread->PC, 1);
     thread->PC++;
     memcpy(&parametro2, thread->PC, 1);
     temp2Byte = (parametro1 << 8) + parametro2;
     
     cpIndx = &pCPInfo[temp2Byte-1].info;
-    pFieldref = (ST_tpCONSTANT_Fieldref_info *) malloc(sizeof(ST_tpCONSTANT_Fieldref_info));
     
+    pFieldref = (ST_tpCONSTANT_Fieldref_info *) malloc(sizeof(ST_tpCONSTANT_Fieldref_info));
     memcpy(pFieldref, cpIndx, sizeof(ST_tpCONSTANT_Fieldref_info));
     
-    nameClasseIndex = cpIndx->Fieldref.class_index;
-    nameAndTypeIndex = cpIndx->Fieldref.name_and_type_index;
+    index1 = pFieldref->class_index;
+    nomeField = (wchar_t *) pCPInfo[index1 - 1].info.Utf8.bytes;
     
-    memcpy(&pFieldref->class_index, &nameClasseIndex, sizeof(u2));
-    memcpy(&pFieldref->name_and_type_index, &nameAndTypeIndex, sizeof(u2));
+    index2 = pFieldref->name_and_type_index;
+    descritorField = (wchar_t *) pCPInfo[index2 - 1].info.Utf8.bytes;
     
     pNameAndType = (ST_tpCONSTANT_NameAndType_info *)malloc(sizeof(ST_tpCONSTANT_NameAndType_info));
-    cpIndx = &pCPInfo[nameAndTypeIndex-1].info;
     memcpy(pNameAndType, cpIndx, sizeof(ST_tpCONSTANT_NameAndType_info));
-    
-    memcpy(pNameAndType, &cpIndx->NameAndType.name_index, sizeof(u2));
-    memcpy(pNameAndType, &cpIndx->NameAndType.descriptor_index, sizeof(u2));
-    //pegarStaticFieldVAlue();
+
+
+    VM_recuperarValorStaticField();
     
     PL_pushOperando(&thread->pJVMStack->operandStack, var);
-*/  
+ 
     thread->PC++;thread->PC++;
 }
 void FU_ldc2_w(ST_tpJVM *pJVM, ST_tpClassFile *pClasseFile){
