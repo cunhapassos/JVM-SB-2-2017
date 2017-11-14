@@ -27,31 +27,33 @@
 #include "virtualMachine.h"
 
 
-
-void FU_invokevirtual(ST_tpCp_info *pConstantPool, ST_tpThread *thread, u1 *pc, ST_tpJVM *pJVM);
-void FU_getstatic( ST_tpThread *thread);
-
-void FU_ldc2_w(ST_tpJVM *pJVM, ST_tpClassFile *pClasseFile);
-
-void FU_dstore_n(ST_tpThread *thread, int posicao);
-
-void FU_dload_n(ST_tpThread *thread, int posicao);
-
-void FU_dadd(ST_tpThread *thread);
-
-void FU_dsub(ST_tpThread *thread);
-
-void FU_dmul(ST_tpThread *thread);
-
-void FU_ddiv(ST_tpThread *thread);
-
-void FU_drem(ST_tpThread *thread);
-
-void FU_dneg(ST_tpThread *thread);
-
-ST_tpVariable FU_dreturn(ST_tpThread *thread);
-
 int FU_resolveMethodo(ST_tpCONSTANT_Utf8_info *nome, ST_tpCONSTANT_Utf8_info *descricao);
+
+void FU_invokevirtual(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc);
+
+void FU_getstatic(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc);
+
+void FU_ldc2_w(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc);
+
+void FU_dstore_n(ST_tpStackFrame *pFrame, int posicao);
+
+void FU_dload_n(ST_tpStackFrame *pFrame, int posicao);
+
+void FU_dadd(ST_tpStackFrame *pFrame);
+
+void FU_dsub(ST_tpStackFrame *pFrame);
+
+void FU_dmul(ST_tpStackFrame *pFrame);
+
+void FU_ddiv(ST_tpStackFrame *pFrame);
+
+void FU_drem(ST_tpStackFrame *pFrame);
+
+void FU_dneg(ST_tpStackFrame *pFrame);
+
+ST_tpVariable FU_dreturn(ST_tpStackFrame *pFrame );
+
+
 
 int isValidType(char t);
 

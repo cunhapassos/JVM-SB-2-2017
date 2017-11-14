@@ -487,11 +487,12 @@ typedef struct OperandStack{
 }ST_tpOperandStack;
 
 /**  Estrutura que representa um Frame */
-typedef struct {
+typedef struct StackFrame{
     ST_tpParameterStack *parameterStack;
     ST_tpOperandStack   *operandStack;
     ST_tpVariable *localVariables;
     ST_tpClassFile *cp;
+    struct StackFrame *next;
     /* ReferenceConstantPoll */
 }ST_tpStackFrame;
 

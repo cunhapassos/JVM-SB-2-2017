@@ -15,7 +15,7 @@
 *	Para ler algum argumento do code incremente o PC usando 
 	thread->PC ++;
 */
-void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpClassFile *pClasseFile) {
+void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame) {
 	u1 opcode = *(pJVM->thread->PC);
 	printf("%d = x%0x\t", opcode, opcode);
 
@@ -417,7 +417,9 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpClassFile *pClasseFile) {
 			
 		*******************************************************************************************/
 		case 0x14:
-           FU_ldc2_w(pJVM, pClasseFile);
+            FU_ldc2_w(pJVM, pFrame, &pJVM->thread->PC);
+            
+            //FU_ldc2_w(pJVM, pFrame, &opcode);
 			break;
 
 
@@ -759,7 +761,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpClassFile *pClasseFile) {
 
 		*******************************************************************************************/
 		case 0x26:
-            FU_dload_n(pJVM->thread, 0);
+            FU_dload_n(pFrame, 0);
 			break;
 
 
@@ -777,7 +779,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpClassFile *pClasseFile) {
 
 		*******************************************************************************************/
 		case 0x27:
-            FU_dload_n(pJVM->thread, 1);
+            FU_dload_n(pFrame, 1);
 			break;
 
 
@@ -795,7 +797,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpClassFile *pClasseFile) {
 
 		*******************************************************************************************/
 		case 0x28:
-            FU_dload_n(pJVM->thread, 2);
+            FU_dload_n(pFrame, 2);
 			break;
 
 
@@ -813,7 +815,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpClassFile *pClasseFile) {
 
 		*******************************************************************************************/
 		case 0x29:
-            FU_dload_n(pJVM->thread, 3);
+            FU_dload_n(pFrame, 3);
 			break;
 
 
@@ -1399,7 +1401,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpClassFile *pClasseFile) {
 
 		*******************************************************************************************/
 		case 0x47:
-            FU_dstore_n(pJVM->thread, 0);
+            FU_dstore_n(pFrame, 0);
 			break;
 
 
@@ -1417,7 +1419,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpClassFile *pClasseFile) {
 
 		*******************************************************************************************/
 		case 0x48:
-            FU_dstore_n(pJVM->thread, 1);
+            FU_dstore_n(pFrame, 1);
 			break;
 
 
@@ -1435,7 +1437,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpClassFile *pClasseFile) {
 
 		*******************************************************************************************/
 		case 0x49:
-            FU_dstore_n(pJVM->thread, 2);
+            FU_dstore_n(pFrame, 2);
 			break;
 
 
@@ -1453,7 +1455,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpClassFile *pClasseFile) {
 
 		*******************************************************************************************/
 		case 0x4a:
-            FU_dstore_n(pJVM->thread, 3);
+            FU_dstore_n(pFrame, 3);
 			break;
 
 
@@ -1947,7 +1949,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpClassFile *pClasseFile) {
 
 		*******************************************************************************************/
 		case 0x63:
-            FU_dadd(pJVM->thread);
+            FU_dadd(pFrame);
 			break;
 
 
@@ -2022,7 +2024,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpClassFile *pClasseFile) {
 
 		*******************************************************************************************/
 		case 0x67:
-            FU_dsub(pJVM->thread);
+            FU_dsub(pFrame);
 			break;
 
 
@@ -2098,7 +2100,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpClassFile *pClasseFile) {
 
 		*******************************************************************************************/
 		case 0x6b:
-            FU_dmul(pJVM->thread);
+            FU_dmul(pFrame);
 			break;
 
 
@@ -2176,7 +2178,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpClassFile *pClasseFile) {
 
 		*******************************************************************************************/
 		case 0x6f:
-            FU_ddiv(pJVM->thread);
+            FU_ddiv(pFrame);
 			break;
 
 
@@ -2253,7 +2255,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpClassFile *pClasseFile) {
 
 		*******************************************************************************************/
 		case 0x73:
-            FU_drem(pJVM->thread);
+            FU_drem(pFrame);
 			break;
 
 
@@ -2328,7 +2330,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpClassFile *pClasseFile) {
 
 		*******************************************************************************************/
 		case 0x77:
-            FU_dneg(pJVM->thread);
+            FU_dneg(pFrame);
 			break;
 
 
@@ -3399,7 +3401,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpClassFile *pClasseFile) {
 
 		*******************************************************************************************/
 		case 0xaf:
-            FU_dreturn(pJVM->thread);
+            FU_dreturn(pFrame);
 			break;
 
 
@@ -3461,7 +3463,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpClassFile *pClasseFile) {
 
 		*******************************************************************************************/
 		case 0xb2:
-            FU_getstatic(pJVM->thread);
+            FU_getstatic(pJVM, pFrame, &pJVM->thread->PC);
 			break;
 
 
@@ -3550,7 +3552,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpClassFile *pClasseFile) {
 
 		*******************************************************************************************/
 		case 0xb6:
-            FU_invokevirtual(pJVM->methodArea->classFile->constant_pool_table, pJVM->thread, pJVM->thread->PC, pJVM);
+            FU_invokevirtual(pJVM, pFrame, &pJVM->thread->PC);
 			break;
 
 

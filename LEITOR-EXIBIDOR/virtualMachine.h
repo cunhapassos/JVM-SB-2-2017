@@ -38,7 +38,7 @@ void VM_armazenarVariavel(ST_tpVariable *pVariaveisLocais, ST_tpVariable variave
 
 ST_tpVariable VM_recuperarVariavel(ST_tpVariable *pVariaveisLocais, int posicao);
 
-ST_tpStackFrame *VM_criarStackFrame(ST_tpStackFrame **pJVMStack, long maxStackSize, ST_tpObjectHeap *thisClass);
+ST_tpStackFrame *VM_criarStackFrame(ST_tpStackFrame **pJVMStack, ST_tpClassFile *pClasse, ST_tpParameterStack *pilhaParametros, long maxStackSize);
 
 ST_tpMethod_info *VM_procurarMetodo(ST_tpClassFile *pClassFile, char *descritorMetodo, char *nomeMetodo);
 
@@ -62,9 +62,11 @@ void *VM_criarClasse(ST_tpJVM *pJVM, wchar_t *pClassName);
 
 void *VM_armazenarValorStaticField(ST_tpJVM *pJVM, wchar_t *pClassName, wchar_t *pFieldName, wchar_t *pFieldDescritor, ST_tpVariable var);
 
+ST_tpVariable *VM_recuperarValorStaticField(ST_tpJVM *pJVM, wchar_t *pClassName, wchar_t *pFieldName, wchar_t *pFieldDescritor);
+
 ST_tpJVM *VM_exucutarJVM(int numeroClasses, char *nomeClasses[]);
 
-void VM_executarMetodo(ST_tpJVM *pJVM, ST_tpClassFile *pClasse, ST_tpMethod_info *pMetodo, ST_tpObjectHeap *thisClass);
+void VM_executarMetodo(ST_tpJVM *pJVM, ST_tpClassFile *pClasse, ST_tpParameterStack *pilhaParametros, ST_tpMethod_info *pMetodo);
 
 #endif /* virtualMachine_h */
 

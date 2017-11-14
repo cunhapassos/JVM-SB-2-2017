@@ -21,10 +21,11 @@
 #include "instrucoes.h"
 #include "pilhas_listas.h"
 
-void FU_invokevirtual(ST_tpCp_info *pConstantPool, ST_tpThread *thread, u1 *pc, ST_tpJVM *pJVM){
+void FU_invokevirtual(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
     u1 parametro1, parametro2;
     u2 temp2Byte;
     ST_tpClassFile *pClassFile;
+    ST_tpCp_info *pConstantPool;
     ST_tpConstantPool *cpIndx;
     ST_tpCONSTANT_Methodref_info *pMethodref;
     ST_tpCONSTANT_Class_info *pClassRef;
@@ -32,11 +33,11 @@ void FU_invokevirtual(ST_tpCp_info *pConstantPool, ST_tpThread *thread, u1 *pc, 
     ST_tpCONSTANT_NameAndType_info *nameTyperef;
     int count = 0;
     
-
-    pc++;
-    memcpy(&parametro1, pc, 1);
-    pc++;
-    memcpy(&parametro2, pc, 1);
+    pConstantPool = pFrame->cp->constant_pool_table;
+    (*pc)++;
+    memcpy(&parametro1, *pc, 1);
+    (*pc)++;
+    memcpy(&parametro2, *pc, 1);
     
     temp2Byte = (parametro1 << 8) + parametro2;
     cpIndx = &pConstantPool[temp2Byte -1].info;
@@ -67,14 +68,14 @@ void FU_invokevirtual(ST_tpCp_info *pConstantPool, ST_tpThread *thread, u1 *pc, 
     cpIndx = &pConstantPool[temp2Byte-1].info;
     pMethodDescriptor = (ST_tpCONSTANT_Utf8_info *)malloc(sizeof(ST_tpCONSTANT_Utf8_info));
     memcpy(pMethodDescriptor, &(cpIndx->Utf8), sizeof(ST_tpCONSTANT_Utf8_info));
-
+    
     count = FU_resolveMethodo(pMethodName, pMethodDescriptor);
     count ++;
 
     if(count >= 0) {
-        while( count != 0 && thread->pJVMStack->operandStack != NULL) {
-            PL_pushParametro(   &thread->pJVMStack->parameterStack, 
-                                PL_popOperando(&thread->pJVMStack->operandStack));
+        while( count != 0 && pFrame->operandStack != NULL) {
+            PL_pushParametro(   &pFrame->parameterStack,
+                                PL_popOperando(&pFrame->operandStack));
             count --;
         }
 
@@ -85,7 +86,7 @@ void FU_invokevirtual(ST_tpCp_info *pConstantPool, ST_tpThread *thread, u1 *pc, 
 
         //tenta criar methodo
     }
-    pc++;
+    (*pc)++;
 }
 
 //TODO resolve method
@@ -119,25 +120,26 @@ int FU_resolveMethodo(ST_tpCONSTANT_Utf8_info *nome, ST_tpCONSTANT_Utf8_info *de
     return params;
 }
 
-void FU_getstatic( ST_tpThread *thread){
+void FU_getstatic(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
+    
+    ST_tpVariable var;
+    ST_tpCp_info *pCPInfo;
+    ST_tpConstantPool *cpIndx;
     u1 parametro1, parametro2;
     u2 temp2Byte, index1, index2;
-    wchar_t *nomeClasse, *nomeField, *descritorField;
-    ST_tpVariable var;
-    ST_tpConstantPool *cpIndx;
-    ST_tpCp_info *pCPInfo;
     ST_tpCONSTANT_Fieldref_info *pFieldref;
     ST_tpCONSTANT_NameAndType_info *pNameAndType;
+    wchar_t *nomeClasse, *nomeField, *descritorField;
     
     var.tipo = 0x99; // inicializa variavel com valor arbitrario
-    pCPInfo = thread->pJVMStack->cp->constant_pool_table;
-    index1 = pCPInfo[thread->pJVMStack->cp->this_class-1].info.Class.name_index;
+    pCPInfo = pFrame->cp->constant_pool_table;
+    index1 = pCPInfo[pFrame->cp->this_class-1].info.Class.name_index;
     nomeClasse = (wchar_t *)pCPInfo[index1 - 1].info.Utf8.bytes;
     
-    thread->PC++;
-    memcpy(&parametro1, thread->PC, 1);
-    thread->PC++;
-    memcpy(&parametro2, thread->PC, 1);
+    (*pc)++;
+    memcpy(&parametro1, *pc, 1);
+    (*pc)++;
+    memcpy(&parametro2, *pc, 1);
     temp2Byte = (parametro1 << 8) + parametro2;
     
     cpIndx = &pCPInfo[temp2Byte-1].info;
@@ -155,17 +157,17 @@ void FU_getstatic( ST_tpThread *thread){
     memcpy(pNameAndType, cpIndx, sizeof(ST_tpCONSTANT_NameAndType_info));
 
 
-    VM_recuperarValorStaticField();
+    var = *VM_recuperarValorStaticField(pJVM, nomeClasse, nomeField, descritorField);
     
-    PL_pushOperando(&thread->pJVMStack->operandStack, var);
+    PL_pushOperando(&pFrame->operandStack, var);
  
-    thread->PC++;thread->PC++;
+    (*pc)++;
+    (*pc)++;
 }
-void FU_ldc2_w(ST_tpJVM *pJVM, ST_tpClassFile *pClasseFile){
+void FU_ldc2_w(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
     
     int i;
     u2 temp2Byte;
-    ST_tpThread *pThread;
     ST_tpObjectHeap *pObjRef;
     ST_tpConstantPool *cpIndx;
     ST_tpArrayHeap *pArrayRef;
@@ -175,28 +177,23 @@ void FU_ldc2_w(ST_tpJVM *pJVM, ST_tpClassFile *pClasseFile){
     ST_tpCONSTANT_Double_info *pDouble;
     ST_tpCONSTANT_String_info *pString;
     ST_tpVariable pVar, pVar1, pVar2;
- 
-    wchar_t nomeField[] = L"value";
-    wchar_t descriptorField[] = L"[C";
-    wchar_t nomeClasse[] =  L"java/lang/String";
     
-    pThread = pJVM->thread;
     cpIndx = malloc(sizeof(ST_tpConstantPool));
     
-    pThread->PC++;
-    memcpy(&parametro1, pThread->PC, 1);
+    (*pc)++;
+    memcpy(&parametro1, *pc, 1);
     
-    pThread->PC++;
-    memcpy(&parametro2, pThread->PC, 1);
+    (*pc)++;
+    memcpy(&parametro2, *pc, 1);
     temp2Byte = (parametro1 << 8) + parametro2;
-    cpIndx = &(pClasseFile->constant_pool_table[temp2Byte - 1].info);
+    cpIndx = &(pFrame->cp->constant_pool_table[temp2Byte - 1].info);
 
     if(cpIndx->Long.tag == CONSTANT_Long){
         pLong             = (ST_tpCONSTANT_Long_info *)cpIndx;
         pVar2.valor.Long = pLong->high_bytes;
         pVar1.valor.Long = (pVar2.valor.Long << 32) | pLong->low_bytes;
         pVar1.tipo = JLONG;
-        PL_pushOperando(&pThread->pJVMStack->operandStack, pVar1);
+        PL_pushOperando(&pFrame->operandStack, pVar1);
     }
     
     else if (cpIndx->Double.tag == CONSTANT_Double){
@@ -206,14 +203,18 @@ void FU_ldc2_w(ST_tpJVM *pJVM, ST_tpClassFile *pClasseFile){
         aux |= pDouble->low_bytes;
         memcpy(&pVar1.valor.Double, &aux, sizeof(int64_t));
         pVar1.tipo = JDOUBLE;
-        PL_pushOperando(&pThread->pJVMStack->operandStack, pVar1);
+        PL_pushOperando(&pFrame->operandStack, pVar1);
     }
     
     else if (cpIndx->Double.tag == CONSTANT_String){
         
+        wchar_t nomeField[] = L"value";
+        wchar_t descriptorField[] = L"[C";
+        wchar_t nomeClasse[] =  L"java/lang/String";
+        
         pString = (ST_tpCONSTANT_String_info *) cpIndx;
         if(pString->StringObject == NULL){
-            cpIndx = &(pJVM->methodArea->classFile->constant_pool_table[pString->string_index-1].info);
+            cpIndx = &(pFrame->cp->constant_pool_table[pString->string_index-1].info);
             pUTF8 = (ST_tpCONSTANT_Utf8_info *) cpIndx;
             tipo = T_CHAR;
             
@@ -225,7 +226,7 @@ void FU_ldc2_w(ST_tpJVM *pJVM, ST_tpClassFile *pClasseFile){
                 VM_armazenarValorArray(pArrayRef, i, pVar1);
             }
             
-            pObjRef = VM_criarObjeto(pJVM, pClasseFile);
+            pObjRef = VM_criarObjeto(pJVM, pFrame->cp);
             pVar2.valor.obj_ref = pObjRef;
             
             VM_armazenarValorField(pJVM, nomeClasse, nomeField, descriptorField, pVar1, pVar2);
@@ -248,90 +249,90 @@ void FU_ldc2_w(ST_tpJVM *pJVM, ST_tpClassFile *pClasseFile){
             tipo = JREF;
             pVar2.valor.obj_ref = pString->StringObject;
         }
-        PL_pushOperando(&pThread->pJVMStack->operandStack, pVar2);
+        PL_pushOperando(&pFrame->operandStack, pVar2);
     }
 }
 
-void FU_dload_n(ST_tpThread *thread, int posicao){
+void FU_dload_n(ST_tpStackFrame *pFrame, int posicao){
     ST_tpVariable var;
     
-    var = VM_recuperarVariavel(thread->pJVMStack->localVariables, posicao);
-    PL_pushOperando(&thread->pJVMStack->operandStack, var);
+    var = VM_recuperarVariavel(pFrame->localVariables, posicao);
+    PL_pushOperando(&pFrame->operandStack, var);
 }
 
-void FU_dstore_n(ST_tpThread *thread, int posicao){
+void FU_dstore_n(ST_tpStackFrame *pFrame, int posicao){
     ST_tpVariable var;
     
-    var = PL_popOperando(&thread->pJVMStack->operandStack);
-    VM_armazenarVariavel(thread->pJVMStack->localVariables, var, posicao);
+    var = PL_popOperando(&pFrame->operandStack);
+    VM_armazenarVariavel(pFrame->localVariables, var, posicao);
     
 }
 
-void FU_dadd(ST_tpThread *thread){
+void FU_dadd(ST_tpStackFrame *pFrame){
     ST_tpVariable var, var1, var2;
     
-    var1 = PL_popOperando(&thread->pJVMStack->operandStack);
-    var2 = PL_popOperando(&thread->pJVMStack->operandStack);
+    var1 = PL_popOperando(&pFrame->operandStack);
+    var2 = PL_popOperando(&pFrame->operandStack);
     
     var.valor.Double = var1.valor.Double + var2.valor.Double;
     var.tipo = JDOUBLE;
-    PL_pushOperando(&thread->pJVMStack->operandStack, var);
+    PL_pushOperando(&pFrame->operandStack, var);
 }
 
-void FU_dsub(ST_tpThread *thread){
+void FU_dsub(ST_tpStackFrame *pFrame){
     ST_tpVariable var, var1, var2;
     
-    var1 = PL_popOperando(&thread->pJVMStack->operandStack);
-    var2 = PL_popOperando(&thread->pJVMStack->operandStack);
+    var1 = PL_popOperando(&pFrame->operandStack);
+    var2 = PL_popOperando(&pFrame->operandStack);
     
     var.valor.Double = var2.valor.Double - var1.valor.Double;
     var.tipo = JDOUBLE;
-    PL_pushOperando(&thread->pJVMStack->operandStack, var);
+    PL_pushOperando(&pFrame->operandStack, var);
 }
 
-void FU_dmul(ST_tpThread *thread){
+void FU_dmul(ST_tpStackFrame *pFrame){
     ST_tpVariable var, var1, var2;
     
-    var1 = PL_popOperando(&thread->pJVMStack->operandStack);
-    var2 = PL_popOperando(&thread->pJVMStack->operandStack);
+    var1 = PL_popOperando(&pFrame->operandStack);
+    var2 = PL_popOperando(&pFrame->operandStack);
     
     var.valor.Double = var1.valor.Double * var2.valor.Double;
     var.tipo = JDOUBLE;
-    PL_pushOperando(&thread->pJVMStack->operandStack, var);
+    PL_pushOperando(&pFrame->operandStack, var);
 }
 
-void FU_ddiv(ST_tpThread *thread){
+void FU_ddiv(ST_tpStackFrame *pFrame){
     ST_tpVariable var, var1, var2;
     
-    var1 = PL_popOperando(&thread->pJVMStack->operandStack);
-    var2 = PL_popOperando(&thread->pJVMStack->operandStack);
+    var1 = PL_popOperando(&pFrame->operandStack);
+    var2 = PL_popOperando(&pFrame->operandStack);
     
     var.valor.Double = var2.valor.Double / var1.valor.Double;
     var.tipo = JDOUBLE;
-    PL_pushOperando(&thread->pJVMStack->operandStack, var);
+    PL_pushOperando(&pFrame->operandStack, var);
 }
-void FU_drem(ST_tpThread *thread){
+void FU_drem(ST_tpStackFrame *pFrame){
     ST_tpVariable var, var1, var2;
     
-    var1 = PL_popOperando(&thread->pJVMStack->operandStack);
-    var2 = PL_popOperando(&thread->pJVMStack->operandStack);
+    var1 = PL_popOperando(&pFrame->operandStack);
+    var2 = PL_popOperando(&pFrame->operandStack);
     
     var.valor.Double = fmod(var2.valor.Double, var1.valor.Double);
     var.tipo = JDOUBLE;
-    PL_pushOperando(&thread->pJVMStack->operandStack, var);
+    PL_pushOperando(&pFrame->operandStack, var);
 }
-void FU_dneg(ST_tpThread *thread){
+void FU_dneg(ST_tpStackFrame *pFrame){
     ST_tpVariable var;
     
-    var = PL_popOperando(&thread->pJVMStack->operandStack);
+    var = PL_popOperando(&pFrame->operandStack);
     var.valor.Double = -var.valor.Double;
-    PL_pushOperando(&thread->pJVMStack->operandStack, var);
+    PL_pushOperando(&pFrame->operandStack, var);
 }
             
-ST_tpVariable FU_dreturn(ST_tpThread *thread){
+ST_tpVariable FU_dreturn(ST_tpStackFrame *pFrame){
     ST_tpVariable varReturn;
     
-    varReturn = PL_popOperando(&thread->pJVMStack->operandStack); // VERIFICAR SE *pVarReturn TEM * MESMO
+    varReturn = PL_popOperando(&pFrame->operandStack); // VERIFICAR SE *pVarReturn TEM * MESMO
     return varReturn;
 } 
                             
