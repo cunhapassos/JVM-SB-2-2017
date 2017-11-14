@@ -40,7 +40,6 @@ ST_tpVariable VM_recuperarVariavel(ST_tpVariable *pVariaveisLocais, int posicao)
 
 ST_tpStackFrame *VM_criarStackFrame(ST_tpStackFrame **pJVMStack, ST_tpClassFile *pClasse, ST_tpParameterStack *pilhaParametros, long maxStackSize);
 
-ST_tpMethod_info *VM_procurarMetodo(ST_tpClassFile *pClassFile, char *descritorMetodo, char *nomeMetodo);
 
 u1 *VM_retornaNomeSuperClasse(ST_tpClassFile *pClassFile);
 
@@ -66,7 +65,9 @@ ST_tpVariable *VM_recuperarValorStaticField(ST_tpJVM *pJVM, wchar_t *pClassName,
 
 ST_tpJVM *VM_exucutarJVM(int numeroClasses, char *nomeClasses[]);
 
-void VM_executarMetodo(ST_tpJVM *pJVM, ST_tpClassFile *pClasse, ST_tpParameterStack *pilhaParametros, ST_tpMethod_info *pMetodo);
+ST_tpVariable *VM_executarMetodo(ST_tpJVM *pJVM, ST_tpClassFile *pClasse, ST_tpParameterStack *pilhaParametros, ST_tpMethod_info *pMetodo);
+
+ST_tpMethod_info *VM_procurarMetodo(ST_tpClassFile *pClassFile, char *descritorMetodo, char *nomeMetodo);
 
 #endif /* virtualMachine_h */
 

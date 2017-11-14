@@ -51,6 +51,7 @@ typedef uint64_t u8;
 #define ACC_STATIC          0X0008
 #define ACC_PUBLIC_STATIC   0x0009
 #define ACC_FINAL           0X0010
+#define ACC_NATIVE          0X0100
 #define ACC_INTERFACE       0X0200
 #define ACC_ABSTRACT        0X0400
 #define ACC_SYNTHETIC       0x1000

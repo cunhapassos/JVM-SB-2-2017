@@ -15,7 +15,7 @@
 *	Para ler algum argumento do code incremente o PC usando 
 	thread->PC ++;
 */
-void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame) {
+void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable **Retorno) {
 	u1 opcode = *(pJVM->thread->PC);
 	printf("%d = x%0x\t", opcode, opcode);
 
@@ -3573,8 +3573,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame) {
 
 		*******************************************************************************************/
 		case 0xb7:
-			printf("invokespecial \n");
-			pJVM->thread->PC += 2;
+            FU_invokespecial(pJVM, pFrame, &(pJVM->thread->PC), Retorno);
 //////////////////////////////////////////////
 //////////////////////////////////////////////
 			break;

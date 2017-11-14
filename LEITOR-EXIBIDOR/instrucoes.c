@@ -88,7 +88,108 @@ void FU_invokevirtual(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
     }
     (*pc)++;
 }
-
+int FU_invokespecial(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc, ST_tpVariable **Retorno){
+    
+    u2 temp2Byte;
+    int count = 0;
+    ST_tpVariable *pVar1;
+    wchar_t *nomeClasseTemp = NULL;
+    u1 parametro1, parametro2;
+    ST_tpConstantPool *cpIndx;
+    ST_tpClassFile *pClassFile;
+    ST_tpObjectHeap *pTempHeap;
+    ST_tpCp_info *pConstantPool;
+    ST_tpMethod_info *pMetodoInfo;
+    ST_tpCONSTANT_Class_info *pClassRef;
+    ST_tpCONSTANT_Methodref_info *pMethodref;
+    ST_tpCONSTANT_Utf8_info *pMethodName, *pMethodDescriptor;
+    ST_tpCONSTANT_NameAndType_info *nameTyperef;
+    
+    
+    (*pc)++;
+    memcpy(&parametro1, *pc, 1);
+    (*pc)++;
+    memcpy(&parametro2, *pc, 1);
+    temp2Byte = (parametro1 << 8) + parametro2;
+    
+    pConstantPool = pFrame->cp->constant_pool_table;
+    cpIndx = &pConstantPool[temp2Byte -1].info;
+    pMethodref = (ST_tpCONSTANT_Methodref_info *)malloc(sizeof(ST_tpCONSTANT_Methodref_info));
+    memcpy(pMethodref, &(cpIndx->Methodref), sizeof(ST_tpCONSTANT_Methodref_info));
+    
+    temp2Byte = pMethodref->class_index;
+    cpIndx = &pConstantPool[temp2Byte-1].info;
+    pClassRef = (ST_tpCONSTANT_Class_info *)malloc(sizeof(ST_tpCONSTANT_Class_info));
+    memcpy(pClassRef, &(cpIndx->Class), sizeof(ST_tpCONSTANT_Class_info));
+    
+    temp2Byte = pMethodref->name_and_type_index;
+    cpIndx = &pConstantPool[temp2Byte-1].info;
+    nameTyperef = (ST_tpCONSTANT_NameAndType_info *)malloc(sizeof(ST_tpCONSTANT_NameAndType_info));
+    memcpy(nameTyperef, &(cpIndx->Utf8), sizeof(ST_tpCONSTANT_NameAndType_info));
+    
+    temp2Byte = nameTyperef->name_index;
+    cpIndx = &pConstantPool[temp2Byte-1].info;
+    pMethodName = (ST_tpCONSTANT_Utf8_info *)malloc(sizeof(ST_tpCONSTANT_Utf8_info));
+    memcpy(pMethodName, &(cpIndx->Utf8), sizeof(ST_tpCONSTANT_Utf8_info));
+    
+    temp2Byte = nameTyperef->descriptor_index;
+    cpIndx = &pConstantPool[temp2Byte-1].info;
+    pMethodDescriptor = (ST_tpCONSTANT_Utf8_info *)malloc(sizeof(ST_tpCONSTANT_Utf8_info));
+    memcpy(pMethodDescriptor, &(cpIndx->Utf8), sizeof(ST_tpCONSTANT_Utf8_info));
+    
+    count = FU_resolveMethodo(pMethodName, pMethodDescriptor);
+    //count ++;
+    
+    while( count != 0 && pFrame->operandStack != NULL) {
+        PL_pushParametro(&pFrame->parameterStack, PL_popOperando(&pFrame->operandStack));
+        count --;
+    }
+    if(!wcscmp((wchar_t *)pMethodName, L"<init>")){
+        return 1; // Significa um erro
+    }
+    
+    pVar1 = &pFrame->parameterStack->variable;
+    pTempHeap = pVar1->valor.obj_ref;
+    
+    wcscpy(nomeClasseTemp, pTempHeap->classeName);
+    
+    pClassFile = PL_buscarClasse(pJVM, nomeClasseTemp);
+    
+    if(pClassFile != NULL){
+        pMetodoInfo = VM_procurarMetodo(pClassFile, (char *) (pMethodDescriptor->bytes) , (char *) (pMethodName->bytes));
+        
+        if((pMetodoInfo->access_flags & ACC_ABSTRACT) == ACC_ABSTRACT){
+            return 1; // ERRO
+        }
+        if((pMetodoInfo->access_flags & ACC_STATIC) == ACC_STATIC){
+            return 1; // ERRO
+        }
+        if((pMetodoInfo->access_flags & ACC_NATIVE) == ACC_NATIVE){
+            // EXECUTAR METODO NATIVO
+            
+        }
+        else{
+            *Retorno = VM_executarMetodo(pJVM, pClassFile, pFrame->parameterStack, pMetodoInfo);
+        }
+        
+        if((*Retorno)->tipo != JVOID ){
+            PL_pushOperando(&pFrame->operandStack, *(*Retorno));
+        }
+        if ((*Retorno)->tipo == JAREF && (*Retorno)->valor.array_ref != 0) {
+            ((*Retorno)->valor.array_ref)->ref_count --;
+        }
+        if((*Retorno)->tipo == JREF && (*Retorno)->valor.array_ref != 0){
+            ((*Retorno)->valor.array_ref)->ref_count --;
+        }
+        // Ver caseo de excecoes
+        //if()
+    }
+    else{
+        return 1; // ERRO
+    }
+    
+    return 0;
+}
 //TODO resolve method
 int FU_resolveMethodo(ST_tpCONSTANT_Utf8_info *nome, ST_tpCONSTANT_Utf8_info *descricao){
 

@@ -1,4 +1,4 @@
-/** ********************************************************************************
+ /** ********************************************************************************
  *
  *  Universidade de Brasilia - 02/2017
  *    Software Basico - Turma A
@@ -129,14 +129,28 @@ ST_tpStackFrame *VM_criarStackFrame(ST_tpStackFrame **pJVMStack, ST_tpClassFile 
     return pFrame;
 }
 
-void VM_executarMetodo(ST_tpJVM *pJVM, ST_tpClassFile *pClasse, ST_tpParameterStack *pilhaParametros, ST_tpMethod_info *pMetodo){
+ST_tpVariable *VM_executarMetodo(ST_tpJVM *pJVM, ST_tpClassFile *pClasse, ST_tpParameterStack *pilhaParametros, ST_tpMethod_info *pMetodo){
     int i;
     u1* end;
-    u2 nameIndex;
     char *name;
-    ST_tpCode_attribute *pCode;
+    u2 nameIndex;
     ST_tpStackFrame *pFrame;
+    ST_tpVariable *pRetorno;
+    ST_tpCode_attribute *pCode;
     
+    pRetorno = (ST_tpVariable*)malloc(sizeof(ST_tpVariable));
+    pRetorno->tipo = 0;
+    pRetorno->valor.Int = 0;
+    pRetorno->valor.Long = 0;
+    pRetorno->valor.Byte = 0;
+    pRetorno->valor.Char = 0;
+    pRetorno->valor.Short = 0;
+    pRetorno->valor.Float = 0;
+    pRetorno->valor.Double = 0;
+    pRetorno->valor.Boolean = 0;
+    pRetorno->valor.obj_ref = NULL;
+    pRetorno->valor.array_ref = NULL;
+
     for(i = 0; i < pMetodo->attributes_count; i++){
         nameIndex = pMetodo->attributes[i].attribute_name_index-1;
         name = (char *) pClasse->constant_pool_table[nameIndex].info.Utf8.bytes;
@@ -187,7 +201,7 @@ void VM_executarMetodo(ST_tpJVM *pJVM, ST_tpClassFile *pClasse, ST_tpParameterSt
             pJVM->thread->PC = (u1 *)pCode->code;
             end = pJVM->thread->PC + pCode->code_length;
             while(pJVM->thread->PC < end){
-                IT_executaInstrucao(pJVM, pFrame); // VERIFICAR ONDE EXECUTA AS EXCESSOES
+                IT_executaInstrucao(pJVM, pFrame, &pRetorno); // VERIFICAR ONDE EXECUTA AS EXCESSOES
                 pJVM->thread->PC++;
             }
 
@@ -196,6 +210,7 @@ void VM_executarMetodo(ST_tpJVM *pJVM, ST_tpClassFile *pClasse, ST_tpParameterSt
             // VERIFICAR COMO FAZER O RETORNO DA FUNCAO
         }
     }
+    return pRetorno;
 }
 
 ST_tpMethod_info *VM_procurarMetodo(ST_tpClassFile *pClassFile, char *descritorMetodo, char *nomeMetodo) {
@@ -740,7 +755,7 @@ ST_tpVariable  *VM_recuperarValorStaticField(ST_tpJVM *pJVM, wchar_t *pClassName
     ST_tpField_info *pFieldTable = NULL;
     wchar_t *pNameField, *pDescriptorField;
     
-    var->tipo = 0x99;
+    //var->tipo = 0x99;
     
     pNomeClasse = (wchar_t *)malloc(wcslen(pClassName)+2);
     
@@ -821,8 +836,8 @@ ST_tpJVM *VM_exucutarJVM(int numeroClasses, char *nomeClasses[]){
     /* Procurando a primeira classe que tem o main */
     for(pClasse = pJVM->methodArea->classFile; pClasse != NULL; pClasse = pClasse->next){
         
-        //pMetodo = VM_procurarMetodo( pClasse, "(I)V", "<init>");
-        pMetodo = VM_procurarMetodo( pClasse, "([Ljava/lang/String;)V", "main");
+        pMetodo = VM_procurarMetodo( pClasse, "()V", "<init>");
+        //pMetodo = VM_procurarMetodo( pClasse, L"([Ljava/lang/String;)V", L"main");
         if (pMetodo != NULL){
             
             /* Cria Objeto e insere no topo da lista de objeto do Heap */
