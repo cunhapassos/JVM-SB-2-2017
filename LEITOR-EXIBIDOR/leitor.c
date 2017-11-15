@@ -30,8 +30,9 @@
  #include <stdio.h>
  #include <string.h>
  #include "leitor.h"
+ #include "configuracao.h"
+ 
 
- #define PATH "/Users/paulopassos/Documents/GitHub/JVM-SB-2-2017/"
 /**
  *  Descri��o da fun��o:
  *       Le um byte de um arquivo apontado por pArq
@@ -597,7 +598,7 @@ ST_tpAttribute_info *LE_lerAttribute(FILE *pArq, ST_tpCp_info *cp, ST_tpAttribut
      strcat(arq, ".class");
      /* Cria ponteiro para estrutura classFile */
      FILE * pArq = fopen(arq,"rb");
- 	
+     free(arq);
  	/* Verifica se foi possivel abrir o arquivo */
  	if(pArq == NULL){
  		printf("ERRO AO ABRIR O ARQUIVO .CLASS!\n");
