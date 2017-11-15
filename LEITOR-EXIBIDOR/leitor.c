@@ -30,9 +30,8 @@
  #include <stdio.h>
  #include <string.h>
  #include "leitor.h"
-
- #define PATH "/home/alon/Documentos/jvm/JVM-SB-2-2017/"
- //#define PATH "/Users/paulopassos/Documents/GitHub/JVM-SB-2-2017/"
+ #include "configuracao.h"
+ 
 
 /**
  *  Descri��o da fun��o:
@@ -221,6 +220,18 @@ ST_tpField_info *LE_lerFields(FILE *pArq, ST_tpCp_info *cp, u2 fields_count) {
         pFields[i].attributes_count = LE_lerU2(pArq);
         for (j = 0 ; j < pFields[i].attributes_count; j++) {
              LE_lerAttribute(pArq, cp, &(pFields[i].attributes[j]));
+            if((j+1) < pFields[i].attributes_count){
+                (pFields[i].attributes[j]).next = &(pFields[i].attributes[j+1]);
+            }
+            else{
+                (pFields[i].attributes[j]).next = NULL;
+            }
+        }
+        if((i + 1) < fields_count){
+            pFields[i].next = &pFields[i+1];
+        }
+        else{
+            pFields[i].next = NULL;
         }
     }
     return pFields;
@@ -258,6 +269,18 @@ ST_tpMethod_info *LE_lerMethods(FILE *pArq, ST_tpCp_info *cp, u2 methods_count) 
          
          for(j = 0; j < pMethods[i].attributes_count; j++){
              LE_lerAttribute(pArq, cp, &(pMethods[i].attributes[j]));
+             if((j+1) < pMethods[i].attributes_count){
+                 (pMethods[i].attributes[j]).next = &(pMethods[i].attributes[j+1]);
+             }
+             else{
+                 (pMethods[i].attributes[j]).next = NULL;
+             }
+         }
+         if((i+1) < methods_count){
+             pMethods[i].next = &pMethods[i+1];
+         }
+         else{
+             pMethods[i].next = NULL;
          }
              
         //printf("%02d\n", pI->attributes_count);
@@ -353,6 +376,12 @@ ST_tpCode_attribute *LE_lerCodeAttribute(FILE *pArq, ST_tpCp_info *cp, ST_tpAttr
         pCode->attribute_info = (ST_tpAttribute_info*)malloc(pCode->attributes_count*sizeof(ST_tpAttribute_info));
         for (i = 0; i < pCode->attributes_count; i++) {
             LE_lerAttribute(pArq, cp, &(pCode->attribute_info[i]));
+            if((i+1) < pCode->attributes_count){
+                (pCode->attribute_info[i]).next = &(pCode->attribute_info[i+1]);
+            }
+            else{
+                (pCode->attribute_info[i]).next = NULL;
+            }
         }
     }
     return pCode;
@@ -558,7 +587,7 @@ ST_tpAttribute_info *LE_lerAttribute(FILE *pArq, ST_tpCp_info *cp, ST_tpAttribut
  */
  ST_tpClassFile *LE_carregarClasse(char *nomeArquivo){
  	
-     char arq[255];
+     char *arq;
      u2 index;
      int tamanho;
      ST_tpClassFile *arqPontoClass = NULL;
@@ -569,7 +598,7 @@ ST_tpAttribute_info *LE_lerAttribute(FILE *pArq, ST_tpCp_info *cp, ST_tpAttribut
      printf("\n%s\n", arq);
      /* Cria ponteiro para estrutura classFile */
      FILE * pArq = fopen(arq,"rb");
- 	
+     free(arq);
  	/* Verifica se foi possivel abrir o arquivo */
  	if(pArq == NULL){
  		printf("ERRO AO ABRIR O ARQUIVO .CLASS!\n");
@@ -611,6 +640,12 @@ ST_tpAttribute_info *LE_lerAttribute(FILE *pArq, ST_tpCp_info *cp, ST_tpAttribut
     arqPontoClass->attribute_info_table = malloc((arqPontoClass->attributes_count) * sizeof(ST_tpAttribute_info));
      for(int j = 0; j < arqPontoClass->attributes_count; j++){
          LE_lerAttribute(pArq, arqPontoClass->constant_pool_table, &(arqPontoClass->attribute_info_table[j]));
+         if((j+1) < arqPontoClass->attributes_count){
+             (arqPontoClass->attribute_info_table[j]).next = &arqPontoClass->attribute_info_table[j+1];
+         }
+         else{
+             (arqPontoClass->attribute_info_table[j]).next = NULL;
+         }
      }
      
      index   = arqPontoClass->constant_pool_table[arqPontoClass->this_class - 1].info.Class.name_index;
