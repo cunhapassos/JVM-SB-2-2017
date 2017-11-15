@@ -667,8 +667,8 @@ void *VM_criarClasse(ST_tpJVM *pJVM, char *pClassName){
                 return NULL;
             }
             else{
-                PL_inserirClasseTopo(pJVM, pClassFile1);
-                VM_criarClasse(pJVM, pClassFile1->nomeClasse);
+                PL_inserirClasseTopo(pJVM, pClassFile2);
+                VM_criarClasse(pJVM, pClassFile2->nomeClasse);
             }
         }
         pClassFile1 = pClassFile2;
