@@ -79,7 +79,7 @@ void FU_invokevirtual(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
             count --;
         }
 
-        pClassFile = PL_buscarClasse(pJVM, (wchar_t *) pClassName->bytes);
+        pClassFile = PL_buscarClasse(pJVM, (char *) pClassName->bytes);
 
 
         //cria stack 
@@ -93,7 +93,7 @@ int FU_invokespecial(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc, ST_tpVari
     u2 temp2Byte;
     int count = 0;
     ST_tpVariable *pVar1;
-    wchar_t *nomeClasseTemp = NULL;
+    char *nomeClasseTemp = NULL;
     u1 parametro1, parametro2;
     ST_tpConstantPool *cpIndx;
     ST_tpClassFile *pClassFile;
@@ -144,14 +144,14 @@ int FU_invokespecial(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc, ST_tpVari
         PL_pushParametro(&pFrame->parameterStack, PL_popOperando(&pFrame->operandStack));
         count --;
     }
-    if(!wcscmp((wchar_t *)pMethodName, L"<init>")){
+    if(!strcmp((const char *)pMethodName, "<init>")){
         return 1; // Significa um erro
     }
     
     pVar1 = &pFrame->parameterStack->variable;
     pTempHeap = pVar1->valor.obj_ref;
     
-    wcscpy(nomeClasseTemp, pTempHeap->classeName);
+    strcpy(nomeClasseTemp, pTempHeap->classeName);
     
     pClassFile = PL_buscarClasse(pJVM, nomeClasseTemp);
     
@@ -229,14 +229,11 @@ void FU_getstatic(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
     u1 parametro1, parametro2;
     u2 temp2Byte, index1, index2;
     ST_tpCONSTANT_Fieldref_info *pFieldref;
-    ST_tpCONSTANT_NameAndType_info *pNameAndType;
-    wchar_t *nomeClasse, *nomeField, *descritorField;
+    char *nomeClasse, *nomeField, *descritorField;
     
     var.tipo = 0x99; // inicializa variavel com valor arbitrario
     pCPInfo = pFrame->cp->constant_pool_table;
-    index1 = pCPInfo[pFrame->cp->this_class-1].info.Class.name_index;
-    nomeClasse = (wchar_t *)pCPInfo[index1 - 1].info.Utf8.bytes;
-    
+
     (*pc)++;
     memcpy(&parametro1, *pc, 1);
     (*pc)++;
@@ -245,25 +242,24 @@ void FU_getstatic(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
     
     cpIndx = &pCPInfo[temp2Byte-1].info;
     
-    pFieldref = (ST_tpCONSTANT_Fieldref_info *) malloc(sizeof(ST_tpCONSTANT_Fieldref_info));
+    pFieldref   = (ST_tpCONSTANT_Fieldref_info *) malloc(sizeof(ST_tpCONSTANT_Fieldref_info));
     memcpy(pFieldref, cpIndx, sizeof(ST_tpCONSTANT_Fieldref_info));
     
-    index1 = pFieldref->class_index;
-    nomeField = (wchar_t *) pCPInfo[index1 - 1].info.Utf8.bytes;
+    index1      = pFieldref->class_index;
+    index2      = pCPInfo[index1 - 1].info.Class.name_index;
+    nomeClasse  = (char *)pCPInfo[index2 - 1].info.Utf8.bytes;
     
-    index2 = pFieldref->name_and_type_index;
-    descritorField = (wchar_t *) pCPInfo[index2 - 1].info.Utf8.bytes;
+    index1 = pFieldref->name_and_type_index;
+    index2 = pCPInfo[index1 - 1].info.NameAndType.name_index;
+    nomeField = (char *) pCPInfo[index2 - 1].info.Utf8.bytes;
+   
+    index2 = pCPInfo[index1 - 1].info.NameAndType.descriptor_index;
+    descritorField = (char *) pCPInfo[index2 - 1].info.Utf8.bytes;
     
-    pNameAndType = (ST_tpCONSTANT_NameAndType_info *)malloc(sizeof(ST_tpCONSTANT_NameAndType_info));
-    memcpy(pNameAndType, cpIndx, sizeof(ST_tpCONSTANT_NameAndType_info));
-
-
     var = *VM_recuperarValorStaticField(pJVM, nomeClasse, nomeField, descritorField);
     
     PL_pushOperando(&pFrame->operandStack, var);
- 
-    (*pc)++;
-    (*pc)++;
+
 }
 void FU_ldc2_w(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
     
@@ -309,9 +305,9 @@ void FU_ldc2_w(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
     
     else if (cpIndx->Double.tag == CONSTANT_String){
         
-        wchar_t nomeField[] = L"value";
-        wchar_t descriptorField[] = L"[C";
-        wchar_t nomeClasse[] =  L"java/lang/String";
+        char nomeField[] = "value";
+        char descriptorField[] = "[C";
+        char nomeClasse[] =  "java/lang/String";
         
         pString = (ST_tpCONSTANT_String_info *) cpIndx;
         if(pString->StringObject == NULL){
@@ -319,7 +315,7 @@ void FU_ldc2_w(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
             pUTF8 = (ST_tpCONSTANT_Utf8_info *) cpIndx;
             tipo = T_CHAR;
             
-            pArrayRef = VM_criarArray(tipo, L"", pUTF8->length);
+            pArrayRef = VM_criarArray(tipo, "", pUTF8->length);
             pVar1.tipo = JREF;
             pVar1.valor.array_ref = pArrayRef;
             
@@ -333,13 +329,13 @@ void FU_ldc2_w(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
             VM_armazenarValorField(pJVM, nomeClasse, nomeField, descriptorField, pVar1, pVar2);
             
             pVar.valor.Int = 0;
-            wcscpy(nomeField, L"offset");
-            wcscpy(descriptorField, L"I");
+            strcpy(nomeField, "offset");
+            strcpy(descriptorField, "I");
             VM_armazenarValorField(pJVM, nomeClasse, nomeField, descriptorField, pVar, pVar2);
             
             pVar.valor.Int = i;
-            wcscpy(nomeField, L"count");
-            wcscpy(descriptorField, L"I");
+            strcpy(nomeField, "count");
+            strcpy(descriptorField, "I");
             VM_armazenarValorField(pJVM, nomeClasse, nomeField, descriptorField, pVar, pVar2);
             
             

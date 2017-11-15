@@ -382,9 +382,9 @@ typedef struct ClassFile{
     ST_tpMethod_info *method_info_table; // Tabela de Metodos
     u2    attributes_count;              // Numero de estruturas attributes_info na tabela Atributos
     ST_tpAttribute_info *attribute_info_table; // Tabela de Attributos
-    wchar_t *nomeCompletoClasse;
-    wchar_t *nomeClasse;
-    wchar_t *nomeSuperClasse;
+    char *nomeCompletoClasse;
+    char *nomeClasse;
+    char *nomeSuperClasse;
     //u2 code_index;
     //u2 main_name_index;
     //u2 start_method_index;
@@ -403,14 +403,14 @@ typedef struct thread ST_tpThread;
 
 /**  Estrutura que representa o Heap de classes */
 typedef struct ClassHeap{
-    wchar_t *pClasseName;
+    char *pClasseName;
     struct Variable *field_area;
     struct ClassHeap *next;
 }ST_tpClassHeap;
 
 /**  Estrutura que representa o Heap para objetos */
 typedef struct ObjectHeap{
-    wchar_t *classeName;
+    char *classeName;
     struct Variable *field_area;
     ST_tpThread *thread;
     u4 ref_count;

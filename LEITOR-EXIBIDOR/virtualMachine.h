@@ -47,21 +47,21 @@ u1 *VM_retornarNomeClasse(ST_tpClassFile *pClassFile);
 
 ST_tpObjectHeap *VM_criarObjeto(ST_tpJVM *pJVM, ST_tpClassFile *pClassFile);
 
-ST_tpArrayHeap *VM_criarArray(u1 tipo, wchar_t *nomeClasse, int tamanho);
+ST_tpArrayHeap *VM_criarArray(u1 tipo, char *nomeClasse, int tamanho);
 
 void VM_armazenarValorArray(ST_tpArrayHeap *pArray, int posicao, ST_tpVariable variavel);
 
 ST_tpVariable VM_recuperarValorArray(ST_tpArrayHeap *pArrayHeap, int posicao);
 
-void *VM_armazenarValorField(ST_tpJVM *pJVM, wchar_t *nomeClasse, wchar_t *pFieldName, wchar_t *pFieldDescriptor, ST_tpVariable var, ST_tpVariable objRef);
+void *VM_armazenarValorField(ST_tpJVM *pJVM, char *nomeClasse, char *pFieldName, char *pFieldDescriptor, ST_tpVariable var, ST_tpVariable objRef);
 
-void *VM_recuperarValorField(ST_tpJVM *pJVM, wchar_t *nomeClasse, wchar_t *pFieldName, wchar_t *pFieldDescriptor, ST_tpVariable *var, ST_tpVariable objRef);
+void *VM_recuperarValorField(ST_tpJVM *pJVM, char *nomeClasse, char *pFieldName, char *pFieldDescriptor, ST_tpVariable *var, ST_tpVariable objRef);
 
-void *VM_criarClasse(ST_tpJVM *pJVM, wchar_t *pClassName);
+void *VM_criarClasse(ST_tpJVM *pJVM, char *pClassName);
 
-void *VM_armazenarValorStaticField(ST_tpJVM *pJVM, wchar_t *pClassName, wchar_t *pFieldName, wchar_t *pFieldDescritor, ST_tpVariable var);
+void *VM_armazenarValorStaticField(ST_tpJVM *pJVM, char *pClassName, char *pFieldName, char *pFieldDescritor, ST_tpVariable var);
 
-ST_tpVariable *VM_recuperarValorStaticField(ST_tpJVM *pJVM, wchar_t *pClassName, wchar_t *pFieldName, wchar_t *pFieldDescritor);
+ST_tpVariable *VM_recuperarValorStaticField(ST_tpJVM *pJVM, char *pClassName, char *pFieldName, char *pFieldDescritor);
 
 ST_tpJVM *VM_exucutarJVM(int numeroClasses, char *nomeClasses[]);
 

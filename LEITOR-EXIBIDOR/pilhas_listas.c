@@ -228,9 +228,9 @@ int PL_removerClasseTopo(ST_tpJVM *pJVM){
  *  @param nomeClasse   - Nome da classe a ser procurada
  *
  */
-ST_tpClassFile *PL_buscarClasse(ST_tpJVM *pJVM, wchar_t *nomeClasse){
+ST_tpClassFile *PL_buscarClasse(ST_tpJVM *pJVM, char *nomeClasse){
     ST_tpClassFile *pClasse;
-    wchar_t *name;
+    char *name;
     u2 nameIndex;
     
     if(pJVM == NULL) return NULL;
@@ -240,9 +240,9 @@ ST_tpClassFile *PL_buscarClasse(ST_tpJVM *pJVM, wchar_t *nomeClasse){
     for(pClasse = pJVM->methodArea->classFile; pClasse != NULL; pClasse = pClasse->next){
         
         nameIndex = pClasse->constant_pool_table[pClasse->this_class-1].info.Class.name_index-1;
-        name = (wchar_t *) pClasse->constant_pool_table[nameIndex].info.Utf8.bytes;
-        
-        if(wcscmp(name, nomeClasse) == 0) return pClasse;
+        name = (char *) pClasse->constant_pool_table[nameIndex].info.Utf8.bytes;
+        //printf("%s", name);
+        if(strcmp(name, nomeClasse) == 0) return pClasse;
     }
     
     return NULL;

@@ -265,7 +265,7 @@ ST_tpObjectHeap *VM_criarObjeto(ST_tpJVM *pJVM, ST_tpClassFile *pClassFile){
     while(flag == 1 && pAuxClassFile1->super_class != 0 ){
         nome = VM_retornaNomeSuperClasse(pClassFile);
         /* Verifica se a SuperClasse esta carregada */
-        pAuxClassFile2 = PL_buscarClasse(pJVM, (wchar_t *)nome);
+        pAuxClassFile2 = PL_buscarClasse(pJVM, (char *) nome);
         
         /* Se nao estiver carragada, carrega */
         if(pAuxClassFile2 == NULL){
@@ -287,7 +287,7 @@ ST_tpObjectHeap *VM_criarObjeto(ST_tpJVM *pJVM, ST_tpClassFile *pClassFile){
     }
     
     pObjeto->field_area = (ST_tpVariable *)malloc(sizeof(ST_tpVariable) * (maxVariaveis + 1));
-    wcscpy(pObjeto->classeName, pClassFile->nomeCompletoClasse);
+    strcpy(pObjeto->classeName, pClassFile->nomeCompletoClasse);
     pObjeto->thread = pJVM->thread;
     pObjeto->max_no_var = maxVariaveis;
     pObjeto->ref_count = 0;
@@ -303,7 +303,7 @@ ST_tpObjectHeap *VM_criarObjeto(ST_tpJVM *pJVM, ST_tpClassFile *pClassFile){
     
     return pObjeto;
 }
-ST_tpArrayHeap *VM_criarArray(u1 tipo, wchar_t *nomeClasse, int tamanho){
+ST_tpArrayHeap *VM_criarArray(u1 tipo, char *nomeClasse, int tamanho){
     ST_tpArrayHeap *pArray = ( ST_tpArrayHeap *) malloc(sizeof( ST_tpArrayHeap)); // VERIFICAR SE EH PRECISO MULTIPLICAR POR TAMANHO
     
     switch (tipo) {
@@ -492,9 +492,9 @@ ST_tpVariable VM_recuperarValorArray(ST_tpArrayHeap *pArrayHeap, int posicao){
     return var;
 }
 
-void *VM_armazenarValorField(ST_tpJVM *pJVM, wchar_t *nomeClasse, wchar_t *pFieldName, wchar_t *pFieldDescriptor, ST_tpVariable var, ST_tpVariable objRef){
+void *VM_armazenarValorField(ST_tpJVM *pJVM, char *nomeClasse, char *pFieldName, char *pFieldDescriptor, ST_tpVariable var, ST_tpVariable objRef){
     int i = 0;
-    wchar_t *string;
+    char *string;
     ST_tpField_info *pField;
     ST_tpClassFile *pClassFile;
     ST_tpObjectHeap *pHeap;
@@ -517,16 +517,16 @@ void *VM_armazenarValorField(ST_tpJVM *pJVM, wchar_t *nomeClasse, wchar_t *pFiel
         }
         pField = pClassFile->field_info_table;
         while (pField != NULL) {
-            string = (wchar_t *)(pClassFile->constant_pool_table[pField->name_index - 1].info.Utf8.bytes);
+            string = (char *)(pClassFile->constant_pool_table[pField->name_index - 1].info.Utf8.bytes);
             
-            if(wcscmp(string, pFieldName) == 0){
+            if(strcmp(string, pFieldName) == 0){
                 i++;
                 pField = pField->next;
                 continue;
             }
             
-            string = (wchar_t *)pClassFile->constant_pool_table[pField->descriptor_index-1].info.Utf8.bytes;
-            if(wcscmp(string, pFieldDescriptor) == 0){
+            string = (char *)pClassFile->constant_pool_table[pField->descriptor_index-1].info.Utf8.bytes;
+            if(strcmp(string, pFieldDescriptor) == 0){
                 i++;
                 pField = pField->next;
                 continue;
@@ -542,7 +542,7 @@ void *VM_armazenarValorField(ST_tpJVM *pJVM, wchar_t *nomeClasse, wchar_t *pFiel
                 break;
             }
             else{
-                //wcscpy(temp_class_name, pClassFile->super_class_name);
+                //strcpy(temp_class_name, pClassFile->super_class_name);
             }
         }
         else{
@@ -558,9 +558,9 @@ void *VM_armazenarValorField(ST_tpJVM *pJVM, wchar_t *nomeClasse, wchar_t *pFiel
     return pHeap;
 }
 
-void *VM_recuperarValorField(ST_tpJVM *pJVM, wchar_t *nomeClasse, wchar_t *pFieldName, wchar_t *pFieldDescriptor, ST_tpVariable *var, ST_tpVariable objRef){
+void *VM_recuperarValorField(ST_tpJVM *pJVM, char *nomeClasse, char *pFieldName, char *pFieldDescriptor, ST_tpVariable *var, ST_tpVariable objRef){
     int i = 0;
-    wchar_t *string;
+    char *string;
     ST_tpField_info *pField;
     ST_tpClassFile *pClassFile;
     ST_tpObjectHeap *pHeap;
@@ -584,16 +584,16 @@ void *VM_recuperarValorField(ST_tpJVM *pJVM, wchar_t *nomeClasse, wchar_t *pFiel
 
         pField = pClassFile->field_info_table;
         while (pField != NULL) {
-            string = (wchar_t *)(pClassFile->constant_pool_table[pField->name_index - 1].info.Utf8.bytes);
+            string = (char *)(pClassFile->constant_pool_table[pField->name_index - 1].info.Utf8.bytes);
             
-            if(wcscmp(string, pFieldName) == 0){
+            if(strcmp(string, pFieldName) == 0){
                 i++;
                 pField = pField->next;
                 continue;
             }
             
-            string = (wchar_t *)pClassFile->constant_pool_table[pField->descriptor_index-1].info.Utf8.bytes;
-            if(wcscmp(string, pFieldDescriptor) == 0){
+            string = (char *)pClassFile->constant_pool_table[pField->descriptor_index-1].info.Utf8.bytes;
+            if(strcmp(string, pFieldDescriptor) == 0){
                 i++;
                 pField = pField->next;
                 continue;
@@ -609,7 +609,7 @@ void *VM_recuperarValorField(ST_tpJVM *pJVM, wchar_t *nomeClasse, wchar_t *pFiel
                 break;
             }
             else{
-                //wcscpy(temp_class_name, pClassFile->super_class_name);
+                //strcpy(temp_class_name, pClassFile->super_class_name);
             }
         }
         else{
@@ -625,10 +625,10 @@ void *VM_recuperarValorField(ST_tpJVM *pJVM, wchar_t *nomeClasse, wchar_t *pFiel
     return var;
 }
 
-void *VM_criarClasse(ST_tpJVM *pJVM, wchar_t *pClassName){
+void *VM_criarClasse(ST_tpJVM *pJVM, char *pClassName){
     
     int maxStaticVar = 0;
-    wchar_t *pNomeClasse;
+    char *pNomeClasse;
     ST_tpClassHeap *pClassHeap;
     ST_tpField_info *pFieldTable;
     ST_tpClassFile *pClassFile1, *pClassFile2;
@@ -646,9 +646,9 @@ void *VM_criarClasse(ST_tpJVM *pJVM, wchar_t *pClassName){
         if (pClassFile1->super_class == 0) {
             break;
         }
-        pNomeClasse = (wchar_t *)malloc(wcslen(pClassFile1->nomeSuperClasse)+2);
-        wcscpy(pNomeClasse, pClassFile1->nomeSuperClasse);
-        wcscat(pNomeClasse, L".class");
+        pNomeClasse = (char *)malloc(strlen(pClassFile1->nomeSuperClasse)+2);
+        strcpy(pNomeClasse, pClassFile1->nomeSuperClasse);
+        strcat(pNomeClasse, ".class");
         pClassFile2 = PL_buscarClasse(pJVM, pNomeClasse);
         
         if (pClassFile2 == NULL) {
@@ -664,8 +664,8 @@ void *VM_criarClasse(ST_tpJVM *pJVM, wchar_t *pClassName){
         pClassFile1 = pClassFile2;
     }
     pClassHeap = (ST_tpClassHeap *)malloc(sizeof(ST_tpClassHeap));
-    pClassHeap->pClasseName = (wchar_t *)malloc(wcslen(pClassName)+2);
-    wcscpy(pClassHeap->pClasseName, pClassName);
+    pClassHeap->pClasseName = (char *)malloc(strlen(pClassName)+2);
+    strcpy(pClassHeap->pClasseName, pClassName);
     
     pClassHeap->field_area = (ST_tpVariable *)malloc(sizeof(ST_tpVariable) * (maxStaticVar + 1));
     pClassHeap->next = NULL;
@@ -680,17 +680,17 @@ void *VM_criarClasse(ST_tpJVM *pJVM, wchar_t *pClassName){
     return pClassHeap;
 }
 
-void *VM_armazenarValorStaticField(ST_tpJVM *pJVM, wchar_t *pClassName, wchar_t *pFieldName, wchar_t *pFieldDescritor, ST_tpVariable var){
+void *VM_armazenarValorStaticField(ST_tpJVM *pJVM, char *pClassName, char *pFieldName, char *pFieldDescritor, ST_tpVariable var){
     int i = 0;
-    wchar_t *pNomeClasse;
+    char *pNomeClasse;
     ST_tpClassFile *pClassFile1;
     ST_tpClassHeap *pClassHeap;
     ST_tpField_info *pFieldTable = NULL;
-    wchar_t *pNameField, *pDescriptorField;
+    char *pNameField, *pDescriptorField;
     
-    pNomeClasse = (wchar_t *)malloc(wcslen(pClassName)+2);
+    pNomeClasse = (char *)malloc(strlen(pClassName)+2);
     
-    wcscpy(pNomeClasse, pClassName);
+    strcpy(pNomeClasse, pClassName);
     
     while (TRUE) {
         pClassFile1 = PL_buscarClasse(pJVM, pNomeClasse);
@@ -706,14 +706,14 @@ void *VM_armazenarValorStaticField(ST_tpJVM *pJVM, wchar_t *pClassName, wchar_t 
         }
         
         while (pFieldTable != NULL) {
-            pNameField = (wchar_t *) pClassFile1->constant_pool_table[pFieldTable->name_index-1].info.Utf8.bytes;
-            if (wcscmp(pNameField, pFieldName) == 0) {
+            pNameField = (char *) pClassFile1->constant_pool_table[pFieldTable->name_index-1].info.Utf8.bytes;
+            if (strcmp(pNameField, pFieldName) == 0) {
                 if ((pFieldTable->access_flags & ACC_STATIC) == ACC_STATIC) i++;
                 pFieldTable = pFieldTable->next;
                 continue;
             }
-            pDescriptorField = (wchar_t *) pClassFile1->constant_pool_table[pFieldTable->descriptor_index-1].info.Utf8.bytes;
-            if (wcscmp(pDescriptorField, pFieldDescritor)) {
+            pDescriptorField = (char *) pClassFile1->constant_pool_table[pFieldTable->descriptor_index-1].info.Utf8.bytes;
+            if (strcmp(pDescriptorField, pFieldDescritor)) {
                 if ((pFieldTable->access_flags & ACC_STATIC) == ACC_STATIC) i++;
                 pFieldTable = pFieldTable->next;
                 continue;
@@ -731,13 +731,13 @@ void *VM_armazenarValorStaticField(ST_tpJVM *pJVM, wchar_t *pClassName, wchar_t 
             return NULL;
         }
         else{
-            wcscpy(pNomeClasse, pClassFile1->nomeSuperClasse);
+            strcpy(pNomeClasse, pClassFile1->nomeSuperClasse);
         }
     }
     
     pClassHeap = pJVM->heap->classes;
     while (pClassHeap != NULL) {
-        if (!(wcscmp(pClassHeap->pClasseName, pClassName))) break;
+        if (!(strcmp(pClassHeap->pClasseName, pClassName))) break;
         pClassHeap = pClassHeap->next;
     }
     memcpy(pClassHeap->field_area + i, &var, sizeof(var));
@@ -746,23 +746,23 @@ void *VM_armazenarValorStaticField(ST_tpJVM *pJVM, wchar_t *pClassName, wchar_t 
     
 }
 
-ST_tpVariable  *VM_recuperarValorStaticField(ST_tpJVM *pJVM, wchar_t *pClassName, wchar_t *pFieldName, wchar_t *pFieldDescritor){
+ST_tpVariable  *VM_recuperarValorStaticField(ST_tpJVM *pJVM, char *pClassName, char *pFieldName, char *pFieldDescritor){
     int i = 0;
     ST_tpVariable *var = NULL;
-    wchar_t *pNomeClasse;
+    char *pNomeClasse;
     ST_tpClassFile *pClassFile1;
     ST_tpClassHeap *pClassHeap;
     ST_tpField_info *pFieldTable = NULL;
-    wchar_t *pNameField, *pDescriptorField;
+    char *pNameField, *pDescriptorField;
     
     //var->tipo = 0x99;
     
-    pNomeClasse = (wchar_t *)malloc(wcslen(pClassName)+2);
+    pNomeClasse = (char *)malloc(strlen(pClassName)+2);
     
-    wcscpy(pNomeClasse, pClassName);
+    strcpy(pNomeClasse, pClassName);
     
     while (TRUE) {
-        pClassFile1 = PL_buscarClasse(pJVM, pNomeClasse);
+        pClassFile1 = PL_buscarClasse(pJVM, (char *)pNomeClasse);
         if (pClassFile1 == NULL) {
             pClassFile1 = LE_carregarClasse((char *)pNomeClasse);
             if (pClassFile1 == NULL) {
@@ -775,14 +775,14 @@ ST_tpVariable  *VM_recuperarValorStaticField(ST_tpJVM *pJVM, wchar_t *pClassName
         }
         
         while (pFieldTable != NULL) {
-            pNameField = (wchar_t *) pClassFile1->constant_pool_table[pFieldTable->name_index-1].info.Utf8.bytes;
-            if (wcscmp(pNameField, pFieldName) == 0) {
+            pNameField = (char *) pClassFile1->constant_pool_table[pFieldTable->name_index-1].info.Utf8.bytes;
+            if (strcmp(pNameField, pFieldName) == 0) {
                 if ((pFieldTable->access_flags & ACC_STATIC) == ACC_STATIC) i++;
                 pFieldTable = pFieldTable->next;
                 continue;
             }
-            pDescriptorField = (wchar_t *) pClassFile1->constant_pool_table[pFieldTable->descriptor_index-1].info.Utf8.bytes;
-            if (wcscmp(pDescriptorField, pFieldDescritor)) {
+            pDescriptorField = (char *) pClassFile1->constant_pool_table[pFieldTable->descriptor_index-1].info.Utf8.bytes;
+            if (strcmp(pDescriptorField, pFieldDescritor)) {
                 if ((pFieldTable->access_flags & ACC_STATIC) == ACC_STATIC) i++;
                 pFieldTable = pFieldTable->next;
                 continue;
@@ -800,13 +800,13 @@ ST_tpVariable  *VM_recuperarValorStaticField(ST_tpJVM *pJVM, wchar_t *pClassName
             return var;
         }
         else{
-            wcscpy(pNomeClasse, pClassFile1->nomeSuperClasse);
+            strcpy(pNomeClasse, pClassFile1->nomeSuperClasse);
         }
     }
     
     pClassHeap = pJVM->heap->classes;
     while (pClassHeap != NULL) {
-        if (!(wcscmp(pClassHeap->pClasseName, pClassName))) break;
+        if (!(strcmp(pClassHeap->pClasseName, pClassName))) break;
         pClassHeap = pClassHeap->next;
     }
     memcpy(var, pClassHeap->field_area + i, sizeof(ST_tpVariable));
