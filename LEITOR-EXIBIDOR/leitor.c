@@ -586,24 +586,23 @@ ST_tpAttribute_info *LE_lerAttribute(FILE *pArq, ST_tpCp_info *cp, ST_tpAttribut
  *  @return arqPontoClass   - Ponteiro para a a estrutura do .class carregada em memoria
  */
  ST_tpClassFile *LE_carregarClasse(char *nomeArquivo){
- 	
-     char *arq;
-     u2 index;
-     int tamanho;
-     ST_tpClassFile *arqPontoClass = NULL;
-     
-     strcpy(arq, PATH);
-     strcat(arq, nomeArquivo);
-     strcat(arq, ".class");
-     printf("\n%s\n", arq);
-     /* Cria ponteiro para estrutura classFile */
-     FILE * pArq = fopen(arq,"rb");
-     free(arq);
- 	/* Verifica se foi possivel abrir o arquivo */
- 	if(pArq == NULL){
- 		printf("ERRO AO ABRIR O ARQUIVO .CLASS!\n");
- 		return NULL;
-	}
+    
+    char arq[256];
+    u2 index;
+    int tamanho;
+    ST_tpClassFile *arqPontoClass = NULL;
+
+    strcpy(arq, PATH);
+    strcat(arq, nomeArquivo);
+    strcat(arq, ".class");
+    printf("%s\n", arq);
+    /* Cria ponteiro para estrutura classFile */
+    FILE * pArq = fopen(arq,"rb");
+    /* Verifica se foi possivel abrir o arquivo */
+    if(pArq == NULL){
+        printf("ERRO AO ABRIR O ARQUIVO .CLASS!\n");
+        return NULL;
+    }
 	
 	arqPontoClass = (ST_tpClassFile*) malloc(sizeof(ST_tpClassFile));
 	
