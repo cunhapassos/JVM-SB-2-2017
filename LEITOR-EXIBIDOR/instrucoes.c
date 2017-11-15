@@ -464,13 +464,6 @@ void FU_ldc2_w(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
     }
 }
 
-void FU_dload_n(ST_tpStackFrame *pFrame, int posicao){
-    ST_tpVariable var;
-    
-    var = VM_recuperarVariavel(pFrame->localVariables, posicao);
-    PL_pushOperando(&pFrame->operandStack, var);
-}
-
 void FU_dstore_n(ST_tpStackFrame *pFrame, int posicao){
     ST_tpVariable var;
     
@@ -602,5 +595,116 @@ void FU_pushConstDouble(ST_tpStackFrame *pFrame, double cte) {
     
     var.valor.Double = cte,
     var.tipo = JDOUBLE;
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+void FU_iload(ST_tpStackFrame *pFrame, u1 **pc) {
+
+    ST_tpVariable var;
+    u1 parametro1;
+    (*pc)++;
+    memcpy(&parametro1, *pc, 1);
+
+    var = VM_recuperarVariavel(pFrame->localVariables, (int) parametro1);
+    var.tipo = JINT;
+    
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+void FU_lload(ST_tpStackFrame *pFrame, u1 **pc) {
+
+    ST_tpVariable var;
+    u1 parametro1;
+    (*pc)++;
+    memcpy(&parametro1, *pc, 1);
+
+    var = VM_recuperarVariavel(pFrame->localVariables, (int) parametro1);
+    var.tipo = JLONG;
+    
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+void FU_fload(ST_tpStackFrame *pFrame, u1 **pc) {
+
+    ST_tpVariable var;
+    u1 parametro1;
+    (*pc)++;
+    memcpy(&parametro1, *pc, 1);
+
+    var = VM_recuperarVariavel(pFrame->localVariables, (int) parametro1);
+    var.tipo = JFLOAT;
+    
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+
+void FU_dload(ST_tpStackFrame *pFrame, u1 **pc) {
+
+    ST_tpVariable var;
+    u1 parametro1;
+    (*pc)++;
+    memcpy(&parametro1, *pc, 1);
+
+    var = VM_recuperarVariavel(pFrame->localVariables, (int) parametro1);
+    var.tipo = JDOUBLE;
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+void FU_aload(ST_tpStackFrame *pFrame, u1 **pc) {
+
+    ST_tpVariable var;
+    u1 parametro1;
+    (*pc)++;
+    memcpy(&parametro1, *pc, 1);
+
+    var = VM_recuperarVariavel(pFrame->localVariables,  parametro1);
+    
+    var.tipo = JREF;
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+void FU_iload_n(ST_tpStackFrame *pFrame, int index) {
+
+    ST_tpVariable var;
+
+    var = VM_recuperarVariavel(pFrame->localVariables,  index);
+    var.tipo = JINT;
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+void FU_lload_n(ST_tpStackFrame *pFrame, int index) {
+
+    ST_tpVariable var;
+
+    var = VM_recuperarVariavel(pFrame->localVariables,  index);
+    var.tipo = JLONG;
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+
+void FU_fload_n(ST_tpStackFrame *pFrame, int index) {
+
+    ST_tpVariable var;
+
+    var = VM_recuperarVariavel(pFrame->localVariables,  index);
+    var.tipo = JFLOAT;
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+void FU_dload_n(ST_tpStackFrame *pFrame, int index) {
+
+    ST_tpVariable var;
+
+    var = VM_recuperarVariavel(pFrame->localVariables,  index);
+    var.tipo = JDOUBLE;
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+void FU_aload_n(ST_tpStackFrame *pFrame, int index) {
+
+    ST_tpVariable var;
+
+    var = VM_recuperarVariavel(pFrame->localVariables,  index);
+    var.tipo = JREF;
     PL_pushOperando(&pFrame->operandStack, var);
 }

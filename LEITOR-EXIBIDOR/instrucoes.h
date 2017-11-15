@@ -60,6 +60,7 @@ void FU_dneg(ST_tpStackFrame *pFrame);
 ST_tpVariable FU_dreturn(ST_tpStackFrame *pFrame );
 
 void FU_bipush(ST_tpStackFrame *pFrame, u1 **pc);
+
 void FU_pushNull(ST_tpStackFrame *pFrame);
 
 void FU_pushConstInt(ST_tpStackFrame *pFrame, int cte);
@@ -71,5 +72,25 @@ void FU_pushConstLong(ST_tpStackFrame *pFrame, int64_t cte);
 void FU_pushConstDouble(ST_tpStackFrame *pFrame, double cte);
 
 int isValidType(char t);
+
+void FU_iload(ST_tpStackFrame *pFrame, u1 **pc);
+
+void FU_lload(ST_tpStackFrame *pFrame, u1 **pc);
+
+void FU_dload(ST_tpStackFrame *pFrame, u1 **pc);
+
+void FU_fload(ST_tpStackFrame *pFrame, u1 **pc);
+
+void FU_aload(ST_tpStackFrame *pFrame, u1 **pc);
+
+void FU_iload_n(ST_tpStackFrame *pFrame, int index);
+
+void FU_lload_n(ST_tpStackFrame *pFrame, int index);
+
+void FU_fload_n(ST_tpStackFrame *pFrame, int index);
+
+void FU_dload_n(ST_tpStackFrame *pFrame, int index);
+
+void FU_aload_n(ST_tpStackFrame *pFrame, int index);
 
 #endif /* instrucoes_h */
