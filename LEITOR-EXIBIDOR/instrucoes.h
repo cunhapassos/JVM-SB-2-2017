@@ -35,6 +35,10 @@ int FU_invokespecial(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc, ST_tpVari
 
 void FU_getstatic(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc);
 
+void FU_putstatic(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc);
+
+void FU_ldc(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc);
+
 void FU_ldc2_w(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc);
 
 void FU_dstore_n(ST_tpStackFrame *pFrame, int posicao);
@@ -55,7 +59,7 @@ void FU_dneg(ST_tpStackFrame *pFrame);
 
 ST_tpVariable FU_dreturn(ST_tpStackFrame *pFrame );
 
-
+void FU_bipush(ST_tpStackFrame *pFrame, u1 **pc);
 
 int isValidType(char t);
 

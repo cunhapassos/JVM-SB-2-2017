@@ -119,17 +119,25 @@ ST_tpVariable PL_popOperando(ST_tpOperandStack **pPilhaOperandos){
     ST_tpOperandStack *pAux;
     
     // VERIFICAR COMO FAZER QUANDO A PILHA FOR VAZIA
-    //if (pPilhaOperandos == NULL){
+    if (pPilhaOperandos != NULL){
+        var.tipo =  (*pPilhaOperandos)->variable.tipo;
+        var.valor = (*pPilhaOperandos)->variable.valor;
+        pAux =  *pPilhaOperandos;
+        *pPilhaOperandos = (*pPilhaOperandos)->next;
+        
+        free(pAux);
+        pAux = NULL;
+        
+        return var;
+    }
+    else{
+        printf("ERRO, PILHA VAZIA, NAO PODE RETORNAR VARIAVEL!");
+        var.tipo = 0x99;
+        return var;
+    }
     
-    var.tipo =  (*pPilhaOperandos)->variable.tipo;
-    var.valor = (*pPilhaOperandos)->variable.valor;
-    pAux =  *pPilhaOperandos;
-    *pPilhaOperandos = (*pPilhaOperandos)->next;
     
-    free(pAux);
-    pAux = NULL;
-    
-    return var;
+
 }
 
 

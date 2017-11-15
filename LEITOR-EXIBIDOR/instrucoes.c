@@ -261,19 +261,136 @@ void FU_getstatic(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
     PL_pushOperando(&pFrame->operandStack, var);
 
 }
+void FU_putstatic(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
+    
+    ST_tpVariable var1, var2;
+    ST_tpCp_info *pCPInfo;
+    ST_tpConstantPool *cpIndx;
+    u1 parametro1, parametro2;
+    u2 temp2Byte, index1, index2;
+    ST_tpCONSTANT_Fieldref_info *pFieldref;
+    char *nomeClasse, *nomeField, *descritorField;
+    
+    //var.tipo = 0x99; // inicializa variavel com valor arbitrario
+    pCPInfo = pFrame->cp->constant_pool_table;
+    
+    (*pc)++;
+    memcpy(&parametro1, *pc, 1);
+    (*pc)++;
+    memcpy(&parametro2, *pc, 1);
+    temp2Byte = (parametro1 << 8) + parametro2;
+    
+    cpIndx = &pCPInfo[temp2Byte-1].info;
+    
+    pFieldref   = (ST_tpCONSTANT_Fieldref_info *) malloc(sizeof(ST_tpCONSTANT_Fieldref_info));
+    memcpy(pFieldref, cpIndx, sizeof(ST_tpCONSTANT_Fieldref_info));
+    
+    index1      = pFieldref->class_index;
+    index2      = pCPInfo[index1 - 1].info.Class.name_index;
+    nomeClasse  = (char *)pCPInfo[index2 - 1].info.Utf8.bytes;
+    
+    index1 = pFieldref->name_and_type_index;
+    index2 = pCPInfo[index1 - 1].info.NameAndType.name_index;
+    nomeField = (char *) pCPInfo[index2 - 1].info.Utf8.bytes;
+    
+    index2 = pCPInfo[index1 - 1].info.NameAndType.descriptor_index;
+    descritorField = (char *) pCPInfo[index2 - 1].info.Utf8.bytes;
+    
+    
+    var1 = PL_popOperando(&pFrame->operandStack);
+    if(var1.tipo == JBOOL || var1.tipo == JBYTE || var1.tipo == JSHORT){
+        if(var1.tipo == JBOOL) var2.valor.Int = var1.valor.Boolean;
+        if(var1.tipo == JBYTE) var2.valor.Int = var1.valor.Byte;
+        if(var1.tipo == JCHAR) var2.valor.Int = var1.valor.Char;
+        if(var1.tipo == JSHORT) var2.valor.Int = var1.valor.Short;
+        var2.tipo = JINT;
+    }
+    VM_armazenarValorStaticField(pJVM, nomeClasse, nomeField, descritorField, var1);
+}
+void FU_ldc(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
+    int tipo, i;
+    u1 parametro1;
+    ST_tpVariable var, var1, var2;
+    ST_tpConstantPool *cpIndx;
+    ST_tpCONSTANT_Utf8_info *pUTF8;
+    ST_tpCONSTANT_Float_info *pFloat;
+    ST_tpCONSTANT_String_info *pString;
+    ST_tpCONSTANT_Integer_info *pInteger;
+
+    
+    (*pc)++;
+    memcpy(&parametro1, *pc, 1);
+    cpIndx = &(pFrame->cp->constant_pool_table[parametro1 - 1].info);
+    
+    if (cpIndx->Integer.tag == CONSTANT_Integer ) {
+        pInteger = (ST_tpCONSTANT_Integer_info *) cpIndx;
+        var1.tipo = JINT;
+        memcpy((void *)&var1.valor.Int, (void *)&pInteger->bytes, 4);
+        PL_pushOperando(&pFrame->operandStack, var1);
+    }
+    else if (cpIndx->Float.tag == CONSTANT_Float){
+        pFloat = (ST_tpCONSTANT_Float_info *) cpIndx;
+        var1.tipo = JFLOAT;
+        memcpy((void *)&var1.valor.Float, (void *)&pFloat->bytes, 4);
+        PL_pushOperando(&pFrame->operandStack, var1);
+        
+    }
+    else if (cpIndx->String.tag == CONSTANT_String) {
+        
+        char nomeField[] = "value";
+        char descriptorField[] = "[C";
+        char nomeClasse[] =  "java/lang/String";
+        
+        pString = (ST_tpCONSTANT_String_info *) cpIndx;
+        if(pString->StringObject == NULL){
+
+            pUTF8 = (ST_tpCONSTANT_Utf8_info *) &(pFrame->cp->constant_pool_table[pString->string_index-1].info);
+        
+            tipo = T_CHAR;
+            var1.tipo = JAREF;
+        
+            var1.valor.array_ref = VM_criarArray(tipo, "", pUTF8->length);
+        
+            for(i = 0; i < pUTF8->length; i++){
+                VM_armazenarValorArray(var1.valor.array_ref, i, var1);
+            }
+        
+            var2.valor.obj_ref = VM_criarObjeto(pJVM, pFrame->cp);
+            VM_armazenarValorField(pJVM, nomeClasse, nomeField, descriptorField, var1, var2);
+        
+            var.valor.Int = 0;
+            strcpy(nomeField, "offset");
+            strcpy(descriptorField, "I");
+            VM_armazenarValorField(pJVM, nomeClasse, nomeField, descriptorField, var, var2);
+        
+            var.valor.Int = i;
+            strcpy(nomeField, "count");
+            strcpy(descriptorField, "I");
+            VM_armazenarValorField(pJVM, nomeClasse, nomeField, descriptorField, var, var2);
+        
+            pString->StringObject = (ST_tpObjectHeap *) var2.valor.obj_ref;
+        
+        }
+        else{
+            tipo = JREF;
+            var2.valor.obj_ref = pString->StringObject;
+        }
+        PL_pushOperando(&pFrame->operandStack, var2);
+    }
+    
+}
+
 void FU_ldc2_w(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
     
     int i;
     u2 temp2Byte;
-    ST_tpObjectHeap *pObjRef;
     ST_tpConstantPool *cpIndx;
-    ST_tpArrayHeap *pArrayRef;
     ST_tpCONSTANT_Utf8_info *pUTF8;
     ST_tpCONSTANT_Long_info *pLong;
     u1 parametro1, parametro2, tipo;
     ST_tpCONSTANT_Double_info *pDouble;
     ST_tpCONSTANT_String_info *pString;
-    ST_tpVariable pVar, pVar1, pVar2;
+    ST_tpVariable var, var1, var2;
     
     cpIndx = malloc(sizeof(ST_tpConstantPool));
     
@@ -287,10 +404,10 @@ void FU_ldc2_w(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
 
     if(cpIndx->Long.tag == CONSTANT_Long){
         pLong             = (ST_tpCONSTANT_Long_info *)cpIndx;
-        pVar2.valor.Long = pLong->high_bytes;
-        pVar1.valor.Long = (pVar2.valor.Long << 32) | pLong->low_bytes;
-        pVar1.tipo = JLONG;
-        PL_pushOperando(&pFrame->operandStack, pVar1);
+        var2.valor.Long = pLong->high_bytes;
+        var1.valor.Long = (var2.valor.Long << 32) | pLong->low_bytes;
+        var1.tipo = JLONG;
+        PL_pushOperando(&pFrame->operandStack, var1);
     }
     
     else if (cpIndx->Double.tag == CONSTANT_Double){
@@ -298,12 +415,12 @@ void FU_ldc2_w(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
         u8 aux = (u8)pDouble->high_bytes;
         aux <<= 32;
         aux |= pDouble->low_bytes;
-        memcpy(&pVar1.valor.Double, &aux, sizeof(int64_t));
-        pVar1.tipo = JDOUBLE;
-        PL_pushOperando(&pFrame->operandStack, pVar1);
+        memcpy(&var1.valor.Double, &aux, sizeof(int64_t));
+        var1.tipo = JDOUBLE;
+        PL_pushOperando(&pFrame->operandStack, var1);
     }
     
-    else if (cpIndx->Double.tag == CONSTANT_String){
+    else if (cpIndx->String.tag == CONSTANT_String){
         
         char nomeField[] = "value";
         char descriptorField[] = "[C";
@@ -311,42 +428,39 @@ void FU_ldc2_w(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
         
         pString = (ST_tpCONSTANT_String_info *) cpIndx;
         if(pString->StringObject == NULL){
-            cpIndx = &(pFrame->cp->constant_pool_table[pString->string_index-1].info);
-            pUTF8 = (ST_tpCONSTANT_Utf8_info *) cpIndx;
-            tipo = T_CHAR;
+            pUTF8 = (ST_tpCONSTANT_Utf8_info *) &(pFrame->cp->constant_pool_table[pString->string_index-1].info);
             
-            pArrayRef = VM_criarArray(tipo, "", pUTF8->length);
-            pVar1.tipo = JREF;
-            pVar1.valor.array_ref = pArrayRef;
+            tipo = T_CHAR;
+            var1.tipo = JREF;
+            var1.valor.array_ref = VM_criarArray(tipo, "", pUTF8->length);
             
             for(i = 0; i < pUTF8->length; i++){
-                VM_armazenarValorArray(pArrayRef, i, pVar1);
+                VM_armazenarValorArray(var1.valor.array_ref, i, var1);
             }
             
-            pObjRef = VM_criarObjeto(pJVM, pFrame->cp);
-            pVar2.valor.obj_ref = pObjRef;
+            var2.valor.obj_ref  = VM_criarObjeto(pJVM, pFrame->cp);
             
-            VM_armazenarValorField(pJVM, nomeClasse, nomeField, descriptorField, pVar1, pVar2);
+            VM_armazenarValorField(pJVM, nomeClasse, nomeField, descriptorField, var1, var2);
             
-            pVar.valor.Int = 0;
+            var.valor.Int = 0;
             strcpy(nomeField, "offset");
             strcpy(descriptorField, "I");
-            VM_armazenarValorField(pJVM, nomeClasse, nomeField, descriptorField, pVar, pVar2);
+            VM_armazenarValorField(pJVM, nomeClasse, nomeField, descriptorField, var, var2);
             
-            pVar.valor.Int = i;
+            var.valor.Int = i;
             strcpy(nomeField, "count");
             strcpy(descriptorField, "I");
-            VM_armazenarValorField(pJVM, nomeClasse, nomeField, descriptorField, pVar, pVar2);
+            VM_armazenarValorField(pJVM, nomeClasse, nomeField, descriptorField, var, var2);
             
             
-            pString->StringObject = (ST_tpObjectHeap *) pVar2.valor.obj_ref;
+            pString->StringObject = (ST_tpObjectHeap *) var2.valor.obj_ref;
         }
         
         else{
             tipo = JREF;
-            pVar2.valor.obj_ref = pString->StringObject;
+            var2.valor.obj_ref = pString->StringObject;
         }
-        PL_pushOperando(&pFrame->operandStack, pVar2);
+        PL_pushOperando(&pFrame->operandStack, var2);
     }
 }
 
@@ -432,4 +546,13 @@ ST_tpVariable FU_dreturn(ST_tpStackFrame *pFrame){
     varReturn = PL_popOperando(&pFrame->operandStack); // VERIFICAR SE *pVarReturn TEM * MESMO
     return varReturn;
 } 
-                            
+void FU_bipush(ST_tpStackFrame *pFrame, u1 **pc){
+    ST_tpVariable var;
+    
+    (*pc)++;
+    memcpy(&var.valor.Byte, *pc, 1);
+    var.valor.Int = var.valor.Byte;
+    var.tipo = JINT;
+    
+    PL_pushOperando(&pFrame->operandStack, var);
+}

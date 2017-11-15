@@ -337,8 +337,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x10:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+            FU_bipush(pFrame, &pJVM->thread->PC);
 			break;
 
 
@@ -377,8 +376,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 			
 		*******************************************************************************************/
 		case 0x12:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+            FU_ldc(pJVM, pFrame, &pJVM->thread->PC);
 			break;
 
 
@@ -3484,8 +3482,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0xb3:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+            FU_putstatic(pJVM, pFrame, &pJVM->thread->PC);
 			break;
 
 
