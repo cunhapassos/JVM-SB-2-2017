@@ -432,4 +432,51 @@ ST_tpVariable FU_dreturn(ST_tpStackFrame *pFrame){
     varReturn = PL_popOperando(&pFrame->operandStack); // VERIFICAR SE *pVarReturn TEM * MESMO
     return varReturn;
 } 
+
+void FU_pushNull(ST_tpStackFrame *pFrame) {
+
+    ST_tpVariable var;
+    
+    var.valor.obj_ref = 0,
+    var.tipo = JREF;
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+
                             
+void FU_pushConstInt(ST_tpStackFrame *pFrame, int cte) {
+    
+    ST_tpVariable var;
+    
+    var.valor.Int = cte,
+    var.tipo = JINT;
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+void FU_pushConstLong(ST_tpStackFrame *pFrame, int64_t cte) {
+
+    ST_tpVariable var;
+    
+    var.valor.Long = cte,
+    var.tipo = JLONG;
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+void FU_pushConstFloat(ST_tpStackFrame *pFrame, float cte) {
+
+    ST_tpVariable var;
+    
+    var.valor.Float = cte,
+    var.tipo = JFLOAT;
+    PL_pushOperando(&pFrame->operandStack, var);
+
+}
+
+void FU_pushConstDouble(ST_tpStackFrame *pFrame, double cte) {
+
+    ST_tpVariable var;
+    
+    var.valor.Double = cte,
+    var.tipo = JDOUBLE;
+    PL_pushOperando(&pFrame->operandStack, var);
+}

@@ -55,7 +55,15 @@ void FU_dneg(ST_tpStackFrame *pFrame);
 
 ST_tpVariable FU_dreturn(ST_tpStackFrame *pFrame );
 
+void FU_pushNull(ST_tpStackFrame *pFrame);
 
+void FU_pushConstInt(ST_tpStackFrame *pFrame, int cte);
+
+void FU_pushConstFloat(ST_tpStackFrame *pFrame, float cte);
+
+void FU_pushConstLong(ST_tpStackFrame *pFrame, int64_t cte);
+
+void FU_pushConstDouble(ST_tpStackFrame *pFrame, double cte);
 
 int isValidType(char t);
 
