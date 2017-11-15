@@ -276,8 +276,10 @@ ST_tpObjectHeap *VM_criarObjeto(ST_tpJVM *pJVM, ST_tpClassFile *pClassFile){
             pAuxClassFile2 = LE_carregarClasse((char *)nome);
             if(pAuxClassFile2 != NULL){
                 PL_inserirClasseTopo(pJVM, pAuxClassFile2);
+                VM_criarClasse(pJVM, pAuxClassFile2->nomeClasse);
             }
             else{
+                printf("ERRO AO CARREGAR CLASSE");
                 return NULL;
             }
             maxVariaveis += pAuxClassFile2->fields_count;
@@ -509,10 +511,12 @@ void *VM_armazenarValorField(ST_tpJVM *pJVM, char *nomeClasse, char *pFieldName,
         if(pClassFile == NULL){
             pClassFile = LE_carregarClasse((char*)nomeClasse);
             if (pClassFile == NULL) {
+                printf("ERRO AO CARREGAR CLASSE!");
                 return NULL;
             }
             else{
                 PL_inserirClasseTopo(pJVM, pClassFile);
+                VM_criarClasse(pJVM, pClassFile->nomeClasse);
             }
         }
         pField = pClassFile->field_info_table;
@@ -575,10 +579,12 @@ void *VM_recuperarValorField(ST_tpJVM *pJVM, char *nomeClasse, char *pFieldName,
         if(pClassFile == NULL){
             pClassFile = LE_carregarClasse((char *)nomeClasse);
             if (pClassFile == NULL) {
+                printf("ERRO AO CARREGAR CLASSE!");
                 return NULL;
             }
             else{
                 PL_inserirClasseTopo(pJVM, pClassFile);
+                VM_criarClasse(pJVM, pClassFile->nomeClasse);
             }
         }
 
@@ -646,19 +652,23 @@ void *VM_criarClasse(ST_tpJVM *pJVM, char *pClassName){
         if (pClassFile1->super_class == 0) {
             break;
         }
+        
         pNomeClasse = (char *)malloc(strlen(pClassFile1->nomeSuperClasse)+2);
         strcpy(pNomeClasse, pClassFile1->nomeSuperClasse);
-        strcat(pNomeClasse, ".class");
-        pClassFile2 = PL_buscarClasse(pJVM, pNomeClasse);
+        //strcat(pNomeClasse, ".class");
         
+        pClassFile2 = PL_buscarClasse(pJVM, pNomeClasse);
+    
         if (pClassFile2 == NULL) {
             pClassFile2 = LE_carregarClasse((char *)pNomeClasse);
             if (pClassFile2 == NULL) {
                 /* A classe não foi carregada */
+                printf("ERRO AO CARREGAR CLASSE!");
                 return NULL;
             }
             else{
                 PL_inserirClasseTopo(pJVM, pClassFile1);
+                VM_criarClasse(pJVM, pClassFile1->nomeClasse);
             }
         }
         pClassFile1 = pClassFile2;
@@ -697,10 +707,12 @@ void *VM_armazenarValorStaticField(ST_tpJVM *pJVM, char *pClassName, char *pFiel
         if (pClassFile1 == NULL) {
             pClassFile1 = LE_carregarClasse((char *)pNomeClasse);
             if (pClassFile1 == NULL) {
+                printf("ERRO AO CARREGAR CLASSE!");
                 return NULL;
             }
             else{
                 PL_inserirClasseTopo(pJVM, pClassFile1);
+                VM_criarClasse(pJVM, pClassFile1->nomeClasse);
             }
             pFieldTable = pClassFile1->field_info_table;
         }
@@ -770,6 +782,7 @@ ST_tpVariable  *VM_recuperarValorStaticField(ST_tpJVM *pJVM, char *pClassName, c
             }
             else{
                 PL_inserirClasseTopo(pJVM, pClassFile1);
+                VM_criarClasse(pJVM, pClassFile1->nomeClasse);
             }
             pFieldTable = pClassFile1->field_info_table;
         }
@@ -829,8 +842,14 @@ ST_tpJVM *VM_exucutarJVM(int numeroClasses, char *nomeClasses[]){
     /* Carregando classes na JVM */
     for(i = 0; i < numeroClasses; i++){
         ST_tpClassFile *pClasse= LE_carregarClasse(nomeClasses[i]);
-        /* Insere classe carregada na lista de classes carregadas da JVM */
-        PL_inserirClasseTopo(pJVM, pClasse);
+        if(pClasse != NULL){
+            /* Insere classe carregada na lista de classes carregadas da JVM */
+            PL_inserirClasseTopo(pJVM, pClasse);
+            VM_criarClasse(pJVM, pClasse->nomeClasse);
+        }
+        else{
+            printf("ERRO AO CARREGAR CLASSE!");
+        }
     }
     flag1 = 0;
     flag2 = 0;
