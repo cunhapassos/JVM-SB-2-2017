@@ -30,8 +30,14 @@ int main(int argc, const char * argv[]) {
     EX_imprimirClassFile(p);
     free(p);
     p = NULL;*/
+
+    char *aux[] = {"double_aritmetica"};
+
+
+    //const char* s = getenv("ROOT");
+    //printf("PATH :%s\n",(s!=NULL)? s : "getenv returned NULL");
+
     
-    char *aux[] = {"/Users/paulopassos/Documents/JVM-SB-2-2017/double_aritmetica.class"};
     ST_tpJVM *pJVM = VM_exucutarJVM(1, aux);
  
     

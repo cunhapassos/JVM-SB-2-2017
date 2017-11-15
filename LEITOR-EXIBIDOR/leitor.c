@@ -31,6 +31,7 @@
  #include <string.h>
  #include "leitor.h"
 
+ #define PATH "/Users/paulopassos/Documents/GitHub/JVM-SB-2-2017/"
 /**
  *  Descri��o da fun��o:
  *       Le um byte de um arquivo apontado por pArq
@@ -555,10 +556,16 @@ ST_tpAttribute_info *LE_lerAttribute(FILE *pArq, ST_tpCp_info *cp, ST_tpAttribut
  */
  ST_tpClassFile *LE_carregarClasse(char *nomeArquivo){
  	
+     char arq[255];
      u2 index;
      int tamanho;
-     ST_tpClassFile *arqPontoClass = NULL;                 /* Cria ponteiro para estrutura classFile */
-     FILE * pArq = fopen(nomeArquivo,"rb");
+     ST_tpClassFile *arqPontoClass = NULL;
+     
+     strcat(arq, PATH);
+     strcat(arq, nomeArquivo);
+     strcat(arq, ".class");
+     /* Cria ponteiro para estrutura classFile */
+     FILE * pArq = fopen(arq,"rb");
  	
  	/* Verifica se foi possivel abrir o arquivo */
  	if(pArq == NULL){
@@ -608,12 +615,12 @@ ST_tpAttribute_info *LE_lerAttribute(FILE *pArq, ST_tpCp_info *cp, ST_tpAttribut
  
      memcpy(&arqPontoClass->nomeClasse, &(arqPontoClass->constant_pool_table[index - 1].info.Utf8.bytes), tamanho + 1);
      
-     //wprintf(L"%s", arqPontoClass->nomeClasse);
+     wprintf(L"%s", arqPontoClass->nomeClasse);
      
      index   = arqPontoClass->constant_pool_table[arqPontoClass->super_class - 1].info.Class.name_index;
      tamanho = arqPontoClass->constant_pool_table[index - 1].info.Utf8.length;
      memcpy(&arqPontoClass->nomeSuperClasse, &(arqPontoClass->constant_pool_table[index - 1].info.Utf8.bytes), tamanho + 1);
-     //wprintf(L"%s", arqPontoClass->nomeSuperClasse);
+     wprintf(L"%s", arqPontoClass->nomeSuperClasse);
      
      // FALTA ACRESCENTAR NOME COMPLETO DA CLASSE
      

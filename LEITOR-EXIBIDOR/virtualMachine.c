@@ -836,8 +836,8 @@ ST_tpJVM *VM_exucutarJVM(int numeroClasses, char *nomeClasses[]){
     /* Procurando a primeira classe que tem o main */
     for(pClasse = pJVM->methodArea->classFile; pClasse != NULL; pClasse = pClasse->next){
         
-        pMetodo = VM_procurarMetodo( pClasse, "()V", "<init>");
-        //pMetodo = VM_procurarMetodo( pClasse, L"([Ljava/lang/String;)V", L"main");
+        //pMetodo = VM_procurarMetodo( pClasse, "()V", "<init>");
+        pMetodo = VM_procurarMetodo( pClasse, "([Ljava/lang/String;)V", "main");
         if (pMetodo != NULL){
             
             /* Cria Objeto e insere no topo da lista de objeto do Heap */
