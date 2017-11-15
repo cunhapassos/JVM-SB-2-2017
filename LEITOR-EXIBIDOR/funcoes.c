@@ -1037,8 +1037,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 			
 		*******************************************************************************************/
 		case 0x36:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_istore(pFrame, &pJVM->thread->PC);
 			break;
 
 
@@ -1056,8 +1055,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x37:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_lstore(pFrame, &pJVM->thread->PC);
 			break;
 
 
@@ -1075,8 +1073,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x38:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_fstore(pFrame, &pJVM->thread->PC);
 			break;
 
 
@@ -1094,8 +1091,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x39:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_dstore(pFrame, &pJVM->thread->PC);
 			break;
 
 
@@ -1114,8 +1110,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x3a:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_astore(pFrame, &pJVM->thread->PC);
 			break;
 
 

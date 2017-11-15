@@ -708,3 +708,72 @@ void FU_aload_n(ST_tpStackFrame *pFrame, int index) {
     var.tipo = JREF;
     PL_pushOperando(&pFrame->operandStack, var);
 }
+
+void FU_istore(ST_tpStackFrame *pFrame, u1 **pc) {
+    ST_tpVariable var;
+    
+    u1 parametro1;
+    (*pc)++;
+    memcpy(&parametro1, *pc, 1);
+    
+    var = PL_popOperando(&pFrame->operandStack);
+    var.tipo = JINT;
+    VM_armazenarVariavel(pFrame->localVariables, var, parametro1);
+    
+}
+
+
+void FU_fstore(ST_tpStackFrame *pFrame, u1 **pc) {
+    ST_tpVariable var;
+    
+    u1 parametro1;
+    (*pc)++;
+    memcpy(&parametro1, *pc, 1);
+    
+    var = PL_popOperando(&pFrame->operandStack);
+    var.tipo = JFLOAT;
+    VM_armazenarVariavel(pFrame->localVariables, var, parametro1);
+    
+}
+
+
+void FU_lstore(ST_tpStackFrame *pFrame, u1 **pc) {
+    ST_tpVariable var;
+    
+    u1 parametro1;
+    (*pc)++;
+    memcpy(&parametro1, *pc, 1);
+    
+    var = PL_popOperando(&pFrame->operandStack);
+    var.tipo = JLONG;
+    VM_armazenarVariavel(pFrame->localVariables, var, parametro1);
+    
+}
+
+
+void FU_dstore(ST_tpStackFrame *pFrame, u1 **pc) {
+    ST_tpVariable var;
+    
+    u1 parametro1;
+    (*pc)++;
+    memcpy(&parametro1, *pc, 1);
+    
+    var = PL_popOperando(&pFrame->operandStack);
+    var.tipo = JDOUBLE;
+    VM_armazenarVariavel(pFrame->localVariables, var, parametro1);
+    
+}
+
+
+void FU_astore(ST_tpStackFrame *pFrame, u1 **pc) {
+    ST_tpVariable var;
+    
+    u1 parametro1;
+    (*pc)++;
+    memcpy(&parametro1, *pc, 1);
+    
+    var = PL_popOperando(&pFrame->operandStack);
+    var.tipo = JREF;
+    VM_armazenarVariavel(pFrame->localVariables, var, parametro1);
+    
+}
