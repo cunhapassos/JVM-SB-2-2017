@@ -782,7 +782,7 @@ ST_tpVariable  *VM_recuperarValorStaticField(ST_tpJVM *pJVM, char *pClassName, c
                 continue;
             }
             pDescriptorField = (char *) pClassFile1->constant_pool_table[pFieldTable->descriptor_index-1].info.Utf8.bytes;
-            if (strcmp(pDescriptorField, pFieldDescritor)) {
+            if (strcmp(pDescriptorField, pFieldDescritor) == 0) {
                 if ((pFieldTable->access_flags & ACC_STATIC) == ACC_STATIC) i++;
                 pFieldTable = pFieldTable->next;
                 continue;

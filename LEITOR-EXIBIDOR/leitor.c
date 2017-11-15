@@ -31,7 +31,9 @@
  #include <string.h>
  #include "leitor.h"
 
- #define PATH "/Users/paulopassos/Documents/GitHub/JVM-SB-2-2017/"
+ #define PATH "/home/alon/Documentos/jvm/JVM-SB-2-2017/"
+ //#define PATH "/Users/paulopassos/Documents/GitHub/JVM-SB-2-2017/"
+
 /**
  *  Descri��o da fun��o:
  *       Le um byte de um arquivo apontado por pArq
@@ -561,9 +563,10 @@ ST_tpAttribute_info *LE_lerAttribute(FILE *pArq, ST_tpCp_info *cp, ST_tpAttribut
      int tamanho;
      ST_tpClassFile *arqPontoClass = NULL;
      
-     strcat(arq, PATH);
+     strcpy(arq, PATH);
      strcat(arq, nomeArquivo);
      strcat(arq, ".class");
+     printf("\n%s\n", arq);
      /* Cria ponteiro para estrutura classFile */
      FILE * pArq = fopen(arq,"rb");
  	
