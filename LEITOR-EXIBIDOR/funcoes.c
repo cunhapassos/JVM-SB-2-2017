@@ -1644,8 +1644,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x57:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_pop(pFrame);
 			break;
 
 
@@ -1663,8 +1662,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 			
 		*******************************************************************************************/
 		case 0x58:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_pop2(pFrame);
 			break;
 
 
@@ -1682,15 +1680,14 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x59:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_dup(pFrame);
 			break;
 
 
 
 		/********************************************************************************************
 		
-			dup: Duplicate the top operand stack value and insert two values down
+			dup_x1: Duplicate the top operand stack value and insert two values down
 			page: 413
 			
 			@inputs: 
@@ -1701,15 +1698,14 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x5a:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_dup_x1(pFrame);
 			break;
 
 
 
 		/********************************************************************************************
 		
-			dup_x1: Duplicate the top operand stack value and insert two or three values down
+			dup_x2: Duplicate the top operand stack value and insert two or three values down
 			page: 414
 			
 			@inputs: 
@@ -1720,8 +1716,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x5b:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_dup_x2(pFrame);
 			break;
 
 

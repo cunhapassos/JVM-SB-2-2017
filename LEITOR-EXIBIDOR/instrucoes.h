@@ -141,4 +141,14 @@ void FU_castore(ST_tpStackFrame *pFrame);
 
 void FU_sastore(ST_tpStackFrame *pFrame);
 
+void FU_pop(ST_tpStackFrame *pFrame);
+
+void FU_pop2(ST_tpStackFrame *pFrame);
+
+void FU_dup(ST_tpStackFrame *pFrame);
+
+void FU_dup_x1(ST_tpStackFrame *pFrame);
+
+void FU_dup_x2(ST_tpStackFrame *pFrame);
+
 #endif /* instrucoes_h */

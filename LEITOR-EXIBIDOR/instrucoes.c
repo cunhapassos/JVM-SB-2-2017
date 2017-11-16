@@ -983,3 +983,55 @@ void FU_sastore(ST_tpStackFrame *pFrame){
     var1.valor.Short=(short)var1.valor.Int;    
     VM_armazenarValorArray(var.valor.array_ref, var2.valor.Int, var1);
 }
+
+void FU_pop(ST_tpStackFrame *pFrame){
+    ST_tpVariable var;
+    var=PL_popOperando(&pFrame->operandStack);
+}
+
+void FU_pop2(ST_tpStackFrame *pFrame){
+    ST_tpVariable var;
+    var=PL_popOperando(&pFrame->operandStack);
+    if (var.tipo!=JLONG && var.tipo!=JDOUBLE)
+        var=PL_popOperando(&pFrame->operandStack);
+}
+
+void FU_dup(ST_tpStackFrame *pFrame){
+    //Enter critical section ?
+    ST_tpVariable var;
+    var=PL_popOperando(&pFrame->operandStack);
+    //Push de var em pFrame->operandStack
+    //Push de var em pFrame->operandStack
+    //Leave critical section ?
+}
+
+void FU_dup_x1(ST_tpStackFrame *pFrame){
+    //Enter critical section ?
+    ST_tpVariable var1, var2;
+    var1=PL_popOperando(&pFrame->operandStack);
+    var2=PL_popOperando(&pFrame->operandStack);
+    //Push de var1 em pFrame->operandStack
+    //Push de var2 em pFrame->operandStack
+    //Push de var1 em pFrame->operandStack
+    //Leave critical section ?
+}
+
+void FU_dup_x2(ST_tpStackFrame *pFrame){
+    //Enter critical section ?
+    ST_tpVariable var1, var2, var3;
+    var1=PL_popOperando(&pFrame->operandStack);
+    var2=PL_popOperando(&pFrame->operandStack);
+    if (var2.tipo!=JLONG && var2.tipo!=JDOUBLE){
+        var3=PL_popOperando(&pFrame->operandStack);
+        //Push de var1 em pFrame->operandStack
+        //Push de var3 em pFrame->operandStack
+        //Push de var2 em pFrame->operandStack
+        //Push de var1 em pFrame->operandStack
+    }
+    else{
+        //Push de var1 em pFrame->operandStack
+        //Push de var2 em pFrame->operandStack
+        //Push de var1 em pFrame->operandStack
+    }
+    //Leave critical section ?
+}
