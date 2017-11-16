@@ -41,7 +41,15 @@ void FU_ldc(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc);
 
 void FU_ldc2_w(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc);
 
+void FU_istore_n(ST_tpStackFrame *pFrame, int posicao);
+
+void FU_lstore_n(ST_tpStackFrame *pFrame, int posicao);
+
+void FU_fstore_n(ST_tpStackFrame *pFrame, int posicao);
+
 void FU_dstore_n(ST_tpStackFrame *pFrame, int posicao);
+
+void FU_astore_n(ST_tpStackFrame *pFrame, int posicao);
 
 void FU_dadd(ST_tpStackFrame *pFrame);
 
@@ -91,6 +99,22 @@ void FU_dload_n(ST_tpStackFrame *pFrame, int index);
 
 void FU_aload_n(ST_tpStackFrame *pFrame, int index);
 
+void FU_iaload(ST_tpStackFrame *pFrame);
+
+void FU_laload(ST_tpStackFrame *pFrame);
+
+void FU_faload(ST_tpStackFrame *pFrame);
+
+void FU_daload(ST_tpStackFrame *pFrame);
+
+void FU_aaload(ST_tpStackFrame *pFrame);
+
+void FU_baload(ST_tpStackFrame *pFrame);
+
+void FU_caload(ST_tpStackFrame *pFrame);
+
+void FU_saload(ST_tpStackFrame *pFrame);
+
 void FU_istore(ST_tpStackFrame *pFrame, u1 **pc);
 
 void FU_fstore(ST_tpStackFrame *pFrame, u1 **pc);
@@ -100,5 +124,21 @@ void FU_lstore(ST_tpStackFrame *pFrame, u1 **pc);
 void FU_dstore(ST_tpStackFrame *pFrame, u1 **pc);
 
 void FU_astore(ST_tpStackFrame *pFrame, u1 **pc);
+
+void FU_iastore(ST_tpStackFrame *pFrame);
+
+void FU_lastore(ST_tpStackFrame *pFrame);
+
+void FU_fastore(ST_tpStackFrame *pFrame);
+
+void FU_dastore(ST_tpStackFrame *pFrame);
+
+void FU_aastore(ST_tpStackFrame *pFrame);
+
+void FU_bastore(ST_tpStackFrame *pFrame);
+
+void FU_castore(ST_tpStackFrame *pFrame);
+
+void FU_sastore(ST_tpStackFrame *pFrame);
 
 #endif /* instrucoes_h */
