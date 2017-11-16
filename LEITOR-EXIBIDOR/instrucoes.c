@@ -987,52 +987,47 @@ void FU_sastore(ST_tpStackFrame *pFrame){
 
 void FU_pop(ST_tpStackFrame *pFrame){
     ST_tpVariable var;
-    var=*PL_popOperando(&pFrame->operandStack);
+    var = *PL_popOperando(&pFrame->operandStack);
 }
 
 void FU_pop2(ST_tpStackFrame *pFrame){
     ST_tpVariable var;
-    var=*PL_popOperando(&pFrame->operandStack);
+    var = *PL_popOperando(&pFrame->operandStack);
     if (var.tipo!=JLONG && var.tipo!=JDOUBLE)
-        var=*PL_popOperando(&pFrame->operandStack);
+        var = *PL_popOperando(&pFrame->operandStack);
 }
 
 void FU_dup(ST_tpStackFrame *pFrame){
-    //Enter critical section ?
     ST_tpVariable var;
-    var=*PL_popOperando(&pFrame->operandStack);
-    //Push de var em pFrame->operandStack
-    //Push de var em pFrame->operandStack
-    //Leave critical section ?
+    var = *PL_popOperando(&pFrame->operandStack);
+    PL_pushOperando(&pFrame->operandStack, var);
+    PL_pushOperando(&pFrame->operandStack, var);
+
 }
 
 void FU_dup_x1(ST_tpStackFrame *pFrame){
-    //Enter critical section ?
     ST_tpVariable var1, var2;
-    var1=*PL_popOperando(&pFrame->operandStack);
-    var2=*PL_popOperando(&pFrame->operandStack);
-    //Push de var1 em pFrame->operandStack
-    //Push de var2 em pFrame->operandStack
-    //Push de var1 em pFrame->operandStack
-    //Leave critical section ?
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var2 = *PL_popOperando(&pFrame->operandStack);
+    PL_pushOperando(&pFrame->operandStack, var1);
+    PL_pushOperando(&pFrame->operandStack, var2);
+    PL_pushOperando(&pFrame->operandStack, var1);
 }
 
 void FU_dup_x2(ST_tpStackFrame *pFrame){
-    //Enter critical section ?
     ST_tpVariable var1, var2, var3;
-    var1=*PL_popOperando(&pFrame->operandStack);
-    var2=*PL_popOperando(&pFrame->operandStack);
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var2 = *PL_popOperando(&pFrame->operandStack);
     if (var2.tipo!=JLONG && var2.tipo!=JDOUBLE){
         var3=*PL_popOperando(&pFrame->operandStack);
-        //Push de var1 em pFrame->operandStack
-        //Push de var3 em pFrame->operandStack
-        //Push de var2 em pFrame->operandStack
-        //Push de var1 em pFrame->operandStack
+        PL_pushOperando(&pFrame->operandStack, var1);
+        PL_pushOperando(&pFrame->operandStack, var3);
+        PL_pushOperando(&pFrame->operandStack, var2);
+        PL_pushOperando(&pFrame->operandStack, var1);
     }
     else{
-        //Push de var1 em pFrame->operandStack
-        //Push de var2 em pFrame->operandStack
-        //Push de var1 em pFrame->operandStack
+        PL_pushOperando(&pFrame->operandStack, var1);
+        PL_pushOperando(&pFrame->operandStack, var2);
+        PL_pushOperando(&pFrame->operandStack, var1);
     }
-    //Leave critical section ?
 }
