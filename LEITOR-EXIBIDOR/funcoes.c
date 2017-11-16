@@ -52,8 +52,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x01:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_pushNull(pFrame);
 			break;
 
 
@@ -71,8 +70,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x02:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_pushConstInt(pFrame, -1);
 			break;
 
 
@@ -90,8 +88,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x03:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_pushConstInt(pFrame, 0);
 			break;
 
 
@@ -109,8 +106,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x04:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_pushConstInt(pFrame, 1);
 			break;
 
 
@@ -128,8 +124,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x05:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_pushConstInt(pFrame, 2);
 			break;
 
 
@@ -147,8 +142,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x06:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_pushConstInt(pFrame, 3);
 			break;
 
 
@@ -166,8 +160,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x07:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_pushConstInt(pFrame, 4);
 			break;
 
 
@@ -185,8 +178,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x08:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_pushConstInt(pFrame, 5);
 			break;
 
 
@@ -204,8 +196,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x09:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_pushConstLong(pFrame, 0);
 			break;
 
 
@@ -223,8 +214,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 			
 		*******************************************************************************************/
 		case 0x0a:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_pushConstLong(pFrame, 1);
 			break;
 
 
@@ -242,8 +232,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 			
 		*******************************************************************************************/
 		case 0x0b:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_pushConstFloat(pFrame, 0);
 			break;
 
 
@@ -261,8 +250,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x0c:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_pushConstFloat(pFrame, 1);
 			break;
 
 
@@ -280,8 +268,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x0d:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_pushConstFloat(pFrame, 2);
 			break;
 
 
@@ -299,8 +286,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x0e:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_pushConstDouble(pFrame, 0);
 			break;
 
 
@@ -318,8 +304,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x0f:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_pushConstDouble(pFrame, 1);
 			break;
 
 
@@ -435,8 +420,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x15:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_iload(pFrame, &pJVM->thread->PC);
 			break;
 
 
@@ -454,8 +438,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x16:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_lload(pFrame, &pJVM->thread->PC);
 			break;
 
 
@@ -473,8 +456,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x17:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_fload(pFrame, &pJVM->thread->PC);
 			break;
 
 
@@ -492,8 +474,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x18:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_dload(pFrame, &pJVM->thread->PC);
 			break;
 
 
@@ -511,8 +492,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x19:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_aload(pFrame, &pJVM->thread->PC);
 			break;
 
 
@@ -530,8 +510,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x1a:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_iload_n(pFrame, 0);
 			break;
 
 
@@ -549,9 +528,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x1b:
-			printf("iload_1 \n");
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_iload_n(pFrame, 1);
 			break;
 
 
@@ -569,8 +546,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x1c:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_iload_n(pFrame, 2);
 			break;
 
 
@@ -588,8 +564,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x1d:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_iload_n(pFrame, 3);
 			break;
 
 
@@ -607,8 +582,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x1e:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_lload_n(pFrame, 0);
 			break;
 
 
@@ -626,8 +600,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x1f:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_lload_n(pFrame, 1);
 			break;
 
 
@@ -645,8 +618,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x20:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_lload_n(pFrame, 2);
 			break;
 
 
@@ -664,8 +636,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x21:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_lload_n(pFrame, 3);
 			break;
 
 
@@ -683,8 +654,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x22:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_fload_n(pFrame, 0);
 			break;
 
 
@@ -702,8 +672,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x23:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_fload_n(pFrame, 1);
 			break;
 
 
@@ -721,8 +690,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x24:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_fload_n(pFrame, 2);
 			break;
 
 
@@ -740,8 +708,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x25:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_fload_n(pFrame, 3);
 			break;
 
 
@@ -831,9 +798,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x2a:
-			printf("aload_0 \n");
-            ST_tpVariable var = VM_recuperarVariavel(pJVM->thread->pJVMStack->localVariables, 0);
-            PL_pushOperando(&pJVM->thread->pJVMStack->operandStack, var);
+			FU_aload_n(pFrame, 0);
 			break;
 
 
@@ -851,8 +816,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x2b:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_aload_n(pFrame, 1);
 			break;
 
 
@@ -870,8 +834,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x2c:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_aload_n(pFrame, 2);
 			break;
 
 
@@ -889,8 +852,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x2d:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_aload_n(pFrame, 3);
 			break;
 
 
@@ -910,8 +872,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x2e:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_iaload(pFrame);
 			break;
 
 		/********************************************************************************************
@@ -929,8 +890,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x2f:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_laload(pFrame);
 			break;
 
 
@@ -950,8 +910,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x30:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_faload(pFrame);
 			break;
 
 
@@ -971,8 +930,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x31:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_daload(pFrame);
 			break;
 
 
@@ -992,8 +950,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x32:
-//////////////////////////////////////////////
-//////////////////////////////////////////////	
+			FU_aaload(pFrame);
 			break;
 
 
@@ -1014,8 +971,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x33:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_baload(pFrame);
 			break;
 
 
@@ -1035,8 +991,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x34:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_caload(pFrame);
 			break;
 
 
@@ -1056,8 +1011,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x35:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_saload(pFrame);
 			break;
 
 
@@ -1075,8 +1029,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 			
 		*******************************************************************************************/
 		case 0x36:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_istore(pFrame, &pJVM->thread->PC);
 			break;
 
 
@@ -1094,8 +1047,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x37:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_lstore(pFrame, &pJVM->thread->PC);
 			break;
 
 
@@ -1113,8 +1065,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x38:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_fstore(pFrame, &pJVM->thread->PC);
 			break;
 
 
@@ -1132,8 +1083,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x39:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_dstore(pFrame, &pJVM->thread->PC);
 			break;
 
 
@@ -1152,8 +1102,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x3a:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_astore(pFrame, &pJVM->thread->PC);
 			break;
 
 
@@ -1171,8 +1120,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 			
 		*******************************************************************************************/
 		case 0x3b:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_istore_n(pFrame, 0);
 			break;
 
 
@@ -1190,8 +1138,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 			
 		*******************************************************************************************/
 		case 0x3c:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_istore_n(pFrame, 1);
 			break;
 
 
@@ -1209,8 +1156,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x3d:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_istore_n(pFrame, 2);
 			break;
 
 
@@ -1228,8 +1174,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x3e:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_istore_n(pFrame, 3);
 			break;
 
 
@@ -1247,8 +1192,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x3f:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_lstore_n(pFrame, 0);
 			break;
 
 
@@ -1266,8 +1210,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 			
 		*******************************************************************************************/
 		case 0x40:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_lstore_n(pFrame, 1);
 			break;
 
 
@@ -1285,8 +1228,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 			
 		*******************************************************************************************/
 		case 0x41:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_lstore_n(pFrame, 2);
 			break;
 
 
@@ -1304,8 +1246,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 			
 		*******************************************************************************************/
 		case 0x42:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_lstore_n(pFrame, 3);
 			break;
 
 
@@ -1323,8 +1264,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x43:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_fstore_n(pFrame, 0);
 			break;
 
 
@@ -1342,8 +1282,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x44:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_fstore_n(pFrame, 1);
 			break;
 
 
@@ -1361,8 +1300,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x45:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_fstore_n(pFrame, 2);
 			break;
 
 
@@ -1380,8 +1318,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x46:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_fstore_n(pFrame, 3);
 			break;
 
 
@@ -1460,7 +1397,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		/********************************************************************************************
 		
-			astore_1: Store reference in first index of local variable
+			astore_0: Store reference into local variable 0
 			page: 379
 
 			@inputs: 
@@ -1471,15 +1408,14 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x4b:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_astore_n(pFrame, 0);
 			break;
 
 
 
 		/********************************************************************************************
 		
-			astore_2: Store reference in second index of local variable
+			astore_1: Store reference into local variable 1
 			page: 379
 
 			@inputs: 
@@ -1490,15 +1426,14 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x4c:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_astore_n(pFrame, 1);
 			break;
 
 
 
 		/********************************************************************************************
 		
-			astore_3: Store reference in third index of local variable
+			astore_2: Store reference into local variable 2
 			page: 379
 
 			@inputs: 
@@ -1509,15 +1444,14 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x4d:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_astore_n(pFrame, 2);
 			break;
 
 
 
 		/********************************************************************************************
 		
-			astore_4: Store reference in fourth index of local variable
+			astore_3: Store reference into local variable 3
 			page: 379
 
 			@inputs: 
@@ -1528,8 +1462,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x4e:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_astore_n(pFrame, 3);
 			break;
 
 
@@ -1549,8 +1482,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 			
 		*******************************************************************************************/
 		case 0x4f:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_iastore(pFrame);
 			break;
 
 
@@ -1570,8 +1502,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x50:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_lastore(pFrame);
 			break;
 
 
@@ -1591,8 +1522,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x51:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_fastore(pFrame);
 			break;
 
 
@@ -1613,8 +1543,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x52:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_dastore(pFrame);
 			break;
 
 
@@ -1636,8 +1565,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x53:
-//////////////////////////////////////////////
-//////////////////////////////////////////////	
+			FU_aastore(pFrame);
 			break;
 
 
@@ -1658,8 +1586,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x54:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_bastore(pFrame);
 			break;
 
 
@@ -1679,8 +1606,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x55:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_castore(pFrame);
 			break;
 
 
@@ -1700,8 +1626,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x56:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_sastore(pFrame);
 			break;
 
 
@@ -1719,8 +1644,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x57:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_pop(pFrame);
 			break;
 
 
@@ -1738,8 +1662,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 			
 		*******************************************************************************************/
 		case 0x58:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_pop2(pFrame);
 			break;
 
 
@@ -1757,15 +1680,14 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x59:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_dup(pFrame);
 			break;
 
 
 
 		/********************************************************************************************
 		
-			dup: Duplicate the top operand stack value and insert two values down
+			dup_x1: Duplicate the top operand stack value and insert two values down
 			page: 413
 			
 			@inputs: 
@@ -1776,15 +1698,14 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x5a:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_dup_x1(pFrame);
 			break;
 
 
 
 		/********************************************************************************************
 		
-			dup_x1: Duplicate the top operand stack value and insert two or three values down
+			dup_x2: Duplicate the top operand stack value and insert two or three values down
 			page: 414
 			
 			@inputs: 
@@ -1795,8 +1716,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x5b:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_dup_x2(pFrame);
 			break;
 
 
