@@ -93,7 +93,6 @@ int FU_invokespecial(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc, ST_tpVari
     u2 temp2Byte;
     int count = 0;
     ST_tpVariable *pVar1;
-    char *nomeClasseTemp = NULL;
     u1 parametro1, parametro2;
     ST_tpConstantPool *cpIndx;
     ST_tpClassFile *pClassFile;
@@ -138,8 +137,9 @@ int FU_invokespecial(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc, ST_tpVari
     memcpy(pMethodDescriptor, &(cpIndx->Utf8), sizeof(ST_tpCONSTANT_Utf8_info));
     
     count = FU_resolveMethodo(pMethodName, pMethodDescriptor);
-    //count ++;
+    count ++;
     
+    /* Retira todos os valores da pilha de operandos e passa para a pilha de parametros */
     while( count != 0 && pFrame->operandStack != NULL) {
         PL_pushParametro(&pFrame->parameterStack, *PL_popOperando(&pFrame->operandStack));
         count --;
@@ -151,9 +151,8 @@ int FU_invokespecial(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc, ST_tpVari
     pVar1 = &pFrame->parameterStack->variable;
     pTempHeap = pVar1->valor.obj_ref;
     
-    strcpy(nomeClasseTemp, pTempHeap->className);
-    
-    pClassFile = PL_buscarClasse(pJVM, nomeClasseTemp);
+    // ESTA CHEGANDO COM NOME ERRADO AQUI
+    pClassFile = PL_buscarClasse(pJVM, pTempHeap->className);
     
     if(pClassFile != NULL){
         pMetodoInfo = VM_procurarMetodo(pClassFile, (char *) (pMethodDescriptor->bytes) , (char *) (pMethodName->bytes));

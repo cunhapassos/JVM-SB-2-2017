@@ -38,14 +38,15 @@ void VM_armazenarVariavel(ST_tpVariable *pVariaveisLocais, ST_tpVariable variave
 
 ST_tpVariable VM_recuperarVariavel(ST_tpVariable *pVariaveisLocais, int posicao);
 
-ST_tpStackFrame *VM_criarStackFrame(ST_tpStackFrame **pJVMStack, ST_tpClassFile *pClasse, ST_tpParameterStack *pilhaParametros, long maxStackSize);
-
+ST_tpStackFrame *VM_criarStackFrame(ST_tpJVM *pJVM, ST_tpStackFrame **pJVMStack, ST_tpClassFile *pClasse, ST_tpParameterStack *pilhaParametros, long maxStackSize);
 
 u1 *VM_retornaNomeSuperClasse(ST_tpClassFile *pClassFile);
 
 u1 *VM_retornarNomeClasse(ST_tpClassFile *pClassFile);
 
 ST_tpObjectHeap *VM_criarObjeto(ST_tpJVM *pJVM, ST_tpClassFile *pClassFile);
+
+ST_tpObjectHeap *VM_recuperarObjeto(ST_tpObjectHeap *pObejectHeap, char *nomeObjeto);
 
 ST_tpArrayHeap *VM_criarArray(u1 tipo, char *nomeClasse, int tamanho);
 
