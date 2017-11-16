@@ -461,21 +461,6 @@ void FU_ldc2_w(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
     }
 }
 
-void FU_dload_n(ST_tpStackFrame *pFrame, int posicao){
-    ST_tpVariable var;
-    
-    var = VM_recuperarVariavel(pFrame->localVariables, posicao);
-    PL_pushOperando(&pFrame->operandStack, var);
-}
-
-void FU_dstore_n(ST_tpStackFrame *pFrame, int posicao){
-    ST_tpVariable var;
-    
-    var = *PL_popOperando(&pFrame->operandStack);
-    VM_armazenarVariavel(pFrame->localVariables, var, posicao);
-    
-}
-
 void FU_dadd(ST_tpStackFrame *pFrame){
     ST_tpVariable var, var1, var2;
     
@@ -562,7 +547,7 @@ void FU_pushNull(ST_tpStackFrame *pFrame) {
 
     ST_tpVariable var;
     
-    var.valor.obj_ref = 0,
+    var.valor.obj_ref = 0;
     var.tipo = JREF;
     PL_pushOperando(&pFrame->operandStack, var);
 }
@@ -573,7 +558,7 @@ void FU_pushConstInt(ST_tpStackFrame *pFrame, int cte) {
     
     ST_tpVariable var;
     
-    var.valor.Int = cte,
+    var.valor.Int = cte;
     var.tipo = JINT;
     PL_pushOperando(&pFrame->operandStack, var);
 }
@@ -582,7 +567,7 @@ void FU_pushConstLong(ST_tpStackFrame *pFrame, int64_t cte) {
 
     ST_tpVariable var;
     
-    var.valor.Long = cte,
+    var.valor.Long = cte;
     var.tipo = JLONG;
     PL_pushOperando(&pFrame->operandStack, var);
 }
@@ -591,7 +576,7 @@ void FU_pushConstFloat(ST_tpStackFrame *pFrame, float cte) {
 
     ST_tpVariable var;
     
-    var.valor.Float = cte,
+    var.valor.Float = cte;
     var.tipo = JFLOAT;
     PL_pushOperando(&pFrame->operandStack, var);
 
@@ -601,7 +586,7 @@ void FU_pushConstDouble(ST_tpStackFrame *pFrame, double cte) {
 
     ST_tpVariable var;
     
-    var.valor.Double = cte,
+    var.valor.Double = cte;
     var.tipo = JDOUBLE;
     PL_pushOperando(&pFrame->operandStack, var);
 }
@@ -719,8 +704,8 @@ void FU_aload_n(ST_tpStackFrame *pFrame, int index) {
 
 void FU_iaload(ST_tpStackFrame *pFrame){
     ST_tpVariable var1, var2, val;
-    var1   = PL_popOperando(&pFrame->operandStack); // Index
-    var2   = PL_popOperando(&pFrame->operandStack); // Array reference
+    var1   = *PL_popOperando(&pFrame->operandStack); // Index
+    var2   = *PL_popOperando(&pFrame->operandStack); // Array reference
 
     val = VM_recuperarValorArray (var2.valor.array_ref , var1.valor.Int);
     val.tipo=JINT;
@@ -730,8 +715,8 @@ void FU_iaload(ST_tpStackFrame *pFrame){
 
 void FU_laload(ST_tpStackFrame *pFrame){
     ST_tpVariable var1, var2, val;
-    var1   = PL_popOperando(&pFrame->operandStack); // Index
-    var2   = PL_popOperando(&pFrame->operandStack); // Array reference
+    var1   = *PL_popOperando(&pFrame->operandStack); // Index
+    var2   = *PL_popOperando(&pFrame->operandStack); // Array reference
 
     val = VM_recuperarValorArray (var2.valor.array_ref , var1.valor.Int);
     val.tipo=JLONG;
@@ -741,8 +726,8 @@ void FU_laload(ST_tpStackFrame *pFrame){
 
 void FU_faload(ST_tpStackFrame *pFrame){
     ST_tpVariable var1, var2, val;
-    var1   = PL_popOperando(&pFrame->operandStack); // Index
-    var2   = PL_popOperando(&pFrame->operandStack); // Array reference
+    var1   = *PL_popOperando(&pFrame->operandStack); // Index
+    var2   = *PL_popOperando(&pFrame->operandStack); // Array reference
 
     val = VM_recuperarValorArray (var2.valor.array_ref , var1.valor.Int);
     val.tipo=JFLOAT;
@@ -752,8 +737,8 @@ void FU_faload(ST_tpStackFrame *pFrame){
 
 void FU_daload(ST_tpStackFrame *pFrame){
     ST_tpVariable var1, var2, val;
-    var1   = PL_popOperando(&pFrame->operandStack); // Index
-    var2   = PL_popOperando(&pFrame->operandStack); // Array reference
+    var1   = *PL_popOperando(&pFrame->operandStack); // Index
+    var2   = *PL_popOperando(&pFrame->operandStack); // Array reference
 
     val = VM_recuperarValorArray (var2.valor.array_ref , var1.valor.Int);
     val.tipo=JDOUBLE;
@@ -763,8 +748,8 @@ void FU_daload(ST_tpStackFrame *pFrame){
 
 void FU_aaload(ST_tpStackFrame *pFrame){
     ST_tpVariable var1, var2, val;
-    var1   = PL_popOperando(&pFrame->operandStack); // Index
-    var2   = PL_popOperando(&pFrame->operandStack); // Array reference
+    var1   = *PL_popOperando(&pFrame->operandStack); // Index
+    var2   = *PL_popOperando(&pFrame->operandStack); // Array reference
 
     val = VM_recuperarValorArray (var2.valor.array_ref , var1.valor.Int);
     val.tipo=JAREF;
@@ -774,8 +759,8 @@ void FU_aaload(ST_tpStackFrame *pFrame){
 
 void FU_baload(ST_tpStackFrame *pFrame){
     ST_tpVariable var1, var2, val;
-    var1   = PL_popOperando(&pFrame->operandStack); // Index
-    var2   = PL_popOperando(&pFrame->operandStack); // Array reference
+    var1   = *PL_popOperando(&pFrame->operandStack); // Index
+    var2   = *PL_popOperando(&pFrame->operandStack); // Array reference
 
     val = VM_recuperarValorArray (var2.valor.array_ref , var1.valor.Int);
     if (val.tipo==JBOOL){
@@ -792,8 +777,8 @@ void FU_baload(ST_tpStackFrame *pFrame){
 
 void FU_caload(ST_tpStackFrame *pFrame){
     ST_tpVariable var1, var2, val;
-    var1   = PL_popOperando(&pFrame->operandStack); // Index
-    var2   = PL_popOperando(&pFrame->operandStack); // Array reference
+    var1   = *PL_popOperando(&pFrame->operandStack); // Index
+    var2   = *PL_popOperando(&pFrame->operandStack); // Array reference
 
     val = VM_recuperarValorArray (var2.valor.array_ref , var1.valor.Int);
     if (val.valor.Char<0)
@@ -806,8 +791,8 @@ void FU_caload(ST_tpStackFrame *pFrame){
 
 void FU_saload(ST_tpStackFrame *pFrame){
     ST_tpVariable var1, var2, val;
-    var1   = PL_popOperando(&pFrame->operandStack); // Index
-    var2   = PL_popOperando(&pFrame->operandStack); // Array reference
+    var1   = *PL_popOperando(&pFrame->operandStack); // Index
+    var2   = *PL_popOperando(&pFrame->operandStack); // Array reference
 
     val = VM_recuperarValorArray (var2.valor.array_ref , var1.valor.Int);
     val.valor.Int=(int)val.valor.Short;
@@ -822,7 +807,7 @@ void FU_istore(ST_tpStackFrame *pFrame, u1 **pc) {
     (*pc)++;
     memcpy(&parametro1, *pc, 1);
     
-    var = PL_popOperando(&pFrame->operandStack);
+    var = *PL_popOperando(&pFrame->operandStack);
     var.tipo = JINT;
     VM_armazenarVariavel(pFrame->localVariables, var, parametro1);
     
@@ -836,7 +821,7 @@ void FU_fstore(ST_tpStackFrame *pFrame, u1 **pc) {
     (*pc)++;
     memcpy(&parametro1, *pc, 1);
     
-    var = PL_popOperando(&pFrame->operandStack);
+    var = *PL_popOperando(&pFrame->operandStack);
     var.tipo = JFLOAT;
     VM_armazenarVariavel(pFrame->localVariables, var, parametro1);
     
@@ -850,7 +835,7 @@ void FU_lstore(ST_tpStackFrame *pFrame, u1 **pc) {
     (*pc)++;
     memcpy(&parametro1, *pc, 1);
     
-    var = PL_popOperando(&pFrame->operandStack);
+    var = *PL_popOperando(&pFrame->operandStack);
     var.tipo = JLONG;
     VM_armazenarVariavel(pFrame->localVariables, var, parametro1);
     
@@ -864,7 +849,7 @@ void FU_dstore(ST_tpStackFrame *pFrame, u1 **pc) {
     (*pc)++;
     memcpy(&parametro1, *pc, 1);
     
-    var = PL_popOperando(&pFrame->operandStack);
+    var = *PL_popOperando(&pFrame->operandStack);
     var.tipo = JDOUBLE;
     VM_armazenarVariavel(pFrame->localVariables, var, parametro1);
     
@@ -878,7 +863,7 @@ void FU_astore(ST_tpStackFrame *pFrame, u1 **pc) {
     (*pc)++;
     memcpy(&parametro1, *pc, 1);
     
-    var = PL_popOperando(&pFrame->operandStack);
+    var = *PL_popOperando(&pFrame->operandStack);
     var.tipo = JREF;
     VM_armazenarVariavel(pFrame->localVariables, var, parametro1);
     
@@ -887,88 +872,88 @@ void FU_astore(ST_tpStackFrame *pFrame, u1 **pc) {
 void FU_istore_n(ST_tpStackFrame *pFrame, int posicao){
     ST_tpVariable var;
     
-    var = PL_popOperando(&pFrame->operandStack);
+    var = *PL_popOperando(&pFrame->operandStack);
     VM_armazenarVariavel(pFrame->localVariables, var, posicao);    
 }
 
 void FU_lstore_n(ST_tpStackFrame *pFrame, int posicao){
     ST_tpVariable var;
     
-    var = PL_popOperando(&pFrame->operandStack);
+    var = *PL_popOperando(&pFrame->operandStack);
     VM_armazenarVariavel(pFrame->localVariables, var, posicao);
 }
 
 void FU_fstore_n(ST_tpStackFrame *pFrame, int posicao){
     ST_tpVariable var;
     
-    var = PL_popOperando(&pFrame->operandStack);
+    var = *PL_popOperando(&pFrame->operandStack);
     VM_armazenarVariavel(pFrame->localVariables, var, posicao);
 }
 
 void FU_dstore_n(ST_tpStackFrame *pFrame, int posicao){
     ST_tpVariable var;
     
-    var = PL_popOperando(&pFrame->operandStack);
+    var = *PL_popOperando(&pFrame->operandStack);
     VM_armazenarVariavel(pFrame->localVariables, var, posicao);
 }
 
 void FU_astore_n(ST_tpStackFrame *pFrame, int posicao){
     ST_tpVariable var;
     
-    var = PL_popOperando(&pFrame->operandStack);
+    var = *PL_popOperando(&pFrame->operandStack);
     VM_armazenarVariavel(pFrame->localVariables, var, posicao);
 }
 
 void FU_iastore(ST_tpStackFrame *pFrame){
     ST_tpVariable var1, var2, var;
-    var1   = PL_popOperando(&pFrame->operandStack); // Val
-    var2   = PL_popOperando(&pFrame->operandStack); // Index
-    var    = PL_popOperando(&pFrame->operandStack); // Array reference
+    var1   = *PL_popOperando(&pFrame->operandStack); // Val
+    var2   = *PL_popOperando(&pFrame->operandStack); // Index
+    var    = *PL_popOperando(&pFrame->operandStack); // Array reference
         
     VM_armazenarValorArray(var.valor.array_ref, var2.valor.Int, var1);
 }
 
 void FU_lastore(ST_tpStackFrame *pFrame){
     ST_tpVariable var1, var2, var;
-    var1   = PL_popOperando(&pFrame->operandStack); // Val
-    var2   = PL_popOperando(&pFrame->operandStack); // Index
-    var    = PL_popOperando(&pFrame->operandStack); // Array reference
+    var1   = *PL_popOperando(&pFrame->operandStack); // Val
+    var2   = *PL_popOperando(&pFrame->operandStack); // Index
+    var    = *PL_popOperando(&pFrame->operandStack); // Array reference
         
     VM_armazenarValorArray(var.valor.array_ref, var2.valor.Int, var1);
 }
 
 void FU_fastore(ST_tpStackFrame *pFrame){
     ST_tpVariable var1, var2, var;
-    var1   = PL_popOperando(&pFrame->operandStack); // Val
-    var2   = PL_popOperando(&pFrame->operandStack); // Index
-    var    = PL_popOperando(&pFrame->operandStack); // Array reference
+    var1   = *PL_popOperando(&pFrame->operandStack); // Val
+    var2   = *PL_popOperando(&pFrame->operandStack); // Index
+    var    = *PL_popOperando(&pFrame->operandStack); // Array reference
         
     VM_armazenarValorArray(var.valor.array_ref, var2.valor.Int, var1);
 }
 
 void FU_dastore(ST_tpStackFrame *pFrame){
     ST_tpVariable var1, var2, var;
-    var1   = PL_popOperando(&pFrame->operandStack); // Val
-    var2   = PL_popOperando(&pFrame->operandStack); // Index
-    var    = PL_popOperando(&pFrame->operandStack); // Array reference
+    var1   = *PL_popOperando(&pFrame->operandStack); // Val
+    var2   = *PL_popOperando(&pFrame->operandStack); // Index
+    var    = *PL_popOperando(&pFrame->operandStack); // Array reference
         
     VM_armazenarValorArray(var.valor.array_ref, var2.valor.Int, var1);
 }
 
 void FU_aastore(ST_tpStackFrame *pFrame){
     ST_tpVariable var1, var2, var;
-    var1   = PL_popOperando(&pFrame->operandStack); // Val
-    var2   = PL_popOperando(&pFrame->operandStack); // Index
-    var    = PL_popOperando(&pFrame->operandStack); // Array reference
+    var1   = *PL_popOperando(&pFrame->operandStack); // Val
+    var2   = *PL_popOperando(&pFrame->operandStack); // Index
+    var    = *PL_popOperando(&pFrame->operandStack); // Array reference
         
     VM_armazenarValorArray(var.valor.array_ref, var2.valor.Int, var1);
 }
 
 void FU_bastore(ST_tpStackFrame *pFrame){
     ST_tpVariable var1, var2, var;
-    var1   = PL_popOperando(&pFrame->operandStack); // Val
-    var2   = PL_popOperando(&pFrame->operandStack); // Index
-    var    = PL_popOperando(&pFrame->operandStack); // Array reference
+    var1   = *PL_popOperando(&pFrame->operandStack); // Val
+    var2   = *PL_popOperando(&pFrame->operandStack); // Index
+    var    = *PL_popOperando(&pFrame->operandStack); // Array reference
 
     if (var.valor.array_ref->type==JBOOL){
         var1.valor.Boolean=var1.valor.Int & 0x01;
@@ -982,9 +967,9 @@ void FU_bastore(ST_tpStackFrame *pFrame){
 
 void FU_castore(ST_tpStackFrame *pFrame){
     ST_tpVariable var1, var2, var;
-    var1   = PL_popOperando(&pFrame->operandStack); // Val
-    var2   = PL_popOperando(&pFrame->operandStack); // Index
-    var    = PL_popOperando(&pFrame->operandStack); // Array reference
+    var1   = *PL_popOperando(&pFrame->operandStack); // Val
+    var2   = *PL_popOperando(&pFrame->operandStack); // Index
+    var    = *PL_popOperando(&pFrame->operandStack); // Array reference
         
     var1.valor.Int=0xffff & var1.valor.Char;    
     VM_armazenarValorArray(var.valor.array_ref, var2.valor.Int, var1);
@@ -992,9 +977,9 @@ void FU_castore(ST_tpStackFrame *pFrame){
 
 void FU_sastore(ST_tpStackFrame *pFrame){
     ST_tpVariable var1, var2, var;
-    var1   = PL_popOperando(&pFrame->operandStack); // Val
-    var2   = PL_popOperando(&pFrame->operandStack); // Index
-    var    = PL_popOperando(&pFrame->operandStack); // Array reference
+    var1   = *PL_popOperando(&pFrame->operandStack); // Val
+    var2   = *PL_popOperando(&pFrame->operandStack); // Index
+    var    = *PL_popOperando(&pFrame->operandStack); // Array reference
     
     var1.valor.Short=(short)var1.valor.Int;    
     VM_armazenarValorArray(var.valor.array_ref, var2.valor.Int, var1);
@@ -1002,20 +987,20 @@ void FU_sastore(ST_tpStackFrame *pFrame){
 
 void FU_pop(ST_tpStackFrame *pFrame){
     ST_tpVariable var;
-    var=PL_popOperando(&pFrame->operandStack);
+    var=*PL_popOperando(&pFrame->operandStack);
 }
 
 void FU_pop2(ST_tpStackFrame *pFrame){
     ST_tpVariable var;
-    var=PL_popOperando(&pFrame->operandStack);
+    var=*PL_popOperando(&pFrame->operandStack);
     if (var.tipo!=JLONG && var.tipo!=JDOUBLE)
-        var=PL_popOperando(&pFrame->operandStack);
+        var=*PL_popOperando(&pFrame->operandStack);
 }
 
 void FU_dup(ST_tpStackFrame *pFrame){
     //Enter critical section ?
     ST_tpVariable var;
-    var=PL_popOperando(&pFrame->operandStack);
+    var=*PL_popOperando(&pFrame->operandStack);
     //Push de var em pFrame->operandStack
     //Push de var em pFrame->operandStack
     //Leave critical section ?
@@ -1024,8 +1009,8 @@ void FU_dup(ST_tpStackFrame *pFrame){
 void FU_dup_x1(ST_tpStackFrame *pFrame){
     //Enter critical section ?
     ST_tpVariable var1, var2;
-    var1=PL_popOperando(&pFrame->operandStack);
-    var2=PL_popOperando(&pFrame->operandStack);
+    var1=*PL_popOperando(&pFrame->operandStack);
+    var2=*PL_popOperando(&pFrame->operandStack);
     //Push de var1 em pFrame->operandStack
     //Push de var2 em pFrame->operandStack
     //Push de var1 em pFrame->operandStack
@@ -1035,10 +1020,10 @@ void FU_dup_x1(ST_tpStackFrame *pFrame){
 void FU_dup_x2(ST_tpStackFrame *pFrame){
     //Enter critical section ?
     ST_tpVariable var1, var2, var3;
-    var1=PL_popOperando(&pFrame->operandStack);
-    var2=PL_popOperando(&pFrame->operandStack);
+    var1=*PL_popOperando(&pFrame->operandStack);
+    var2=*PL_popOperando(&pFrame->operandStack);
     if (var2.tipo!=JLONG && var2.tipo!=JDOUBLE){
-        var3=PL_popOperando(&pFrame->operandStack);
+        var3=*PL_popOperando(&pFrame->operandStack);
         //Push de var1 em pFrame->operandStack
         //Push de var3 em pFrame->operandStack
         //Push de var2 em pFrame->operandStack
