@@ -135,6 +135,7 @@ ST_tpCp_info *LE_lerConstant_pool(FILE *pArq, u2 constant_pool_count){
             case CONSTANT_String:
                 constantPool[i].info.String.tag = CONSTANT_String;
                 constantPool[i].info.String.string_index = LE_lerU2(pArq);
+                constantPool[i].info.String.StringObject = NULL;
                 break;
             case CONSTANT_Fieldref:
                 constantPool[i].info.Fieldref.tag = CONSTANT_Fieldref;
@@ -218,7 +219,8 @@ ST_tpField_info *LE_lerFields(FILE *pArq, ST_tpCp_info *cp, u2 fields_count) {
         pFields[i].name_index       = LE_lerU2(pArq);
         pFields[i].descriptor_index = LE_lerU2(pArq);
         pFields[i].attributes_count = LE_lerU2(pArq);
-        for (j = 0 ; j < pFields[i].attributes_count; j++) {
+        for (j = 0 ; j < (pFields[i].attributes_count); j++) {
+            pFields[i].attributes = (ST_tpAttribute_info *)malloc((pFields[i].attributes_count) * sizeof(ST_tpAttribute_info));
              LE_lerAttribute(pArq, cp, &(pFields[i].attributes[j]));
             if((j+1) < pFields[i].attributes_count){
                 (pFields[i].attributes[j]).next = &(pFields[i].attributes[j+1]);
@@ -588,8 +590,8 @@ ST_tpAttribute_info *LE_lerAttribute(FILE *pArq, ST_tpCp_info *cp, ST_tpAttribut
  ST_tpClassFile *LE_carregarClasse(char *nomeArquivo){
     
     char arq[256];
-    u2 index;
-    int tamanho;
+    u4 index;
+    u2 tamanho;
     ST_tpClassFile *arqPontoClass = NULL;
 
     strcpy(arq, PATH);
@@ -649,14 +651,17 @@ ST_tpAttribute_info *LE_lerAttribute(FILE *pArq, ST_tpCp_info *cp, ST_tpAttribut
      
      index   = arqPontoClass->constant_pool_table[arqPontoClass->this_class - 1].info.Class.name_index;
      tamanho = arqPontoClass->constant_pool_table[index - 1].info.Utf8.length;
- 
-     memcpy(&arqPontoClass->nomeClasse, &(arqPontoClass->constant_pool_table[index - 1].info.Utf8.bytes), tamanho + 1);
+     memcpy(&arqPontoClass->nomeClasse, &(arqPontoClass->constant_pool_table[index - 1].info.Utf8.bytes), tamanho);
      
      //wprintf(L"%s", arqPontoClass->nomeClasse);
      
-     index   = arqPontoClass->constant_pool_table[arqPontoClass->super_class - 1].info.Class.name_index;
-     tamanho = arqPontoClass->constant_pool_table[index - 1].info.Utf8.length;
-     memcpy(&arqPontoClass->nomeSuperClasse, &(arqPontoClass->constant_pool_table[index - 1].info.Utf8.bytes), tamanho + 1);
+     
+     if(arqPontoClass->super_class > 0){
+         index   = arqPontoClass->constant_pool_table[arqPontoClass->super_class - 1].info.Class.name_index;
+         tamanho = arqPontoClass->constant_pool_table[index - 1].info.Utf8.length;
+         memcpy(&arqPontoClass->nomeSuperClasse, &(arqPontoClass->constant_pool_table[index - 1].info.Utf8.bytes), tamanho);
+     }
+     
      //wprintf(L"%s", arqPontoClass->nomeSuperClasse);
      
      // FALTA ACRESCENTAR NOME COMPLETO DA CLASSE

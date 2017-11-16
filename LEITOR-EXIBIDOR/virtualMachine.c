@@ -1,4 +1,4 @@
- /** ********************************************************************************
+   /** ********************************************************************************
  *
  *  Universidade de Brasilia - 02/2017
  *    Software Basico - Turma A
@@ -18,6 +18,7 @@
  @}********************************************************************************/
 
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 
 #include "leitor.h"
@@ -112,7 +113,7 @@ ST_tpStackFrame *VM_criarStackFrame(ST_tpStackFrame **pJVMStack, ST_tpClassFile 
     
     i = 0;
     while(pilhaParametros != NULL){
-        varTemporaria = PL_popParametro(&pilhaParametros);
+        varTemporaria = *PL_popParametro(&pilhaParametros);
         VM_armazenarVariavel(pFrame->localVariables, varTemporaria, i);
         i++;
         if(varTemporaria.tipo == JLONG || varTemporaria.tipo == JDOUBLE) i++;
@@ -253,7 +254,7 @@ u1 *VM_retornarNomeClasse(ST_tpClassFile *pClassFile){
     return classeString;
 }
 ST_tpObjectHeap *VM_criarObjeto(ST_tpJVM *pJVM, ST_tpClassFile *pClassFile){
-    int maxVariaveis, flag = 1;
+    int maxVariaveis;
     ST_tpClassFile *pAuxClassFile1, *pAuxClassFile2;
     u1 *nome;
     
@@ -262,7 +263,7 @@ ST_tpObjectHeap *VM_criarObjeto(ST_tpJVM *pJVM, ST_tpClassFile *pClassFile){
     pAuxClassFile1 = pClassFile;
     maxVariaveis = pClassFile->fields_count;
     
-    while(flag == 1 && pAuxClassFile1->super_class != 0 ){
+    while(pAuxClassFile1->super_class != 0 ){
         nome = VM_retornaNomeSuperClasse(pClassFile);
         /* Verifica se a SuperClasse esta carregada */
         pAuxClassFile2 = PL_buscarClasse(pJVM, (char *) nome);
@@ -271,12 +272,10 @@ ST_tpObjectHeap *VM_criarObjeto(ST_tpJVM *pJVM, ST_tpClassFile *pClassFile){
         if(pAuxClassFile2 == NULL){
             
             
-            /* ATENCAO FALTA IMPLEMENTAR !!!!!!!!!!!!!*/
-            /* BUSCAR SUPER CLASSE NO PACOTE DO JAVA */
             pAuxClassFile2 = LE_carregarClasse((char *)nome);
             if(pAuxClassFile2 != NULL){
                 PL_inserirClasseTopo(pJVM, pAuxClassFile2);
-                VM_alocarMemoriaHeapClasse(pJVM, pAuxClassFile2->nomeClasse);
+                //VM_alocarMemoriaHeapClasse(pJVM, pAuxClassFile2->nomeClasse);
             }
             else{
                 printf("ERRO AO CARREGAR CLASSE");
@@ -284,12 +283,12 @@ ST_tpObjectHeap *VM_criarObjeto(ST_tpJVM *pJVM, ST_tpClassFile *pClassFile){
             }
             maxVariaveis += pAuxClassFile2->fields_count;
             pAuxClassFile1 = pAuxClassFile2;
-            flag = 0;
         }
     }
-    
-    pObjeto->field_area = (ST_tpVariable *)malloc(sizeof(ST_tpVariable) * (maxVariaveis + 1));
-    strcpy(pObjeto->classeName, pClassFile->nomeCompletoClasse);
+    //ATENCAO NA ESTA COMPLETO: Acrescenntar os outros valores de ST_tpFieldHeap
+    pObjeto->field_area = (ST_tpFieldHeap *)malloc(sizeof(ST_tpFieldHeap) * (maxVariaveis + 1));
+    pObjeto->className = malloc(sizeof(pClassFile->nomeClasse));
+    memcpy((void*)pObjeto->className, (void*)pClassFile->nomeClasse, sizeof(pClassFile->nomeClasse));
     pObjeto->thread = pJVM->thread;
     pObjeto->max_no_var = maxVariaveis;
     pObjeto->ref_count = 0;
@@ -674,10 +673,11 @@ void *VM_alocarMemoriaHeapClasse(ST_tpJVM *pJVM, char *pClassName){
         pClassFile1 = pClassFile2;
     }
     pClassHeap = (ST_tpClassHeap *)malloc(sizeof(ST_tpClassHeap));
-    pClassHeap->pClasseName = (char *)malloc(strlen(pClassName)+2);
-    strcpy(pClassHeap->pClasseName, pClassName);
+    pClassHeap->pClassName = (char *)malloc(strlen(pClassName)+2);
+    strcpy(pClassHeap->pClassName, pClassName);
     
-    pClassHeap->field_area = (ST_tpVariable *)malloc(sizeof(ST_tpVariable) * (maxStaticVar + 1));
+    //ATENCAO NA ESTA COMPLETO: Acrescenntar os outros valores de ST_tpFieldHeap
+    pClassHeap->field_area = (ST_tpFieldHeap *)malloc(sizeof(ST_tpFieldHeap) * (maxStaticVar + 1));
     pClassHeap->next = NULL;
     
     if(pJVM->heap->classes == NULL){
@@ -728,6 +728,80 @@ ST_tpVariable VM_resolveField(ST_tpCONSTANT_Utf8_info *decritorFieldUtf8){
         }
     }
 } */
+
+void VM_armazenarVariavelNoFieldDaClasse(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, char *pClassName, char *pFieldName, char *pFieldDescritor,ST_tpVariable var){
+    
+    ST_tpFieldHeap *pFieldHeap;
+    ST_tpClassFile *pClassFile;
+    ST_tpClassHeap *pClassHeap, *pAux;
+    ST_tpField_info *pFieldTable = NULL;
+    char *pNameField, *pDescriptorField;
+    
+    pClassFile = PL_buscarClasse(pJVM, pClassName);
+    if(pClassFile == NULL){
+        pClassFile = LE_carregarClasse(pClassName);
+        if (pClassFile != NULL) {
+            PL_inserirClasseTopo(pJVM, pClassFile);
+        }
+        else{
+            printf("ERRO AO CARREGAR CLASSE!");
+        }
+    }
+    pFieldTable = pClassFile->field_info_table;
+
+    pFieldHeap = (ST_tpFieldHeap *)malloc(sizeof(ST_tpFieldHeap));
+    pFieldHeap->nameField       = malloc(sizeof(pFieldName));
+    pFieldHeap->decritorField   = malloc(sizeof(pFieldDescritor));
+    memcpy((void*)pFieldHeap->decritorField, (void*)pFieldDescritor, sizeof(pFieldDescritor));
+    strcpy(pFieldHeap->nameField, pFieldName);
+    pFieldHeap->var             = &var;
+    
+    /* Recuperar acesse flag do field */
+    while (pFieldTable != NULL) {
+        
+        pNameField       = (char *) pClassFile->constant_pool_table[pFieldTable->name_index - 1].info.Utf8.bytes;
+        pDescriptorField = (char *) pClassFile->constant_pool_table[pFieldTable->descriptor_index-1].info.Utf8.bytes;
+        
+        if (strcmp(pNameField, pFieldName) == 0 && strcmp(pDescriptorField, pFieldDescritor) == 0) {
+            pFieldHeap->access_flags =  pFieldTable->access_flags;
+            break;
+        }
+        pFieldTable = pFieldTable->next;
+    }
+    
+    pAux = pJVM->heap->classes;
+    
+    if (pAux == NULL){
+        pClassHeap = (ST_tpClassHeap *)malloc(sizeof(ST_tpClassHeap));
+        pClassHeap->pClassName = (char *)malloc(sizeof(pClassName));
+        
+        memcpy((void*)pClassHeap->pClassName, (void*)pClassName, sizeof(pClassName));
+        pClassHeap->field_area  = pFieldHeap;
+        pClassHeap->next        = NULL;
+        pJVM->heap->classes = pClassHeap;
+    }
+    
+    else{
+        while (pAux != NULL) {
+            if(strcmp(pAux->pClassName, pClassName) == 0) break;
+            pAux = pAux->next;
+        }
+        if (pAux == NULL) {
+            pClassHeap = (ST_tpClassHeap *)malloc(sizeof(ST_tpClassHeap));
+            pClassHeap->pClassName = (char *)malloc(sizeof(pClassName));
+            
+            memcpy((void*)pClassHeap->pClassName, (void*)pClassName, sizeof(pClassName));
+            pClassHeap->field_area  = pFieldHeap;
+            pClassHeap->next        = (pJVM->heap->classes);
+            pJVM->heap->classes     = pClassHeap;
+        }
+        else{
+            pFieldHeap->next = pAux->field_area;
+            pAux->field_area = pFieldHeap;
+        }
+    }
+}
+/*
 void *VM_armazenarValorStaticField(ST_tpJVM *pJVM, char *pClassName, char *pFieldName, char *pFieldDescritor, ST_tpVariable var){
     int i = 0;
     char *pNomeClasse;
@@ -750,10 +824,11 @@ void *VM_armazenarValorStaticField(ST_tpJVM *pJVM, char *pClassName, char *pFiel
             }
             else{
                 PL_inserirClasseTopo(pJVM, pClassFile1);
-                VM_alocarMemoriaHeapClasse(pJVM, pClassFile1->nomeClasse);
+                //VM_alocarMemoriaHeapClasse(pJVM, pClassFile1->nomeClasse);
             }
-            pFieldTable = pClassFile1->field_info_table;
+            
         }
+        pFieldTable = pClassFile1->field_info_table;
         
         while (pFieldTable != NULL) {
             pNameField = (char *) pClassFile1->constant_pool_table[pFieldTable->name_index-1].info.Utf8.bytes;
@@ -787,7 +862,7 @@ void *VM_armazenarValorStaticField(ST_tpJVM *pJVM, char *pClassName, char *pFiel
     
     pClassHeap = pJVM->heap->classes;
     while (pClassHeap != NULL) {
-        if (!(strcmp(pClassHeap->pClasseName, pClassName))) break;
+        if (!(strcmp(pClassHeap->pClassName, pClassName))) break;
         pClassHeap = pClassHeap->next;
     }
     memcpy(pClassHeap->field_area + i, &var, sizeof(var));
@@ -795,7 +870,7 @@ void *VM_armazenarValorStaticField(ST_tpJVM *pJVM, char *pClassName, char *pFiel
     return pJVM->heap->classes;
     
 }
-
+*/
 ST_tpVariable  *VM_recuperarValorStaticField(ST_tpJVM *pJVM, char *pClassName, char *pFieldName, char *pFieldDescritor){
     int i = 0;
     ST_tpVariable *var = NULL;
@@ -858,7 +933,7 @@ ST_tpVariable  *VM_recuperarValorStaticField(ST_tpJVM *pJVM, char *pClassName, c
     
     pClassHeap = pJVM->heap->classes;
     while (pClassHeap != NULL) {
-        if (!(strcmp(pClassHeap->pClasseName, pClassName))) break;
+        if (!(strcmp(pClassHeap->pClassName, pClassName))) break;
         pClassHeap = pClassHeap->next;
     }
     memcpy(var, pClassHeap->field_area + i, sizeof(ST_tpVariable));

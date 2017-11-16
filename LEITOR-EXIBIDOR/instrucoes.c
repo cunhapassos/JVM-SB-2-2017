@@ -75,7 +75,7 @@ void FU_invokevirtual(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
     if(count >= 0) {
         while( count != 0 && pFrame->operandStack != NULL) {
             PL_pushParametro(   &pFrame->parameterStack,
-                                PL_popOperando(&pFrame->operandStack));
+                             *PL_popOperando(&pFrame->operandStack));
             count --;
         }
 
@@ -141,7 +141,7 @@ int FU_invokespecial(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc, ST_tpVari
     //count ++;
     
     while( count != 0 && pFrame->operandStack != NULL) {
-        PL_pushParametro(&pFrame->parameterStack, PL_popOperando(&pFrame->operandStack));
+        PL_pushParametro(&pFrame->parameterStack, *PL_popOperando(&pFrame->operandStack));
         count --;
     }
     if(!strcmp((const char *)pMethodName, "<init>")){
@@ -151,7 +151,7 @@ int FU_invokespecial(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc, ST_tpVari
     pVar1 = &pFrame->parameterStack->variable;
     pTempHeap = pVar1->valor.obj_ref;
     
-    strcpy(nomeClasseTemp, pTempHeap->classeName);
+    strcpy(nomeClasseTemp, pTempHeap->className);
     
     pClassFile = PL_buscarClasse(pJVM, nomeClasseTemp);
     
@@ -263,7 +263,7 @@ void FU_getstatic(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
 }
 void FU_putstatic(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
     
-    ST_tpVariable var1, var2;
+    ST_tpVariable *var1, *var2;
     ST_tpCp_info *pCPInfo;
     ST_tpConstantPool *cpIndx;
     u1 parametro1, parametro2;
@@ -296,16 +296,20 @@ void FU_putstatic(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
     index2 = pCPInfo[index1 - 1].info.NameAndType.descriptor_index;
     descritorField = (char *) pCPInfo[index2 - 1].info.Utf8.bytes;
     
-    
-    var1 = PL_popOperando(&pFrame->operandStack);
-    if(var1.tipo == JBOOL || var1.tipo == JBYTE || var1.tipo == JSHORT){
-        if(var1.tipo == JBOOL) var2.valor.Int = var1.valor.Boolean;
-        if(var1.tipo == JBYTE) var2.valor.Int = var1.valor.Byte;
-        if(var1.tipo == JCHAR) var2.valor.Int = var1.valor.Char;
-        if(var1.tipo == JSHORT) var2.valor.Int = var1.valor.Short;
-        var2.tipo = JINT;
+    var2 = (ST_tpVariable *)malloc(sizeof(ST_tpVariable));
+    var1 = (ST_tpVariable *)malloc(sizeof(ST_tpVariable));
+
+    memcpy((void*) var1, PL_popOperando(&pFrame->operandStack), sizeof(ST_tpVariable));
+
+    if(var1->tipo == JBOOL || var1->tipo == JBYTE || var1->tipo == JSHORT){
+        if(var1->tipo == JBOOL) var2->valor.Int = var1->valor.Boolean;
+        if(var1->tipo == JBYTE) var2->valor.Int = var1->valor.Byte;
+        if(var1->tipo == JCHAR) var2->valor.Int = var1->valor.Char;
+        if(var1->tipo == JSHORT) var2->valor.Int = var1->valor.Short;
+        var2->tipo = JINT;
     }
-    VM_armazenarValorStaticField(pJVM, nomeClasse, nomeField, descritorField, var1);
+    VM_armazenarVariavelNoFieldDaClasse(pJVM, pFrame, nomeClasse, nomeField, descritorField, *var2);
+    //VM_armazenarValorStaticField(pJVM, nomeClasse, nomeField, descritorField, var1);
 }
 void FU_ldc(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
     int tipo, i;
@@ -317,7 +321,6 @@ void FU_ldc(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
     ST_tpCONSTANT_String_info *pString;
     ST_tpCONSTANT_Integer_info *pInteger;
 
-    
     (*pc)++;
     memcpy(&parametro1, *pc, 1);
     cpIndx = &(pFrame->cp->constant_pool_table[parametro1 - 1].info);
@@ -337,11 +340,10 @@ void FU_ldc(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
     }
     else if (cpIndx->String.tag == CONSTANT_String) {
         
-        char nomeField[] = "value";
-        char descriptorField[] = "[C";
-        char nomeClasse[] =  "java/lang/String";
+        char *nomeClasse =  "java/lang/String";
         
         pString = (ST_tpCONSTANT_String_info *) cpIndx;
+
         if(pString->StringObject == NULL){
 
             pUTF8 = (ST_tpCONSTANT_Utf8_info *) &(pFrame->cp->constant_pool_table[pString->string_index-1].info);
@@ -356,17 +358,13 @@ void FU_ldc(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
             }
         
             var2.valor.obj_ref = VM_criarObjeto(pJVM, pFrame->cp);
-            VM_armazenarValorField(pJVM, nomeClasse, nomeField, descriptorField, var1, var2);
+            VM_armazenarValorField(pJVM, nomeClasse, "value", "[C", var1, var2);
         
             var.valor.Int = 0;
-            strcpy(nomeField, "offset");
-            strcpy(descriptorField, "I");
-            VM_armazenarValorField(pJVM, nomeClasse, nomeField, descriptorField, var, var2);
+            VM_armazenarValorField(pJVM, nomeClasse, "offset", "I", var, var2);
         
             var.valor.Int = i;
-            strcpy(nomeField, "count");
-            strcpy(descriptorField, "I");
-            VM_armazenarValorField(pJVM, nomeClasse, nomeField, descriptorField, var, var2);
+            VM_armazenarValorField(pJVM, nomeClasse, "count", "I", var, var2);
         
             pString->StringObject = (ST_tpObjectHeap *) var2.valor.obj_ref;
         
@@ -377,7 +375,6 @@ void FU_ldc(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
         }
         PL_pushOperando(&pFrame->operandStack, var2);
     }
-    
 }
 
 void FU_ldc2_w(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
@@ -474,7 +471,7 @@ void FU_dload_n(ST_tpStackFrame *pFrame, int posicao){
 void FU_dstore_n(ST_tpStackFrame *pFrame, int posicao){
     ST_tpVariable var;
     
-    var = PL_popOperando(&pFrame->operandStack);
+    var = *PL_popOperando(&pFrame->operandStack);
     VM_armazenarVariavel(pFrame->localVariables, var, posicao);
     
 }
@@ -482,8 +479,8 @@ void FU_dstore_n(ST_tpStackFrame *pFrame, int posicao){
 void FU_dadd(ST_tpStackFrame *pFrame){
     ST_tpVariable var, var1, var2;
     
-    var1 = PL_popOperando(&pFrame->operandStack);
-    var2 = PL_popOperando(&pFrame->operandStack);
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var2 = *PL_popOperando(&pFrame->operandStack);
     
     var.valor.Double = var1.valor.Double + var2.valor.Double;
     var.tipo = JDOUBLE;
@@ -493,8 +490,8 @@ void FU_dadd(ST_tpStackFrame *pFrame){
 void FU_dsub(ST_tpStackFrame *pFrame){
     ST_tpVariable var, var1, var2;
     
-    var1 = PL_popOperando(&pFrame->operandStack);
-    var2 = PL_popOperando(&pFrame->operandStack);
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var2 = *PL_popOperando(&pFrame->operandStack);
     
     var.valor.Double = var2.valor.Double - var1.valor.Double;
     var.tipo = JDOUBLE;
@@ -504,8 +501,8 @@ void FU_dsub(ST_tpStackFrame *pFrame){
 void FU_dmul(ST_tpStackFrame *pFrame){
     ST_tpVariable var, var1, var2;
     
-    var1 = PL_popOperando(&pFrame->operandStack);
-    var2 = PL_popOperando(&pFrame->operandStack);
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var2 = *PL_popOperando(&pFrame->operandStack);
     
     var.valor.Double = var1.valor.Double * var2.valor.Double;
     var.tipo = JDOUBLE;
@@ -515,8 +512,8 @@ void FU_dmul(ST_tpStackFrame *pFrame){
 void FU_ddiv(ST_tpStackFrame *pFrame){
     ST_tpVariable var, var1, var2;
     
-    var1 = PL_popOperando(&pFrame->operandStack);
-    var2 = PL_popOperando(&pFrame->operandStack);
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var2 = *PL_popOperando(&pFrame->operandStack);
     
     var.valor.Double = var2.valor.Double / var1.valor.Double;
     var.tipo = JDOUBLE;
@@ -525,8 +522,8 @@ void FU_ddiv(ST_tpStackFrame *pFrame){
 void FU_drem(ST_tpStackFrame *pFrame){
     ST_tpVariable var, var1, var2;
     
-    var1 = PL_popOperando(&pFrame->operandStack);
-    var2 = PL_popOperando(&pFrame->operandStack);
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var2 = *PL_popOperando(&pFrame->operandStack);
     
     var.valor.Double = fmod(var2.valor.Double, var1.valor.Double);
     var.tipo = JDOUBLE;
@@ -535,7 +532,7 @@ void FU_drem(ST_tpStackFrame *pFrame){
 void FU_dneg(ST_tpStackFrame *pFrame){
     ST_tpVariable var;
     
-    var = PL_popOperando(&pFrame->operandStack);
+    var = *PL_popOperando(&pFrame->operandStack);
     var.valor.Double = -var.valor.Double;
     PL_pushOperando(&pFrame->operandStack, var);
 }
@@ -543,9 +540,13 @@ void FU_dneg(ST_tpStackFrame *pFrame){
 ST_tpVariable FU_dreturn(ST_tpStackFrame *pFrame){
     ST_tpVariable varReturn;
     
-    varReturn = PL_popOperando(&pFrame->operandStack); // VERIFICAR SE *pVarReturn TEM * MESMO
+    varReturn = *PL_popOperando(&pFrame->operandStack); // VERIFICAR SE *pVarReturn TEM * MESMO
     return varReturn;
-} 
+}
+
+void FU_return(ST_tpStackFrame *pFrame){
+    PL_esvaziarPilhaOperandos(&pFrame->operandStack);
+}
 void FU_bipush(ST_tpStackFrame *pFrame, u1 **pc){
     ST_tpVariable var;
     

@@ -49,11 +49,14 @@ typedef uint64_t u8;
 #define ACC_SUPER           0X0003
 #define ACC_PROTECTED       0X0004
 #define ACC_STATIC          0X0008
-#define ACC_PUBLIC_STATIC   0x0009
 #define ACC_FINAL           0X0010
+#define ACC_SYNCHRONIZED    0x0020
+#define ACC_VOLATILE        0x0040
+#define ACC_TRANSIENT       0x0080
 #define ACC_NATIVE          0X0100
 #define ACC_INTERFACE       0X0200
 #define ACC_ABSTRACT        0X0400
+#define ACC_STRICT          0x0800
 #define ACC_SYNTHETIC       0x1000
 #define ACC_ANNOTATION      0x2000
 #define ACC_ENUM            0x4000
@@ -401,17 +404,25 @@ typedef struct ClassFile{
  ** ******************************************************************************/
 typedef struct thread ST_tpThread;
 
+typedef struct FieldHeap{
+    char *nameField;
+    int access_flags;
+    char *decritorField;
+    struct Variable *var;
+    struct FieldHeap *next;
+}ST_tpFieldHeap;
+
 /**  Estrutura que representa o Heap de classes */
 typedef struct ClassHeap{
-    char *pClasseName;
-    struct Variable *field_area;
+    char *pClassName;
+    ST_tpFieldHeap *field_area;
     struct ClassHeap *next;
 }ST_tpClassHeap;
 
 /**  Estrutura que representa o Heap para objetos */
 typedef struct ObjectHeap{
-    char *classeName;
-    struct Variable *field_area;
+    char *className;
+    ST_tpFieldHeap *field_area;
     ST_tpThread *thread;
     u4 ref_count;
     u2 max_no_var;

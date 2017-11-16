@@ -114,14 +114,16 @@ void PL_pushOperando(ST_tpOperandStack **pPilhaOperandos, ST_tpVariable var){
     }
 }
 
-ST_tpVariable PL_popOperando(ST_tpOperandStack **pPilhaOperandos){
-    ST_tpVariable var;
+ST_tpVariable *PL_popOperando(ST_tpOperandStack **pPilhaOperandos){
+    ST_tpVariable *var;
     ST_tpOperandStack *pAux;
     
+    var = malloc(sizeof(ST_tpVariable));
+    
     // VERIFICAR COMO FAZER QUANDO A PILHA FOR VAZIA
-    if (pPilhaOperandos != NULL){
-        var.tipo =  (*pPilhaOperandos)->variable.tipo;
-        var.valor = (*pPilhaOperandos)->variable.valor;
+    if (*pPilhaOperandos != NULL){
+        var->tipo =  (*pPilhaOperandos)->variable.tipo;
+        var->valor = (*pPilhaOperandos)->variable.valor;
         pAux =  *pPilhaOperandos;
         *pPilhaOperandos = (*pPilhaOperandos)->next;
         
@@ -132,14 +134,16 @@ ST_tpVariable PL_popOperando(ST_tpOperandStack **pPilhaOperandos){
     }
     else{
         printf("ERRO, PILHA VAZIA, NAO PODE RETORNAR VARIAVEL!");
-        var.tipo = 0x99;
+        var->tipo = 0x99;
         return var;
     }
-    
-    
-
 }
 
+void PL_esvaziarPilhaOperandos(ST_tpOperandStack **pPilhaOperandos){
+    while (*pPilhaOperandos != NULL) {
+        PL_popOperando(pPilhaOperandos);
+    }
+}
 
 void PL_pushParametro(ST_tpParameterStack **pPilhaParametros, ST_tpVariable var){
     ST_tpParameterStack *pAux = (ST_tpParameterStack *)malloc(sizeof(ST_tpParameterStack));
@@ -156,18 +160,25 @@ void PL_pushParametro(ST_tpParameterStack **pPilhaParametros, ST_tpVariable var)
     }
 }
 
-ST_tpVariable PL_popParametro(ST_tpParameterStack **pPilhaParametros){
-    ST_tpVariable var;
+ST_tpVariable *PL_popParametro(ST_tpParameterStack **pPilhaParametros){
+    ST_tpVariable *var;
     ST_tpParameterStack *pAux;
     
-    var.tipo = (*pPilhaParametros)->variable.tipo;
-    var.valor = (*pPilhaParametros)->variable.valor;
-    pAux = (*pPilhaParametros);
-    (*pPilhaParametros) = (*pPilhaParametros)->next;
-    pAux = NULL;
-    free(pAux);
-    
-    return var;
+    var = malloc(sizeof(ST_tpVariable));
+    if (*pPilhaParametros != NULL){
+        var->tipo = (*pPilhaParametros)->variable.tipo;
+        var->valor = (*pPilhaParametros)->variable.valor;
+        pAux = (*pPilhaParametros);
+        (*pPilhaParametros) = (*pPilhaParametros)->next;
+        pAux = NULL;
+        free(pAux);
+        return var;
+    }
+    else{
+        printf("ERRO, PILHA VAZIA, NAO PODE RETORNAR VARIAVEL!");
+        var->tipo = 0x99;
+        return var;
+    }
 }
 /** ******************************************************************************
  *                      ESTRUTURAS E FUNCOES DE LISTA

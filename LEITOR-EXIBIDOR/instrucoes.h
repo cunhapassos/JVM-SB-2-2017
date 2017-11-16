@@ -59,6 +59,8 @@ void FU_dneg(ST_tpStackFrame *pFrame);
 
 ST_tpVariable FU_dreturn(ST_tpStackFrame *pFrame );
 
+void FU_return(ST_tpStackFrame *pFrame);
+
 void FU_bipush(ST_tpStackFrame *pFrame, u1 **pc);
 
 int isValidType(char t);
