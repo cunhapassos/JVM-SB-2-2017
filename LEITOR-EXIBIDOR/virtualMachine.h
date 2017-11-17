@@ -60,9 +60,9 @@ void *VM_recuperarValorField(ST_tpJVM *pJVM, char *nomeClasse, char *pFieldName,
 
 void *VM_alocarMemoriaHeapClasse(ST_tpJVM *pJVM, char *pClassName);
 
-void VM_armazenarVariavelNoFieldDaClasse(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, char *pClassName, char *pFieldName, char *pFieldDescritor,ST_tpVariable var);
+//void VM_armazenarVariavelNoFieldDaClasse(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, char *pClassName, char *pFieldName, char *pFieldDescritor,ST_tpVariable var);
 
-//void *VM_armazenarValorStaticField(ST_tpJVM *pJVM, char *pClassName, char *pFieldName, char *pFieldDescritor, ST_tpVariable var);
+void *VM_armazenarValorStaticField(ST_tpJVM *pJVM, char *pClassName, char *pFieldName, char *pFieldDescritor, ST_tpVariable var);
 
 ST_tpVariable *VM_recuperarValorStaticField(ST_tpJVM *pJVM, char *pClassName, char *pFieldName, char *pFieldDescritor);
 

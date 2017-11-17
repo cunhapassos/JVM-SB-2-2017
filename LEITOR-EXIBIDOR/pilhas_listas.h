@@ -53,6 +53,8 @@ ST_tpVariable *PL_popParametro(ST_tpParameterStack **pPilhaParametros);
 
 void PL_inserirClasseTopo(ST_tpJVM *pJvm, ST_tpClassFile *pClasse);
 
+void PL_inserirClasseFundo(ST_tpJVM *pJvm, ST_tpClassFile *pClasse);
+
 int PL_removerClasseTopo(ST_tpJVM *pJVM);
 
 ST_tpClassFile *PL_buscarClasse(ST_tpJVM *pJVM, char *nomeClasse);

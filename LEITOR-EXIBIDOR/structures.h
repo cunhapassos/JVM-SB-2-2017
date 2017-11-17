@@ -404,25 +404,18 @@ typedef struct ClassFile{
  ** ******************************************************************************/
 typedef struct thread ST_tpThread;
 
-typedef struct FieldHeap{
-    char *nameField;
-    int access_flags;
-    char *decritorField;
-    struct Variable *var;
-    struct FieldHeap *next;
-}ST_tpFieldHeap;
 
 /**  Estrutura que representa o Heap de classes */
 typedef struct ClassHeap{
     char *pClassName;
-    ST_tpFieldHeap *field_area;
+    struct Variable *field_area;
     struct ClassHeap *next;
 }ST_tpClassHeap;
 
 /**  Estrutura que representa o Heap para objetos */
 typedef struct ObjectHeap{
     char *className;
-    ST_tpFieldHeap *field_area;
+    struct Variable *field_area;
     ST_tpThread *thread;
     u4 ref_count;
     u2 max_no_var;

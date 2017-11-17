@@ -307,8 +307,8 @@ void FU_putstatic(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
         if(var1->tipo == JSHORT) var2->valor.Int = var1->valor.Short;
         var2->tipo = JINT;
     }
-    VM_armazenarVariavelNoFieldDaClasse(pJVM, pFrame, nomeClasse, nomeField, descritorField, *var2);
-    //VM_armazenarValorStaticField(pJVM, nomeClasse, nomeField, descritorField, var1);
+    //VM_armazenarVariavelNoFieldDaClasse(pJVM, pFrame, nomeClasse, nomeField, descritorField, *var2);
+    VM_armazenarValorStaticField(pJVM, nomeClasse, nomeField, descritorField, *var1);
 }
 void FU_ldc(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
     int tipo, i;

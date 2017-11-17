@@ -59,4 +59,5 @@ ST_tpAttribute_info *LE_lerAttribute(FILE *pArq, ST_tpCp_info *cp, ST_tpAttribut
 
 ST_tpClassFile *LE_carregarClasse(char *nomeArquivo);
 
+
 #endif /* leitor_h */

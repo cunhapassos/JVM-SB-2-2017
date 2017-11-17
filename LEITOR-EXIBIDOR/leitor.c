@@ -194,26 +194,15 @@ u2 *LE_lerInterfaces(FILE *pArq, ST_tpCp_info *cp, u2 interfaces_count) {
  */
 ST_tpField_info *LE_lerFields(FILE *pArq, ST_tpCp_info *cp, u2 fields_count) {
     int i, j;
-    ST_tpField_info *pFields = (ST_tpField_info *) malloc(fields_count * sizeof(ST_tpField_info));
-    /*
-     ST_tpField_info *pI = NULL;
-    
-    for(pI = pFields; pI <  (pFields + fields_count); pI++ ){
-        pI->access_flags = LE_lerU2(pArq);
-        pI->name_index = LE_lerU2(pArq);
-        pI->descriptor_index = LE_lerU2(pArq);
-        pI->attributes_count = LE_lerU2(pArq);
-        pI->attributes = (ST_tpAttribute_info *) malloc(pI->attributes_count * sizeof(ST_tpAttribute_info));
-        ST_tpAttribute_info *pJ;
-        for(pJ = pI->attributes; pJ <  (pI->attributes + pI->attributes_count); pJ++ ){
-            pJ->attribute_name_index = LE_lerU2(pArq);
-            pJ->attribute_length = LE_lerU4(pArq);
-            pJ->info = (u1 *) malloc(pJ->attribute_length * sizeof(u1)); // !!!!! VERIFICAR ISSO MELHOR LER ATRIBUTO COMO FOI FEITO NA FUNCAO *LE_lerMethods
-            fread(pJ->info, 1, pJ->attribute_length, pArq);
-        }
+    ST_tpField_info *pFields;
+    if (fields_count > 0) {
+        pFields = (ST_tpField_info *) malloc(fields_count * sizeof(ST_tpField_info));
+    }
+    else{
+        pFields = NULL;
+    }
     
 
-    }*/
     for(i = 0; i < fields_count; i++){
         pFields[i].access_flags     = LE_lerU2(pArq);
         pFields[i].name_index       = LE_lerU2(pArq);
@@ -653,12 +642,14 @@ ST_tpAttribute_info *LE_lerAttribute(FILE *pArq, ST_tpCp_info *cp, ST_tpAttribut
      tamanho = arqPontoClass->constant_pool_table[index - 1].info.Utf8.length;
      memcpy(&arqPontoClass->nomeClasse, &(arqPontoClass->constant_pool_table[index - 1].info.Utf8.bytes), tamanho + 1);
      
+     
      //wprintf(L"%s", arqPontoClass->nomeClasse);
      
      
      if(arqPontoClass->super_class > 0){
          index   = arqPontoClass->constant_pool_table[arqPontoClass->super_class - 1].info.Class.name_index;
          tamanho = arqPontoClass->constant_pool_table[index - 1].info.Utf8.length;
+         
          memcpy(&arqPontoClass->nomeSuperClasse, &(arqPontoClass->constant_pool_table[index - 1].info.Utf8.bytes), tamanho + 1);
      }
      
