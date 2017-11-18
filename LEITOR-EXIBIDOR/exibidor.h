@@ -41,6 +41,8 @@ void EX_imprimirFields(ST_tpClassFile *pClassFile);
 
 void EX_imprimirInterfaces(ST_tpClassFile *pClassFile);
 
+void EX_imprimirGeneralInformation(ST_tpClassFile *pClassFile);
+
 void EX_imprimirClassFile(ST_tpClassFile *classFile);
 
 #endif /* exibidor_h */

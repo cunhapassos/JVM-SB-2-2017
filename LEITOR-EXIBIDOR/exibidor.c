@@ -26,124 +26,42 @@
 #include "string.h"
 #include <stdlib.h>
 
-void EX_imprimirStringPool(ST_tpCp_info* cp, int index)
-{
-    if (cp[index-1].tag == CONSTANT_Utf8)
-    {
-        printf("%s", cp[index-1].info.Utf8.bytes);
-        return;
-    }
-    switch(cp[index-1].tag)
-    {
-        case CONSTANT_Class:
-            printf("<");
-            EX_imprimirStringPool(cp, cp[index-1].info.Class.name_index);
-            printf(">");
-            break;
-            
-        case CONSTANT_Fieldref:
-            printf("<");
-            EX_imprimirStringPool(cp, cp[index-1].info.Fieldref.class_index);
-            EX_imprimirStringPool(cp, cp[index-1].info.Fieldref.name_and_type_index);
-            printf(">");
-            break;
-            
-        case CONSTANT_NameAndType:
-            printf("<");
-            EX_imprimirStringPool(cp, cp[index-1].info.NameAndType.name_index);
-            printf(":");
-            EX_imprimirStringPool(cp, cp[index-1].info.NameAndType.descriptor_index);
-            printf(">");
-            break;
-            
-        case CONSTANT_Methodref:
-            printf("<");
-            EX_imprimirStringPool(cp, cp[index-1].info.Methodref.class_index);
-            EX_imprimirStringPool(cp, cp[index-1].info.Methodref.name_and_type_index);
-            printf(">");
-            break;
-            
-        case CONSTANT_InterfaceMethodref:
-            printf("<");
-            EX_imprimirStringPool(cp, cp[index-1].info.InterfaceMethodref.class_index);
-            EX_imprimirStringPool(cp, cp[index-1].info.InterfaceMethodref.name_and_type_index);
-            printf(">");
-            break;
-        case CONSTANT_String:
-            printf("<");
-            EX_imprimirStringPool(cp, cp[index-1].info.String.string_index);
-            printf(">");
-            break;
-        default:
-            break;
-    }
+/**
+ *  Descrição da função:
+ *       Imprime todo o conteudo contido na ClassFile
+ *
+ *  @param  pClassFile - Ponteiro para a estrutura do ClassFile
+ */
+void EX_imprimirClassFile(ST_tpClassFile *pClassFile){
+    EX_imprimirGeneralInformation(pClassFile);
+    EX_imprimirConstantPool(pClassFile);
+    EX_imprimirInterfaces(pClassFile);
+    EX_imprimirFields(pClassFile);
+    EX_imprimirMethods(pClassFile);
+    EX_imprimirAtributos(pClassFile, pClassFile->attribute_info_table,pClassFile->attributes_count);
 }
 
 /**
  *  Descrição da função:
- *       Imprime atributos contidos na Tabela de Atributos
+ *       Imprime as Informacoes Gerais da Classe
  *
- *  @param  pAttributeInfoTable - Ponteiro para a Tabela de Atributos
- *  @param  attributesCount - quantidades de atributos da Tabela de Atributos
+ *  @param  pClassFile - Ponteiro para a estrutura do ClassFile
  */
-void EX_imprimirAtributos(ST_tpClassFile *pClassFile, ST_tpAttribute_info *pAttributeInfoTable, u2 attributesCount){
-    int i;
-    //ST_tpAttribute_info *pN = pAttributeInfoTable;
-    
-    //for(pN = pAttributeInfoTable; pN <  (pAttributeInfoTable + attributesCount); pN++) {
-    for(i = 0; i < attributesCount; i++ ){
-        //printf("___________________________________\n");
-        
-        printf("\n   -----------------");
-        printf("\n      Attributes");
-        printf("\n   -----------------\n\n");
-        printf("\n[%02d] ",i);
-        EX_imprimirStringPool(pClassFile->constant_pool_table, pAttributeInfoTable[i].attribute_name_index);
-        
-        printf("\n...................................\n\n");
-        printf("\tGENERIC INFO:\n\n");
-        printf("\tAttribute name index: cp_info #%d ", pAttributeInfoTable[i].attribute_name_index);
-        EX_imprimirStringPool(pClassFile->constant_pool_table, pAttributeInfoTable[i].attribute_name_index);
-        printf("\n");
-        printf("\tAttibute length: %d\n", pAttributeInfoTable[i].attribute_length);
-        printf("...................................\n\n");
-        printf("\tSPECIFC INFO:\n\n");
-        
-        switch(pAttributeInfoTable[i].tag) {
-            case SOURCEFILE:
-                printf("\tSource file name index: cp_info #%d ", ((ST_tpSourceFile_attribute *) pAttributeInfoTable[i].info)->source_file_index);
-                EX_imprimirStringPool(pClassFile->constant_pool_table, ((ST_tpSourceFile_attribute *) pAttributeInfoTable[i].info)->source_file_index);
-                printf("\n");
-            break;
-            case CODE:
-                printf("\tmax_stack: %d\n",((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->max_stack);
-                printf("\tmax_locals: %d\n",((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->max_locals);
-                printf("\tcode_length: %d\n",((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->code_length);
-                printf("\n\tBytecode:\n");
-               for (int j=0; j < ((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->code_length; j++)
-                   printf("\t%d -> x%0x \n", j , ((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->code[j]);
-               printf("\n\texception_table_length: %d\n",((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->exception_table_length);
-                for (int j=0; j < ((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->exception_table_length; j++) {
-                    printf("\t%d -> x%0x \n", j , ((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->exception_table[j].start_pc);
-                    printf("\t%d -> x%0x \n", j , ((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->exception_table[j].end_pc);
-                    printf("\t%d -> x%0x \n", j , ((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->exception_table[j].handler_pc);
-                    printf("\t%d -> x%0x \n", j , ((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->exception_table[j].catch_type);
-                }
-                printf("\n\tattributes_count: %d\n",((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->attributes_count);
-                /*for (int j=0; j < ((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->code_length; j++)
-                    printf("\t%d -> x%0x \n", j , ((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->code[j]);*/
-                
-                /*u2 max_stack;
-                u2 max_locals;
-                u4 code_length;
-                u1 *code;
-                u2 exception_table_length;
-                ST_tpException_table *exception_table;
-                u2 attributes_count;
-                ST_tpAttribute_info *attribute_info;*/
-            break;
-        }
-    }
+void EX_imprimirGeneralInformation(ST_tpClassFile *pClassFile) {
+    printf("\n===================================\n        GENERAL INFORMATION\n===================================\n\n");
+    printf("Magic: 0x%08x\n",pClassFile->magic);
+    printf("Minor Version: 0x%04x\n",pClassFile->minor_version_number);
+    printf("Major Version: 0x%04x\n",pClassFile->major_version_number);
+    printf("Constant Pool Count: %d\n",pClassFile->constant_pool_count);
+    printf("Access Flags: 0x%04x\n",pClassFile->access_flags);
+    printf("This Class: cp_info #%d ",pClassFile->this_class);
+    EX_imprimirStringPool(pClassFile->constant_pool_table, pClassFile->this_class);
+    printf("\nSuper Class: cp_info #%d ",pClassFile->super_class);
+    EX_imprimirStringPool(pClassFile->constant_pool_table, pClassFile->super_class);
+    printf("\nInterfaces Count: %d\n",pClassFile->interfaces_count);
+    printf("Fields Count: %d\n",pClassFile->fields_count);
+    printf("Methods Count: %d\n",pClassFile->methods_count);
+    printf("Atributes Count: %d\n",pClassFile->attributes_count);
 }
 
 /**
@@ -155,7 +73,7 @@ void EX_imprimirAtributos(ST_tpClassFile *pClassFile, ST_tpAttribute_info *pAttr
 void EX_imprimirConstantPool(ST_tpClassFile *pClassFile) {
     
     int i;
-    printf("\n\n-----CONSTANT POOL-----\n\n");
+    printf("\n===================================\n        CONSTANT POOL\n===================================\n\n");
     for(i = 0; i <  (pClassFile->constant_pool_count-1); i++ ){
         switch(pClassFile->constant_pool_table[i].tag) {
             case CONSTANT_Utf8:
@@ -244,6 +162,41 @@ void EX_imprimirConstantPool(ST_tpClassFile *pClassFile) {
 
 /**
  *  Descrição da função:
+ *       Imprime a Tabela de Interfaces
+ *
+ *  @param  pClassFile - Ponteiro para a estrutura do ClassFile
+ */
+void EX_imprimirInterfaces(ST_tpClassFile *pClassFile) {
+    printf("\n===================================\n              INTERFACES\n===================================\n\n");
+    for(int i = 0; i < pClassFile->interfaces_count; i++) {
+        printf("\n\tInterfaces: cp_info #%d ", pClassFile->interfaces_table[i]);
+        EX_imprimirStringPool(pClassFile->constant_pool_table, pClassFile->interfaces_table[i]);
+    }
+}
+
+/**
+ *  Descrição da função:
+ *       Imprime a Tabela de Fields
+ *
+ *  @param  pClassFile - Ponteiro para a estrutura do ClassFile
+ */
+// a impressao dos Fields ainda não foi testada
+void EX_imprimirFields(ST_tpClassFile *pClassFile) {
+    printf("\n===================================\n              FIELDS\n===================================\n\n");
+    for(int i = 0; i <  pClassFile->fields_count; i++) {
+        printf("\tName: cp_info #%d ", pClassFile->field_info_table[i].name_index);
+        EX_imprimirStringPool(pClassFile->constant_pool_table, pClassFile->field_info_table[i].name_index);
+        
+        printf("\n\tDescriptor: cp_info #%d ", pClassFile->field_info_table[i].descriptor_index);
+        EX_imprimirStringPool(pClassFile->constant_pool_table, pClassFile->field_info_table[i].descriptor_index);
+        
+        printf("\n\tAccess flags: 0x%04x\n", pClassFile->field_info_table[i].access_flags);
+        EX_imprimirAtributos(pClassFile, pClassFile->field_info_table[i].attributes, pClassFile->field_info_table[i].attributes_count);
+    }
+}
+
+/**
+ *  Descrição da função:
  *       Imprime a Tabela de Metodos
  *
  *  @param  pClassFile - Ponteiro para a estrutura do ClassFile
@@ -271,64 +224,122 @@ void EX_imprimirMethods(ST_tpClassFile *pClassFile) {
 
 /**
  *  Descrição da função:
- *       Imprime a Tabela de Fields
+ *       Imprime atributos contidos na Tabela de Atributos
  *
- *  @param  pClassFile - Ponteiro para a estrutura do ClassFile
+ *  @param  pAttributeInfoTable - Ponteiro para a Tabela de Atributos
+ *  @param  attributesCount - quantidades de atributos da Tabela de Atributos
  */
-// a impressao dos Fields ainda não foi testada
-void EX_imprimirFields(ST_tpClassFile *pClassFile) {
-    ST_tpField_info *pL;
-    for(pL = pClassFile->field_info_table; pL <  (pClassFile->field_info_table+pClassFile->fields_count); pL++) {
-        printf("\n===================================\n              FIELDS\n===================================\n\n");
-        printf("\tName: ");
-        EX_imprimirStringPool(pClassFile->constant_pool_table, pL->name_index-1);
+void EX_imprimirAtributos(ST_tpClassFile *pClassFile, ST_tpAttribute_info *pAttributeInfoTable, u2 attributesCount){
+    int i;
+    //ST_tpAttribute_info *pN = pAttributeInfoTable;
+    
+    //for(pN = pAttributeInfoTable; pN <  (pAttributeInfoTable + attributesCount); pN++) {
+    for(i = 0; i < attributesCount; i++ ){
+        //printf("___________________________________\n");
         
-        printf("\tDescriptor: ");
-        EX_imprimirStringPool(pClassFile->constant_pool_table, pL->descriptor_index-1);
+        printf("\n   -----------------");
+        printf("\n      Attributes");
+        printf("\n   -----------------\n\n");
+        printf("\n[%02d] ",i);
+        EX_imprimirStringPool(pClassFile->constant_pool_table, pAttributeInfoTable[i].attribute_name_index);
         
-        printf("\tAccess flags: 0x%04x\n", pL->access_flags);
-        EX_imprimirAtributos(pClassFile, pL->attributes, pL->attributes_count);
+        printf("\n...................................\n\n");
+        printf("\tGENERIC INFO:\n\n");
+        printf("\tAttribute name index: cp_info #%d ", pAttributeInfoTable[i].attribute_name_index);
+        EX_imprimirStringPool(pClassFile->constant_pool_table, pAttributeInfoTable[i].attribute_name_index);
+        printf("\n");
+        printf("\tAttibute length: %d\n", pAttributeInfoTable[i].attribute_length);
+        printf("...................................\n\n");
+        printf("\tSPECIFC INFO:\n\n");
+        
+        switch(pAttributeInfoTable[i].tag) {
+            case SOURCEFILE:
+                printf("\tSource file name index: cp_info #%d ", ((ST_tpSourceFile_attribute *) pAttributeInfoTable[i].info)->source_file_index);
+                EX_imprimirStringPool(pClassFile->constant_pool_table, ((ST_tpSourceFile_attribute *) pAttributeInfoTable[i].info)->source_file_index);
+                printf("\n");
+            break;
+            case CODE:
+                printf("\tmax_stack: %d\n",((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->max_stack);
+                printf("\tmax_locals: %d\n",((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->max_locals);
+                printf("\tcode_length: %d\n",((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->code_length);
+                printf("\n\tBytecode:\n");
+               for (int j=0; j < ((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->code_length; j++)
+                   printf("\t%d -> x%0x \n", j , ((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->code[j]);
+               printf("\n\texception_table_length: %d\n",((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->exception_table_length);
+                for (int j=0; j < ((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->exception_table_length; j++) {
+                    printf("\t%d -> x%0x \n", j , ((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->exception_table[j].start_pc);
+                    printf("\t%d -> x%0x \n", j , ((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->exception_table[j].end_pc);
+                    printf("\t%d -> x%0x \n", j , ((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->exception_table[j].handler_pc);
+                    printf("\t%d -> x%0x \n", j , ((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->exception_table[j].catch_type);
+                }
+                printf("\n\tattributes_count: %d\n",((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->attributes_count);
+                /*for (int j=0; j < ((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->code_length; j++)
+                    printf("\t%d -> x%0x \n", j , ((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->code[j]);*/
+                
+                /*u2 max_stack;
+                u2 max_locals;
+                u4 code_length;
+                u1 *code;
+                u2 exception_table_length;
+                ST_tpException_table *exception_table;
+                u2 attributes_count;
+                ST_tpAttribute_info *attribute_info;*/
+            break;
+        }
     }
 }
 
-/**
- *  Descrição da função:
- *       Imprime a Tabela de Interfaces
- *
- *  @param  pClassFile - Ponteiro para a estrutura do ClassFile
- */
-void EX_imprimirInterfaces(ST_tpClassFile *pClassFile) {
-    u2 *pK;
-    for(pK = pClassFile->interfaces_table; pK <  (pClassFile->interfaces_table+pClassFile->interfaces_count); pK++)
-        printf("Interfaces: %04x\n", *pK);
+void EX_imprimirStringPool(ST_tpCp_info* cp, int index)
+{
+    if (cp[index-1].tag == CONSTANT_Utf8)
+    {
+        printf("%s", cp[index-1].info.Utf8.bytes);
+        return;
+    }
+    switch(cp[index-1].tag)
+    {
+        case CONSTANT_Class:
+            printf("<");
+            EX_imprimirStringPool(cp, cp[index-1].info.Class.name_index);
+            printf(">");
+            break;
+            
+        case CONSTANT_Fieldref:
+            printf("<");
+            EX_imprimirStringPool(cp, cp[index-1].info.Fieldref.class_index);
+            EX_imprimirStringPool(cp, cp[index-1].info.Fieldref.name_and_type_index);
+            printf(">");
+            break;
+            
+        case CONSTANT_NameAndType:
+            printf("<");
+            EX_imprimirStringPool(cp, cp[index-1].info.NameAndType.name_index);
+            printf(":");
+            EX_imprimirStringPool(cp, cp[index-1].info.NameAndType.descriptor_index);
+            printf(">");
+            break;
+            
+        case CONSTANT_Methodref:
+            printf("<");
+            EX_imprimirStringPool(cp, cp[index-1].info.Methodref.class_index);
+            EX_imprimirStringPool(cp, cp[index-1].info.Methodref.name_and_type_index);
+            printf(">");
+            break;
+            
+        case CONSTANT_InterfaceMethodref:
+            printf("<");
+            EX_imprimirStringPool(cp, cp[index-1].info.InterfaceMethodref.class_index);
+            EX_imprimirStringPool(cp, cp[index-1].info.InterfaceMethodref.name_and_type_index);
+            printf(">");
+            break;
+        case CONSTANT_String:
+            printf("<");
+            EX_imprimirStringPool(cp, cp[index-1].info.String.string_index);
+            printf(">");
+            break;
+        default:
+            break;
+    }
 }
 
-/**
- *  Descrição da função:
- *       Imprime todo o conteudo contido na ClassFile
- *
- *  @param  pClassFile - Ponteiro para a estrutura do ClassFile
- */
-void EX_imprimirClassFile(ST_tpClassFile *pClassFile){
-    
-    printf("\n-----GENERAL INFORMATION-----\n\n");
-    printf("Magic: 0x%08x\n",pClassFile->magic);
-    printf("Minor Version: 0x%04x\n",pClassFile->minor_version_number);
-    printf("Major Version: 0x%04x\n",pClassFile->major_version_number);
-    printf("Constant Pool Count: %d\n",pClassFile->constant_pool_count);
-    printf("Access Flags: 0x%04x\n",pClassFile->access_flags);
-    printf("This Class: cp_info #%d ",pClassFile->this_class);
-    EX_imprimirStringPool(pClassFile->constant_pool_table, pClassFile->this_class);
-    printf("\nSuper Class: cp_info #%d ",pClassFile->super_class);
-    EX_imprimirStringPool(pClassFile->constant_pool_table, pClassFile->super_class);
-    printf("\nInterfaces Count: %d\n",pClassFile->interfaces_count);
-    printf("Fields Count: %d\n",pClassFile->fields_count);
-    printf("Methods Count: %d\n",pClassFile->methods_count);
-    printf("Atributes Count: %d\n",pClassFile->attributes_count);    
-    EX_imprimirConstantPool(pClassFile);
-    EX_imprimirInterfaces(pClassFile);
-    EX_imprimirFields(pClassFile);
-    EX_imprimirMethods(pClassFile);
-    EX_imprimirAtributos(pClassFile, pClassFile->attribute_info_table,pClassFile->attributes_count);
-}
 

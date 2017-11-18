@@ -12,6 +12,7 @@
 #include "LEITOR-EXIBIDOR/exibidor.h"
 #include "LEITOR-EXIBIDOR/virtualMachine.h"
 #include "LEITOR-EXIBIDOR/pilhas_listas.h"
+#include "LEITOR-EXIBIDOR/configuracao.h"
 
 int main(int argc, const char * argv[]) {
     
@@ -31,14 +32,24 @@ int main(int argc, const char * argv[]) {
     free(p);
     p = NULL;*/
 
-    char *aux[] = {"ARQUIVOS PARA TESTES/testeStatic"};
-
-
     //const char* s = getenv("ROOT");
     //printf("PATH :%s\n",(s!=NULL)? s : "getenv returned NULL");
+    
+    char *aux[] = {"ARQUIVOS PARA TESTES/testeStatic"};
+    if(VIEWER) {
+        ST_tpClassFile * p = LE_carregarClasse(aux[0]);
+        EX_imprimirClassFile(p);
+        free(p);
+        return 0;
+    }
+    else  VM_exucutarJVM(1, aux);
+    
+
+
+
 
     
-    ST_tpJVM *pJVM = VM_exucutarJVM(1, aux);
+    
     
     
     
