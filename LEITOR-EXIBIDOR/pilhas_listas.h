@@ -47,6 +47,8 @@ void PL_pushParametro(ST_tpParameterStack **pPilhaParametros, ST_tpVariable var)
 
 ST_tpVariable *PL_popParametro(ST_tpParameterStack **pPilhaParametros);
 
+void PL_esvaziarPilhaParametros(ST_tpParameterStack **pPilhaParemetros);
+
 /** ******************************************************************************
  *                      ESTRUTURAS E FUNCOES DE LISTA
  ** ******************************************************************************/
@@ -58,5 +60,7 @@ void PL_inserirClasseFundo(ST_tpJVM *pJvm, ST_tpClassFile *pClasse);
 int PL_removerClasseTopo(ST_tpJVM *pJVM);
 
 ST_tpClassFile *PL_buscarClasse(ST_tpJVM *pJVM, char *nomeClasse);
+
+ST_tpObjectHeap *PL_buscaObjetoHeap(ST_tpObjectHeap *pObjects, char *nomeClasse);
 
 #endif /* pilhas_listas_h */

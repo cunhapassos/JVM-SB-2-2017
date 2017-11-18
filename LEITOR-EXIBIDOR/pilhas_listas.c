@@ -145,6 +145,12 @@ void PL_esvaziarPilhaOperandos(ST_tpOperandStack **pPilhaOperandos){
     }
 }
 
+void PL_esvaziarPilhaParametros(ST_tpParameterStack**pPilhaParemetros ){
+    while (*pPilhaParemetros != NULL) {
+        PL_popParametro(pPilhaParemetros);
+    }
+}
+
 void PL_pushParametro(ST_tpParameterStack **pPilhaParametros, ST_tpVariable var){
     ST_tpParameterStack *pAux = (ST_tpParameterStack *)malloc(sizeof(ST_tpParameterStack));
     
@@ -266,7 +272,7 @@ int PL_removerClasseTopo(ST_tpJVM *pJVM){
 ST_tpClassFile *PL_buscarClasse(ST_tpJVM *pJVM, char *nomeClasse){
     ST_tpClassFile *pClasse;
     char *name;
-    u2 nameIndex;
+    u2 nameIndex, thisClass;
     
     if(pJVM == NULL) return NULL;
     if (pJVM->methodArea == NULL) return NULL;
@@ -274,7 +280,8 @@ ST_tpClassFile *PL_buscarClasse(ST_tpJVM *pJVM, char *nomeClasse){
     
     for(pClasse = pJVM->methodArea->classFile; pClasse != NULL; pClasse = pClasse->next){
         
-        nameIndex = pClasse->constant_pool_table[pClasse->this_class - 1].info.Class.name_index;
+        thisClass = pClasse->this_class;
+        nameIndex = pClasse->constant_pool_table[thisClass - 1].info.Class.name_index;
         name = (char *) pClasse->constant_pool_table[nameIndex - 1].info.Utf8.bytes;
  
         if(strcmp(name, nomeClasse) == 0) return pClasse;
@@ -284,6 +291,24 @@ ST_tpClassFile *PL_buscarClasse(ST_tpJVM *pJVM, char *nomeClasse){
 }
 
 
+/**
+ Retorna um pontero para um Objeto de classe
+
+ @param pObjects   - Ponteiro para a pilha de Objetos do ObjectHeap
+ @param nomeClasse - Nome da classe referente ao objeto a ser procurado
+ @return NULL      - Se o objeto nao foi encontrado
+         pAux      - Ponteiro para o objeto encontrado
+ */
+ST_tpObjectHeap *PL_buscaObjetoHeap(ST_tpObjectHeap *pObjects, char *nomeClasse){
+ 
+    ST_tpObjectHeap *pAux;
+    
+    if(pObjects == NULL) return NULL;
+    for(pAux = pObjects; pAux != NULL; pAux = pAux->next){
+        if(strcmp(pAux->className, nomeClasse)) return pAux;
+    }
+    return NULL;
+}
 
 
 

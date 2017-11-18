@@ -297,7 +297,7 @@ void FU_putstatic(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
     
     var2 = (ST_tpVariable *)malloc(sizeof(ST_tpVariable));
     var1 = (ST_tpVariable *)malloc(sizeof(ST_tpVariable));
-
+    
     memcpy((void*) var1, PL_popOperando(&pFrame->operandStack), sizeof(ST_tpVariable));
 
     if(var1->tipo == JBOOL || var1->tipo == JBYTE || var1->tipo == JSHORT){
@@ -307,13 +307,13 @@ void FU_putstatic(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
         if(var1->tipo == JSHORT) var2->valor.Int = var1->valor.Short;
         var2->tipo = JINT;
     }
-    //VM_armazenarVariavelNoFieldDaClasse(pJVM, pFrame, nomeClasse, nomeField, descritorField, *var2);
     VM_armazenarValorStaticField(pJVM, nomeClasse, nomeField, descritorField, *var1);
 }
 void FU_ldc(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
     int tipo, i;
     u1 parametro1;
     ST_tpVariable var, var1, var2;
+    ST_tpObjectHeap *pObjeto;
     ST_tpConstantPool *cpIndx;
     ST_tpCONSTANT_Utf8_info *pUTF8;
     ST_tpCONSTANT_Float_info *pFloat;
@@ -353,17 +353,34 @@ void FU_ldc(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
             var1.valor.array_ref = VM_criarArray(tipo, "", pUTF8->length);
         
             for(i = 0; i < pUTF8->length; i++){
-                VM_armazenarValorArray(var1.valor.array_ref, i, var1);
+                var.valor.Char = pUTF8->bytes[i];
+                
+                if ((var.valor.Char & 0xe0) == 0xe0) {
+                    var.valor.Char = ((*(pUTF8->bytes) & 0xf) << 12) + ((*(pUTF8->bytes + 1) & 0x3f) << 6) + (*(pUTF8->bytes + 2) & 0x3f);
+                    i += 2;
+                }
+                else if ((var.valor.Char & 0xc0) == 0xc0){
+                    var.valor.Char = ((*(pUTF8->bytes) & 0x1f) << 12) + (*(pUTF8->bytes + 1) & 0x3f);
+                }
+                VM_armazenarValorArray(var1.valor.array_ref, i, var);
             }
         
-            var2.valor.obj_ref = VM_criarObjeto(pJVM, pFrame->cp);
+            /* Verifica se objeto ja existe */
+            pObjeto = PL_buscaObjetoHeap(pJVM->heap->objects, nomeClasse);
+            if (pObjeto == NULL) {
+                var2.valor.obj_ref = VM_alocarMemoriaHeapObjeto(pJVM, pFrame->cp);
+            }
+            else{
+                var2.valor.obj_ref = pObjeto;
+            }
+            
             VM_armazenarValorField(pJVM, nomeClasse, "value", "[C", var1, var2);
         
-            var.valor.Int = 0;
-            VM_armazenarValorField(pJVM, nomeClasse, "offset", "I", var, var2);
+           // var.valor.Int = 0;
+           // VM_armazenarValorField(pJVM, nomeClasse, "offset", "I", var, var2);
         
-            var.valor.Int = i;
-            VM_armazenarValorField(pJVM, nomeClasse, "count", "I", var, var2);
+           // var.valor.Int = i;
+           // VM_armazenarValorField(pJVM, nomeClasse, "count", "I", var, var2);
         
             pString->StringObject = (ST_tpObjectHeap *) var2.valor.obj_ref;
         
@@ -380,6 +397,7 @@ void FU_ldc2_w(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
     
     int i;
     u2 temp2Byte;
+    ST_tpObjectHeap *pObjeto;
     ST_tpConstantPool *cpIndx;
     ST_tpCONSTANT_Utf8_info *pUTF8;
     ST_tpCONSTANT_Long_info *pLong;
@@ -434,7 +452,13 @@ void FU_ldc2_w(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
                 VM_armazenarValorArray(var1.valor.array_ref, i, var1);
             }
             
-            var2.valor.obj_ref  = VM_criarObjeto(pJVM, pFrame->cp);
+            pObjeto  = VM_alocarMemoriaHeapObjeto(pJVM, pFrame->cp);
+            if (pObjeto == NULL) {
+                var2.valor.obj_ref = VM_alocarMemoriaHeapObjeto(pJVM, pFrame->cp);
+            }
+            else{
+                var2.valor.obj_ref = pObjeto;
+            }
             
             VM_armazenarValorField(pJVM, nomeClasse, nomeField, descriptorField, var1, var2);
             

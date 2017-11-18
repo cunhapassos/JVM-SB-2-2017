@@ -425,7 +425,7 @@ typedef struct ObjectHeap{
 /**  Estrutura que representa o Heap para array */
 typedef struct ArrayHeap{
     u1 type;
-    ST_tpClassFile *pClasse;
+    char *className;
     int length;
     void *area;
     u4 ref_count;

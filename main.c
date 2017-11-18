@@ -39,7 +39,8 @@ int main(int argc, const char * argv[]) {
 
     
     ST_tpJVM *pJVM = VM_exucutarJVM(1, aux);
- 
+    
+    
     
     /** ******************************************************************************
      *                            PARA CARREGAR MAIS DE UMA CLASSE

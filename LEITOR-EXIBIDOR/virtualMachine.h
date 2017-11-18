@@ -44,7 +44,7 @@ u1 *VM_retornaNomeSuperClasse(ST_tpClassFile *pClassFile);
 
 u1 *VM_retornarNomeClasse(ST_tpClassFile *pClassFile);
 
-ST_tpObjectHeap *VM_criarObjeto(ST_tpJVM *pJVM, ST_tpClassFile *pClassFile);
+ST_tpObjectHeap *VM_alocarMemoriaHeapObjeto(ST_tpJVM *pJVM, ST_tpClassFile *pClassFile);
 
 ST_tpObjectHeap *VM_recuperarObjeto(ST_tpObjectHeap *pObejectHeap, char *nomeObjeto);
 
