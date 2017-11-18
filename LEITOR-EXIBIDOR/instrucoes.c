@@ -20,6 +20,7 @@
 #include <math.h>
 #include "instrucoes.h"
 #include "pilhas_listas.h"
+#include <limits.h>
 
 void FU_invokevirtual(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
     u1 parametro1, parametro2;
@@ -307,8 +308,8 @@ void FU_putstatic(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
         if(var1->tipo == JSHORT) var2->valor.Int = var1->valor.Short;
         var2->tipo = JINT;
     }
-    //VM_armazenarVariavelNoFieldDaClasse(pJVM, pFrame, nomeClasse, nomeField, descritorField, *var2);
-    VM_armazenarValorStaticField(pJVM, nomeClasse, nomeField, descritorField, *var1);
+    VM_armazenarVariavelNoFieldDaClasse(pJVM, pFrame, nomeClasse, nomeField, descritorField, *var2);
+    //VM_armazenarValorStaticField(pJVM, nomeClasse, nomeField, descritorField, var1);
 }
 void FU_ldc(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
     int tipo, i;
@@ -460,73 +461,7 @@ void FU_ldc2_w(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
     }
 }
 
-void FU_dadd(ST_tpStackFrame *pFrame){
-    ST_tpVariable var, var1, var2;
-    
-    var1 = *PL_popOperando(&pFrame->operandStack);
-    var2 = *PL_popOperando(&pFrame->operandStack);
-    
-    var.valor.Double = var1.valor.Double + var2.valor.Double;
-    var.tipo = JDOUBLE;
-    PL_pushOperando(&pFrame->operandStack, var);
-}
 
-void FU_dsub(ST_tpStackFrame *pFrame){
-    ST_tpVariable var, var1, var2;
-    
-    var1 = *PL_popOperando(&pFrame->operandStack);
-    var2 = *PL_popOperando(&pFrame->operandStack);
-    
-    var.valor.Double = var2.valor.Double - var1.valor.Double;
-    var.tipo = JDOUBLE;
-    PL_pushOperando(&pFrame->operandStack, var);
-}
-
-void FU_dmul(ST_tpStackFrame *pFrame){
-    ST_tpVariable var, var1, var2;
-    
-    var1 = *PL_popOperando(&pFrame->operandStack);
-    var2 = *PL_popOperando(&pFrame->operandStack);
-    
-    var.valor.Double = var1.valor.Double * var2.valor.Double;
-    var.tipo = JDOUBLE;
-    PL_pushOperando(&pFrame->operandStack, var);
-}
-
-void FU_ddiv(ST_tpStackFrame *pFrame){
-    ST_tpVariable var, var1, var2;
-    
-    var1 = *PL_popOperando(&pFrame->operandStack);
-    var2 = *PL_popOperando(&pFrame->operandStack);
-    
-    var.valor.Double = var2.valor.Double / var1.valor.Double;
-    var.tipo = JDOUBLE;
-    PL_pushOperando(&pFrame->operandStack, var);
-}
-void FU_drem(ST_tpStackFrame *pFrame){
-    ST_tpVariable var, var1, var2;
-    
-    var1 = *PL_popOperando(&pFrame->operandStack);
-    var2 = *PL_popOperando(&pFrame->operandStack);
-    
-    var.valor.Double = fmod(var2.valor.Double, var1.valor.Double);
-    var.tipo = JDOUBLE;
-    PL_pushOperando(&pFrame->operandStack, var);
-}
-void FU_dneg(ST_tpStackFrame *pFrame){
-    ST_tpVariable var;
-    
-    var = *PL_popOperando(&pFrame->operandStack);
-    var.valor.Double = -var.valor.Double;
-    PL_pushOperando(&pFrame->operandStack, var);
-}
-            
-ST_tpVariable FU_dreturn(ST_tpStackFrame *pFrame){
-    ST_tpVariable varReturn;
-    
-    varReturn = *PL_popOperando(&pFrame->operandStack); // VERIFICAR SE *pVarReturn TEM * MESMO
-    return varReturn;
-}
 
 void FU_return(ST_tpStackFrame *pFrame){
     PL_esvaziarPilhaOperandos(&pFrame->operandStack);
@@ -1014,11 +949,11 @@ void FU_dup_x1(ST_tpStackFrame *pFrame){
 }
 
 void FU_dup_x2(ST_tpStackFrame *pFrame){
-    ST_tpVariable var1, var2, var3;
+    ST_tpVariable var1, var2;
     var1 = *PL_popOperando(&pFrame->operandStack);
     var2 = *PL_popOperando(&pFrame->operandStack);
     if (var2.tipo!=JLONG && var2.tipo!=JDOUBLE){
-        var3=*PL_popOperando(&pFrame->operandStack);
+    	ST_tpVariable var3=*PL_popOperando(&pFrame->operandStack);
         PL_pushOperando(&pFrame->operandStack, var1);
         PL_pushOperando(&pFrame->operandStack, var3);
         PL_pushOperando(&pFrame->operandStack, var2);
@@ -1029,4 +964,381 @@ void FU_dup_x2(ST_tpStackFrame *pFrame){
         PL_pushOperando(&pFrame->operandStack, var2);
         PL_pushOperando(&pFrame->operandStack, var1);
     }
+}
+
+void FU_dup2(ST_tpStackFrame *pFrame){
+	ST_tpVariable var1; 
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    if (var1.tipo!=JLONG && var1.tipo!=JDOUBLE){
+    	ST_tpVariable var2;
+    	var2 = *PL_popOperando(&pFrame->operandStack);
+    	PL_pushOperando(&pFrame->operandStack, var2);
+        PL_pushOperando(&pFrame->operandStack, var1);
+        PL_pushOperando(&pFrame->operandStack, var2);
+        PL_pushOperando(&pFrame->operandStack, var1);
+    }
+    else{
+    	PL_pushOperando(&pFrame->operandStack, var1);
+        PL_pushOperando(&pFrame->operandStack, var1);
+    }
+}
+
+void FU_dup2_x1(ST_tpStackFrame *pFrame){
+	ST_tpVariable var1, var2; 
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var2 = *PL_popOperando(&pFrame->operandStack);
+    if (var1.tipo!=JLONG && var1.tipo!=JDOUBLE){
+    	ST_tpVariable var3;
+    	var3 = *PL_popOperando(&pFrame->operandStack);
+    	PL_pushOperando(&pFrame->operandStack, var2);
+    	PL_pushOperando(&pFrame->operandStack, var1);
+        PL_pushOperando(&pFrame->operandStack, var3);
+        PL_pushOperando(&pFrame->operandStack, var2);
+        PL_pushOperando(&pFrame->operandStack, var1);
+    }
+    else{
+    	PL_pushOperando(&pFrame->operandStack, var1);
+    	PL_pushOperando(&pFrame->operandStack, var2);	
+        PL_pushOperando(&pFrame->operandStack, var1);
+    }
+}
+
+void FU_dup2_x2(ST_tpStackFrame *pFrame){
+	ST_tpVariable var1, var2; 
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var2 = *PL_popOperando(&pFrame->operandStack);
+    if (var1.tipo!=JLONG && var1.tipo!=JDOUBLE && var2.tipo!=JLONG && var2.tipo!=JDOUBLE){
+    	ST_tpVariable var3;
+    	var3 = *PL_popOperando(&pFrame->operandStack);
+    	if (var3.tipo!=JLONG && var3.tipo!=JDOUBLE){
+    		ST_tpVariable var4 = *PL_popOperando(&pFrame->operandStack);	
+    		PL_pushOperando(&pFrame->operandStack, var2);
+	    	PL_pushOperando(&pFrame->operandStack, var1);
+	        PL_pushOperando(&pFrame->operandStack, var4);
+	        PL_pushOperando(&pFrame->operandStack, var3);
+	        PL_pushOperando(&pFrame->operandStack, var2);
+	        PL_pushOperando(&pFrame->operandStack, var1);
+    	}
+    	else{
+    		PL_pushOperando(&pFrame->operandStack, var2);
+	    	PL_pushOperando(&pFrame->operandStack, var1);
+	        PL_pushOperando(&pFrame->operandStack, var3);
+	        PL_pushOperando(&pFrame->operandStack, var2);
+	        PL_pushOperando(&pFrame->operandStack, var1);
+    	}}
+
+    else if (var1.tipo==JLONG && var1.tipo==JDOUBLE){
+    	ST_tpVariable var3;
+    	var3 = *PL_popOperando(&pFrame->operandStack);
+    	PL_pushOperando(&pFrame->operandStack, var1);
+	    PL_pushOperando(&pFrame->operandStack, var3);
+	    PL_pushOperando(&pFrame->operandStack, var2);
+	    PL_pushOperando(&pFrame->operandStack, var1);
+    }		
+    else{
+    	PL_pushOperando(&pFrame->operandStack, var1);
+    	PL_pushOperando(&pFrame->operandStack, var2);	
+        PL_pushOperando(&pFrame->operandStack, var1);
+    }
+}
+
+void FU_swap(ST_tpStackFrame *pFrame){
+    ST_tpVariable var1, var2;
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var2 = *PL_popOperando(&pFrame->operandStack);
+    PL_pushOperando(&pFrame->operandStack, var1);
+	PL_pushOperando(&pFrame->operandStack, var2);
+}
+
+void FU_iadd(ST_tpStackFrame *pFrame){
+    ST_tpVariable var1, var2, var;
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var2 = *PL_popOperando(&pFrame->operandStack);
+    var.valor.Int = var1.valor.Int + var2.valor.Int;
+    var.tipo=JINT;
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+void FU_ladd(ST_tpStackFrame *pFrame){
+    ST_tpVariable var1, var2, var;
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var2 = *PL_popOperando(&pFrame->operandStack);
+    var.valor.Long = var1.valor.Long + var2.valor.Long;
+    var.tipo=JLONG;
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+void FU_fadd(ST_tpStackFrame *pFrame){
+    ST_tpVariable var1, var2, var;
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var2 = *PL_popOperando(&pFrame->operandStack);
+    var.valor.Float = var1.valor.Float + var2.valor.Float;
+    var.tipo=JFLOAT;
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+void FU_dadd(ST_tpStackFrame *pFrame){
+    ST_tpVariable var, var1, var2;
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var2 = *PL_popOperando(&pFrame->operandStack);
+    var.valor.Double = var1.valor.Double + var2.valor.Double;
+    var.tipo = JDOUBLE;
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+void FU_isub(ST_tpStackFrame *pFrame){
+    ST_tpVariable var, var1, var2;
+    
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var2 = *PL_popOperando(&pFrame->operandStack);
+    
+    var.valor.Int = var2.valor.Int - var1.valor.Int;
+    var.tipo = JINT;
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+void FU_lsub(ST_tpStackFrame *pFrame){
+    ST_tpVariable var, var1, var2;
+    
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var2 = *PL_popOperando(&pFrame->operandStack);
+    
+    var.valor.Long = var2.valor.Long - var1.valor.Long;
+    var.tipo = JLONG;
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+void FU_fsub(ST_tpStackFrame *pFrame){
+    ST_tpVariable var, var1, var2;
+    
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var2 = *PL_popOperando(&pFrame->operandStack);
+    
+    var.valor.Float = var2.valor.Float - var1.valor.Float;
+    var.tipo = JFLOAT;
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+
+void FU_dsub(ST_tpStackFrame *pFrame){
+    ST_tpVariable var, var1, var2;
+    
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var2 = *PL_popOperando(&pFrame->operandStack);
+    
+    var.valor.Double = var2.valor.Double - var1.valor.Double;
+    var.tipo = JDOUBLE;
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+void FU_imul(ST_tpStackFrame *pFrame){
+    ST_tpVariable var, var1, var2;
+    
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var2 = *PL_popOperando(&pFrame->operandStack);
+    
+    var.valor.Int = var1.valor.Int * var2.valor.Int;
+    var.tipo = JINT;
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+void FU_lmul(ST_tpStackFrame *pFrame){
+    ST_tpVariable var, var1, var2;
+    
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var2 = *PL_popOperando(&pFrame->operandStack);
+    
+    var.valor.Long = var1.valor.Long * var2.valor.Long;
+    var.tipo = JLONG;
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+void FU_fmul(ST_tpStackFrame *pFrame){
+    ST_tpVariable var, var1, var2;
+    
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var2 = *PL_popOperando(&pFrame->operandStack);
+    
+    var.valor.Float = var1.valor.Float * var2.valor.Float;
+    var.tipo = JFLOAT;
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+void FU_dmul(ST_tpStackFrame *pFrame){
+    ST_tpVariable var, var1, var2;
+    
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var2 = *PL_popOperando(&pFrame->operandStack);
+    
+    var.valor.Double = var1.valor.Double * var2.valor.Double;
+    var.tipo = JDOUBLE;
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+void FU_idiv(ST_tpStackFrame *pFrame){														
+    ST_tpVariable var, var1, var2;
+    
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var2 = *PL_popOperando(&pFrame->operandStack);
+    
+    if (var1.valor.Int==0){
+		/* EXCESSÃO	ARITMÉTICA*/
+	}
+	else if (var2.valor.Int==INT_MIN && var1.valor.Int==-1){
+		var.valor.Int=INT_MIN;
+	}
+
+	else{
+		var.valor.Int=var2.valor.Int/var1.valor.Int;
+
+	}
+    var.tipo = JINT;
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+void FU_ldiv(ST_tpStackFrame *pFrame){
+    ST_tpVariable var, var1, var2;
+    
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var2 = *PL_popOperando(&pFrame->operandStack);
+    
+   	if (var1.valor.Long==0){
+		/* EXCESSÃO	ARITMÉTICA*/
+	}
+	else if (var2.valor.Long==LONG_MIN && var1.valor.Long==-1){
+		var.valor.Long=LONG_MIN;
+	}
+
+	else{
+		var.valor.Long=var2.valor.Long/var1.valor.Long;
+
+	}
+    var.tipo = JLONG;
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+void FU_fdiv(ST_tpStackFrame *pFrame){
+    ST_tpVariable var, var1, var2;
+    
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var2 = *PL_popOperando(&pFrame->operandStack);
+    
+    var.valor.Float = var2.valor.Float / var1.valor.Float;
+    var.tipo = JFLOAT;
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+void FU_ddiv(ST_tpStackFrame *pFrame){
+    ST_tpVariable var, var1, var2;
+    
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var2 = *PL_popOperando(&pFrame->operandStack);
+    
+    var.valor.Double = var2.valor.Double / var1.valor.Double;
+    var.tipo = JDOUBLE;
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+void FU_irem(ST_tpStackFrame *pFrame){
+    ST_tpVariable var, var1, var2;
+    
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var2 = *PL_popOperando(&pFrame->operandStack);
+
+	if (var1.valor.Int==0){
+		/* EXCESSÃO	*/
+	}
+	else if (var2.valor.Int==INT_MIN && var1.valor.Int==-1){
+		var.valor.Int=0;
+	}
+
+	else{
+		var.valor.Int=var2.valor.Int%var1.valor.Int;
+	}
+    var.tipo = JINT;
+
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+void FU_lrem(ST_tpStackFrame *pFrame){
+    ST_tpVariable var, var1, var2;
+    
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var2 = *PL_popOperando(&pFrame->operandStack);
+    
+    if (var1.valor.Long==0){
+		/* EXCESSÃO	ARITMÉTICA*/
+	}
+	else if (var2.valor.Long==LONG_MIN && var1.valor.Long==-1){
+		var.valor.Long=0;
+	}
+
+	else{
+		var.valor.Long=var2.valor.Long%var1.valor.Long;
+
+	}
+    var.tipo = JDOUBLE;
+    
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+void FU_frem(ST_tpStackFrame *pFrame){
+    ST_tpVariable var, var1, var2;
+    
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var2 = *PL_popOperando(&pFrame->operandStack);
+    
+    var.valor.Double = fmod(var2.valor.Double, var1.valor.Double);
+    var.tipo = JDOUBLE;
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+void FU_drem(ST_tpStackFrame *pFrame){
+    ST_tpVariable var, var1, var2;
+    
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var2 = *PL_popOperando(&pFrame->operandStack);
+    
+    var.valor.Double = fmod(var2.valor.Double, var1.valor.Double);
+    var.tipo = JDOUBLE;
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+void FU_ineg(ST_tpStackFrame *pFrame){
+    ST_tpVariable var;
+    
+    var = *PL_popOperando(&pFrame->operandStack);
+    var.valor.Int = ~var.valor.Int+1;
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+void FU_lneg(ST_tpStackFrame *pFrame){
+    ST_tpVariable var;
+    
+    var = *PL_popOperando(&pFrame->operandStack);
+    var.valor.Long = ~var.valor.Long+1;
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+void FU_fneg(ST_tpStackFrame *pFrame){
+    ST_tpVariable var;
+    
+    var = *PL_popOperando(&pFrame->operandStack);
+    var.valor.Float = -var.valor.Float;
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+void FU_dneg(ST_tpStackFrame *pFrame){
+    ST_tpVariable var;
+    
+    var = *PL_popOperando(&pFrame->operandStack);
+    var.valor.Double = -var.valor.Double;
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+            
+ST_tpVariable FU_dreturn(ST_tpStackFrame *pFrame){
+    ST_tpVariable varReturn;
+    
+    varReturn = *PL_popOperando(&pFrame->operandStack); // VERIFICAR SE *pVarReturn TEM * MESMO
+    return varReturn;
 }

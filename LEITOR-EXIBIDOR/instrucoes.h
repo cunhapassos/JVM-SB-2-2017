@@ -51,18 +51,6 @@ void FU_dstore_n(ST_tpStackFrame *pFrame, int posicao);
 
 void FU_astore_n(ST_tpStackFrame *pFrame, int posicao);
 
-void FU_dadd(ST_tpStackFrame *pFrame);
-
-void FU_dsub(ST_tpStackFrame *pFrame);
-
-void FU_dmul(ST_tpStackFrame *pFrame);
-
-void FU_ddiv(ST_tpStackFrame *pFrame);
-
-void FU_drem(ST_tpStackFrame *pFrame);
-
-void FU_dneg(ST_tpStackFrame *pFrame);
-
 ST_tpVariable FU_dreturn(ST_tpStackFrame *pFrame );
 
 void FU_return(ST_tpStackFrame *pFrame);
@@ -152,5 +140,61 @@ void FU_dup(ST_tpStackFrame *pFrame);
 void FU_dup_x1(ST_tpStackFrame *pFrame);
 
 void FU_dup_x2(ST_tpStackFrame *pFrame);
+
+void FU_dup2(ST_tpStackFrame *pFrame);
+
+void FU_dup2_x1(ST_tpStackFrame *pFrame);
+
+void FU_dup2_x2(ST_tpStackFrame *pFrame);
+
+void FU_swap(ST_tpStackFrame *pFrame);
+
+void FU_iadd(ST_tpStackFrame *pFrame);
+
+void FU_ladd(ST_tpStackFrame *pFrame);
+
+void FU_fadd(ST_tpStackFrame *pFrame);
+
+void FU_dadd(ST_tpStackFrame *pFrame);
+
+void FU_isub(ST_tpStackFrame *pFrame);
+
+void FU_lsub(ST_tpStackFrame *pFrame);
+
+void FU_fsub(ST_tpStackFrame *pFrame);
+
+void FU_dsub(ST_tpStackFrame *pFrame);
+
+void FU_imul(ST_tpStackFrame *pFrame);
+
+void FU_lmul(ST_tpStackFrame *pFrame);
+
+void FU_fmul(ST_tpStackFrame *pFrame);
+
+void FU_dmul(ST_tpStackFrame *pFrame);
+
+void FU_idiv(ST_tpStackFrame *pFrame);
+
+void FU_ldiv(ST_tpStackFrame *pFrame);
+
+void FU_fdiv(ST_tpStackFrame *pFrame);
+
+void FU_ddiv(ST_tpStackFrame *pFrame);
+
+void FU_irem(ST_tpStackFrame *pFrame);
+
+void FU_lrem(ST_tpStackFrame *pFrame);
+
+void FU_frem(ST_tpStackFrame *pFrame);
+
+void FU_drem(ST_tpStackFrame *pFrame);
+
+void FU_ineg(ST_tpStackFrame *pFrame);
+
+void FU_lneg(ST_tpStackFrame *pFrame);
+
+void FU_fneg(ST_tpStackFrame *pFrame);
+
+void FU_dneg(ST_tpStackFrame *pFrame);
 
 #endif /* instrucoes_h */
