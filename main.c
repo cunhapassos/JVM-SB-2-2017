@@ -16,7 +16,7 @@
 
 int main(int argc, const char * argv[]) {
     
-    char *aux[] = {"ARQUIVOS PARA TESTES/short_aritmetica"};
+    char *aux[] = {"ARQUIVOS PARA TESTES/testeStatic"};
     if(VIEWER) {
         EX_imprimirClassFile(LE_lerClasse(aux[0]));
         return 0;

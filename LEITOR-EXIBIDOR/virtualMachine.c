@@ -888,22 +888,4 @@ ST_tpJVM *VM_exucutarJVM(int numeroClasses, char *nomeClasses[]){
     
     return pJVM;
 }
-/*
-void VM_UTF8paraString(ST_tpCONSTANT_Utf8_info *pUTF8, char *string){
-    int i;
-    char aux;
 
-    for(i = 0; i < pUTF8->length; i++){
-        aux = (char) pUTF8->bytes[i];
-
-        if ((aux & 0xe0) == 0xe0) {
-            aux = ((pUTF8->bytes[i] & 0xf) << 12) + ((pUTF8->bytes[i + 1] & 0x3f) << 6) + (pUTF8->bytes[i + 2] & 0x3f);
-            i += 2;
-        }
-        else if ((aux & 0xc0) == 0xc0){
-            aux = ((pUTF8->bytes[i] & 0x1f) << 12) + (pUTF8->bytes[i + 1] & 0x3f);
-        }
-        string[i] = aux;
-    }
-}
-*/

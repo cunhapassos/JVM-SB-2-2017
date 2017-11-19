@@ -21,11 +21,11 @@
 #ifndef configuracao_h
 #define configuracao_h
 
-#define VIEWER 1 // 1 para ativar o modo de exibicao do arquivo .class
+#define VIEWER 0 // 1 para ativar o modo de exibicao do arquivo .class
 
-//#define PATH "/Users/paulopassos/Documents/GitHub/JVM-SB-2-2017/"
+#define PATH "/Users/paulopassos/Documents/GitHub/JVM-SB-2-2017/"
 //#define PATH "/Users/paulopassos/Documents/JVM-SB-2-2017/"
-#define PATH "/Users/danielmatias/Desktop/JVM-SB-2-2017/"
+//#define PATH "/Users/danielmatias/Desktop/JVM-SB-2-2017/"
 //#define PATH "/home/alon/Documentos/jvm/JVM-SB-2-2017/"
 
 #endif /* configuracao_h */

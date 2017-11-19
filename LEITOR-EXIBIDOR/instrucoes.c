@@ -1429,7 +1429,7 @@ void FU_lrem(ST_tpStackFrame *pFrame){
         var.valor.Long=var2.valor.Long%var1.valor.Long;
 
     }
-    var.tipo = JDOUBLE;
+    var.tipo = JLONG;
     
     PL_pushOperando(&pFrame->operandStack, var);
 }
@@ -1440,8 +1440,8 @@ void FU_frem(ST_tpStackFrame *pFrame){
     var1 = *PL_popOperando(&pFrame->operandStack);
     var2 = *PL_popOperando(&pFrame->operandStack);
     
-    var.valor.Double = fmod(var2.valor.Double, var1.valor.Double);
-    var.tipo = JDOUBLE;
+    var.valor.Float = fmod(var2.valor.Double, var1.valor.Double);
+    var.tipo = JFLOAT;
     PL_pushOperando(&pFrame->operandStack, var);
 }
 
