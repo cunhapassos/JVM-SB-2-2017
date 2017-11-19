@@ -16,7 +16,7 @@
 
 int main(int argc, const char * argv[]) {
     
-    char *aux[] = {"ARQUIVOS PARA TESTES/java/lang/StringBuffer"};
+    char *aux[] = {"ARQUIVOS PARA TESTES/java/lang/short_aritmetica"};
     if(VIEWER) {
         EX_imprimirClassFile(LE_carregarClasse(aux[0]));
         return 0;
