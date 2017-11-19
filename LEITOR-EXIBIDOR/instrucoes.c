@@ -18,6 +18,7 @@
  @}********************************************************************************/
 
 #include <math.h>
+#include <float.h>
 #include "instrucoes.h"
 #include "pilhas_listas.h"
 #include <limits.h>
@@ -1493,4 +1494,347 @@ ST_tpVariable FU_dreturn(ST_tpStackFrame *pFrame){
     
     varReturn = *PL_popOperando(&pFrame->operandStack); // VERIFICAR SE *pVarReturn TEM * MESMO
     return varReturn;
+}
+
+void FU_lcmp(ST_tpStackFrame *pFrame){
+    ST_tpVariable var, var1, var2;
+
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var2 = *PL_popOperando(&pFrame->operandStack);
+
+    if (var1.valor.Long == var2.valor.Long) {
+        var.valor.Int = 0;
+    }
+    else if(var1.valor.Long > var2.valor.Long){
+        var.valor.Int = -1;
+    }
+    else var.valor.Int = 1;
+
+    var.tipo = JINT;
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+void FU_fcmpl(ST_tpStackFrame *pFrame){
+    ST_tpVariable var, var1, var2;
+
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var2 = *PL_popOperando(&pFrame->operandStack);
+
+    if (isnan(var1.valor.Float) || isnan(var2.valor.Float)) {
+        var.valor.Int = -1;
+    }
+    else if(var1.valor.Float == var2.valor.Float){
+        var.valor.Int = 0;
+    }
+    else if(var1.valor.Float > var2.valor.Float){
+        var.valor.Int = -1;
+    }
+    else var.valor.Int = 1;
+
+    var.tipo = JINT;
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+void FU_fcmpg(ST_tpStackFrame *pFrame){
+    ST_tpVariable var, var1, var2;
+
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var2 = *PL_popOperando(&pFrame->operandStack);
+
+    if (isnan(var1.valor.Float) || isnan(var2.valor.Float)) {
+        var.valor.Int = 1;
+    }
+    else if(var1.valor.Float == var2.valor.Float){
+        var.valor.Int = 0;
+    }
+    else if(var1.valor.Float > var2.valor.Float){
+        var.valor.Int = -1;
+    }
+    else var.valor.Int = 1;
+
+    var.tipo = JINT;
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+void FU_dcmpl(ST_tpStackFrame *pFrame){
+    ST_tpVariable var, var1, var2;
+
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var2 = *PL_popOperando(&pFrame->operandStack);
+
+    if (isnan(var1.valor.Double) || isnan(var2.valor.Double)) {
+        var.valor.Int = -1;
+    }
+    else if(var1.valor.Double == var2.valor.Double){
+        var.valor.Int = 0;
+    }
+    else if(var1.valor.Double > var2.valor.Double){
+        var.valor.Int = -1;
+    }
+    else var.valor.Int = 1;
+
+    var.tipo = JINT;
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+void FU_dcmpg(ST_tpStackFrame *pFrame){
+    ST_tpVariable var, var1, var2;
+
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var2 = *PL_popOperando(&pFrame->operandStack);
+
+    if (isnan(var1.valor.Double) || isnan(var2.valor.Double)) {
+        var.valor.Int = 1;
+    }
+    else if(var1.valor.Double == var2.valor.Double){
+        var.valor.Int = 0;
+    }
+    else if(var1.valor.Double > var2.valor.Double){
+        var.valor.Int = -1;
+    }
+    else var.valor.Int = 1;
+
+    var.tipo = JINT;
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+void FU_ifeq(ST_tpStackFrame *pFrame, u1 **pc){
+    ST_tpVariable var;
+    u1 parametro1, parametro2;
+    u2 temp2Byte;
+
+    (*pc)++;
+    memcpy(&parametro1, *pc, 1);
+    (*pc)++;
+    memcpy(&parametro2, *pc, 1);
+    temp2Byte = (parametro1 << 8) + parametro2;
+
+    var = *PL_popOperando(&pFrame->operandStack);
+
+    if (var.valor.Int == 0) {
+        *pc += (temp2Byte - 3);
+    }
+}
+
+void FU_ifne(ST_tpStackFrame *pFrame, u1 **pc){
+    ST_tpVariable var;
+    u1 parametro1, parametro2;
+    u2 temp2Byte;
+
+    (*pc)++;
+    memcpy(&parametro1, *pc, 1);
+    (*pc)++;
+    memcpy(&parametro2, *pc, 1);
+    temp2Byte = (parametro1 << 8) + parametro2;
+
+    var = *PL_popOperando(&pFrame->operandStack);
+
+    if (var.valor.Int != 0) {
+        *pc += (temp2Byte - 3);
+    }
+}
+
+void FU_iflt(ST_tpStackFrame *pFrame, u1 **pc){
+    ST_tpVariable var;
+    u1 parametro1, parametro2;
+    u2 temp2Byte;
+
+    (*pc)++;
+    memcpy(&parametro1, *pc, 1);
+    (*pc)++;
+    memcpy(&parametro2, *pc, 1);
+    temp2Byte = (parametro1 << 8) + parametro2;
+
+    var = *PL_popOperando(&pFrame->operandStack);
+
+    if (var.valor.Int < 0) {
+        *pc += (temp2Byte - 3);
+    }
+}
+
+void FU_ifge(ST_tpStackFrame *pFrame, u1 **pc){
+    ST_tpVariable var;
+    u1 parametro1, parametro2;
+    u2 temp2Byte;
+
+    (*pc)++;
+    memcpy(&parametro1, *pc, 1);
+    (*pc)++;
+    memcpy(&parametro2, *pc, 1);
+    temp2Byte = (parametro1 << 8) + parametro2;
+
+    var = *PL_popOperando(&pFrame->operandStack);
+
+    if (var.valor.Int >= 0) {
+        *pc += (temp2Byte - 3);
+    }
+}
+
+void FU_ifgt(ST_tpStackFrame *pFrame, u1 **pc){
+    ST_tpVariable var;
+    u1 parametro1, parametro2;
+    u2 temp2Byte;
+
+    (*pc)++;
+    memcpy(&parametro1, *pc, 1);
+    (*pc)++;
+    memcpy(&parametro2, *pc, 1);
+    temp2Byte = (parametro1 << 8) + parametro2;
+
+    var = *PL_popOperando(&pFrame->operandStack);
+
+    if (var.valor.Int > 0) {
+        *pc += (temp2Byte - 3);
+    }
+}
+
+void FU_ifle(ST_tpStackFrame *pFrame, u1 **pc){
+    ST_tpVariable var;
+    u1 parametro1, parametro2;
+    u2 temp2Byte;
+
+    (*pc)++;
+    memcpy(&parametro1, *pc, 1);
+    (*pc)++;
+    memcpy(&parametro2, *pc, 1);
+    temp2Byte = (parametro1 << 8) + parametro2;
+
+    var = *PL_popOperando(&pFrame->operandStack);
+
+    if (var.valor.Int <= 0) {
+        *pc += (temp2Byte - 3);
+    }
+}
+
+void FU_if_icmpeq(ST_tpStackFrame *pFrame, u1 **pc){
+    ST_tpVariable var1, var2;
+    u1 parametro1, parametro2;
+    u2 temp2Byte;
+
+    (*pc)++;
+    memcpy(&parametro1, *pc, 1);
+    (*pc)++;
+    memcpy(&parametro2, *pc, 1);
+    temp2Byte = (parametro1 << 8) + parametro2;
+
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var2 = *PL_popOperando(&pFrame->operandStack);
+
+    if (var1.valor.Int <= var2.valor.Int) {
+        *pc += (temp2Byte - 3);
+    }
+}
+
+void FU_if_icmpne(ST_tpStackFrame *pFrame, u1 **pc){
+    ST_tpVariable var1, var2;
+    u1 parametro1, parametro2;
+    u2 temp2Byte;
+
+    (*pc)++;
+    memcpy(&parametro1, *pc, 1);
+    (*pc)++;
+    memcpy(&parametro2, *pc, 1);
+    temp2Byte = (parametro1 << 8) + parametro2;
+
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var2 = *PL_popOperando(&pFrame->operandStack);
+
+    if (var1.valor.Int != var2.valor.Int) {
+        *pc += (temp2Byte - 3);
+    }
+}
+
+void FU_if_icmplt(ST_tpStackFrame *pFrame, u1 **pc){
+    ST_tpVariable var1, var2;
+    u1 parametro1, parametro2;
+    u2 temp2Byte;
+
+    (*pc)++;
+    memcpy(&parametro1, *pc, 1);
+    (*pc)++;
+    memcpy(&parametro2, *pc, 1);
+    temp2Byte = (parametro1 << 8) + parametro2;
+
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var2 = *PL_popOperando(&pFrame->operandStack);
+
+    if (var2.valor.Int < var1.valor.Int) {
+        *pc += (temp2Byte - 3);
+    }
+}
+
+void FU_if_icmpge(ST_tpStackFrame *pFrame, u1 **pc){
+    ST_tpVariable var1, var2;
+    u1 parametro1, parametro2;
+    u2 temp2Byte;
+
+    (*pc)++;
+    memcpy(&parametro1, *pc, 1);
+    (*pc)++;
+    memcpy(&parametro2, *pc, 1);
+    temp2Byte = (parametro1 << 8) + parametro2;
+
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var2 = *PL_popOperando(&pFrame->operandStack);
+
+    if (var2.valor.Int >= var1.valor.Int) {
+        *pc += (temp2Byte - 3);
+    }
+}
+
+void FU_if_icmpgt(ST_tpStackFrame *pFrame, u1 **pc){
+    ST_tpVariable var1, var2;
+    u1 parametro1, parametro2;
+    u2 temp2Byte;
+
+    (*pc)++;
+    memcpy(&parametro1, *pc, 1);
+    (*pc)++;
+    memcpy(&parametro2, *pc, 1);
+    temp2Byte = (parametro1 << 8) + parametro2;
+
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var2 = *PL_popOperando(&pFrame->operandStack);
+
+    if (var2.valor.Int > var1.valor.Int) {
+        *pc += (temp2Byte - 3);
+    }
+}
+
+void FU_if_icmple(ST_tpStackFrame *pFrame, u1 **pc){
+    ST_tpVariable var1, var2;
+    u1 parametro1, parametro2;
+    u2 temp2Byte;
+
+    (*pc)++;
+    memcpy(&parametro1, *pc, 1);
+    (*pc)++;
+    memcpy(&parametro2, *pc, 1);
+    temp2Byte = (parametro1 << 8) + parametro2;
+
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var2 = *PL_popOperando(&pFrame->operandStack);
+
+    if (var2.valor.Int <= var1.valor.Int) {
+        *pc += (temp2Byte - 3);
+    }
+}
+
+void FU_if_acmpeq(ST_tpStackFrame *pFrame, u1 **pc){
+    ST_tpVariable var1, var2;
+    u1 parametro1, parametro2;
+    u2 temp2Byte;
+
+    (*pc)++;
+    memcpy(&parametro1, *pc, 1);
+    (*pc)++;
+    memcpy(&parametro2, *pc, 1);
+    temp2Byte = (parametro1 << 8) + parametro2;
+
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var2 = *PL_popOperando(&pFrame->operandStack);
+
+    if (var2.valor.Int == var1.valor.Int) {
+        *pc += (temp2Byte - 3);
+    }
 }

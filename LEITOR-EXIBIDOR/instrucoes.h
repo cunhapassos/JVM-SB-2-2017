@@ -201,4 +201,39 @@ void FU_fneg(ST_tpStackFrame *pFrame);
 
 void FU_dneg(ST_tpStackFrame *pFrame);
 
+void FU_lcmp(ST_tpStackFrame *pFrame);
+
+void FU_fcmpl(ST_tpStackFrame *pFrame);
+
+void FU_fcmpg(ST_tpStackFrame *pFrame);
+
+void FU_dcmpl(ST_tpStackFrame *pFrame);
+
+void FU_dcmpg(ST_tpStackFrame *pFrame);
+
+void FU_ifeq(ST_tpStackFrame *pFrame, u1 **pc);
+
+void FU_ifne(ST_tpStackFrame *pFrame, u1 **pc);
+
+void FU_iflt(ST_tpStackFrame *pFrame, u1 **pc);
+
+void FU_ifge(ST_tpStackFrame *pFrame, u1 **pc);
+
+void FU_ifgt(ST_tpStackFrame *pFrame, u1 **pc);
+
+void FU_ifle(ST_tpStackFrame *pFrame, u1 **pc);
+
+void FU_if_icmpeq(ST_tpStackFrame *pFrame, u1 **pc);
+
+void FU_if_icmpne(ST_tpStackFrame *pFrame, u1 **pc);
+
+void FU_if_icmplt(ST_tpStackFrame *pFrame, u1 **pc);
+
+void FU_if_icmpge(ST_tpStackFrame *pFrame, u1 **pc);
+
+void FU_if_icmpgt(ST_tpStackFrame *pFrame, u1 **pc);
+
+void FU_if_icmple(ST_tpStackFrame *pFrame, u1 **pc);
+
+void FU_if_acmpeq(ST_tpStackFrame *pFrame, u1 **pc);
 #endif /* instrucoes_h */
