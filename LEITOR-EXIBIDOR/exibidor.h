@@ -47,7 +47,7 @@ void EX_imprimirClassFile(ST_tpClassFile *classFile);
 
 void EX_imprimirAtributosClasse(ST_tpClassFile *pClassFile, ST_tpAttribute_info *pAttributeInfoTable, u2 attributesCount);
 
-void EX_imprimirStringPool(ST_tpCp_info* cp, int index);
+void EX_imprimirConstantElement(ST_tpCp_info* cp, int index);
 
 void EX_imprimirAccessFlags(u2 access_flags);
 
