@@ -12,9 +12,20 @@
 #include "LEITOR-EXIBIDOR/exibidor.h"
 #include "LEITOR-EXIBIDOR/virtualMachine.h"
 #include "LEITOR-EXIBIDOR/pilhas_listas.h"
+#include "LEITOR-EXIBIDOR/configuracao.h"
 
 int main(int argc, const char * argv[]) {
     
+    char *aux[] = {"ARQUIVOS PARA TESTES/java/lang/StringBuffer"};
+    if(VIEWER) {
+        EX_imprimirClassFile(LE_carregarClasse(aux[0]));
+        return 0;
+    }
+    else {
+       VM_exucutarJVM(1, aux);
+    }
+    
+
     //char *pNomeArquivo = malloc(200*sizeof(char));
     
     //printf("Insira o nome do  arquivo .class: \n");
@@ -37,8 +48,9 @@ int main(int argc, const char * argv[]) {
     //const char* s = getenv("ROOT");
     //printf("PATH :%s\n",(s!=NULL)? s : "getenv returned NULL");
 
+
     
-    ST_tpJVM *pJVM = VM_exucutarJVM(1, aux);
+    
     
     
     

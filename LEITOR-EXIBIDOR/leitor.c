@@ -508,7 +508,6 @@ ST_tpAttribute_info *LE_lerAttribute(FILE *pArq, ST_tpCp_info *cp, ST_tpAttribut
         pConstantValue = LE_lerConstantValueAttribute(pArq);
         pAttributes->info = (ST_tpConstantValue_attribute*) pConstantValue;
         pConstantValue = NULL;
-        pAttributes->tag = 1;
     }
     else if(strcmp((char *) cp[(pAttributes->attribute_name_index)-1].info.Utf8.bytes, "Code") == 0)
     {
@@ -516,7 +515,6 @@ ST_tpAttribute_info *LE_lerAttribute(FILE *pArq, ST_tpCp_info *cp, ST_tpAttribut
         pCode = LE_lerCodeAttribute(pArq, cp, pAttributes);
         pAttributes->info = (ST_tpCode_attribute*) pCode;
         pCode = NULL;
-        pAttributes->tag = 2;
     }
     else if(strcmp((char *) cp[(pAttributes->attribute_name_index)-1].info.Utf8.bytes, "Exceptions") == 0)
     {
@@ -524,7 +522,6 @@ ST_tpAttribute_info *LE_lerAttribute(FILE *pArq, ST_tpCp_info *cp, ST_tpAttribut
         pExceptions = LE_lerExceptionsAttribute(pArq);
         pAttributes->info = (ST_tpExceptions_attribute*) pExceptions;
         pExceptions = NULL;
-        pAttributes->tag = 3;
     }
     else if(strcmp((char *) cp[(pAttributes->attribute_name_index)-1].info.Utf8.bytes, "InnerClasses") == 0)
     {
@@ -532,7 +529,6 @@ ST_tpAttribute_info *LE_lerAttribute(FILE *pArq, ST_tpCp_info *cp, ST_tpAttribut
         pInnerClasses = LE_lerInnerClassesAttribute(pArq);
         pAttributes->info = (ST_tpInnerClasses_attribute*) pInnerClasses;
         pInnerClasses = NULL;
-        pAttributes->tag = 4;
     }
    else if(strcmp((char *) cp[(pAttributes->attribute_name_index)-1].info.Utf8.bytes, "SourceFile") == 0)
     {
@@ -540,7 +536,6 @@ ST_tpAttribute_info *LE_lerAttribute(FILE *pArq, ST_tpCp_info *cp, ST_tpAttribut
         pSourceFile = LE_lerSourceFileAttribute(pArq);
         pAttributes->info = (ST_tpSourceFile_attribute*) pSourceFile;
         pSourceFile = NULL;
-        pAttributes->tag = 5;
     }
      else if(strcmp((char *) cp[(pAttributes->attribute_name_index)-1].info.Utf8.bytes, "LineNumberTable") == 0)
     {
@@ -548,14 +543,12 @@ ST_tpAttribute_info *LE_lerAttribute(FILE *pArq, ST_tpCp_info *cp, ST_tpAttribut
         pLineNumberTable = LE_lerLineNumberAttribute(pArq);
         pAttributes->info = (ST_tpLineNumberTable_attribute*) pLineNumberTable;
         pLineNumberTable = NULL;
-        pAttributes->tag = 6;
     }
      else if (strcmp((char *) cp[(pAttributes->attribute_name_index)-1].info.Utf8.bytes, "LocalVariableTable") == 0){
          ST_tpLocalVariableTable_attribute *pLocalVariableAttribute = (ST_tpLocalVariableTable_attribute*) malloc(sizeof(ST_tpLocalVariableTable_attribute));
          pLocalVariableAttribute = LE_lerLocalVariableAttribute(pArq);
          pAttributes->info = (ST_tpLocalVariableTable_attribute*) pLocalVariableAttribute;
          pLocalVariableAttribute = NULL;
-         pAttributes->tag = 7;
      }
     //faz a leitura dos atributos desconhecidos
      else
