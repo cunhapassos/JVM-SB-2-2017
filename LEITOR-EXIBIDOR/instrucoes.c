@@ -422,6 +422,22 @@ void FU_putstatic(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
     VM_armazenarValorStaticField(pJVM, nomeClasse, nomeField, descritorField, *var1);
     
 }
+void FU_sipush(ST_tpStackFrame *pFrame, u1 **pc){
+    ST_tpVariable var;
+    u1 parametro1, parametro2;
+    u2 temp2Byte;
+    
+    (*pc)++;
+    memcpy(&parametro1, *pc, 1);
+    (*pc)++;
+    memcpy(&parametro2, *pc, 1);
+    temp2Byte = (parametro1 << 8) + parametro2;
+    
+    var.tipo = JINT;
+    var.valor.Int = (int)temp2Byte;
+    PL_pushOperando(&pFrame->operandStack, var);
+    
+}
 void FU_ldc(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
     int tipo, i;
     u1 parametro1;

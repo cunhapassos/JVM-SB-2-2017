@@ -39,6 +39,8 @@ void FU_getstatic(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc);
 
 void FU_putstatic(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc);
 
+void FU_sipush(ST_tpStackFrame *pFrame, u1 **pc);
+
 void FU_ldc(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc);
 
 void FU_ldc2_w(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc);

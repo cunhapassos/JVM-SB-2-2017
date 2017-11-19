@@ -339,8 +339,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0x11:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+            FU_sipush(pFrame, &pJVM->thread->PC);
 			break;
 
 
