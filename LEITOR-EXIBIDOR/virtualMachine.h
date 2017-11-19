@@ -66,11 +66,15 @@ void *VM_armazenarValorStaticField(ST_tpJVM *pJVM, char *pClassName, char *pFiel
 
 ST_tpVariable *VM_recuperarValorStaticField(ST_tpJVM *pJVM, char *pClassName, char *pFieldName, char *pFieldDescritor);
 
+ST_tpClassFile *VM_carregarClasse(char *nomeClasses, ST_tpJVM *pJVM);
+
 ST_tpJVM *VM_exucutarJVM(int numeroClasses, char *nomeClasses[]);
 
 ST_tpVariable *VM_executarMetodo(ST_tpJVM *pJVM, ST_tpClassFile *pClasse, ST_tpParameterStack *pilhaParametros, ST_tpMethod_info *pMetodo);
 
 ST_tpMethod_info *VM_procurarMetodo(ST_tpClassFile *pClassFile, char *descritorMetodo, char *nomeMetodo);
+
+void VM_UTF8paraString(ST_tpCONSTANT_Utf8_info *pUTF8, char *string);
 
 #endif /* virtualMachine_h */
 

@@ -31,7 +31,7 @@ int main(int argc, const char * argv[]) {
     free(p);
     p = NULL;*/
 
-    char *aux[] = {"ARQUIVOS PARA TESTES/testeStatic"};
+    char *aux[] = {"ARQUIVOS PARA TESTES/double_aritmetica"};
 
 
     //const char* s = getenv("ROOT");

@@ -576,7 +576,7 @@ ST_tpAttribute_info *LE_lerAttribute(FILE *pArq, ST_tpCp_info *cp, ST_tpAttribut
  *
  *  @return arqPontoClass   - Ponteiro para a a estrutura do .class carregada em memoria
  */
- ST_tpClassFile *LE_carregarClasse(char *nomeArquivo){
+ ST_tpClassFile *LE_lerClasse(char *nomeArquivo){
     
     char arq[256];
     u4 index;

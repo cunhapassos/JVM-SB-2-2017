@@ -22,123 +22,147 @@
 #include "pilhas_listas.h"
 #include <limits.h>
 
-void FU_invokevirtual(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
-    u1 parametro1, parametro2;
-    u2 temp2Byte;
-    ST_tpClassFile *pClassFile;
-    ST_tpCp_info *pConstantPool;
-    ST_tpConstantPool *cpIndx;
-    ST_tpCONSTANT_Methodref_info *pMethodref;
-    ST_tpCONSTANT_Class_info *pClassRef;
-    ST_tpCONSTANT_Utf8_info *pClassName, *pMethodName, *pMethodDescriptor;
-    ST_tpCONSTANT_NameAndType_info *nameTyperef;
+int FU_invokevirtual(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc, ST_tpVariable **Retorno){
     int count = 0;
-    
-    pConstantPool = pFrame->cp->constant_pool_table;
-    (*pc)++;
-    memcpy(&parametro1, *pc, 1);
-    (*pc)++;
-    memcpy(&parametro2, *pc, 1);
-    
-    temp2Byte = (parametro1 << 8) + parametro2;
-    cpIndx = &pConstantPool[temp2Byte -1].info;
-    pMethodref = (ST_tpCONSTANT_Methodref_info *)malloc(sizeof(ST_tpCONSTANT_Methodref_info));
-    memcpy(pMethodref, &(cpIndx->Methodref), sizeof(ST_tpCONSTANT_Methodref_info));
-
-    temp2Byte = pMethodref->class_index;
-    cpIndx = &pConstantPool[temp2Byte-1].info;
-    pClassRef = (ST_tpCONSTANT_Class_info *)malloc(sizeof(ST_tpCONSTANT_Class_info));
-    memcpy(pClassRef, &(cpIndx->Class), sizeof(ST_tpCONSTANT_Class_info));
-
-    temp2Byte = pClassRef->name_index;
-    cpIndx = &pConstantPool[temp2Byte-1].info;
-    pClassName = (ST_tpCONSTANT_Utf8_info *)malloc(sizeof(ST_tpCONSTANT_Utf8_info));
-    memcpy(pClassName, &(cpIndx->Utf8), sizeof(ST_tpCONSTANT_Utf8_info));
-
-    temp2Byte = pMethodref->name_and_type_index;
-    cpIndx = &pConstantPool[temp2Byte-1].info;
-    nameTyperef = (ST_tpCONSTANT_NameAndType_info *)malloc(sizeof(ST_tpCONSTANT_NameAndType_info));
-    memcpy(nameTyperef, &(cpIndx->Utf8), sizeof(ST_tpCONSTANT_NameAndType_info));
-
-    temp2Byte = nameTyperef->name_index;
-    cpIndx = &pConstantPool[temp2Byte-1].info;
-    pMethodName = (ST_tpCONSTANT_Utf8_info *)malloc(sizeof(ST_tpCONSTANT_Utf8_info));
-    memcpy(pMethodName, &(cpIndx->Utf8), sizeof(ST_tpCONSTANT_Utf8_info));
-
-    temp2Byte = nameTyperef->descriptor_index;
-    cpIndx = &pConstantPool[temp2Byte-1].info;
-    pMethodDescriptor = (ST_tpCONSTANT_Utf8_info *)malloc(sizeof(ST_tpCONSTANT_Utf8_info));
-    memcpy(pMethodDescriptor, &(cpIndx->Utf8), sizeof(ST_tpCONSTANT_Utf8_info));
-    
-    count = FU_resolveMethodo(pMethodName, pMethodDescriptor);
-    count ++;
-
-    if(count >= 0) {
-        while( count != 0 && pFrame->operandStack != NULL) {
-            PL_pushParametro(   &pFrame->parameterStack,
-                             *PL_popOperando(&pFrame->operandStack));
-            count --;
-        }
-
-        pClassFile = PL_buscarClasse(pJVM, (char *) pClassName->bytes);
-
-
-        //cria stack 
-
-        //tenta criar methodo
-    }
-    (*pc)++;
-}
-int FU_invokespecial(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc, ST_tpVariable **Retorno){
-    
-    u2 temp2Byte;
-    int count = 0;
-    ST_tpVariable *pVar1;
     u1 parametro1, parametro2;
     ST_tpConstantPool *cpIndx;
     ST_tpClassFile *pClassFile;
-    ST_tpObjectHeap *pTempHeap;
     ST_tpCp_info *pConstantPool;
     ST_tpMethod_info *pMetodoInfo;
-    ST_tpCONSTANT_Class_info *pClassRef;
-    ST_tpCONSTANT_Methodref_info *pMethodref;
-    ST_tpCONSTANT_Utf8_info *pMethodName, *pMethodDescriptor;
     ST_tpCONSTANT_NameAndType_info *nameTyperef;
-    
-    
+        //char *nomeClasse = NULL, *nomeMetodo, *descritorMetodo;
+    ST_tpCONSTANT_Utf8_info *pClasseName = NULL, *pMethodName, *pMethodDescriptor;
+    u2 temp2Byte, pClasseIndex, pNameAndTypeIndex,pNomeMetodoIndex, pDescritorMetodoIndex;
+
+    (*pc)++;
+    memcpy(&parametro1, *pc, 1);
+    (*pc)++;
+    memcpy(&parametro2, *pc, 1);
+    temp2Byte = (parametro1 << 8) + parametro2;
+
+    pConstantPool         = pFrame->cp->constant_pool_table;
+    pClasseIndex          = pConstantPool[temp2Byte -1].info.Methodref.class_index;
+    pNameAndTypeIndex     = pConstantPool[temp2Byte -1].info.Methodref.name_and_type_index;
+
+    pClasseIndex          = pConstantPool[pClasseIndex - 1].info.Class.name_index;
+    pClasseName = (ST_tpCONSTANT_Utf8_info *)malloc(sizeof(ST_tpCONSTANT_Utf8_info));
+    memcpy(pClasseName, &(pConstantPool[pClasseIndex - 1].info.Utf8), sizeof(ST_tpCONSTANT_Utf8_info));
+
+    pNomeMetodoIndex      = pConstantPool[pNameAndTypeIndex - 1].info.NameAndType.name_index;
+    pDescritorMetodoIndex = pConstantPool[pNameAndTypeIndex - 1].info.NameAndType.descriptor_index;
+
+    temp2Byte             = pNameAndTypeIndex;
+    cpIndx                = &pConstantPool[pNomeMetodoIndex-1].info;
+    nameTyperef           = (ST_tpCONSTANT_NameAndType_info *)malloc(sizeof(ST_tpCONSTANT_NameAndType_info));
+    memcpy(nameTyperef, &(cpIndx->Utf8), sizeof(ST_tpCONSTANT_NameAndType_info));
+
+    temp2Byte             = pNomeMetodoIndex;
+    cpIndx                = &pConstantPool[temp2Byte-1].info;
+    pMethodName           = (ST_tpCONSTANT_Utf8_info *)malloc(sizeof(ST_tpCONSTANT_Utf8_info));
+    memcpy(pMethodName, &(cpIndx->Utf8), sizeof(ST_tpCONSTANT_Utf8_info));
+
+    temp2Byte             = pDescritorMetodoIndex;
+    cpIndx                = &pConstantPool[temp2Byte-1].info;
+    pMethodDescriptor     = (ST_tpCONSTANT_Utf8_info *)malloc(sizeof(ST_tpCONSTANT_Utf8_info));
+    memcpy(pMethodDescriptor, &(cpIndx->Utf8), sizeof(ST_tpCONSTANT_Utf8_info));
+
+    count                 = FU_retornaNumeroParametrosMetodo(pMethodName, pMethodDescriptor);
+    count++;
+
+    /* Retira todos os valores da pilha de operandos e passa para a pilha de parametros */
+    while( count != 0 && pFrame->operandStack != NULL) {
+        PL_pushParametro(&pFrame->parameterStack, *PL_popOperando(&pFrame->operandStack));
+        count --;
+    }
+    if(!strcmp((const char *)pMethodName, "<init>")){
+        return 1; // Significa um erro
+    }
+
+    pClassFile = PL_buscarClasse(pJVM, (char *) pClasseName->bytes);
+
+    if(pClassFile != NULL){
+        pMetodoInfo = VM_procurarMetodo(pClassFile, (char *) (pMethodDescriptor->bytes) , (char *) (pMethodName->bytes));
+
+        if((pMetodoInfo->access_flags & ACC_ABSTRACT) == ACC_ABSTRACT){
+            printf("\nERRO NA INSTRUCAO invokevirtual!\n");
+            return 1; // ERRO
+        }
+        if((pMetodoInfo->access_flags & ACC_STATIC) == ACC_STATIC){
+            printf("\nERRO NA INSTRUCAO invokevirtual!\n");
+            return 1; // ERRO
+        }
+        if((pMetodoInfo->access_flags & ACC_NATIVE) == ACC_NATIVE){
+                // EXECUTAR METODO NATIVO
+            printf("\nWARNING! AQUI DEVERIA EXECUTAR UM METODO NATIVO!\n");
+        }
+        else{
+            *Retorno = VM_executarMetodo(pJVM, pClassFile, pFrame->parameterStack, pMetodoInfo);
+        }
+
+        if((*Retorno)->tipo != JVOID ){
+            PL_pushOperando(&pFrame->operandStack, *(*Retorno));
+        }
+        if ((*Retorno)->tipo == JAREF && (*Retorno)->valor.array_ref != 0) {
+            ((*Retorno)->valor.array_ref)->ref_count --;
+        }
+        if((*Retorno)->tipo == JREF && (*Retorno)->valor.array_ref != 0){
+            ((*Retorno)->valor.array_ref)->ref_count --;
+        }
+            // Ver caseo de excecoes
+            //if()
+    }
+    else{
+        return 1; // ERRO
+    }
+
+    return 0;
+}
+int FU_invokespecial(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc, ST_tpVariable **Retorno){
+
+    int count = 0;
+    u1 parametro1, parametro2;
+    ST_tpConstantPool *cpIndx;
+    ST_tpClassFile *pClassFile;
+    ST_tpCp_info *pConstantPool;
+    ST_tpMethod_info *pMetodoInfo;
+    ST_tpCONSTANT_NameAndType_info *nameTyperef;
+    ST_tpCONSTANT_Utf8_info *pClasseName = NULL, *pMethodName, *pMethodDescriptor;
+    u2 temp2Byte, pClasseIndex, pNameAndTypeIndex,pNomeMetodoIndex, pDescritorMetodoIndex;
+
     (*pc)++;
     memcpy(&parametro1, *pc, 1);
     (*pc)++;
     memcpy(&parametro2, *pc, 1);
     temp2Byte = (parametro1 << 8) + parametro2;
     
-    pConstantPool = pFrame->cp->constant_pool_table;
-    cpIndx = &pConstantPool[temp2Byte -1].info;
-    pMethodref = (ST_tpCONSTANT_Methodref_info *)malloc(sizeof(ST_tpCONSTANT_Methodref_info));
-    memcpy(pMethodref, &(cpIndx->Methodref), sizeof(ST_tpCONSTANT_Methodref_info));
-    
-    temp2Byte = pMethodref->class_index;
-    cpIndx = &pConstantPool[temp2Byte-1].info;
-    pClassRef = (ST_tpCONSTANT_Class_info *)malloc(sizeof(ST_tpCONSTANT_Class_info));
-    memcpy(pClassRef, &(cpIndx->Class), sizeof(ST_tpCONSTANT_Class_info));
-    
-    temp2Byte = pMethodref->name_and_type_index;
-    cpIndx = &pConstantPool[temp2Byte-1].info;
-    nameTyperef = (ST_tpCONSTANT_NameAndType_info *)malloc(sizeof(ST_tpCONSTANT_NameAndType_info));
+    pConstantPool         = pFrame->cp->constant_pool_table;
+    pClasseIndex          = pConstantPool[temp2Byte -1].info.Methodref.class_index;
+    pNameAndTypeIndex     = pConstantPool[temp2Byte -1].info.Methodref.name_and_type_index;
+
+    pClasseIndex          = pConstantPool[pClasseIndex - 1].info.Class.name_index;
+    pClasseName = (ST_tpCONSTANT_Utf8_info *)malloc(sizeof(ST_tpCONSTANT_Utf8_info));
+    memcpy(pClasseName, &(pConstantPool[pClasseIndex - 1].info.Utf8), sizeof(ST_tpCONSTANT_Utf8_info));
+
+    pNomeMetodoIndex      = pConstantPool[pNameAndTypeIndex - 1].info.NameAndType.name_index;
+    pDescritorMetodoIndex = pConstantPool[pNameAndTypeIndex - 1].info.NameAndType.descriptor_index;
+
+    temp2Byte             = pNameAndTypeIndex;
+    cpIndx                = &pConstantPool[pNomeMetodoIndex-1].info;
+    nameTyperef           = (ST_tpCONSTANT_NameAndType_info *)malloc(sizeof(ST_tpCONSTANT_NameAndType_info));
     memcpy(nameTyperef, &(cpIndx->Utf8), sizeof(ST_tpCONSTANT_NameAndType_info));
     
-    temp2Byte = nameTyperef->name_index;
-    cpIndx = &pConstantPool[temp2Byte-1].info;
-    pMethodName = (ST_tpCONSTANT_Utf8_info *)malloc(sizeof(ST_tpCONSTANT_Utf8_info));
+    temp2Byte             = pNomeMetodoIndex;
+    cpIndx                = &pConstantPool[temp2Byte-1].info;
+    pMethodName           = (ST_tpCONSTANT_Utf8_info *)malloc(sizeof(ST_tpCONSTANT_Utf8_info));
     memcpy(pMethodName, &(cpIndx->Utf8), sizeof(ST_tpCONSTANT_Utf8_info));
     
-    temp2Byte = nameTyperef->descriptor_index;
-    cpIndx = &pConstantPool[temp2Byte-1].info;
-    pMethodDescriptor = (ST_tpCONSTANT_Utf8_info *)malloc(sizeof(ST_tpCONSTANT_Utf8_info));
+    temp2Byte             = pDescritorMetodoIndex;
+    cpIndx                = &pConstantPool[temp2Byte-1].info;
+    pMethodDescriptor     = (ST_tpCONSTANT_Utf8_info *)malloc(sizeof(ST_tpCONSTANT_Utf8_info));
     memcpy(pMethodDescriptor, &(cpIndx->Utf8), sizeof(ST_tpCONSTANT_Utf8_info));
     
-    count = FU_resolveMethodo(pMethodName, pMethodDescriptor);
-    count ++;
+    count                 = FU_retornaNumeroParametrosMetodo(pMethodName, pMethodDescriptor);
+    count++;
     
     /* Retira todos os valores da pilha de operandos e passa para a pilha de parametros */
     while( count != 0 && pFrame->operandStack != NULL) {
@@ -148,25 +172,23 @@ int FU_invokespecial(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc, ST_tpVari
     if(!strcmp((const char *)pMethodName, "<init>")){
         return 1; // Significa um erro
     }
-    
-    pVar1 = &pFrame->parameterStack->variable;
-    pTempHeap = pVar1->valor.obj_ref;
-    
-    // ESTA CHEGANDO COM NOME ERRADO AQUI
-    pClassFile = PL_buscarClasse(pJVM, pTempHeap->className);
+
+    pClassFile = PL_buscarClasse(pJVM, (char *) pClasseName->bytes);
     
     if(pClassFile != NULL){
         pMetodoInfo = VM_procurarMetodo(pClassFile, (char *) (pMethodDescriptor->bytes) , (char *) (pMethodName->bytes));
         
         if((pMetodoInfo->access_flags & ACC_ABSTRACT) == ACC_ABSTRACT){
+            printf("\nERRO NA INSTRUCAO invokespecial!\n");
             return 1; // ERRO
         }
         if((pMetodoInfo->access_flags & ACC_STATIC) == ACC_STATIC){
+            printf("\nERRO NA INSTRUCAO invokespecial!\n");
             return 1; // ERRO
         }
         if((pMetodoInfo->access_flags & ACC_NATIVE) == ACC_NATIVE){
             // EXECUTAR METODO NATIVO
-            
+            printf("\nWARNING! AQUI DEVERIA EXECUTAR UM METODO NATIVO!\n");
         }
         else{
             *Retorno = VM_executarMetodo(pJVM, pClassFile, pFrame->parameterStack, pMetodoInfo);
@@ -190,8 +212,97 @@ int FU_invokespecial(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc, ST_tpVari
     
     return 0;
 }
-//TODO resolve method
-int FU_resolveMethodo(ST_tpCONSTANT_Utf8_info *nome, ST_tpCONSTANT_Utf8_info *descricao){
+
+int FU_invokestatic(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc, ST_tpVariable **Retorno){
+    int count = 0;
+    u1 parametro1, parametro2;
+    ST_tpConstantPool *cpIndx;
+    ST_tpClassFile *pClassFile;
+    ST_tpCp_info *pConstantPool;
+    ST_tpMethod_info *pMetodoInfo;
+    ST_tpCONSTANT_NameAndType_info *nameTyperef;
+    ST_tpCONSTANT_Utf8_info *pClasseName = NULL, *pMethodName, *pMethodDescriptor;
+    u2 temp2Byte, pClasseIndex, pNameAndTypeIndex,pNomeMetodoIndex, pDescritorMetodoIndex;
+
+    (*pc)++;
+    memcpy(&parametro1, *pc, 1);
+    (*pc)++;
+    memcpy(&parametro2, *pc, 1);
+    temp2Byte = (parametro1 << 8) + parametro2;
+
+    pConstantPool         = pFrame->cp->constant_pool_table;
+    pClasseIndex          = pConstantPool[temp2Byte -1].info.Methodref.class_index;
+    pNameAndTypeIndex     = pConstantPool[temp2Byte -1].info.Methodref.name_and_type_index;
+
+    pClasseIndex          = pConstantPool[pClasseIndex - 1].info.Class.name_index;
+    pClasseName = (ST_tpCONSTANT_Utf8_info *)malloc(sizeof(ST_tpCONSTANT_Utf8_info));
+    memcpy(pClasseName, &(pConstantPool[pClasseIndex - 1].info.Utf8), sizeof(ST_tpCONSTANT_Utf8_info));
+
+    pNomeMetodoIndex      = pConstantPool[pNameAndTypeIndex - 1].info.NameAndType.name_index;
+    pDescritorMetodoIndex = pConstantPool[pNameAndTypeIndex - 1].info.NameAndType.descriptor_index;
+
+    temp2Byte             = pNameAndTypeIndex;
+    cpIndx                = &pConstantPool[pNomeMetodoIndex-1].info;
+    nameTyperef           = (ST_tpCONSTANT_NameAndType_info *)malloc(sizeof(ST_tpCONSTANT_NameAndType_info));
+    memcpy(nameTyperef, &(cpIndx->Utf8), sizeof(ST_tpCONSTANT_NameAndType_info));
+
+    temp2Byte             = pNomeMetodoIndex;
+    cpIndx                = &pConstantPool[temp2Byte-1].info;
+    pMethodName           = (ST_tpCONSTANT_Utf8_info *)malloc(sizeof(ST_tpCONSTANT_Utf8_info));
+    memcpy(pMethodName, &(cpIndx->Utf8), sizeof(ST_tpCONSTANT_Utf8_info));
+
+    temp2Byte             = pDescritorMetodoIndex;
+    cpIndx                = &pConstantPool[temp2Byte-1].info;
+    pMethodDescriptor     = (ST_tpCONSTANT_Utf8_info *)malloc(sizeof(ST_tpCONSTANT_Utf8_info));
+    memcpy(pMethodDescriptor, &(cpIndx->Utf8), sizeof(ST_tpCONSTANT_Utf8_info));
+
+    count                 = FU_retornaNumeroParametrosMetodo(pMethodName, pMethodDescriptor);
+    count++;
+
+    /* Retira todos os valores da pilha de operandos e passa para a pilha de parametros */
+    while( count != 0 && pFrame->operandStack != NULL) {
+        PL_pushParametro(&pFrame->parameterStack, *PL_popOperando(&pFrame->operandStack));
+        count --;
+    }
+
+    pClassFile = PL_buscarClasse(pJVM, (char *) pClasseName->bytes);
+
+    if(pClassFile != NULL){
+        pMetodoInfo = VM_procurarMetodo(pClassFile, (char *) (pMethodDescriptor->bytes) , (char *) (pMethodName->bytes));
+
+        if((pMetodoInfo->access_flags & ACC_STATIC) != ACC_STATIC){
+            printf("\nERRO NA INSTRUCAO invokestatic!\n");
+            return 1; // ERRO
+        }
+        if((pMetodoInfo->access_flags & ACC_NATIVE) == ACC_NATIVE){
+                // EXECUTAR METODO NATIVO
+            printf("\nWARNING! AQUI DEVERIA EXECUTAR UM METODO NATIVO!\n");
+        }
+        else{
+            *Retorno = VM_executarMetodo(pJVM, pClassFile, pFrame->parameterStack, pMetodoInfo);
+        }
+
+        if((*Retorno)->tipo != JVOID ){
+            PL_pushOperando(&pFrame->operandStack, *(*Retorno));
+        }
+        if ((*Retorno)->tipo == JAREF && (*Retorno)->valor.array_ref != 0) {
+            ((*Retorno)->valor.array_ref)->ref_count --;
+        }
+        if((*Retorno)->tipo == JREF && (*Retorno)->valor.array_ref != 0){
+            ((*Retorno)->valor.array_ref)->ref_count --;
+        }
+            // Ver caseo de excecoes
+            //if()
+    }
+    else{
+        printf("ERRO NA INSTRUCAO invokestatic!");
+        return 1; // ERRO
+    }
+
+    return 0;
+}
+
+int FU_retornaNumeroParametrosMetodo(ST_tpCONSTANT_Utf8_info *nome, ST_tpCONSTANT_Utf8_info *descricao){
 
     int params = 0, index = -1;
     char aux;
@@ -488,7 +599,7 @@ void FU_ldc2_w(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
 
 
 void FU_return(ST_tpStackFrame *pFrame){
-    PL_esvaziarPilhaOperandos(&pFrame->operandStack);
+    //PL_esvaziarPilhaOperandos(&pFrame->operandStack);
 }
 void FU_bipush(ST_tpStackFrame *pFrame, u1 **pc){
     ST_tpVariable var;
