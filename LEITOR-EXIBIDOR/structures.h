@@ -43,10 +43,9 @@ typedef uint64_t u8;
  *                                FLAGS DE ACESSO
  ** *******************************************************************************/
 
-/**                             DEFINICOES DE TAGS                               **/
 #define ACC_PUBLIC          0X0001
 #define ACC_PRIVATE         0X0002
-#define ACC_SUPER           0X0003
+#define ACC_SUPER           0X0020
 #define ACC_PROTECTED       0X0004
 #define ACC_STATIC          0X0008
 #define ACC_FINAL           0X0010
@@ -227,7 +226,6 @@ typedef struct{
 typedef struct Attribute_info{
     u2 attribute_name_index;
     u4 attribute_length;
-    u1 tag;
     void *info;
     struct Attribute_info *next;
 }ST_tpAttribute_info;

@@ -12,9 +12,20 @@
 #include "LEITOR-EXIBIDOR/exibidor.h"
 #include "LEITOR-EXIBIDOR/virtualMachine.h"
 #include "LEITOR-EXIBIDOR/pilhas_listas.h"
+#include "LEITOR-EXIBIDOR/configuracao.h"
 
 int main(int argc, const char * argv[]) {
     
+    char *aux[] = {"ARQUIVOS PARA TESTES/java/lang/StringBuffer"};
+    if(VIEWER) {
+        EX_imprimirClassFile(LE_carregarClasse(aux[0]));
+        return 0;
+    }
+    else {
+       VM_exucutarJVM(1, aux);
+    }
+    
+
     //char *pNomeArquivo = malloc(200*sizeof(char));
     
     //printf("Insira o nome do  arquivo .class: \n");
@@ -26,19 +37,17 @@ int main(int argc, const char * argv[]) {
     
     //ST_tpClassFile *p;
     //p = LE_carregarClasse("/Users/danielmatias/Desktop/JVM-SB-2-2017/LEITOR-EXIBIDOR/double_aritmetica.class");
-/*    p = LE_carregarClasse("/Users/paulopassos/Documents/JVM-SB-2-2017/ARQUIVOS PARA TESTES/TesteExcecao.class");
-    EX_imprimirClassFile(p);
-    free(p);
-    p = NULL;*/
-
-    char *aux[] = {"ARQUIVOS PARA TESTES/testeStatic"};
-
-
+    /*    p = LE_carregarClasse("/Users/paulopassos/Documents/JVM-SB-2-2017/ARQUIVOS PARA TESTES/TesteExcecao.class");
+     EX_imprimirClassFile(p);
+     free(p);
+     p = NULL;*/
+    
     //const char* s = getenv("ROOT");
     //printf("PATH :%s\n",(s!=NULL)? s : "getenv returned NULL");
 
+
     
-    ST_tpJVM *pJVM = VM_exucutarJVM(1, aux);
+    
     
     
     

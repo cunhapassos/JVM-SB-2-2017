@@ -21,8 +21,10 @@
 #ifndef configuracao_h
 #define configuracao_h
 
-#define PATH "/Users/paulopassos/Documents/JVM-SB-2-2017/"
-//#define PATH "/Users/danielmatias/Desktop/JVM-SB-2-2017/"
+#define VIEWER 1 // 1 para ativar o modo de exibicao
+
+//#define PATH "/Users/paulopassos/Documents/JVM-SB-2-2017/"
+#define PATH "/Users/danielmatias/Desktop/JVM-SB-2-2017/"
 //#define PATH "/home/alon/Documentos/jvm/JVM-SB-2-2017/"
 
 #endif /* configuracao_h */

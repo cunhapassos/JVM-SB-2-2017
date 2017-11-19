@@ -29,7 +29,7 @@
 #include "structures.h"
 
 
-void EX_imprimirStringPool(ST_tpCp_info* cp, int index);
+
 
 void EX_imprimirAtributos(ST_tpClassFile *pClassFile, ST_tpAttribute_info *attribute_info_table,u2 attributes_count);
 
@@ -41,6 +41,14 @@ void EX_imprimirFields(ST_tpClassFile *pClassFile);
 
 void EX_imprimirInterfaces(ST_tpClassFile *pClassFile);
 
+void EX_imprimirGeneralInformation(ST_tpClassFile *pClassFile);
+
 void EX_imprimirClassFile(ST_tpClassFile *classFile);
+
+void EX_imprimirAtributosClasse(ST_tpClassFile *pClassFile, ST_tpAttribute_info *pAttributeInfoTable, u2 attributesCount);
+
+void EX_imprimirStringPool(ST_tpCp_info* cp, int index);
+
+void EX_imprimirAccessFlags(u2 access_flags);
 
 #endif /* exibidor_h */
