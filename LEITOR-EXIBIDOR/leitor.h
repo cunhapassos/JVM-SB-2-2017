@@ -57,7 +57,7 @@ ST_tpLocalVariableTable_attribute *LE_lerLocalVariableAttribute(FILE *pArq);
 
 ST_tpAttribute_info *LE_lerAttribute(FILE *pArq, ST_tpCp_info *cp, ST_tpAttribute_info *pAttributes);
 
-ST_tpClassFile *LE_carregarClasse(char *nomeArquivo);
+ST_tpClassFile *LE_lerClasse(char *nomeArquivo);
 
 
 #endif /* leitor_h */

@@ -37,11 +37,14 @@ int main(int argc, const char * argv[]) {
     
     //ST_tpClassFile *p;
     //p = LE_carregarClasse("/Users/danielmatias/Desktop/JVM-SB-2-2017/LEITOR-EXIBIDOR/double_aritmetica.class");
-    /*    p = LE_carregarClasse("/Users/paulopassos/Documents/JVM-SB-2-2017/ARQUIVOS PARA TESTES/TesteExcecao.class");
-     EX_imprimirClassFile(p);
-     free(p);
-     p = NULL;*/
-    
+/*    p = LE_carregarClasse("/Users/paulopassos/Documents/JVM-SB-2-2017/ARQUIVOS PARA TESTES/TesteExcecao.class");
+    EX_imprimirClassFile(p);
+    free(p);
+    p = NULL;*/
+
+    char *aux[] = {"ARQUIVOS PARA TESTES/double_aritmetica"};
+
+
     //const char* s = getenv("ROOT");
     //printf("PATH :%s\n",(s!=NULL)? s : "getenv returned NULL");
 
