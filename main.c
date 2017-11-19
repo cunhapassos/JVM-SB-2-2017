@@ -16,6 +16,16 @@
 
 int main(int argc, const char * argv[]) {
     
+    char *aux[] = {"ARQUIVOS PARA TESTES/java/lang/StringBuffer"};
+    if(VIEWER) {
+        EX_imprimirClassFile(LE_carregarClasse(aux[0]));
+        return 0;
+    }
+    else {
+       VM_exucutarJVM(1, aux);
+    }
+    
+
     //char *pNomeArquivo = malloc(200*sizeof(char));
     
     //printf("Insira o nome do  arquivo .class: \n");
@@ -27,25 +37,13 @@ int main(int argc, const char * argv[]) {
     
     //ST_tpClassFile *p;
     //p = LE_carregarClasse("/Users/danielmatias/Desktop/JVM-SB-2-2017/LEITOR-EXIBIDOR/double_aritmetica.class");
-/*    p = LE_carregarClasse("/Users/paulopassos/Documents/JVM-SB-2-2017/ARQUIVOS PARA TESTES/TesteExcecao.class");
-    EX_imprimirClassFile(p);
-    free(p);
-    p = NULL;*/
-
+    /*    p = LE_carregarClasse("/Users/paulopassos/Documents/JVM-SB-2-2017/ARQUIVOS PARA TESTES/TesteExcecao.class");
+     EX_imprimirClassFile(p);
+     free(p);
+     p = NULL;*/
+    
     //const char* s = getenv("ROOT");
     //printf("PATH :%s\n",(s!=NULL)? s : "getenv returned NULL");
-    
-    char *aux[] = {"ARQUIVOS PARA TESTES/testeStatic"};
-    if(VIEWER) {
-        ST_tpClassFile * p = LE_carregarClasse(aux[0]);
-        EX_imprimirClassFile(p);
-        free(p);
-        return 0;
-    }
-    else  VM_exucutarJVM(1, aux);
-    
-
-
 
 
     
