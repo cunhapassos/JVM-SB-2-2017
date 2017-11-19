@@ -16,9 +16,9 @@
 
 int main(int argc, const char * argv[]) {
     
-    char *aux[] = {"ARQUIVOS PARA TESTES/java/lang/short_aritmetica"};
+    char *aux[] = {"ARQUIVOS PARA TESTES/short_aritmetica"};
     if(VIEWER) {
-        EX_imprimirClassFile(LE_carregarClasse(aux[0]));
+        EX_imprimirClassFile(LE_lerClasse(aux[0]));
         return 0;
     }
     else {
@@ -41,9 +41,6 @@ int main(int argc, const char * argv[]) {
     EX_imprimirClassFile(p);
     free(p);
     p = NULL;*/
-
-    char *aux[] = {"ARQUIVOS PARA TESTES/double_aritmetica"};
-
 
     //const char* s = getenv("ROOT");
     //printf("PATH :%s\n",(s!=NULL)? s : "getenv returned NULL");
