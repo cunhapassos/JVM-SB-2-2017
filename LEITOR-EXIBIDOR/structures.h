@@ -64,18 +64,19 @@ typedef uint64_t u8;
  *                            JVM DATA TYPES
  ** ******************************************************************************/
 
-#define JBOOL   0X00
-#define JBYTE   0X01
-#define JCHAR   0X02
-#define JSTRING 0X03
-#define JSHORT  0X04
-#define JVOID   0X05
-#define JREF    0X06
-#define JAREF   0X07
-#define JINT    0X08
-#define JLONG   0X16
-#define JFLOAT  0X32
-#define JDOUBLE 0X64
+#define JBOOL       0X00
+#define JBYTE       0X01
+#define JCHAR       0X02
+#define JSTRING     0X03
+#define JSHORT      0X04
+#define JVOID       0X05
+#define JREF        0X06
+#define JAREF       0X07
+#define JINT        0X08
+#define JLONG       0X16
+#define JFLOAT      0X32
+#define JDOUBLE     0X64
+#define JRETADDRESS 0x70
 
 /** ******************************************************************************
  *                            ARRAY TYPES
@@ -452,7 +453,7 @@ union variable{
     char Boolean;
     ST_tpObjectHeap *obj_ref;
     ST_tpArrayHeap *array_ref;
-    // RETADDRESS retAddres;
+    u1 retAddres;
 };
 
 typedef struct Variable{

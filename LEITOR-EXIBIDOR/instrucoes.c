@@ -1838,3 +1838,64 @@ void FU_if_acmpeq(ST_tpStackFrame *pFrame, u1 **pc){
         *pc += (temp2Byte - 3);
     }
 }
+
+void FU_if_acmpne(ST_tpStackFrame *pFrame, u1 **pc){
+    ST_tpVariable var1, var2;
+    u1 parametro1, parametro2;
+    u2 temp2Byte;
+    
+    (*pc)++;
+    memcpy(&parametro1, *pc, 1);
+    (*pc)++;
+    memcpy(&parametro2, *pc, 1);
+    temp2Byte = (parametro1 << 8) + parametro2;
+    
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var2 = *PL_popOperando(&pFrame->operandStack);
+    
+    if (var2.valor.Int != var1.valor.Int) {
+        *pc += (temp2Byte - 3);
+    }
+}
+
+void FU_goto(ST_tpStackFrame *pFrame, u1 **pc){
+
+    u1 parametro1, parametro2;
+    u2 temp2Byte;
+    
+    (*pc)++;
+    memcpy(&parametro1, *pc, 1);
+    (*pc)++;
+    memcpy(&parametro2, *pc, 1);
+    temp2Byte = (parametro1 << 8) + parametro2;
+    
+    *pc += (temp2Byte - 3);
+}
+
+void FU_jsr(ST_tpStackFrame *pFrame, u1 **pc){
+    ST_tpVariable var;
+    u1 parametro1, parametro2;
+    u2 temp2Byte;
+    
+    (*pc)++;
+    memcpy(&parametro1, *pc, 1);
+    (*pc)++;
+    memcpy(&parametro2, *pc, 1);
+    temp2Byte = (parametro1 << 8) + parametro2;
+    
+    var.valor.retAddres = *((*pc));
+    var.tipo = JRETADDRESS;
+    
+    PL_pushOperando(&pFrame->operandStack, var);
+    *pc += (temp2Byte - 3);
+}
+
+void FU_ret(ST_tpStackFrame *pFrame, u1 **pc){
+    ST_tpVariable var;
+    u1 parametro1;
+    
+    (*pc)++;
+    memcpy(&parametro1, *pc, 1);
+    
+    var = VM_recuperarVariavel(pFrame->localVariables, parametro1);
+}

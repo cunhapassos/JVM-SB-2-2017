@@ -236,4 +236,12 @@ void FU_if_icmpgt(ST_tpStackFrame *pFrame, u1 **pc);
 void FU_if_icmple(ST_tpStackFrame *pFrame, u1 **pc);
 
 void FU_if_acmpeq(ST_tpStackFrame *pFrame, u1 **pc);
+
+void FU_if_acmpne(ST_tpStackFrame *pFrame, u1 **pc);
+
+void FU_goto(ST_tpStackFrame *pFrame, u1 **pc);
+
+void FU_jsr(ST_tpStackFrame *pFrame, u1 **pc);
+
+void FU_ret(ST_tpStackFrame *pFrame, u1 **pc);
 #endif /* instrucoes_h */
