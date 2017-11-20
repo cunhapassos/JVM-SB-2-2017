@@ -2068,3 +2068,69 @@ void FU_f2i(ST_tpStackFrame *pFrame){
     var.tipo = JINT;
     PL_pushOperando(&pFrame->operandStack, var);
 }
+
+void FU_iand(ST_tpStackFrame *pFrame){
+    ST_tpVariable var, var1, var2;
+    
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var2 = *PL_popOperando(&pFrame->operandStack);
+    
+    var.valor.Int = var1.valor.Int & var2.valor.Int ;
+    var.tipo = JINT;
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+void FU_land(ST_tpStackFrame *pFrame){
+    ST_tpVariable var, var1, var2;
+    
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var2 = *PL_popOperando(&pFrame->operandStack);
+    
+    var.valor.Long = var1.valor.Long & var2.valor.Long ;
+    var.tipo = JLONG;
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+void FU_ior(ST_tpStackFrame *pFrame){
+    ST_tpVariable var, var1, var2;
+    
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var2 = *PL_popOperando(&pFrame->operandStack);
+    
+    var.valor.Int = var1.valor.Int | var2.valor.Int ;
+    var.tipo = JINT;
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+void FU_lor(ST_tpStackFrame *pFrame){
+    ST_tpVariable var, var1, var2;
+    
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var2 = *PL_popOperando(&pFrame->operandStack);
+    
+    var.valor.Long = var1.valor.Long | var2.valor.Long ;
+    var.tipo = JLONG;
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+void FU_ixor(ST_tpStackFrame *pFrame){
+    ST_tpVariable var, var1, var2;
+    
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var2 = *PL_popOperando(&pFrame->operandStack);
+    
+    var.valor.Int = var1.valor.Int ^ var2.valor.Int ;
+    var.tipo = JINT;
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+void FU_lxor(ST_tpStackFrame *pFrame){
+    ST_tpVariable var, var1, var2;
+    
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var2 = *PL_popOperando(&pFrame->operandStack);
+    
+    var.valor.Long = var1.valor.Long ^ var2.valor.Long ;
+    var.tipo = JLONG;
+    PL_pushOperando(&pFrame->operandStack, var);
+}

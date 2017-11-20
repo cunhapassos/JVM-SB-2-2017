@@ -274,4 +274,16 @@ void FU_i2b(ST_tpStackFrame *pFrame);
 void FU_i2c(ST_tpStackFrame *pFrame);
 
 void FU_i2s(ST_tpStackFrame *pFrame);
+
+void FU_iand(ST_tpStackFrame *pFrame);
+
+void FU_land(ST_tpStackFrame *pFrame);
+
+void FU_ior(ST_tpStackFrame *pFrame);
+
+void FU_lor(ST_tpStackFrame *pFrame);
+
+void FU_ixor(ST_tpStackFrame *pFrame);
+
+void FU_lxor(ST_tpStackFrame *pFrame);
 #endif /* instrucoes_h */
