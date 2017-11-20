@@ -439,7 +439,7 @@ ST_tpVariable VM_recuperarValorArray(ST_tpArrayHeap *pArrayHeap, int posicao){
     int *pInt;
     float *pFloat;
     double *pDouble;
-    __int64_t *pLong;
+    int64_t *pLong;
     short int *pShort;
     char *pByte, *pBoolean;
     ST_tpObjectHeap *pObjRef;

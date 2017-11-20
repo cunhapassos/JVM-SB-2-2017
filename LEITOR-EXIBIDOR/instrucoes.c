@@ -1838,3 +1838,173 @@ void FU_if_acmpeq(ST_tpStackFrame *pFrame, u1 **pc){
         *pc += (temp2Byte - 3);
     }
 }
+
+void FU_i2l(ST_tpStackFrame *pFrame){
+    ST_tpVariable var1, var;
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var.valor.Long = (int64_t) var1.valor.Int;
+    var.tipo = JLONG;
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+void FU_i2f(ST_tpStackFrame *pFrame){
+    ST_tpVariable var1, var;
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var.valor.Float = (float) var1.valor.Int;
+    var.tipo = JFLOAT;
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+void FU_i2d(ST_tpStackFrame *pFrame){
+    ST_tpVariable var1, var;
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var.valor.Double = (double) var1.valor.Int;
+    var.tipo = JDOUBLE;
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+void FU_l2i(ST_tpStackFrame *pFrame){
+    ST_tpVariable var1, var;
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var.valor.Int = (int) var1.valor.Long;
+    var.tipo = JINT;
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+void FU_l2f(ST_tpStackFrame *pFrame){
+    ST_tpVariable var1, var;
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var.valor.Float = (float) var1.valor.Long;
+    var.tipo = JFLOAT;
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+void FU_l2d(ST_tpStackFrame *pFrame){
+    ST_tpVariable var1, var;
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var.valor.Double = (double) var1.valor.Long;
+    var.tipo = JDOUBLE;
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+void FU_f2i(ST_tpStackFrame *pFrame){
+    ST_tpVariable var1, var;
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    if (isnan(var1.valor.Float)) {
+        var.valor.Int = 0;
+    }
+    else if (var1.valor.Float == -INFINITY) {
+        var.valor.Int = INT_MIN;
+    }
+    else if (var1.valor.Float == INFINITY) {
+        var.valor.Int = INT_MAX;
+    }
+    else {
+        var.valor.Int = (int) var1.valor.Float;
+    }
+    var.tipo = JINT;
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+void FU_f2l(ST_tpStackFrame *pFrame){
+    ST_tpVariable var1, var;
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    if (isnan(var1.valor.Float)) {
+        var.valor.Long = 0;
+    }
+    else if (var1.valor.Float == -INFINITY) {
+        var.valor.Long = LONG_MIN;
+    }
+    else if (var1.valor.Float == INFINITY) {
+        var.valor.Long = LONG_MAX;
+    }
+    else {
+        var.valor.Long = (int64_t) var1.valor.Float;
+    }
+    var.tipo = JLONG;
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+void FU_f2d(ST_tpStackFrame *pFrame){
+    ST_tpVariable var1, var;
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var.valor.Double = (double) var1.valor.Float;
+    var.tipo = JDOUBLE;
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+void FU_d2i(ST_tpStackFrame *pFrame){
+    ST_tpVariable var1, var;
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    if (isnan(var1.valor.Double)) {
+        var.valor.Int = 0;
+    }
+    else if (var1.valor.Double == -INFINITY) {
+        var.valor.Int = INT_MIN;
+    }
+    else if (var1.valor.Double == INFINITY) {
+        var.valor.Int = INT_MAX;
+    }
+    else {
+        var.valor.Int = (int) var1.valor.Double;
+    }
+    var.tipo = JINT;
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+void FU_d2l(ST_tpStackFrame *pFrame){
+    ST_tpVariable var1, var;
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    if (isnan(var1.valor.Double)) {
+        var.valor.Long = 0;
+    }
+    else if (var1.valor.Double == -INFINITY) {
+        var.valor.Long = LONG_MIN;
+    }
+    else if (var1.valor.Double == INFINITY) {
+        var.valor.Long = LONG_MAX;
+    }
+    else {
+        var.valor.Long = (int64_t) var1.valor.Double;
+    }
+    var.tipo = JLONG;
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+void FU_d2f(ST_tpStackFrame *pFrame){
+    ST_tpVariable var1, var;
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var.valor.Float = (float) var1.valor.Double;
+    var.tipo = JFLOAT;
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+void FU_i2b(ST_tpStackFrame *pFrame){
+    ST_tpVariable var1, var;
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var.valor.Byte = (char) var1.valor.Int;
+    var1.valor.Int = (int) var.valor.Byte;
+    var1.tipo = JINT;
+    PL_pushOperando(&pFrame->operandStack, var1);
+}
+
+void FU_i2c(ST_tpStackFrame *pFrame){
+    ST_tpVariable var1, var;
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var.valor.Char = (u2) var1.valor.Int;
+    if (var.valor.Char < 0) {
+        var.valor.Char = - var.valor.Char;
+    }
+    var1.valor.Int = (int) var.valor.Char;
+    var1.tipo = JINT;
+    PL_pushOperando(&pFrame->operandStack, var1);
+}
+
+void FU_i2s(ST_tpStackFrame *pFrame){
+    ST_tpVariable var1, var;
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var.valor.Short = (short) var1.valor.Int;
+    var1.valor.Int = (int) var.valor.Byte;
+    var1.tipo = JINT;
+    PL_pushOperando(&pFrame->operandStack, var1);
+}

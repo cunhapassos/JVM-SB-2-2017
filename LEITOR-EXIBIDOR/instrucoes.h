@@ -236,4 +236,35 @@ void FU_if_icmpgt(ST_tpStackFrame *pFrame, u1 **pc);
 void FU_if_icmple(ST_tpStackFrame *pFrame, u1 **pc);
 
 void FU_if_acmpeq(ST_tpStackFrame *pFrame, u1 **pc);
+
+void FU_i2l(ST_tpStackFrame *pFrame);
+
+void FU_i2f(ST_tpStackFrame *pFrame);
+
+void FU_i2d(ST_tpStackFrame *pFrame);
+
+void FU_l2i(ST_tpStackFrame *pFrame);
+
+void FU_l2f(ST_tpStackFrame *pFrame);
+
+void FU_l2d(ST_tpStackFrame *pFrame);
+
+void FU_f2i(ST_tpStackFrame *pFrame);
+
+void FU_f2l(ST_tpStackFrame *pFrame);
+
+void FU_f2d(ST_tpStackFrame *pFrame);
+
+void FU_d2i(ST_tpStackFrame *pFrame);
+
+void FU_d2l(ST_tpStackFrame *pFrame);
+
+void FU_d2f(ST_tpStackFrame *pFrame);
+
+void FU_i2b(ST_tpStackFrame *pFrame);
+
+void FU_i2c(ST_tpStackFrame *pFrame);
+
+void FU_i2s(ST_tpStackFrame *pFrame);
+
 #endif /* instrucoes_h */
