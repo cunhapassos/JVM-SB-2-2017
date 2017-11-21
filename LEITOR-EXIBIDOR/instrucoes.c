@@ -333,96 +333,7 @@ int FU_retornaNumeroParametrosMetodo(ST_tpCONSTANT_Utf8_info *nome, ST_tpCONSTAN
     return params;
 }
 
-void FU_getstatic(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
-    
-    ST_tpVariable var;
-    ST_tpCp_info *pCPInfo;
-    ST_tpConstantPool *cpIndx;
-    u1 parametro1, parametro2;
-    u2 temp2Byte, index1, index2;
-    ST_tpCONSTANT_Fieldref_info *pFieldref;
-    char *nomeClasse, *nomeField, *descritorField;
-    
-    var.tipo = 0x99; // inicializa variavel com valor arbitrario
-    pCPInfo = pFrame->cp->constant_pool_table;
 
-    (*pc)++;
-    memcpy(&parametro1, *pc, 1);
-    (*pc)++;
-    memcpy(&parametro2, *pc, 1);
-    temp2Byte = (parametro1 << 8) + parametro2;
-    
-    cpIndx = &pCPInfo[temp2Byte-1].info;
-    
-    pFieldref   = (ST_tpCONSTANT_Fieldref_info *) malloc(sizeof(ST_tpCONSTANT_Fieldref_info));
-    memcpy(pFieldref, cpIndx, sizeof(ST_tpCONSTANT_Fieldref_info));
-    
-    index1      = pFieldref->class_index;
-    index2      = pCPInfo[index1 - 1].info.Class.name_index;
-    nomeClasse  = (char *)pCPInfo[index2 - 1].info.Utf8.bytes;
-    
-    index1 = pFieldref->name_and_type_index;
-    index2 = pCPInfo[index1 - 1].info.NameAndType.name_index;
-    nomeField = (char *) pCPInfo[index2 - 1].info.Utf8.bytes;
-   
-    index2 = pCPInfo[index1 - 1].info.NameAndType.descriptor_index;
-    descritorField = (char *) pCPInfo[index2 - 1].info.Utf8.bytes;
-    
-    var = *VM_recuperarValorStaticField(pJVM, nomeClasse, nomeField, descritorField);
-    
-    PL_pushOperando(&pFrame->operandStack, var);
-
-}
-void FU_putstatic(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
-    
-    ST_tpVariable *var1, *var2;
-    ST_tpCp_info *pCPInfo;
-    ST_tpConstantPool *cpIndx;
-    u1 parametro1, parametro2;
-    u2 temp2Byte, index1, index2;
-    ST_tpCONSTANT_Fieldref_info *pFieldref;
-    char *nomeClasse, *nomeField, *descritorField;
-    
-    //var.tipo = 0x99; // inicializa variavel com valor arbitrario
-    pCPInfo = pFrame->cp->constant_pool_table;
-    
-    (*pc)++;
-    memcpy(&parametro1, *pc, 1);
-    (*pc)++;
-    memcpy(&parametro2, *pc, 1);
-    temp2Byte = (parametro1 << 8) + parametro2;
-    
-    cpIndx = &pCPInfo[temp2Byte-1].info;
-    
-    pFieldref   = (ST_tpCONSTANT_Fieldref_info *) malloc(sizeof(ST_tpCONSTANT_Fieldref_info));
-    memcpy(pFieldref, cpIndx, sizeof(ST_tpCONSTANT_Fieldref_info));
-    
-    index1      = pFieldref->class_index;
-    index2      = pCPInfo[index1 - 1].info.Class.name_index;
-    nomeClasse  = (char *)pCPInfo[index2 - 1].info.Utf8.bytes;
-    
-    index1 = pFieldref->name_and_type_index;
-    index2 = pCPInfo[index1 - 1].info.NameAndType.name_index;
-    nomeField = (char *) pCPInfo[index2 - 1].info.Utf8.bytes;
-    
-    index2 = pCPInfo[index1 - 1].info.NameAndType.descriptor_index;
-    descritorField = (char *) pCPInfo[index2 - 1].info.Utf8.bytes;
-    
-    var2 = (ST_tpVariable *)malloc(sizeof(ST_tpVariable));
-    var1 = (ST_tpVariable *)malloc(sizeof(ST_tpVariable));
-    
-    memcpy((void*) var1, PL_popOperando(&pFrame->operandStack), sizeof(ST_tpVariable));
-
-    if(var1->tipo == JBOOL || var1->tipo == JBYTE || var1->tipo == JSHORT){
-        if(var1->tipo == JBOOL) var2->valor.Int = var1->valor.Boolean;
-        if(var1->tipo == JBYTE) var2->valor.Int = var1->valor.Byte;
-        if(var1->tipo == JCHAR) var2->valor.Int = var1->valor.Char;
-        if(var1->tipo == JSHORT) var2->valor.Int = var1->valor.Short;
-        var2->tipo = JINT;
-    }
-    VM_armazenarValorStaticField(pJVM, nomeClasse, nomeField, descritorField, *var1);
-    
-}
 void FU_sipush(ST_tpStackFrame *pFrame, u1 **pc){
     ST_tpVariable var;
     u1 parametro1, parametro2;
@@ -2067,4 +1978,278 @@ void FU_f2i(ST_tpStackFrame *pFrame){
     }
     var.tipo = JINT;
     PL_pushOperando(&pFrame->operandStack, var);
+}
+
+void FU_tableswitch(ST_tpStackFrame *pFrame, u1 **pc){
+    u1 **tempPC, aux, parametro1, parametro2, parametro3, parametro4;
+    u4 valorDefalt, valorLow, valorHigh;
+    ST_tpVariable var1, var2, var3;
+
+    tempPC = pc;
+    var1 = *PL_popOperando(&pFrame->operandStack);
+
+    aux = 4 - (*(*pc) % 4);
+    if (aux == 4) {
+        aux = 0;
+    }
+    pc += aux;
+
+    memcpy(&parametro1, (*pc)++, 1);
+    memcpy(&parametro2, (*pc)++, 1);
+    memcpy(&parametro3, (*pc)++, 1);
+    memcpy(&parametro4, (*pc)++, 1);
+    valorDefalt = (parametro1 << 24) | (parametro2 << 16) | (parametro3 << 8) | parametro4;
+
+    memcpy(&parametro1, (*pc)++, 1);
+    memcpy(&parametro2, (*pc)++, 1);
+    memcpy(&parametro3, (*pc)++, 1);
+    memcpy(&parametro4, (*pc)++, 1);
+    valorLow = (parametro1 << 24) | (parametro2 << 16) | (parametro3 << 8) | parametro4;
+
+    memcpy(&parametro1, (*pc)++, 1);
+    memcpy(&parametro2, (*pc)++, 1);
+    memcpy(&parametro3, (*pc)++, 1);
+    memcpy(&parametro4, (*pc)++, 1);
+    valorHigh = (parametro1 << 24) | (parametro2 << 16) | (parametro3 << 8) | parametro4;
+
+    if (var1.valor.Int > valorHigh || var1.valor.Int  < valorLow) {
+        tempPC += (valorDefalt - 1);
+        pc = tempPC;
+    }
+    else{
+        var2.valor.Int = var1.valor.Int - valorLow;
+        var3.valor.Int = var2.valor.Int * 4;
+        pc += var3.valor.Int;
+        memcpy(&parametro1, (*pc)++, 1);
+        memcpy(&parametro2, (*pc)++, 1);
+        memcpy(&parametro3, (*pc)++, 1);
+        memcpy(&parametro4, (*pc)++, 1);
+
+        var3.valor.Int = (parametro1 << 24) | (parametro2 << 16) | (parametro3 << 8) | parametro4;
+        tempPC += (var3.valor.Int - 1);
+        pc = tempPC;
+    }
+}
+
+void FU_lookupswitch(ST_tpStackFrame *pFrame, u1 **pc){
+    u1 **tempPC, aux, parametro1, parametro2, parametro3, parametro4;
+    u4 valorDefalt, npairs, match, offset;
+    ST_tpVariable var1;
+    int controle;
+
+    tempPC = pc;
+    var1 = *PL_popOperando(&pFrame->operandStack);
+
+    aux = 4 - (*(*pc) % 4);
+    if (aux == 4) {
+        aux = 0;
+    }
+    pc += aux;
+
+    memcpy(&parametro1, (*pc)++, 1);
+    memcpy(&parametro2, (*pc)++, 1);
+    memcpy(&parametro3, (*pc)++, 1);
+    memcpy(&parametro4, (*pc)++, 1);
+    valorDefalt = (parametro1 << 24) | (parametro2 << 16) | (parametro3 << 8) | parametro4;
+
+    memcpy(&parametro1, (*pc)++, 1);
+    memcpy(&parametro2, (*pc)++, 1);
+    memcpy(&parametro3, (*pc)++, 1);
+    memcpy(&parametro4, (*pc)++, 1);
+    npairs = (parametro1 << 24) | (parametro2 << 16) | (parametro3 << 8) | parametro4;
+
+    controle = 0;
+    for (int i = 0; i < npairs; i++) {
+        memcpy(&parametro1, (*pc)++, 1);
+        memcpy(&parametro2, (*pc)++, 1);
+        memcpy(&parametro3, (*pc)++, 1);
+        memcpy(&parametro4, (*pc)++, 1);
+        match = (parametro1 << 24) | (parametro2 << 16) | (parametro3 << 8) | parametro4;
+
+        memcpy(&parametro1, (*pc)++, 1);
+        memcpy(&parametro2, (*pc)++, 1);
+        memcpy(&parametro3, (*pc)++, 1);
+        memcpy(&parametro4, (*pc)++, 1);
+        offset = (parametro1 << 24) | (parametro2 << 16) | (parametro3 << 8) | parametro4;
+
+        if (var1.valor.Int == match) {
+            tempPC += (offset - 1);
+            pc = tempPC;
+            aux = 1;
+        }
+    }
+    if (controle == 0) {
+        tempPC += (valorDefalt - 1);
+        pc = tempPC;
+    }
+}
+
+void FU_ireturn(ST_tpStackFrame *pFrame, u1 **pc, ST_tpVariable **Retorno){
+    ST_tpVariable pTempRetorno;
+
+    pTempRetorno = *PL_popOperando(&pFrame->operandStack);
+    if(pTempRetorno.tipo == JBYTE){
+        (*Retorno)->valor.Int = (int) pTempRetorno.valor.Byte;
+    }
+    else if (pTempRetorno.tipo == JBOOL){
+        (*Retorno)->valor.Int = (int) pTempRetorno.valor.Boolean;
+    }
+    else if (pTempRetorno.tipo == JSHORT){
+        (*Retorno)->valor.Int = (int) pTempRetorno.valor.Short;
+    }
+    else if (pTempRetorno.tipo == JCHAR){
+        (*Retorno)->valor.Int = (int) pTempRetorno.valor.Char;
+    }
+    (*Retorno)->tipo = JINT;
+    // Sair do metodo
+}
+
+void FU_lreturn(ST_tpStackFrame *pFrame, ST_tpVariable **Retorno){
+    *Retorno = PL_popOperando(&pFrame->operandStack);
+    // Sair do metodo
+}
+
+void FU_freturn(ST_tpStackFrame *pFrame, ST_tpVariable **Retorno){
+    *Retorno = PL_popOperando(&pFrame->operandStack);
+    // Sair do metodo
+}
+
+void FU_areturn(ST_tpStackFrame *pFrame, ST_tpVariable **Retorno){
+    *Retorno = PL_popOperando(&pFrame->operandStack);
+    if ((*Retorno)->valor.obj_ref != 0) {
+        (*Retorno)->valor.obj_ref->ref_count++;
+    }
+    // Sair do metodo
+}
+
+void FU_getstatic(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
+
+    ST_tpVariable var;
+    ST_tpCp_info *pCPInfo;
+    ST_tpConstantPool *cpIndx;
+    u1 parametro1, parametro2;
+    u2 temp2Byte, index1, index2;
+    ST_tpCONSTANT_Fieldref_info *pFieldref;
+    char *nomeClasse, *nomeField, *descritorField;
+
+    var.tipo = 0x99; // inicializa variavel com valor arbitrario
+    pCPInfo = pFrame->cp->constant_pool_table;
+
+    (*pc)++;
+    memcpy(&parametro1, *pc, 1);
+    (*pc)++;
+    memcpy(&parametro2, *pc, 1);
+    temp2Byte = (parametro1 << 8) + parametro2;
+
+    cpIndx = &pCPInfo[temp2Byte-1].info;
+
+    pFieldref   = (ST_tpCONSTANT_Fieldref_info *) malloc(sizeof(ST_tpCONSTANT_Fieldref_info));
+    memcpy(pFieldref, cpIndx, sizeof(ST_tpCONSTANT_Fieldref_info));
+
+    index1      = pFieldref->class_index;
+    index2      = pCPInfo[index1 - 1].info.Class.name_index;
+    nomeClasse  = (char *)pCPInfo[index2 - 1].info.Utf8.bytes;
+
+    index1 = pFieldref->name_and_type_index;
+    index2 = pCPInfo[index1 - 1].info.NameAndType.name_index;
+    nomeField = (char *) pCPInfo[index2 - 1].info.Utf8.bytes;
+
+    index2 = pCPInfo[index1 - 1].info.NameAndType.descriptor_index;
+    descritorField = (char *) pCPInfo[index2 - 1].info.Utf8.bytes;
+
+    var = *VM_recuperarValorStaticField(pJVM, nomeClasse, nomeField, descritorField);
+
+    PL_pushOperando(&pFrame->operandStack, var);
+
+}
+
+void FU_putstatic(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
+
+    ST_tpVariable *var1, *var2;
+    ST_tpCp_info *pCPInfo;
+    ST_tpConstantPool *cpIndx;
+    u1 parametro1, parametro2;
+    u2 temp2Byte, index1, index2;
+    ST_tpCONSTANT_Fieldref_info *pFieldref;
+    char *nomeClasse, *nomeField, *descritorField;
+
+        //var.tipo = 0x99; // inicializa variavel com valor arbitrario
+    pCPInfo = pFrame->cp->constant_pool_table;
+
+    (*pc)++;
+    memcpy(&parametro1, *pc, 1);
+    (*pc)++;
+    memcpy(&parametro2, *pc, 1);
+    temp2Byte = (parametro1 << 8) + parametro2;
+
+    cpIndx = &pCPInfo[temp2Byte-1].info;
+
+    pFieldref   = (ST_tpCONSTANT_Fieldref_info *) malloc(sizeof(ST_tpCONSTANT_Fieldref_info));
+    memcpy(pFieldref, cpIndx, sizeof(ST_tpCONSTANT_Fieldref_info));
+
+    index1      = pFieldref->class_index;
+    index2      = pCPInfo[index1 - 1].info.Class.name_index;
+    nomeClasse  = (char *)pCPInfo[index2 - 1].info.Utf8.bytes;
+
+    index1 = pFieldref->name_and_type_index;
+    index2 = pCPInfo[index1 - 1].info.NameAndType.name_index;
+    nomeField = (char *) pCPInfo[index2 - 1].info.Utf8.bytes;
+
+    index2 = pCPInfo[index1 - 1].info.NameAndType.descriptor_index;
+    descritorField = (char *) pCPInfo[index2 - 1].info.Utf8.bytes;
+
+    var2 = (ST_tpVariable *)malloc(sizeof(ST_tpVariable));
+    var1 = (ST_tpVariable *)malloc(sizeof(ST_tpVariable));
+
+    memcpy((void*) var1, PL_popOperando(&pFrame->operandStack), sizeof(ST_tpVariable));
+
+    if(var1->tipo == JBOOL || var1->tipo == JBYTE || var1->tipo == JSHORT){
+        if(var1->tipo == JBOOL) var2->valor.Int = var1->valor.Boolean;
+        if(var1->tipo == JBYTE) var2->valor.Int = var1->valor.Byte;
+        if(var1->tipo == JCHAR) var2->valor.Int = var1->valor.Char;
+        if(var1->tipo == JSHORT) var2->valor.Int = var1->valor.Short;
+        var2->tipo = JINT;
+    }
+    VM_armazenarValorStaticField(pJVM, nomeClasse, nomeField, descritorField, *var1);
+
+}
+void FU_getfield(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
+
+    ST_tpVariable var;
+    ST_tpCp_info *pCPInfo;
+    ST_tpConstantPool *cpIndx;
+    u1 parametro1, parametro2;
+    u2 temp2Byte, index1, index2;
+    ST_tpCONSTANT_Fieldref_info *pFieldref;
+    char *nomeClasse, *nomeField, *descritorField;
+
+    var.tipo = 0x99; // inicializa variavel com valor arbitrario
+    pCPInfo = pFrame->cp->constant_pool_table;
+
+    (*pc)++;
+    memcpy(&parametro1, *pc, 1);
+    (*pc)++;
+    memcpy(&parametro2, *pc, 1);
+    temp2Byte = (parametro1 << 8) + parametro2;
+
+    cpIndx = &pCPInfo[temp2Byte-1].info;
+
+    pFieldref   = (ST_tpCONSTANT_Fieldref_info *) malloc(sizeof(ST_tpCONSTANT_Fieldref_info));
+    memcpy(pFieldref, cpIndx, sizeof(ST_tpCONSTANT_Fieldref_info));
+
+    index1      = pFieldref->class_index;
+    index2      = pCPInfo[index1 - 1].info.Class.name_index;
+    nomeClasse  = (char *)pCPInfo[index2 - 1].info.Utf8.bytes;
+
+    index1 = pFieldref->name_and_type_index;
+    index2 = pCPInfo[index1 - 1].info.NameAndType.name_index;
+    nomeField = (char *) pCPInfo[index2 - 1].info.Utf8.bytes;
+
+    index2 = pCPInfo[index1 - 1].info.NameAndType.descriptor_index;
+    descritorField = (char *) pCPInfo[index2 - 1].info.Utf8.bytes;
+
+    var = *VM_recuperarValorStaticField(pJVM, nomeClasse, nomeField, descritorField);
+
+    PL_pushOperando(&pFrame->operandStack, var);
+
 }

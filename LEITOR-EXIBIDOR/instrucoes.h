@@ -274,4 +274,16 @@ void FU_i2b(ST_tpStackFrame *pFrame);
 void FU_i2c(ST_tpStackFrame *pFrame);
 
 void FU_i2s(ST_tpStackFrame *pFrame);
+
+void FU_tableswitch(ST_tpStackFrame *pFrame, u1 **pc);
+
+void FU_lookupswitch(ST_tpStackFrame *pFrame, u1 **pc);
+
+void FU_ireturn(ST_tpStackFrame *pFrame, u1 **pc, ST_tpVariable **Retorno);
+
+void FU_lreturn(ST_tpStackFrame *pFrame, ST_tpVariable **Retorno);
+
+void FU_freturn(ST_tpStackFrame *pFrame, ST_tpVariable **Retorno);
+
+void FU_getfield(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc)
 #endif /* instrucoes_h */

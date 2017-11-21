@@ -209,11 +209,12 @@ ST_tpVariable *VM_executarMetodo(ST_tpJVM *pJVM, ST_tpClassFile *pClasse, ST_tpP
                 IT_executaInstrucao(pJVM, pFrame, &pRetorno); // VERIFICAR ONDE EXECUTA AS EXCESSOES
                 pJVM->thread->PC++;
             }
-       // SaidaDoMEtodo:
+
 
             //CRIA ESSA FUNCAO
            // limparFrame(pJVM->thread->pJVMStack->localVariables);
             // VERIFICAR COMO FAZER O RETORNO DA FUNCAO
+          SaidaDoMEtodo:
             while (pFrame->operandStack != NULL) {
                 pRetorno = PL_popOperando(&pFrame->operandStack);
             }
