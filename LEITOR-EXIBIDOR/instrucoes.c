@@ -2098,18 +2098,64 @@ void FU_ireturn(ST_tpStackFrame *pFrame, u1 **pc, ST_tpVariable **Retorno){
 }
 
 void FU_lreturn(ST_tpStackFrame *pFrame, ST_tpVariable **Retorno){
-    *Retorno = PL_popOperando(&pFrame->operandStack);
-    // Sair do metodo
+    ST_tpVariable pTempRetorno;
+
+    pTempRetorno = *PL_popOperando(&pFrame->operandStack);
+    if(pTempRetorno.tipo == JINT){
+        (*Retorno)->valor.Long = (int64_t) pTempRetorno.valor.Int;
+    }
+    else if (pTempRetorno.tipo == JSHORT){
+        (*Retorno)->valor.Long = (int64_t) pTempRetorno.valor.Short;
+    }else if (pTempRetorno.tipo == JFLOAT){
+        (*Retorno)->valor.Long = (int64_t) pTempRetorno.valor.Float;
+    }
+    else if (pTempRetorno.tipo == JDOUBLE){
+        (*Retorno)->valor.Long = (int64_t) pTempRetorno.valor.Double;
+    }
+
+
+    (*Retorno)->tipo = JLONG;
 }
 
 void FU_freturn(ST_tpStackFrame *pFrame, ST_tpVariable **Retorno){
-    *Retorno = PL_popOperando(&pFrame->operandStack);
-    // Sair do metodo
+    ST_tpVariable pTempRetorno;
+
+    pTempRetorno = *PL_popOperando(&pFrame->operandStack);
+    if(pTempRetorno.tipo == JDOUBLE){
+        (*Retorno)->valor.Float = (float) pTempRetorno.valor.Double;
+    }
+    else if (pTempRetorno.tipo == JSHORT){
+        (*Retorno)->valor.Float = (float) pTempRetorno.valor.Short;
+    }
+    else if (pTempRetorno.tipo == JINT){
+        (*Retorno)->valor.Float = (float) pTempRetorno.valor.Int;
+    }
+    else if (pTempRetorno.tipo == JLONG){
+        (*Retorno)->valor.Float = (float) pTempRetorno.valor.Long;
+    }
+
+    (*Retorno)->tipo = JFLOAT;
 }
 
             
 void FU_dreturn(ST_tpStackFrame *pFrame, ST_tpVariable **Retorno){
-    *Retorno = PL_popOperando(&pFrame->operandStack);
+    ST_tpVariable pTempRetorno;
+
+    pTempRetorno = *PL_popOperando(&pFrame->operandStack);
+    if(pTempRetorno.tipo == JFLOAT){
+        (*Retorno)->valor.Double = (double) pTempRetorno.valor.Float;
+    }
+    else if (pTempRetorno.tipo == JSHORT){
+        (*Retorno)->valor.Double = (double) pTempRetorno.valor.Short;
+    }
+    else if (pTempRetorno.tipo == JINT){
+        (*Retorno)->valor.Double = (double) pTempRetorno.valor.Int;
+    }
+    else if (pTempRetorno.tipo == JLONG){
+        (*Retorno)->valor.Double = (double) pTempRetorno.valor.Long;
+    }
+
+    (*Retorno)->tipo = JDOUBLE;
 }
 
 void FU_areturn(ST_tpStackFrame *pFrame, ST_tpVariable **Retorno){
