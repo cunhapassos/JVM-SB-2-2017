@@ -2252,4 +2252,5 @@ void FU_getfield(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
 
     PL_pushOperando(&pFrame->operandStack, var);
 
+
 }
