@@ -2217,3 +2217,18 @@ void FU_lxor(ST_tpStackFrame *pFrame){
     var.tipo = JLONG;
     PL_pushOperando(&pFrame->operandStack, var);
 }
+
+void FU_iinc(ST_tpStackFrame *pFrame, u1 **pc){
+    ST_tpVariable var;
+    u1 parametro1, parametro2;
+    int8_t inc;
+    
+    (*pc)++;
+    memcpy(&parametro1, *pc, 1);
+    (*pc)++;
+    memcpy(&parametro2, *pc, 1);
+    var = VM_recuperarVariavel(pFrame->localVariables, (int) parametro1);
+    inc = (int8_t) parametro2;
+    var.valor.Int += (int) inc;
+    VM_armazenarVariavel(pFrame->localVariables, var, (int) parametro1);
+}
