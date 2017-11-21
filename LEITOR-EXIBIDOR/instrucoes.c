@@ -1399,13 +1399,6 @@ void FU_dneg(ST_tpStackFrame *pFrame){
     var.valor.Double = -var.valor.Double;
     PL_pushOperando(&pFrame->operandStack, var);
 }
-            
-ST_tpVariable FU_dreturn(ST_tpStackFrame *pFrame){
-    ST_tpVariable varReturn;
-    
-    varReturn = *PL_popOperando(&pFrame->operandStack); // VERIFICAR SE *pVarReturn TEM * MESMO
-    return varReturn;
-}
 
 void FU_lcmp(ST_tpStackFrame *pFrame){
     ST_tpVariable var, var1, var2;
@@ -2112,6 +2105,11 @@ void FU_lreturn(ST_tpStackFrame *pFrame, ST_tpVariable **Retorno){
 void FU_freturn(ST_tpStackFrame *pFrame, ST_tpVariable **Retorno){
     *Retorno = PL_popOperando(&pFrame->operandStack);
     // Sair do metodo
+}
+
+            
+void FU_dreturn(ST_tpStackFrame *pFrame, ST_tpVariable **Retorno){
+    *Retorno = PL_popOperando(&pFrame->operandStack);
 }
 
 void FU_areturn(ST_tpStackFrame *pFrame, ST_tpVariable **Retorno){

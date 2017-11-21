@@ -3136,8 +3136,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0xac:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_ireturn(pFrame, &pJVM->thread->PC, Retorno);
 			break;
 
 
@@ -3156,8 +3155,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0xad:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_lreturn(pFrame, Retorno);
 			break;
 
 
@@ -3176,8 +3174,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0xae:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_freturn(pFrame, Retorno);
 			break;
 
 
@@ -3196,7 +3193,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0xaf:
-            FU_dreturn(pFrame);
+            FU_dreturn(pFrame, Retorno);
 			break;
 
 

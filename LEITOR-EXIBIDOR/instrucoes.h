@@ -55,8 +55,6 @@ void FU_dstore_n(ST_tpStackFrame *pFrame, int posicao);
 
 void FU_astore_n(ST_tpStackFrame *pFrame, int posicao);
 
-ST_tpVariable FU_dreturn(ST_tpStackFrame *pFrame );
-
 void FU_return(ST_tpStackFrame *pFrame);
 
 void FU_bipush(ST_tpStackFrame *pFrame, u1 **pc);
@@ -284,6 +282,8 @@ void FU_ireturn(ST_tpStackFrame *pFrame, u1 **pc, ST_tpVariable **Retorno);
 void FU_lreturn(ST_tpStackFrame *pFrame, ST_tpVariable **Retorno);
 
 void FU_freturn(ST_tpStackFrame *pFrame, ST_tpVariable **Retorno);
+
+void FU_dreturn(ST_tpStackFrame *pFrame, ST_tpVariable **Retorno);
 
 void FU_getfield(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc);
 
