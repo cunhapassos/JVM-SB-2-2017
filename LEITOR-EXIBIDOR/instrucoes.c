@@ -303,6 +303,107 @@ int FU_invokestatic(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc, ST_tpVaria
     return 0;
 }
 
+int FU_invokeinterface(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc, ST_tpVariable **Retorno){
+
+    int aux = 0;
+    u1 parametro1, parametro2, contador, byteExtra;
+    ST_tpConstantPool *cpIndx;
+    ST_tpClassFile *pClassFile;
+    ST_tpCp_info *pConstantPool;
+    ST_tpMethod_info *pMetodoInfo;
+    ST_tpCONSTANT_NameAndType_info *nameTyperef;
+    ST_tpCONSTANT_Utf8_info *pClasseName = NULL, *pMethodName, *pMethodDescriptor;
+    u2 temp2Byte, pClasseIndex, pNameAndTypeIndex,pNomeMetodoIndex, pDescritorMetodoIndex;
+    
+    (*pc)++;
+    memcpy(&parametro1, *pc, 1);
+    (*pc)++;
+    memcpy(&parametro2, *pc, 1);
+    temp2Byte = (parametro1 << 8) + parametro2;
+    
+    (*pc)++;
+    memcpy(&contador, *pc, 1);
+    (*pc)++;
+    memcpy(&byteExtra, *pc, 1);
+    
+    pConstantPool         = pFrame->cp->constant_pool_table;
+    pClasseIndex          = pConstantPool[temp2Byte -1].info.Methodref.class_index;
+    pNameAndTypeIndex     = pConstantPool[temp2Byte -1].info.Methodref.name_and_type_index;
+    
+    pClasseIndex          = pConstantPool[pClasseIndex - 1].info.Class.name_index;
+    pClasseName = (ST_tpCONSTANT_Utf8_info *)malloc(sizeof(ST_tpCONSTANT_Utf8_info));
+    memcpy(pClasseName, &(pConstantPool[pClasseIndex - 1].info.Utf8), sizeof(ST_tpCONSTANT_Utf8_info));
+    
+    pNomeMetodoIndex      = pConstantPool[pNameAndTypeIndex - 1].info.NameAndType.name_index;
+    pDescritorMetodoIndex = pConstantPool[pNameAndTypeIndex - 1].info.NameAndType.descriptor_index;
+    
+    temp2Byte             = pNameAndTypeIndex;
+    cpIndx                = &pConstantPool[pNomeMetodoIndex-1].info;
+    nameTyperef           = (ST_tpCONSTANT_NameAndType_info *)malloc(sizeof(ST_tpCONSTANT_NameAndType_info));
+    memcpy(nameTyperef, &(cpIndx->Utf8), sizeof(ST_tpCONSTANT_NameAndType_info));
+    
+    temp2Byte             = pNomeMetodoIndex;
+    cpIndx                = &pConstantPool[temp2Byte-1].info;
+    pMethodName           = (ST_tpCONSTANT_Utf8_info *)malloc(sizeof(ST_tpCONSTANT_Utf8_info));
+    memcpy(pMethodName, &(cpIndx->Utf8), sizeof(ST_tpCONSTANT_Utf8_info));
+    
+    temp2Byte             = pDescritorMetodoIndex;
+    cpIndx                = &pConstantPool[temp2Byte-1].info;
+    pMethodDescriptor     = (ST_tpCONSTANT_Utf8_info *)malloc(sizeof(ST_tpCONSTANT_Utf8_info));
+    memcpy(pMethodDescriptor, &(cpIndx->Utf8), sizeof(ST_tpCONSTANT_Utf8_info));
+    
+    aux                 = FU_retornaNumeroParametrosMetodo(pMethodName, pMethodDescriptor);
+    aux++;
+    
+    /* Retira todos os valores da pilha de operandos e passa para a pilha de parametros */
+    while( aux != 0 && pFrame->operandStack != NULL) {
+        PL_pushParametro(&pFrame->parameterStack, *PL_popOperando(&pFrame->operandStack));
+        aux --;
+    }
+    if(!strcmp((const char *)pMethodName, "<init>")){
+        return 1; // Significa um erro, goto saidaDoMetodo
+    }
+    
+    pClassFile = PL_buscarClasse(pJVM, (char *) pClasseName->bytes);
+    
+    if(pClassFile != NULL){
+        pMetodoInfo = VM_procurarMetodo(pClassFile, (char *) (pMethodDescriptor->bytes) , (char *) (pMethodName->bytes));
+        
+        if((pMetodoInfo->access_flags & ACC_ABSTRACT) == ACC_ABSTRACT){
+            printf("\nERRO NA INSTRUCAO invokespecial!\n");
+            return 1; // ERRO
+        }
+        if((pMetodoInfo->access_flags & ACC_PUBLIC) != ACC_PUBLIC){
+            printf("\nERRO NA INSTRUCAO invokespecial!\n");
+            return 1; // ERRO
+        }
+        if((pMetodoInfo->access_flags & ACC_NATIVE) == ACC_NATIVE){
+            // EXECUTAR METODO NATIVO
+            printf("\nWARNING! AQUI DEVERIA EXECUTAR UM METODO NATIVO!\n");
+        }
+        else{
+            *Retorno = VM_executarMetodo(pJVM, pClassFile, pFrame->parameterStack, pMetodoInfo);
+        }
+        
+        if((*Retorno)->tipo != JVOID ){
+            PL_pushOperando(&pFrame->operandStack, *(*Retorno));
+        }
+        if ((*Retorno)->tipo == JAREF && (*Retorno)->valor.array_ref != 0) {
+            ((*Retorno)->valor.array_ref)->ref_count --;
+        }
+        if((*Retorno)->tipo == JREF && (*Retorno)->valor.array_ref != 0){
+            ((*Retorno)->valor.array_ref)->ref_count --;
+        }
+        // Ver caseo de excecoes
+        //if()
+    }
+    else{
+        return 1; // ERRO
+    }
+    
+    return 0;
+}
+
 int FU_retornaNumeroParametrosMetodo(ST_tpCONSTANT_Utf8_info *nome, ST_tpCONSTANT_Utf8_info *descricao){
 
     int params = 0, index = -1;
@@ -333,6 +434,233 @@ int FU_retornaNumeroParametrosMetodo(ST_tpCONSTANT_Utf8_info *nome, ST_tpCONSTAN
     return params;
 }
 
+void FU_new(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
+    u1 parametro1, parametro2;
+    u2 temp2Byte, pClasseIndex;
+    ST_tpClassFile *pClassFile;
+    ST_tpVariable *var;
+    ST_tpCp_info *pConstantPool;
+    ST_tpObjectHeap *pObjectHeap;
+    ST_tpCONSTANT_Utf8_info *pClasseName = NULL;
+    
+    (*pc)++;
+    memcpy(&parametro1, *pc, 1);
+    (*pc)++;
+    memcpy(&parametro2, *pc, 1);
+    temp2Byte = (parametro1 << 8) + parametro2;
+    
+    pConstantPool         = pFrame->cp->constant_pool_table;
+    pClasseIndex          = pConstantPool[temp2Byte -1].info.Methodref.class_index;
+    
+    pClasseIndex          = pConstantPool[pClasseIndex - 1].info.Class.name_index;
+    pClasseName = (ST_tpCONSTANT_Utf8_info *)malloc(sizeof(ST_tpCONSTANT_Utf8_info));
+    memcpy(pClasseName, &(pConstantPool[pClasseIndex - 1].info.Utf8), sizeof(ST_tpCONSTANT_Utf8_info));
+    
+    pClassFile = PL_buscarClasse(pJVM, (char *)pClasseName->bytes);
+    if (pClassFile == NULL) {
+        pClassFile = VM_carregarClasse((char *)pClasseName->bytes, pJVM);
+    }
+    pObjectHeap = VM_alocarMemoriaHeapObjeto(pJVM, pClassFile);
+    
+    var = (ST_tpVariable *)malloc(sizeof(ST_tpVariable));
+    var->valor.obj_ref = pObjectHeap;
+    var->tipo = JREF;
+    
+    PL_pushOperando(&pFrame->operandStack, *var);
+    
+}
+
+void FU_newarray(ST_tpStackFrame *pFrame, u1 **pc){
+    u1 parametro1;
+    ST_tpVariable *var;
+    ST_tpArrayHeap *pArray;
+    
+    (*pc)++;
+    memcpy(&parametro1, *pc, 1);
+    
+    var = PL_popOperando(&pFrame->operandStack);
+    pArray = VM_criarArray(parametro1, "", var->valor.Int);
+    var->valor.array_ref = pArray;
+    
+    PL_pushOperando(&pFrame->operandStack, *var);
+    
+}
+
+void FU_anewarray(ST_tpStackFrame *pFrame, u1 **pc){
+    
+    ST_tpVariable *var;
+    ST_tpArrayHeap *pArray;
+    u1 parametro1, parametro2;
+    u2 temp2Byte, pClasseIndex;
+    ST_tpCp_info *pConstantPool;
+    ST_tpCONSTANT_Utf8_info *pClasseName = NULL;
+    
+    (*pc)++;
+    memcpy(&parametro1, *pc, 1);
+    (*pc)++;
+    memcpy(&parametro2, *pc, 1);
+    temp2Byte = (parametro1 << 8) + parametro2;
+    
+    pConstantPool         = pFrame->cp->constant_pool_table;
+    pClasseIndex          = pConstantPool[temp2Byte - 1].info.Class.name_index;
+    pClasseName = (ST_tpCONSTANT_Utf8_info *)malloc(sizeof(ST_tpCONSTANT_Utf8_info));
+    memcpy(pClasseName, &(pConstantPool[pClasseIndex - 1].info.Utf8), sizeof(ST_tpCONSTANT_Utf8_info));
+    
+    var = PL_popOperando(&pFrame->operandStack);
+    
+    parametro1 = T_REF;
+    pArray = VM_criarArray(parametro1, (char *)pClasseName->bytes, var->valor.Int);
+    
+    var->tipo = JAREF;
+    var->valor.array_ref = pArray;
+    
+    PL_pushOperando(&pFrame->operandStack, *var);
+    
+}
+
+void FU_arraylenght(ST_tpStackFrame *pFrame) {
+    ST_tpVariable array_ref, size;
+    
+    array_ref = *PL_popOperando(&pFrame->operandStack);
+    
+    if (array_ref.tipo == JAREF) {
+        if (array_ref.valor.array_ref == NULL) {
+            //TODO lançar NullPointerException
+        }
+        else {
+            size.valor.Int = array_ref.valor.array_ref->length;
+            size.tipo = JINT;
+            PL_pushOperando(&pFrame->operandStack, size);
+        }
+    }
+}
+
+void FU_athrow(ST_tpStackFrame *pFrame){
+    PL_popOperando(&pFrame->operandStack);
+    VM_executarThrow() // Falta implementra essa função
+}
+
+void FU_checkcast(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
+    int flag;
+    char *nomeClasse;
+    ST_tpVariable *var;
+    u1 parametro1, parametro2;
+    u2 temp2Byte, pClasseIndex;
+    ST_tpClassFile *pClassFile;
+    ST_tpCp_info *pConstantPool;
+    ST_tpCONSTANT_Utf8_info *pClasseName1 = NULL;
+    
+    
+    (*pc)++;
+    memcpy(&parametro1, *pc, 1);
+    (*pc)++;
+    memcpy(&parametro2, *pc, 1);
+    temp2Byte = (parametro1 << 8) + parametro2;
+    
+    var = PL_popOperando(&pFrame->operandStack);
+    
+    if ((var->valor.obj_ref == 0)  && (var->tipo != JREF)) {
+        PL_pushOperando(&pFrame->operandStack, *var);
+    }
+    else if ((var->valor.obj_ref == 0)  && (var->tipo != JAREF)){
+        PL_pushOperando(&pFrame->operandStack, *var);
+    }
+    
+    pConstantPool         = pFrame->cp->constant_pool_table;
+    pClasseIndex          = pConstantPool[temp2Byte - 1].info.Class.name_index;
+    pClasseName1 = (ST_tpCONSTANT_Utf8_info *)malloc(sizeof(ST_tpCONSTANT_Utf8_info));
+    memcpy(pClasseName1, &(pConstantPool[pClasseIndex - 1].info.Utf8), sizeof(ST_tpCONSTANT_Utf8_info));
+    
+    if (var->tipo == JAREF) {
+        if (!strcmp((char *) pClasseName1->bytes, "java/lang/object")) {
+            flag = 1;
+        }
+    }
+    else{
+        nomeClasse = (char *)malloc(sizeof(char *) * strlen(var->valor.obj_ref->className));
+        // Verificar se essa forma de fazer o malloc está certa
+        strcpy(nomeClasse, var->valor.obj_ref->className);
+        if (!strcmp((char *) pClasseName1->bytes, nomeClasse)) {
+            flag = 1;
+        }
+        else{
+            flag = 0;
+            while (TRUE) {
+                pClassFile = PL_buscarClasse(pJVM, nomeClasse);
+                if (pClassFile == NULL) {
+                    pClassFile = VM_carregarClasse(nomeClasse, pJVM);
+                }
+                if (pClassFile->super_class == 0) {
+                    flag = 0;
+                    break;
+                }
+                free(nomeClasse);
+                nomeClasse = (char *)malloc(sizeof(char *) * strlen(pClassFile->nomeSuperClasse)); // Verificar se essa forma de fazer o malloc está certa
+                strcpy(nomeClasse, pClassFile->nomeSuperClasse);
+                if (!strcmp(nomeClasse, (char *) pClasseName1->bytes)){
+                    flag = 1;
+                    break;
+                }
+                flag = 0;
+            }
+        }
+    }
+    if (flag == 0) {
+        // Exceção
+    }
+    else{
+        PL_pushOperando(&pFrame->operandStack, *var);
+    }
+}
+
+void FU_instanceof(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
+    int flag;
+    char *nomeClasse;
+    ST_tpVariable *var, *var1;
+    u1 parametro1, parametro2;
+    u2 temp2Byte, pClasseIndex;
+    ST_tpCp_info *pConstantPool;
+    ST_tpCONSTANT_Utf8_info *pClasseName1 = NULL;
+    
+    
+    (*pc)++;
+    memcpy(&parametro1, *pc, 1);
+    (*pc)++;
+    memcpy(&parametro2, *pc, 1);
+    temp2Byte = (parametro1 << 8) + parametro2;
+    
+    var = PL_popOperando(&pFrame->operandStack);
+    
+    if ((var->valor.obj_ref == 0)  && (var->tipo != JREF)) {
+        flag = 0;
+        var->tipo = JINT;
+        PL_pushOperando(&pFrame->operandStack, *var);
+    }
+    else if ((var->valor.obj_ref == 0)  && (var->tipo != JAREF)){
+        flag = 0;
+        var->tipo = JINT;
+        PL_pushOperando(&pFrame->operandStack, *var);
+    }
+    pConstantPool         = pFrame->cp->constant_pool_table;
+    pClasseIndex          = pConstantPool[temp2Byte - 1].info.Class.name_index;
+    pClasseName1 = (ST_tpCONSTANT_Utf8_info *)malloc(sizeof(ST_tpCONSTANT_Utf8_info));
+    memcpy(pClasseName1, &(pConstantPool[pClasseIndex - 1].info.Utf8), sizeof(ST_tpCONSTANT_Utf8_info));
+    
+    if (var->tipo == JREF) {
+        nomeClasse = (char *)malloc(sizeof(char *) * strlen(var->valor.obj_ref->className));
+        strcpy(nomeClasse, var->valor.obj_ref->className);
+        // chamar funcao nao implementada
+        flag = VM_buscarInstanciaDeClasse((char *)pClasseName1->bytes, nomeClasse);
+    }
+    else{
+        flag = VM_buscarInstanciaDeArray((char *)pClasseName1->bytes, var);
+    }
+    var1 = (ST_tpVariable*) malloc(sizeof(ST_tpVariable));
+    var1->tipo = JINT;
+    var1->valor.Int = flag;
+    PL_pushOperando(&pFrame->operandStack, *var1);
+    
+}
 
 void FU_sipush(ST_tpStackFrame *pFrame, u1 **pc){
     ST_tpVariable var;
@@ -2513,20 +2841,3 @@ void FU_iinc(ST_tpStackFrame *pFrame, u1 **pc){
     VM_armazenarVariavel(pFrame->localVariables, var, (int) parametro1);
 }
 
-
-void FU_arraylenght(ST_tpStackFrame *pFrame) {
-    ST_tpVariable array_ref, size;
-
-    array_ref = *PL_popOperando(&pFrame->operandStack);
-
-    if (array_ref.tipo == JAREF) {
-        if (array_ref.valor.array_ref == NULL) {
-            //TODO lançar NullPointerException
-        } 
-        else {
-            size.valor.Int = array_ref.valor.array_ref->length;
-            size.tipo = JINT;
-            PL_pushOperando(&pFrame->operandStack, size);
-        }
-    }
-}
