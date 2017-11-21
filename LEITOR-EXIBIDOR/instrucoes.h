@@ -285,5 +285,28 @@ void FU_lreturn(ST_tpStackFrame *pFrame, ST_tpVariable **Retorno);
 
 void FU_freturn(ST_tpStackFrame *pFrame, ST_tpVariable **Retorno);
 
-void FU_getfield(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc)
+void FU_getfield(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc);
+
+void FU_ishl(ST_tpStackFrame *pFrame);
+
+void FU_lshl(ST_tpStackFrame *pFrame);
+
+void FU_ishr(ST_tpStackFrame *pFrame);
+
+void FU_lshr(ST_tpStackFrame *pFrame);
+
+void FU_iushr(ST_tpStackFrame *pFrame);
+
+void FU_lushr(ST_tpStackFrame *pFrame);
+
+void FU_iand(ST_tpStackFrame *pFrame);
+
+void FU_land(ST_tpStackFrame *pFrame);
+
+void FU_ior(ST_tpStackFrame *pFrame);
+
+void FU_lor(ST_tpStackFrame *pFrame);
+
+void FU_ixor(ST_tpStackFrame *pFrame);
+
 #endif /* instrucoes_h */
