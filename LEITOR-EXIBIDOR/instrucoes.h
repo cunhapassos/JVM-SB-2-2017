@@ -289,6 +289,8 @@ void FU_areturn(ST_tpStackFrame *pFrame, ST_tpVariable **Retorno);
 
 void FU_getfield(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc);
 
+void FU_putfield(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc);
+
 void FU_ishl(ST_tpStackFrame *pFrame);
 
 void FU_lshl(ST_tpStackFrame *pFrame);

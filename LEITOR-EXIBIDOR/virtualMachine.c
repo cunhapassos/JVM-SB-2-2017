@@ -752,7 +752,8 @@ void *VM_armazenarValorStaticField(ST_tpJVM *pJVM, char *pClassName, char *pFiel
             strcpy(pNomeClasse, pClassFile1->nomeSuperClasse);
         }
     }
-    
+    // Verificar se é mais conveniete fazer essa parte igual ao
+    // VM_armazenarValorField
     pClassHeap = pJVM->heap->classes;
     while (pClassHeap != NULL) {
         if (!(strcmp(pClassHeap->pClassName, pClassName))) break;

@@ -2254,6 +2254,7 @@ void FU_putstatic(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
         if(var1->tipo == JSHORT) var2->valor.Int = var1->valor.Short;
         var2->tipo = JINT;
     }
+    // verificar se é melhor passar o var2 na chamda da função 
     VM_armazenarValorStaticField(pJVM, nomeClasse, nomeField, descritorField, *var1);
 
 }
@@ -2295,6 +2296,57 @@ void FU_getfield(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
     var = *VM_recuperarValorStaticField(pJVM, nomeClasse, nomeField, descritorField);
 
     PL_pushOperando(&pFrame->operandStack, var);
+}
+
+void FU_putfield(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
+    
+    ST_tpVariable *var1, *var2;
+    ST_tpCp_info *pCPInfo;
+    ST_tpConstantPool *cpIndx;
+    u1 parametro1, parametro2;
+    u2 temp2Byte, index1, index2;
+    ST_tpCONSTANT_Fieldref_info *pFieldref;
+    char *nomeClasse, *nomeField, *descritorField;
+    
+    //var.tipo = 0x99; // inicializa variavel com valor arbitrario
+    pCPInfo = pFrame->cp->constant_pool_table;
+    
+    (*pc)++;
+    memcpy(&parametro1, *pc, 1);
+    (*pc)++;
+    memcpy(&parametro2, *pc, 1);
+    temp2Byte = (parametro1 << 8) + parametro2;
+    
+    cpIndx = &pCPInfo[temp2Byte-1].info;
+    
+    pFieldref   = (ST_tpCONSTANT_Fieldref_info *) malloc(sizeof(ST_tpCONSTANT_Fieldref_info));
+    memcpy(pFieldref, cpIndx, sizeof(ST_tpCONSTANT_Fieldref_info));
+    
+    index1      = pFieldref->class_index;
+    index2      = pCPInfo[index1 - 1].info.Class.name_index;
+    nomeClasse  = (char *)pCPInfo[index2 - 1].info.Utf8.bytes;
+    
+    index1 = pFieldref->name_and_type_index;
+    index2 = pCPInfo[index1 - 1].info.NameAndType.name_index;
+    nomeField = (char *) pCPInfo[index2 - 1].info.Utf8.bytes;
+    
+    index2 = pCPInfo[index1 - 1].info.NameAndType.descriptor_index;
+    descritorField = (char *) pCPInfo[index2 - 1].info.Utf8.bytes;
+    
+    var2 = (ST_tpVariable *)malloc(sizeof(ST_tpVariable));
+    var1 = (ST_tpVariable *)malloc(sizeof(ST_tpVariable));
+    
+    memcpy((void*) var1, PL_popOperando(&pFrame->operandStack), sizeof(ST_tpVariable));
+    
+    if(var1->tipo == JBOOL || var1->tipo == JBYTE || var1->tipo == JSHORT){
+        if(var1->tipo == JBOOL) var2->valor.Int = var1->valor.Boolean;
+        if(var1->tipo == JBYTE) var2->valor.Int = var1->valor.Byte;
+        if(var1->tipo == JCHAR) var2->valor.Int = var1->valor.Char;
+        if(var1->tipo == JSHORT) var2->valor.Int = var1->valor.Short;
+        var2->tipo = JINT;
+    }
+    VM_armazenarValorField(pJVM, nomeClasse, nomeField, descritorField, *var1, *var2);
+    
 }
 
 void FU_ishl(ST_tpStackFrame *pFrame){
