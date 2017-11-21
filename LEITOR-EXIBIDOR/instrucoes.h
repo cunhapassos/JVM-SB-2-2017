@@ -35,6 +35,24 @@ int FU_invokespecial(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc, ST_tpVari
 
 int FU_invokestatic(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc, ST_tpVariable **Retorno);
 
+int FU_invokeinterface(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc, ST_tpVariable **Retorno);
+
+// Implementar FU_invokedynamic
+
+void FU_new(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc);
+
+void FU_newarray(ST_tpStackFrame *pFrame, u1 **pc);
+
+void FU_anewarray(ST_tpStackFrame *pFrame, u1 **pc);
+
+void FU_arraylenght(ST_tpStackFrame *pFrame);
+
+void FU_athrow(ST_tpStackFrame *pFrame);
+
+void FU_checkcast(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc);
+
+void FU_instanceof(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc);
+
 void FU_getstatic(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc);
 
 void FU_putstatic(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc);
@@ -315,5 +333,6 @@ void FU_ixor(ST_tpStackFrame *pFrame);
 
 void FU_lxor(ST_tpStackFrame *pFrame);
 
-void FU_iinc(ST_tpStackFrame *pFrame, u1 **pc);
+
+
 #endif /* instrucoes_h */
