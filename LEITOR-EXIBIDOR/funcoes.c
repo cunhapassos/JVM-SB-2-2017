@@ -3490,8 +3490,6 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
         case 0xc1:
             FU_instanceof(pJVM, pFrame,  &(pJVM->thread->PC));
             break;
-
-
         /********************************************************************************************
         
             monitorenter: Enter monitor for object
@@ -3506,11 +3504,8 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
         *******************************************************************************************/
         case 0xc2:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+            FU_monitorenter(pFrame);
             break;
-
-
         /********************************************************************************************
         
             monitorexit: Exit monitor for object
@@ -3527,11 +3522,8 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
         *******************************************************************************************/
         case 0xc3:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+            FU_monitorexit(pFrame);
             break;
-
-
         /********************************************************************************************
         
             wide: Extend local variable index by aditional bytes
@@ -3552,11 +3544,8 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
                 
         *******************************************************************************************/
         case 0xc4:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+            FU_wide(pFrame, &(pJVM->thread->PC));
             break;
-
-
         /********************************************************************************************
         
             multianewarray: Creates a new multidimentional array

@@ -53,6 +53,12 @@ void FU_checkcast(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc);
 
 void FU_instanceof(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc);
 
+void FU_monitorenter(ST_tpStackFrame *pFrame);
+
+void FU_monitorexit(ST_tpStackFrame *pFrame);
+
+void FU_wide(ST_tpStackFrame *pFrame, u1 **pc);
+
 void FU_getstatic(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc);
 
 void FU_putstatic(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc);
@@ -333,6 +339,5 @@ void FU_ixor(ST_tpStackFrame *pFrame);
 
 void FU_lxor(ST_tpStackFrame *pFrame);
 
-
-
+void FU_iinc(ST_tpStackFrame *pFrame, u1 **pc);
 #endif /* instrucoes_h */

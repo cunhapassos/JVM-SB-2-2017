@@ -622,7 +622,6 @@ void FU_instanceof(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
     ST_tpCp_info *pConstantPool;
     ST_tpCONSTANT_Utf8_info *pClasseName1 = NULL;
     
-    
     (*pc)++;
     memcpy(&parametro1, *pc, 1);
     (*pc)++;
@@ -660,6 +659,72 @@ void FU_instanceof(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
     var1->valor.Int = flag;
     PL_pushOperando(&pFrame->operandStack, *var1);
     
+}
+
+void FU_monitorenter(ST_tpStackFrame *pFrame){
+    ST_tpVariable *var;
+    
+    var = PL_popOperando(&pFrame->operandStack);
+    if (var->valor.obj_ref != 0) {
+        //
+    }
+}
+
+void FU_monitorexit(ST_tpStackFrame *pFrame){
+    ST_tpVariable *var;
+    
+    var = PL_popOperando(&pFrame->operandStack);
+    
+    if (var->valor.obj_ref != 0) {
+        //
+    }
+    
+}
+
+void FU_wide(ST_tpStackFrame *pFrame, u1 **pc){
+    u1 parametro1, parametro2, parametro3, parametro4, parametro5;
+    u2 temp2Byte;
+    ST_tpVariable var, *var1;
+    
+    (*pc)++;
+    memcpy(&parametro1, *pc, 1);
+    
+    switch (parametro1) {
+        case iinc:
+            memcpy(&parametro2, (*pc)++, 1);
+            memcpy(&parametro3, (*pc)++, 1);
+            memcpy(&parametro4, (*pc)++, 1);
+            memcpy(&parametro5, (*pc)++, 1);
+            temp2Byte = parametro2 << 8 | parametro3;
+            var = VM_recuperarVariavel(pFrame->localVariables, temp2Byte);
+            var1->valor.Short = parametro4;
+            var1->valor.Int = var1->valor.Short;
+            var.valor.Int += var1->valor.Int;
+            
+            VM_armazenarVariavel(pFrame->localVariables, *var1, temp2Byte);
+            break;
+        case aload:
+        case iload:
+        case lload;
+        case fload:
+        case dload:
+            memcpy(&parametro2, (*pc)++, 1);
+            memcpy(&parametro3, (*pc)++, 1);
+            temp2Byte = parametro2 << 8 | parametro3;
+            var = VM_recuperarVariavel(pFrame->localVariables, temp2Byte);
+            PL_pushOperando(&pFrame->operandStack, var);
+            break;
+        case astore:
+        case istore:
+        case lstore:
+        case fstore:
+        case dstore:
+            memcpy(&parametro2, (*pc)++, 1);
+            memcpy(&parametro3, (*pc)++, 1);
+            temp2Byte = parametro2 << 8 | parametro3;
+            var = VM_recuperarVariavel(pFrame->localVariables, temp2Byte);
+            PL_pushOperando(&pFrame->operandStack, var);
+    }
 }
 
 void FU_sipush(ST_tpStackFrame *pFrame, u1 **pc){
