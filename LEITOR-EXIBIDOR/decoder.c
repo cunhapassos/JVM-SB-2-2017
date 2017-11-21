@@ -7,6 +7,7 @@
 //
 
 #include "decoder.h"
+#include "structures.h"
 #include <stdio.h>
 
 char* DE_instruction_name[] = { //10 instrucoes por linha
@@ -33,15 +34,43 @@ char* DE_instruction_name[] = { //10 instrucoes por linha
     "goto_w", "jsr_w", "breakpoint"
 };
 
-int print_instructionName(DE_Instruction opcode){
+int print_instructionName(int opcode){
     if (opcode==0){
         return 0;
     }
-    else if (opcode){
-        printf("OPCODE: 0x%x %s \n", opcode, DE_instruction_name[opcode]);
+    else if (opcode<203){
+        printf("%s", DE_instruction_name[opcode]);
     }
     else{
         printf("instrução não reconhecida\n");
     }
+    return 0;
+}
+
+int printCode(ST_tpCode_attribute * pCodigo){
+    
+    for (int pc=0, linha = 1; pc < pCodigo->code_length; pc++, linha++) {
+        int code = pCodigo->code[pc];
+        if (((code>=0x00)&&(code<=0x0f))||((code>=0x1a)&&(code<=0x35))||((code>=0x3b)&&(code<=0x83))||((code>=0x85)&&(code<=0x98))||((code>=0xac)&&(code<=0xb1))||((code>=0xbe)&&(code<=0xbf))||((code>=0xc2)&&(code<=0xc3))) {
+            printf("\t%d\t%d\t", linha, pc);
+            print_instructionName(code);
+        }
+        else if((code==0x10)||(code==0x12)||(code==0xa9)||(code==0xbc)||((code>=0x15)&&(code<=0x19))||((code>=0x36)&&(code<=0x3a))){
+            printf("\t%d\t%d\t", linha, pc);
+            print_instructionName(code);
+            pc++;
+            printf(" %d ", pCodigo->code[pc]);
+        }
+        else {
+            printf("\t%d\t%d\t", linha, pc);
+            print_instructionName(code);
+            pc++;
+            printf(" %d ", pCodigo->code[pc]);
+            pc++;
+            printf(" %d ", pCodigo->code[pc]);
+        }
+        printf("\n");
+    }
+    printf("\n");
     return 0;
 }
