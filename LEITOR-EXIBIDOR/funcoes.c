@@ -3079,8 +3079,6 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
             FU_ret(pFrame, &pJVM->thread->PC);
 			break;
 
-
-
 		/********************************************************************************************
 		
 			
@@ -3096,11 +3094,8 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 			throws:
 		*******************************************************************************************/
 		case 0xaa:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+            FU_tableswitch(pFrame, &pJVM->thread->PC);
 			break;
-
-
 
 		/********************************************************************************************
 		
@@ -3116,12 +3111,8 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0xab:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+            FU_lookupswitch(pFrame, &pJVM->thread->PC);
 			break;
-
-
-
 		/********************************************************************************************
 		
 			ireturn: Return int from method
@@ -3138,9 +3129,6 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 		case 0xac:
 			FU_ireturn(pFrame, Retorno);
 			break;
-
-
-
 		/********************************************************************************************
 		
 			lreturn: Return long from method
@@ -3157,9 +3145,6 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 		case 0xad:
 			FU_lreturn(pFrame, Retorno);
 			break;
-
-
-
 		/********************************************************************************************
 		
 			freturn: Return float from method
@@ -3176,8 +3161,6 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 		case 0xae:
 			FU_freturn(pFrame, Retorno);
 			break;
-
-
 
 		/********************************************************************************************
 		
@@ -3196,8 +3179,6 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
             FU_dreturn(pFrame, Retorno);
 			break;
 
-
-
 		/********************************************************************************************
 		
 			areturn: Return reference from method
@@ -3212,12 +3193,8 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0xb0:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+            FU_areturn(pFrame, Retorno);
 			break;
-
-
-
 		/********************************************************************************************
 		
 			return: Return void from method
@@ -3234,9 +3211,6 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 		case 0xb1:
             FU_return(pFrame);
 			break;
-
-
-
 		/********************************************************************************************
 		
 			getstatic: Get static field from class
@@ -3255,9 +3229,6 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 		case 0xb2:
             FU_getstatic(pJVM, pFrame, &pJVM->thread->PC);
 			break;
-
-
-
 		/********************************************************************************************
 		
 			putstatic: Set static field in class
@@ -3276,9 +3247,6 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 		case 0xb3:
             FU_putstatic(pJVM, pFrame, &pJVM->thread->PC);
 			break;
-
-
-
 		/********************************************************************************************
 		
 			getfield: Fetch field from object
@@ -3295,12 +3263,8 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0xb4:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+            FU_getfield(pJVM, pFrame, &pJVM->thread->PC);
 			break;
-
-
-
 		/********************************************************************************************
 		
 			putfield: Set fiel in object
@@ -3318,12 +3282,8 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0xb5:
-			pJVM->thread->PC += 2;
-
+			//////////////////
 			break;
-
-
-
 		/********************************************************************************************
 		
 			invokevirtual: Invoke instance method; dispatch based on class
@@ -3341,9 +3301,6 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 		case 0xb6:
             FU_invokevirtual(pJVM, pFrame, &(pJVM->thread->PC), Retorno);
 			break;
-
-
-
 		/********************************************************************************************
 		
 			invokespecial: Invoke instance method; special handling for superclass, private,
