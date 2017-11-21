@@ -2077,7 +2077,7 @@ void FU_lookupswitch(ST_tpStackFrame *pFrame, u1 **pc){
     }
 }
 
-void FU_ireturn(ST_tpStackFrame *pFrame, u1 **pc, ST_tpVariable **Retorno){
+void FU_ireturn(ST_tpStackFrame *pFrame, ST_tpVariable **Retorno){
     ST_tpVariable pTempRetorno;
 
     pTempRetorno = *PL_popOperando(&pFrame->operandStack);
