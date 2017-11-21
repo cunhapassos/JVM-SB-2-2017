@@ -2512,3 +2512,21 @@ void FU_iinc(ST_tpStackFrame *pFrame, u1 **pc){
     var.valor.Int += (int) inc;
     VM_armazenarVariavel(pFrame->localVariables, var, (int) parametro1);
 }
+
+
+void FU_arraylenght(ST_tpStackFrame *pFrame) {
+    ST_tpVariable array_ref, size;
+
+    array_ref = *PL_popOperando(&pFrame->operandStack);
+
+    if (array_ref.tipo == JAREF) {
+        if (array_ref.valor.array_ref == NULL) {
+            //TODO lançar NullPointerException
+        } 
+        else {
+            size.valor.Int = array_ref.valor.array_ref->length;
+            size.tipo = JINT;
+            PL_pushOperando(&pFrame->operandStack, size);
+        }
+    }
+}
