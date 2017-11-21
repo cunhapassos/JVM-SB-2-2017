@@ -2251,6 +2251,168 @@ void FU_getfield(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
     var = *VM_recuperarValorStaticField(pJVM, nomeClasse, nomeField, descritorField);
 
     PL_pushOperando(&pFrame->operandStack, var);
+}
 
+void FU_ishl(ST_tpStackFrame *pFrame){
+    ST_tpVariable var, var1, var2;
+    u1 shift_amount;
 
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var2 = *PL_popOperando(&pFrame->operandStack);
+    shift_amount = var1.valor.Int & 0x1F;
+    var.valor.Int = var2.valor.Int << shift_amount;
+    var.tipo = JINT;
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+void FU_lshl(ST_tpStackFrame *pFrame){
+    ST_tpVariable var, var1, var2;
+    u1 shift_amount;
+
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var2 = *PL_popOperando(&pFrame->operandStack);
+    shift_amount = var1.valor.Int & 0x3F;
+    var.valor.Long = var2.valor.Long << shift_amount;
+    var.tipo = JLONG;
+    PL_pushOperando(&pFrame->operandStack, var);
+
+}
+
+void FU_ishr(ST_tpStackFrame *pFrame){
+    ST_tpVariable var, var1, var2;
+    u1 shift_amount;
+
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var2 = *PL_popOperando(&pFrame->operandStack);
+    shift_amount = var1.valor.Int & 0x1F;
+    var.valor.Int = var2.valor.Int >> shift_amount;
+    var.tipo = JINT;
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+void FU_lshr(ST_tpStackFrame *pFrame){
+    ST_tpVariable var, var1, var2;
+    u1 shift_amount;
+
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var2 = *PL_popOperando(&pFrame->operandStack);
+    shift_amount = var1.valor.Int & 0x3F;
+    var.valor.Long = var2.valor.Long >> shift_amount;
+    var.tipo = JLONG;
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+void FU_iushr(ST_tpStackFrame *pFrame){
+    ST_tpVariable var, var1, var2;
+    u1 shift_amount;
+
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var2 = *PL_popOperando(&pFrame->operandStack);
+    shift_amount = var1.valor.Int & 0x1F;
+    if (var2.valor.Int >=0) {
+        var.valor.Int = var2.valor.Int >> shift_amount;
+    }
+    else {
+        var.valor.Int = (var2.valor.Int >> shift_amount) + (2 << (~shift_amount & 0x1F));
+    }
+    var.tipo = JINT;
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+void FU_lushr(ST_tpStackFrame *pFrame){
+    ST_tpVariable var, var1, var2;
+    u1 shift_amount;
+
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var2 = *PL_popOperando(&pFrame->operandStack);
+    shift_amount = var1.valor.Int & 0x3F;
+    if (var2.valor.Long >=0) {
+        var.valor.Long = var2.valor.Int >> shift_amount;
+    }
+    else {
+        var.valor.Long = (var2.valor.Long >> shift_amount) + (2 << (~shift_amount & 0x3F));
+    }
+    var.tipo = JLONG;
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+void FU_iand(ST_tpStackFrame *pFrame){
+    ST_tpVariable var, var1, var2;
+
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var2 = *PL_popOperando(&pFrame->operandStack);
+
+    var.valor.Int = var1.valor.Int & var2.valor.Int ;
+    var.tipo = JINT;
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+void FU_land(ST_tpStackFrame *pFrame){
+    ST_tpVariable var, var1, var2;
+
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var2 = *PL_popOperando(&pFrame->operandStack);
+
+    var.valor.Long = var1.valor.Long & var2.valor.Long ;
+    var.tipo = JLONG;
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+void FU_ior(ST_tpStackFrame *pFrame){
+    ST_tpVariable var, var1, var2;
+
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var2 = *PL_popOperando(&pFrame->operandStack);
+
+    var.valor.Int = var1.valor.Int | var2.valor.Int ;
+    var.tipo = JINT;
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+void FU_lor(ST_tpStackFrame *pFrame){
+    ST_tpVariable var, var1, var2;
+
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var2 = *PL_popOperando(&pFrame->operandStack);
+
+    var.valor.Long = var1.valor.Long | var2.valor.Long ;
+    var.tipo = JLONG;
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+void FU_ixor(ST_tpStackFrame *pFrame){
+    ST_tpVariable var, var1, var2;
+
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var2 = *PL_popOperando(&pFrame->operandStack);
+
+    var.valor.Int = var1.valor.Int ^ var2.valor.Int ;
+    var.tipo = JINT;
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+void FU_lxor(ST_tpStackFrame *pFrame){
+    ST_tpVariable var, var1, var2;
+
+    var1 = *PL_popOperando(&pFrame->operandStack);
+    var2 = *PL_popOperando(&pFrame->operandStack);
+
+    var.valor.Long = var1.valor.Long ^ var2.valor.Long ;
+    var.tipo = JLONG;
+    PL_pushOperando(&pFrame->operandStack, var);
+}
+
+void FU_iinc(ST_tpStackFrame *pFrame, u1 **pc){
+    ST_tpVariable var;
+    u1 parametro1, parametro2;
+    int8_t inc;
+
+    (*pc)++;
+    memcpy(&parametro1, *pc, 1);
+    (*pc)++;
+    memcpy(&parametro2, *pc, 1);
+    var = VM_recuperarVariavel(pFrame->localVariables, (int) parametro1);
+    inc = (int8_t) parametro2;
+    var.valor.Int += (int) inc;
+    VM_armazenarVariavel(pFrame->localVariables, var, (int) parametro1);
 }
