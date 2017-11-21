@@ -1399,13 +1399,6 @@ void FU_dneg(ST_tpStackFrame *pFrame){
     var.valor.Double = -var.valor.Double;
     PL_pushOperando(&pFrame->operandStack, var);
 }
-            
-ST_tpVariable FU_dreturn(ST_tpStackFrame *pFrame){
-    ST_tpVariable varReturn;
-    
-    varReturn = *PL_popOperando(&pFrame->operandStack); // VERIFICAR SE *pVarReturn TEM * MESMO
-    return varReturn;
-}
 
 void FU_lcmp(ST_tpStackFrame *pFrame){
     ST_tpVariable var, var1, var2;
@@ -2084,7 +2077,7 @@ void FU_lookupswitch(ST_tpStackFrame *pFrame, u1 **pc){
     }
 }
 
-void FU_ireturn(ST_tpStackFrame *pFrame, u1 **pc, ST_tpVariable **Retorno){
+void FU_ireturn(ST_tpStackFrame *pFrame, ST_tpVariable **Retorno){
     ST_tpVariable pTempRetorno;
 
     pTempRetorno = *PL_popOperando(&pFrame->operandStack);
@@ -2105,13 +2098,64 @@ void FU_ireturn(ST_tpStackFrame *pFrame, u1 **pc, ST_tpVariable **Retorno){
 }
 
 void FU_lreturn(ST_tpStackFrame *pFrame, ST_tpVariable **Retorno){
-    *Retorno = PL_popOperando(&pFrame->operandStack);
-    // Sair do metodo
+    ST_tpVariable pTempRetorno;
+
+    pTempRetorno = *PL_popOperando(&pFrame->operandStack);
+    if(pTempRetorno.tipo == JINT){
+        (*Retorno)->valor.Long = (int64_t) pTempRetorno.valor.Int;
+    }
+    else if (pTempRetorno.tipo == JSHORT){
+        (*Retorno)->valor.Long = (int64_t) pTempRetorno.valor.Short;
+    }else if (pTempRetorno.tipo == JFLOAT){
+        (*Retorno)->valor.Long = (int64_t) pTempRetorno.valor.Float;
+    }
+    else if (pTempRetorno.tipo == JDOUBLE){
+        (*Retorno)->valor.Long = (int64_t) pTempRetorno.valor.Double;
+    }
+
+
+    (*Retorno)->tipo = JLONG;
 }
 
 void FU_freturn(ST_tpStackFrame *pFrame, ST_tpVariable **Retorno){
-    *Retorno = PL_popOperando(&pFrame->operandStack);
-    // Sair do metodo
+    ST_tpVariable pTempRetorno;
+
+    pTempRetorno = *PL_popOperando(&pFrame->operandStack);
+    if(pTempRetorno.tipo == JDOUBLE){
+        (*Retorno)->valor.Float = (float) pTempRetorno.valor.Double;
+    }
+    else if (pTempRetorno.tipo == JSHORT){
+        (*Retorno)->valor.Float = (float) pTempRetorno.valor.Short;
+    }
+    else if (pTempRetorno.tipo == JINT){
+        (*Retorno)->valor.Float = (float) pTempRetorno.valor.Int;
+    }
+    else if (pTempRetorno.tipo == JLONG){
+        (*Retorno)->valor.Float = (float) pTempRetorno.valor.Long;
+    }
+
+    (*Retorno)->tipo = JFLOAT;
+}
+
+            
+void FU_dreturn(ST_tpStackFrame *pFrame, ST_tpVariable **Retorno){
+    ST_tpVariable pTempRetorno;
+
+    pTempRetorno = *PL_popOperando(&pFrame->operandStack);
+    if(pTempRetorno.tipo == JFLOAT){
+        (*Retorno)->valor.Double = (double) pTempRetorno.valor.Float;
+    }
+    else if (pTempRetorno.tipo == JSHORT){
+        (*Retorno)->valor.Double = (double) pTempRetorno.valor.Short;
+    }
+    else if (pTempRetorno.tipo == JINT){
+        (*Retorno)->valor.Double = (double) pTempRetorno.valor.Int;
+    }
+    else if (pTempRetorno.tipo == JLONG){
+        (*Retorno)->valor.Double = (double) pTempRetorno.valor.Long;
+    }
+
+    (*Retorno)->tipo = JDOUBLE;
 }
 
 void FU_areturn(ST_tpStackFrame *pFrame, ST_tpVariable **Retorno){
@@ -2210,6 +2254,7 @@ void FU_putstatic(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
         if(var1->tipo == JSHORT) var2->valor.Int = var1->valor.Short;
         var2->tipo = JINT;
     }
+    // verificar se é melhor passar o var2 na chamda da função 
     VM_armazenarValorStaticField(pJVM, nomeClasse, nomeField, descritorField, *var1);
 
 }
@@ -2251,6 +2296,57 @@ void FU_getfield(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
     var = *VM_recuperarValorStaticField(pJVM, nomeClasse, nomeField, descritorField);
 
     PL_pushOperando(&pFrame->operandStack, var);
+}
+
+void FU_putfield(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
+    
+    ST_tpVariable *var1, *var2;
+    ST_tpCp_info *pCPInfo;
+    ST_tpConstantPool *cpIndx;
+    u1 parametro1, parametro2;
+    u2 temp2Byte, index1, index2;
+    ST_tpCONSTANT_Fieldref_info *pFieldref;
+    char *nomeClasse, *nomeField, *descritorField;
+    
+    //var.tipo = 0x99; // inicializa variavel com valor arbitrario
+    pCPInfo = pFrame->cp->constant_pool_table;
+    
+    (*pc)++;
+    memcpy(&parametro1, *pc, 1);
+    (*pc)++;
+    memcpy(&parametro2, *pc, 1);
+    temp2Byte = (parametro1 << 8) + parametro2;
+    
+    cpIndx = &pCPInfo[temp2Byte-1].info;
+    
+    pFieldref   = (ST_tpCONSTANT_Fieldref_info *) malloc(sizeof(ST_tpCONSTANT_Fieldref_info));
+    memcpy(pFieldref, cpIndx, sizeof(ST_tpCONSTANT_Fieldref_info));
+    
+    index1      = pFieldref->class_index;
+    index2      = pCPInfo[index1 - 1].info.Class.name_index;
+    nomeClasse  = (char *)pCPInfo[index2 - 1].info.Utf8.bytes;
+    
+    index1 = pFieldref->name_and_type_index;
+    index2 = pCPInfo[index1 - 1].info.NameAndType.name_index;
+    nomeField = (char *) pCPInfo[index2 - 1].info.Utf8.bytes;
+    
+    index2 = pCPInfo[index1 - 1].info.NameAndType.descriptor_index;
+    descritorField = (char *) pCPInfo[index2 - 1].info.Utf8.bytes;
+    
+    var2 = (ST_tpVariable *)malloc(sizeof(ST_tpVariable));
+    var1 = (ST_tpVariable *)malloc(sizeof(ST_tpVariable));
+    
+    memcpy((void*) var1, PL_popOperando(&pFrame->operandStack), sizeof(ST_tpVariable));
+    
+    if(var1->tipo == JBOOL || var1->tipo == JBYTE || var1->tipo == JSHORT){
+        if(var1->tipo == JBOOL) var2->valor.Int = var1->valor.Boolean;
+        if(var1->tipo == JBYTE) var2->valor.Int = var1->valor.Byte;
+        if(var1->tipo == JCHAR) var2->valor.Int = var1->valor.Char;
+        if(var1->tipo == JSHORT) var2->valor.Int = var1->valor.Short;
+        var2->tipo = JINT;
+    }
+    VM_armazenarValorField(pJVM, nomeClasse, nomeField, descritorField, *var1, *var2);
+    
 }
 
 void FU_ishl(ST_tpStackFrame *pFrame){
@@ -2415,4 +2511,22 @@ void FU_iinc(ST_tpStackFrame *pFrame, u1 **pc){
     inc = (int8_t) parametro2;
     var.valor.Int += (int) inc;
     VM_armazenarVariavel(pFrame->localVariables, var, (int) parametro1);
+}
+
+
+void FU_arraylenght(ST_tpStackFrame *pFrame) {
+    ST_tpVariable array_ref, size;
+
+    array_ref = *PL_popOperando(&pFrame->operandStack);
+
+    if (array_ref.tipo == JAREF) {
+        if (array_ref.valor.array_ref == NULL) {
+            //TODO lançar NullPointerException
+        } 
+        else {
+            size.valor.Int = array_ref.valor.array_ref->length;
+            size.tipo = JINT;
+            PL_pushOperando(&pFrame->operandStack, size);
+        }
+    }
 }
