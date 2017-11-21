@@ -315,4 +315,6 @@ void FU_iinc(ST_tpStackFrame *pFrame, u1 **pc);
 
 void FU_lxor(ST_tpStackFrame *pFrame);
 
+void FU_arraylenght(ST_tpStackFrame *pFrame);
+
 #endif /* instrucoes_h */

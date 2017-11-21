@@ -3496,8 +3496,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
 		*******************************************************************************************/
 		case 0xbe:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+			FU_arraylenght(pFrame);
 			break;
 
 
