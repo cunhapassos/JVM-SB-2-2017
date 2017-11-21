@@ -9,6 +9,8 @@
 #ifndef decoder_h
 #define decoder_h
 
+#include "structures.h"
+
 enum DE_instructions_opcode {
     NOP, // 0X00
     ACONST_NULL,// 0X1
@@ -220,6 +222,8 @@ extern char* DE_instruction_name[];
 
 typedef enum DE_instructions_opcode DE_Instruction;
 
-int print_instructionName(DE_Instruction opcode);
+int print_instructionName(int opcode);
+
+int printCode(ST_tpCode_attribute * Code);
 
 #endif /* decoder_h */

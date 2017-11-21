@@ -25,6 +25,7 @@
 #include "string.h"
 #include "structures.h"
 #include <stdlib.h>
+#include "decoder.h"
 
 /**
  *  Descrição da função:
@@ -306,14 +307,14 @@ void EX_imprimirAtributos(ST_tpClassFile *pClassFile, ST_tpAttribute_info *pAttr
             printf("\n\n");
         }
         else if (strcmp((char *) pClassFile->constant_pool_table[(pAttributeInfoTable->attribute_name_index)-1].info.Utf8.bytes, "Code") == 0) {
-                printf("\tMax_stack: %d\n",((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->max_stack);
-                printf("\tMax_locals: %d\n",((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->max_locals);
-                printf("\tCode_length: %d\n",((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->code_length);
-                printf("\n\tBytecode:\n");
-               for (int j=0; j < ((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->code_length; j++)
-                   printf("\t%d -> x%0x \n", j , ((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->code[j]);
-               printf("\n\tException_table_length: %d\n",((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->exception_table_length);
-                for (int j=0; j < ((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->exception_table_length; j++) {
+            printf("\tMax_stack: %d\n",((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->max_stack);
+            printf("\tMax_locals: %d\n",((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->max_locals);
+            printf("\tCode_length: %d\n",((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->code_length);
+            printf("\n\tBytecode:\n\n");
+            
+            printCode(((ST_tpCode_attribute *) pAttributeInfoTable[i].info));
+            printf("\n\tException_table_length: %d\n",((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->exception_table_length);
+            for (int j=0; j < ((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->exception_table_length; j++) {
                     printf("\t%d -> x%0x \n", j , ((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->exception_table[j].start_pc);
                     printf("\t%d -> x%0x \n", j , ((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->exception_table[j].end_pc);
                     printf("\t%d -> x%0x \n", j , ((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->exception_table[j].handler_pc);
