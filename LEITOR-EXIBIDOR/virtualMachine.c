@@ -769,7 +769,7 @@ ST_tpVariable  *VM_recuperarValorStaticField(ST_tpJVM *pJVM, char *pClassName, c
     
     int i = 0;
     char *pNomeClasse;
-    ST_tpVariable var;
+    ST_tpVariable *var;
     ST_tpClassFile *pClassFile1;
     ST_tpClassHeap *pClassHeap;
     ST_tpField_info *pFieldTable = NULL;
@@ -823,9 +823,10 @@ ST_tpVariable  *VM_recuperarValorStaticField(ST_tpJVM *pJVM, char *pClassName, c
         if (!(strcmp(pClassHeap->pClassName, pClassName))) break;
         pClassHeap = pClassHeap->next;
     }
-    memcpy(&var, pClassHeap->field_area + i, sizeof(ST_tpVariable));
+    var = malloc(sizeof(ST_tpVariable));
+    memcpy(var, pClassHeap->field_area + i, sizeof(ST_tpVariable));
     
-    return &var;
+    return var;
 }
 
 ST_tpClassFile *VM_carregarClasse(char *nomeClasses, ST_tpJVM *pJVM) {
