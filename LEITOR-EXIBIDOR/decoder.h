@@ -61,9 +61,9 @@ enum DE_instructions_opcode {
     FALOAD,// 0X30
     DALOAD,// 0X31
     AALOAD,// 0X32
-    IALOAD,// 0X33
-    IALOAD,// 0X34
-    IALOAD,// 0X35
+    BALOAD,// 0X33
+    CALOAD,// 0X34
+    SALOAD,// 0X35
     ISTORE,// 0X36
     LSTORE,// 0X37
     FSTORE,// 0X38
@@ -94,9 +94,9 @@ enum DE_instructions_opcode {
     FASTORE,// 0X51
     DASTORE,// 0X52
     AASTORE,// 0X53
-    IASTORE,// 0X54
-    IASTORE,// 0X55
-    IASTORE,// 0X56
+    BASTORE,// 0X54
+    CASTORE,// 0X55
+    SASTORE,// 0X56
     POP,// 0X57
     POP2,// 0X58
     DUP,//0X59
@@ -155,7 +155,7 @@ enum DE_instructions_opcode {
     D2I,// 0X8E
     D2L,// 0X8F
     D2F,// 0X90
-    I2C,// 0X91
+    I2B,// 0X91
     I2C,// 0X92
     I2S,// 0X93
     LCMP,// 0X94
@@ -216,6 +216,10 @@ enum DE_instructions_opcode {
 
 typedef enum DE_instructions_opcode DE_Instruction;
 
-void print_instruction(DE_Instruction opcode);
+extern char* DE_instruction_name[];
+
+typedef enum DE_instructions_opcode DE_Instruction;
+
+int print_instructionName(DE_Instruction opcode);
 
 #endif /* decoder_h */

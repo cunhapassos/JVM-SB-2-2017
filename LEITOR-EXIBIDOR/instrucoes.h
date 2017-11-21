@@ -331,8 +331,6 @@ void FU_lor(ST_tpStackFrame *pFrame);
 
 void FU_ixor(ST_tpStackFrame *pFrame);
 
-void FU_iinc(ST_tpStackFrame *pFrame, u1 **pc);
-
 void FU_lxor(ST_tpStackFrame *pFrame);
 
 
