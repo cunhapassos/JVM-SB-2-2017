@@ -537,7 +537,7 @@ void FU_arraylenght(ST_tpStackFrame *pFrame) {
 
 void FU_athrow(ST_tpStackFrame *pFrame){
     PL_popOperando(&pFrame->operandStack);
-    VM_executarThrow() // Falta implementra essa função
+    VM_executarThrow(); // Falta implementra essa função
 }
 
 void FU_checkcast(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
@@ -725,6 +725,86 @@ void FU_wide(ST_tpStackFrame *pFrame, u1 **pc){
             var = VM_recuperarVariavel(pFrame->localVariables, temp2Byte);
             PL_pushOperando(&pFrame->operandStack, var);
     }
+}
+
+void FU_ifnull(ST_tpStackFrame *pFrame, u1 **pc){
+
+    ST_tpVariable *var;
+    u1 parametro1, parametro2;
+    u2 temp2Byte;
+
+
+    (*pc)++;
+    memcpy(&parametro1, *pc, 1);
+    (*pc)++;
+    memcpy(&parametro2, *pc, 1);
+    temp2Byte = (parametro1 << 8) + parametro2;
+    
+    var = PL_popOperando(&pFrame->operandStack);
+    
+    if (var->valor.obj_ref == 0) {
+        (*pc) += (temp2Byte - 3);
+    }
+}
+
+void FU_ifnonnull(ST_tpStackFrame *pFrame, u1 **pc){
+    
+    ST_tpVariable *var;
+    u1 parametro1, parametro2;
+    u2 temp2Byte;
+    
+    (*pc)++;
+    memcpy(&parametro1, *pc, 1);
+    (*pc)++;
+    memcpy(&parametro2, *pc, 1);
+    temp2Byte = (parametro1 << 8) + parametro2;
+    
+    var = PL_popOperando(&pFrame->operandStack);
+    
+    if (var->valor.obj_ref == 0) {
+        (*pc) += (temp2Byte - 3);
+    }
+}
+
+void FU_goto_w(u1 **pc){
+
+    u1 parametro1, parametro2, parametro3, parametro4;
+    u4 temp4Byte;
+    
+    (*pc)++;
+    memcpy(&parametro1, *pc, 1);
+    (*pc)++;
+    memcpy(&parametro2, *pc, 1);
+    (*pc)++;
+    memcpy(&parametro3, *pc, 1);
+    (*pc)++;
+    memcpy(&parametro4, *pc, 1);
+    
+    temp4Byte = (parametro1 << 24) | (parametro2 << 16) | (parametro3 << 8) | parametro4;
+    (*pc) += (temp4Byte - 5);
+}
+
+void FU_jsr_w(ST_tpStackFrame *pFrame, u1 **pc){
+    ST_tpVariable *var;
+    u1 parametro1, parametro2, parametro3, parametro4;
+    u4 temp4Byte;
+    
+    (*pc)++;
+    memcpy(&parametro1, *pc, 1);
+    (*pc)++;
+    memcpy(&parametro2, *pc, 1);
+    (*pc)++;
+    memcpy(&parametro3, *pc, 1);
+    (*pc)++;
+    memcpy(&parametro4, *pc, 1);
+    
+    temp4Byte = (parametro1 << 24) | (parametro2 << 16) | (parametro3 << 8) | parametro4;
+    
+    var->valor.retAddres = (*pc);
+    var->tipo = JRETADDRESS;
+    
+    PL_pushOperando(pFrame->operandStack, var);
+    (*pc) += (temp4Byte - 5);
 }
 
 void FU_sipush(ST_tpStackFrame *pFrame, u1 **pc){

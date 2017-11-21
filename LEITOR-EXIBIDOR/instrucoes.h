@@ -59,6 +59,14 @@ void FU_monitorexit(ST_tpStackFrame *pFrame);
 
 void FU_wide(ST_tpStackFrame *pFrame, u1 **pc);
 
+void FU_ifnull(ST_tpStackFrame *pFrame, u1 **pc);
+
+void FU_ifnonnull(ST_tpStackFrame *pFrame, u1 **pc);
+
+void FU_goto_w(u1 **pc);
+
+void FU_jsr_w(ST_tpStackFrame *pFrame, u1 **pc);
+
 void FU_getstatic(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc);
 
 void FU_putstatic(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc);
