@@ -684,13 +684,13 @@ void FU_monitorexit(ST_tpStackFrame *pFrame){
 void FU_wide(ST_tpStackFrame *pFrame, u1 **pc){
     u1 parametro1, parametro2, parametro3, parametro4, parametro5;
     u2 temp2Byte;
-    ST_tpVariable var, *var1;
+    ST_tpVariable var, *var1 = NULL;
     
     (*pc)++;
     memcpy(&parametro1, *pc, 1);
     
     switch (parametro1) {
-        case iinc:
+        case 0x84:
             memcpy(&parametro2, (*pc)++, 1);
             memcpy(&parametro3, (*pc)++, 1);
             memcpy(&parametro4, (*pc)++, 1);
@@ -703,22 +703,22 @@ void FU_wide(ST_tpStackFrame *pFrame, u1 **pc){
             
             VM_armazenarVariavel(pFrame->localVariables, *var1, temp2Byte);
             break;
-        case aload:
-        case iload:
-        case lload;
-        case fload:
-        case dload:
+        case 0x19: //aload
+        case 0x15://iload:
+        case 0x16://lload;
+        case 0x17://fload:
+        case 0x18://dload:
             memcpy(&parametro2, (*pc)++, 1);
             memcpy(&parametro3, (*pc)++, 1);
             temp2Byte = parametro2 << 8 | parametro3;
             var = VM_recuperarVariavel(pFrame->localVariables, temp2Byte);
             PL_pushOperando(&pFrame->operandStack, var);
             break;
-        case astore:
-        case istore:
-        case lstore:
-        case fstore:
-        case dstore:
+        case 0x3a://astore:
+        case 0x36://istore:
+        case 0x37://lstore:
+        case 0x38://fstore:
+        case 0x39://dstore:
             memcpy(&parametro2, (*pc)++, 1);
             memcpy(&parametro3, (*pc)++, 1);
             temp2Byte = parametro2 << 8 | parametro3;
@@ -785,7 +785,7 @@ void FU_goto_w(u1 **pc){
 }
 
 void FU_jsr_w(ST_tpStackFrame *pFrame, u1 **pc){
-    ST_tpVariable *var;
+    ST_tpVariable *var = NULL;
     u1 parametro1, parametro2, parametro3, parametro4;
     u4 temp4Byte;
     
@@ -800,10 +800,10 @@ void FU_jsr_w(ST_tpStackFrame *pFrame, u1 **pc){
     
     temp4Byte = (parametro1 << 24) | (parametro2 << 16) | (parametro3 << 8) | parametro4;
     
-    var->valor.retAddres = (*pc);
+    var->valor.retAddres = *((*pc));
     var->tipo = JRETADDRESS;
     
-    PL_pushOperando(pFrame->operandStack, var);
+    PL_pushOperando(&pFrame->operandStack, *var);
     (*pc) += (temp4Byte - 5);
 }
 
