@@ -47,7 +47,7 @@ void FU_anewarray(ST_tpStackFrame *pFrame, u1 **pc);
 
 void FU_arraylenght(ST_tpStackFrame *pFrame);
 
-void FU_athrow(ST_tpStackFrame *pFrame);
+void FU_athrow(ST_tpException_table *pExceptionTable, ST_tpClassFile *pClassFile ,ST_tpStackFrame *pFrame, u1 **pc);
 
 void FU_checkcast(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc);
 

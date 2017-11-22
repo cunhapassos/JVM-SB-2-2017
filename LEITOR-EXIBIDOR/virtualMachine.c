@@ -96,7 +96,6 @@ ST_tpStackFrame *VM_criarStackFrame(ST_tpJVM *pJVM, ST_tpStackFrame **pJVMStack,
     int i;
     ST_tpVariable varTemporaria;
     ST_tpStackFrame *pFrame;
-    ST_tpObjectHeap *pObjeto; // VERIFICAR SE EH ST_tpObjectHeap ou ST_tpClassHeap
     
     pFrame = (ST_tpStackFrame *) malloc(sizeof(ST_tpStackFrame));
     pFrame->cp              = pClasse;
@@ -106,13 +105,8 @@ ST_tpStackFrame *VM_criarStackFrame(ST_tpJVM *pJVM, ST_tpStackFrame **pJVMStack,
     pFrame->localVariables  = (ST_tpVariable *) malloc(sizeof(ST_tpVariable) * (maxStackSize + 1));
     
     varTemporaria.tipo          = JREF;
-    pObjeto = (VM_recuperarObjeto(pJVM->heap->objects, (char *)VM_retornarNomeClasse(pClasse)));
-    if(pObjeto == NULL){
-        varTemporaria.valor.obj_ref = VM_alocarMemoriaHeapObjeto(pJVM, pClasse);
-    }
-    else{
-        varTemporaria.valor.obj_ref = pObjeto;
-    }
+
+    varTemporaria.valor.obj_ref = 0;
     VM_armazenarVariavel(pFrame->localVariables, varTemporaria, 0);
     
     i = 0;
@@ -206,7 +200,7 @@ ST_tpVariable *VM_executarMetodo(ST_tpJVM *pJVM, ST_tpClassFile *pClasse, ST_tpP
             pJVM->thread->PC = (u1 *)pCode->code;
             end = pJVM->thread->PC + pCode->code_length;
             while(pJVM->thread->PC < end){
-                IT_executaInstrucao(pJVM, pFrame, &pRetorno); // VERIFICAR ONDE EXECUTA AS EXCESSOES
+                IT_executaInstrucao(pJVM, pFrame, &pRetorno, pCode->exception_table); 
                 pJVM->thread->PC++;
             }
 
@@ -433,7 +427,76 @@ void VM_armazenarValorArray(ST_tpArrayHeap *pArray, int posicao, ST_tpVariable v
     }
 }
 
+ST_tpArrayHeap *alocarMemoriaArrayMulti(char *nomeClasse, ST_tpOperandStack *pPilhaOperandos, int dimensao){
+    int tipo, i;
+    char *aux, *nome = NULL;
+    ST_tpArrayHeap *pArray, *pArray1;
+    ST_tpVariable *var, varAux;
+    
+    
+    aux = strchr(nomeClasse, '[');
+    
+    if (aux == 0) {
+        tipo = retornarTipoString(nomeClasse);
+        if (tipo == T_REF) {
+            aux = nomeClasse;
+            aux++;
+            memset(nome, 0, strlen(aux));
+            memcpy((void *) nome, (void *) nomeClasse, strlen(aux)-1);
+        }
+        pArray = VM_criarArray(tipo, nome, dimensao);
+        
+        return pArray;
+    }
+    else{
+        aux++;
+        var = PL_popOperando(&pPilhaOperandos);
+        varAux.tipo = T_AREF;
+        
+        pArray1 = VM_criarArray(T_AREF, nomeClasse, dimensao);
+        for (i = 0; i < dimensao; i++) {
+            pArray = alocarMemoriaArrayMulti(aux, pPilhaOperandos, var->valor.Int);
+            varAux.valor.array_ref = pArray; // Testar se está correto
+            VM_armazenarValorArray(pArray1, i, varAux);
+        }
+        var->tipo = JINT;
+        PL_pushOperando(&pPilhaOperandos, *var);
+        
+        return pArray1;
+    }
+}
 
+int retornarTipoString(char *string){
+    char aux;
+    int tam;
+    
+    tam = (int) strlen(string);
+    
+    for (int i = 0; i < tam; i++) {
+        aux = string[i];
+        switch (aux) {
+            case 'B':
+                return 8;
+            case 'C':
+                return 5;
+            case 'D':
+                return 7;
+            case 'F':
+                return 6;
+            case 'I':
+                return 10;
+            case 'J':
+                return 11;
+            case 'L':
+                return 12;
+            case 'S':
+                return 9;
+            case 'Z':
+                return 4;
+        }
+    }
+    return 0;
+}
 ST_tpVariable VM_recuperarValorArray(ST_tpArrayHeap *pArrayHeap, int posicao){
     
     u2 *pChar;
@@ -891,4 +954,71 @@ ST_tpJVM *VM_exucutarJVM(int numeroClasses, char *nomeClasses[]){
     
     return pJVM;
 }
+int VM_executarThrow(ST_tpException_table *pExceptionTable, ST_tpClassFile *pClassFile, ST_tpVariable refernciaObjeto,  u1 **pc, ST_tpOperandStack *pPilhaOperandos){
+    ST_tpVariable catch;
+    ST_tpException_table *pException;
+    u2 index;
+    int aux = 0;
+    char *nomeClasse;
+    
+    catch.valor.Int = -1;
+    
+    pException = pExceptionTable;
+    
+    while (pException != NULL) {
+        if ((*(*pc) >= pException->start_pc) && ( (*(*pc)) < pExceptionTable->end_pc)) {
+            
+            if (pException->catch_type == 0) {
+                catch.valor.Int = pException->handler_pc;
+                break;
+            }
+            else{
+                // Verificar se essa parte da implementação está correta
+                index = pClassFile->constant_pool_table[pException->catch_type - 1].info.Class.name_index;
+                nomeClasse = (char *)pClassFile->constant_pool_table[index - 1].info.Utf8.bytes;
+                
+                // verificar se refernciaObjeto é da classe nomeClasse ou se é sub classe de nomeClasse
+                
+                if (aux == 1) {
+                    catch.valor.Int = pException->handler_pc;
+                    break;
+                }
+            }
+        }
+        pException++;
+    }
+    if (catch.valor.Int != -1) {
+        *(*pc) = catch.valor.Int;
+        while (pPilhaOperandos != NULL) {
+            PL_popOperando(&pPilhaOperandos);
+        }
+        refernciaObjeto.tipo = JREF;
+        PL_pushOperando(&pPilhaOperandos, refernciaObjeto);
+    }
+    else{
+        while (pPilhaOperandos != NULL) {
+            PL_popOperando(&pPilhaOperandos);
+        }
+        refernciaObjeto.tipo = JREF;
+        PL_pushOperando(&pPilhaOperandos, refernciaObjeto);
+        return 1;
+    }
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

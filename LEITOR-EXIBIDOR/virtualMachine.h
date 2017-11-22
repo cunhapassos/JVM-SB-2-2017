@@ -54,6 +54,8 @@ void VM_armazenarValorArray(ST_tpArrayHeap *pArray, int posicao, ST_tpVariable v
 
 ST_tpVariable VM_recuperarValorArray(ST_tpArrayHeap *pArrayHeap, int posicao);
 
+int retornarTipoString(char *string);
+
 void *VM_armazenarValorField(ST_tpJVM *pJVM, char *nomeClasse, char *pFieldName, char *pFieldDescriptor, ST_tpVariable var, ST_tpVariable objRef);
 
 void *VM_recuperarValorField(ST_tpJVM *pJVM, char *nomeClasse, char *pFieldName, char *pFieldDescriptor, ST_tpVariable *var, ST_tpVariable objRef);
@@ -75,6 +77,8 @@ ST_tpVariable *VM_executarMetodo(ST_tpJVM *pJVM, ST_tpClassFile *pClasse, ST_tpP
 ST_tpMethod_info *VM_procurarMetodo(ST_tpClassFile *pClassFile, char *descritorMetodo, char *nomeMetodo);
 
 void VM_UTF8paraString(ST_tpCONSTANT_Utf8_info *pUTF8, char *string);
+
+int VM_executarThrow(ST_tpException_table *pExceptionTable, ST_tpClassFile *pClassFile, ST_tpVariable refernciaObjeto,  u1 **pc, ST_tpOperandStack *pPilhaOperandos);
 
 #endif /* virtualMachine_h */
 
