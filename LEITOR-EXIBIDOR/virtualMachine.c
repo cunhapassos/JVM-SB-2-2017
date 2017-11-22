@@ -201,7 +201,7 @@ ST_tpVariable *VM_executarMetodo(ST_tpJVM *pJVM, ST_tpClassFile *pClasse, ST_tpP
             end = pJVM->thread->PC + pCode->code_length);
             while(pJVM->thread->PC < end){
                 IT_executaInstrucao(pJVM, pFrame, &pRetorno, pCode->exception_table); 
-                pJVM->thread->PC++;
+                (*pJVM->thread->PC)++;
             }
 
 
