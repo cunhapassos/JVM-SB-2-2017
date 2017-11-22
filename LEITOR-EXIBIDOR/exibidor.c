@@ -312,7 +312,8 @@ void EX_imprimirAtributos(ST_tpClassFile *pClassFile, ST_tpAttribute_info *pAttr
             printf("\tCode_length: %d\n",((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->code_length);
             printf("\n\tBytecode:\n\n");
             
-            printCode(((ST_tpCode_attribute *) pAttributeInfoTable[i].info));
+            for (int j=0; j < ((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->code_length; j++)
+                printf("\t%d -> x%0x \n", j , ((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->code[j]);
             printf("\n\tException_table_length: %d\n",((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->exception_table_length);
             for (int j=0; j < ((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->exception_table_length; j++) {
                     printf("\t%d -> x%0x \n", j , ((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->exception_table[j].start_pc);

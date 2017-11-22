@@ -543,7 +543,7 @@ void FU_athrow(ST_tpException_table *pExceptionTable, ST_tpClassFile *pClassFile
 }
 
 void FU_checkcast(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
-    int flag;
+    int flag = 0;
     char *nomeClasse;
     ST_tpVariable *var;
     u1 parametro1, parametro2;
@@ -616,7 +616,7 @@ void FU_checkcast(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
 }
 
 void FU_instanceof(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
-    int flag;
+    int flag = 1;
     char *nomeClasse;
     ST_tpVariable *var, *var1;
     u1 parametro1, parametro2;
@@ -651,10 +651,10 @@ void FU_instanceof(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
         nomeClasse = (char *)malloc(sizeof(char *) * strlen(var->valor.obj_ref->className));
         strcpy(nomeClasse, var->valor.obj_ref->className);
         // chamar funcao nao implementada
-        flag = VM_buscarInstanciaDeClasse((char *)pClasseName1->bytes, nomeClasse);
+        //flag = VM_buscarInstanciaDeClasse((char *)pClasseName1->bytes, nomeClasse);
     }
     else{
-        flag = VM_buscarInstanciaDeArray((char *)pClasseName1->bytes, var);
+        //flag = VM_buscarInstanciaDeArray((char *)pClasseName1->bytes, var);
     }
     var1 = (ST_tpVariable*) malloc(sizeof(ST_tpVariable));
     var1->tipo = JINT;
