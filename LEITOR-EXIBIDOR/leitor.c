@@ -571,15 +571,22 @@ ST_tpAttribute_info *LE_lerAttribute(FILE *pArq, ST_tpCp_info *cp, ST_tpAttribut
  */
  ST_tpClassFile *LE_lerClasse(char *nomeArquivo){
     
-    char arq[256];
+    char *arq;
+    long aux;
     u4 index;
     u2 tamanho;
     ST_tpClassFile *arqPontoClass = NULL;
 
+
+    aux = strlen(PATH) + strlen(nomeArquivo) + strlen(".class") + 1;
+
+    arq = (char *)malloc(sizeof(char)* aux);
     strcpy(arq, PATH);
     strcat(arq, nomeArquivo);
     strcat(arq, ".class");
+
     printf("%s\n", arq);
+
     /* Cria ponteiro para estrutura classFile */
     FILE * pArq = fopen(arq,"rb");
     /* Verifica se foi possivel abrir o arquivo */

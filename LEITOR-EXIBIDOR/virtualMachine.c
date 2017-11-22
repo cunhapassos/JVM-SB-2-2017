@@ -130,7 +130,7 @@ ST_tpStackFrame *VM_criarStackFrame(ST_tpJVM *pJVM, ST_tpStackFrame **pJVMStack,
 
 ST_tpVariable *VM_executarMetodo(ST_tpJVM *pJVM, ST_tpClassFile *pClasse, ST_tpParameterStack *pilhaParametros, ST_tpMethod_info *pMetodo){
     int i;
-    u1* end;
+    u1 end;
     char *name;
     u2 nameIndex;
     ST_tpStackFrame *pFrame;
@@ -198,7 +198,7 @@ ST_tpVariable *VM_executarMetodo(ST_tpJVM *pJVM, ST_tpClassFile *pClasse, ST_tpP
             pCode->attribute_info = (ST_tpAttribute_info *) malloc(pCode->attributes_count); // VERIFICAR SE TEM A MULTIPLICACAO MESMO?
             
             pJVM->thread->PC = (u1 *)pCode->code;
-            end = pJVM->thread->PC + pCode->code_length;
+            end = pJVM->thread->PC + pCode->code_length);
             while(pJVM->thread->PC < end){
                 IT_executaInstrucao(pJVM, pFrame, &pRetorno, pCode->exception_table); 
                 pJVM->thread->PC++;
@@ -258,11 +258,17 @@ u1 *VM_retornarNomeClasse(ST_tpClassFile *pClassFile){
     return classeString;
 }
 ST_tpObjectHeap *VM_alocarMemoriaHeapObjeto(ST_tpJVM *pJVM, ST_tpClassFile *pClassFile){
-    int maxVariaveis;
-    ST_tpClassFile *pAuxClassFile1, *pAuxClassFile2;
     u1 *nome;
-    
-    ST_tpObjectHeap *pObjeto = (ST_tpObjectHeap *)malloc(sizeof(ST_tpObjectHeap));
+    int maxVariaveis;
+    ST_tpObjectHeap *pObjeto;
+    ST_tpClassFile *pAuxClassFile1, *pAuxClassFile2;
+
+    pObjeto = PL_buscaObjetoHeap(pJVM->heap->objects, pClassFile->nomeClasse);
+    if(pObjeto != NULL){
+        return pObjeto;
+    }
+
+    pObjeto = (ST_tpObjectHeap *)malloc(sizeof(ST_tpObjectHeap));
     
     pAuxClassFile1 = pClassFile;
     maxVariaveis = pClassFile->fields_count;
@@ -706,6 +712,11 @@ void *VM_alocarMemoriaHeapClasse(ST_tpJVM *pJVM, char *pClassName){
     ST_tpClassFile *pClassFile1, *pClassFile2;
     
     pClassFile1 = PL_buscarClasse(pJVM, pClassName);
+    pClassHeap = PL_buscaClassHeap(pJVM->heap->classes, pClassName);
+    
+    if (pClassHeap != NULL) {
+        return pClassHeap;
+    }
     
     while(TRUE){
         pFieldTable = pClassFile1->field_info_table;
@@ -817,12 +828,12 @@ void *VM_armazenarValorStaticField(ST_tpJVM *pJVM, char *pClassName, char *pFiel
     }
     // Verificar se é mais conveniete fazer essa parte igual ao
     // VM_armazenarValorField
-    pClassHeap = pJVM->heap->classes;
+    /*pClassHeap = pJVM->heap->classes;
     while (pClassHeap != NULL) {
         if (!(strcmp(pClassHeap->pClassName, pClassName))) break;
         pClassHeap = pClassHeap->next;
-    }
-    
+    }*/
+    pClassHeap = PL_buscaClassHeap(pJVM->heap->classes, pClassName);
     memcpy(pClassHeap->field_area + i, &var, sizeof(var));
     
     return pJVM->heap->classes;

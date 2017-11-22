@@ -310,6 +310,17 @@ ST_tpObjectHeap *PL_buscaObjetoHeap(ST_tpObjectHeap *pObjects, char *nomeClasse)
     return NULL;
 }
 
+ST_tpClassHeap *PL_buscaClassHeap(ST_tpClassHeap *pClasses, char *nomeClasse){
+
+    ST_tpClassHeap *pAux;
+
+    if(pClasses == NULL) return NULL;
+    for(pAux = pClasses; pAux != NULL; pAux = pAux->next){
+        if(strcmp(pAux->pClassName, nomeClasse)) return pAux;
+    }
+    return NULL;
+}
+
 
 
 

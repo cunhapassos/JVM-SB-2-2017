@@ -63,4 +63,6 @@ ST_tpClassFile *PL_buscarClasse(ST_tpJVM *pJVM, char *nomeClasse);
 
 ST_tpObjectHeap *PL_buscaObjetoHeap(ST_tpObjectHeap *pObjects, char *nomeClasse);
 
+ST_tpClassHeap *PL_buscaClassHeap(ST_tpClassHeap *pClasses, char *nomeClasse);
+
 #endif /* pilhas_listas_h */
