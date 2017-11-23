@@ -15,8 +15,8 @@
 *    Para ler algum argumento do code incremente o PC usando 
     thread->PC ++;
 */
-int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable **Retorno,  ST_tpException_table *pExceptionTable) {
-    u1 opcode = *(pJVM->thread->PC);
+int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable **Retorno,  ST_tpException_table *pExceptionTable, u1 **PC) {
+    u1 opcode = **PC;
     int flag = 0;
     printf("%d = x%0x\t", opcode, opcode);
 
@@ -322,7 +322,7 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable *
 
         *******************************************************************************************/
         case 0x10:
-            FU_bipush(pFrame, &pJVM->thread->PC);
+            FU_bipush(pFrame, PC);
             break;
 
 
@@ -340,7 +340,7 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable *
 
         *******************************************************************************************/
         case 0x11:
-            FU_sipush(pFrame, &pJVM->thread->PC);
+            FU_sipush(pFrame, PC);
             break;
 
 
@@ -360,7 +360,7 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable *
             
         *******************************************************************************************/
         case 0x12:
-            FU_ldc(pJVM, pFrame, &pJVM->thread->PC);
+            FU_ldc(pJVM, pFrame, PC);
             break;
 
 
@@ -399,7 +399,7 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable *
             
         *******************************************************************************************/
         case 0x14:
-            FU_ldc2_w(pJVM, pFrame, &pJVM->thread->PC);
+            FU_ldc2_w(pJVM, pFrame, PC);
             
             //FU_ldc2_w(pJVM, pFrame, &opcode);
             break;
@@ -419,7 +419,7 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable *
 
         *******************************************************************************************/
         case 0x15:
-            FU_iload(pFrame, &pJVM->thread->PC);
+            FU_iload(pFrame, PC);
             break;
 
 
@@ -437,7 +437,7 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable *
 
         *******************************************************************************************/
         case 0x16:
-            FU_lload(pFrame, &pJVM->thread->PC);
+            FU_lload(pFrame, PC);
             break;
 
 
@@ -455,7 +455,7 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable *
 
         *******************************************************************************************/
         case 0x17:
-            FU_fload(pFrame, &pJVM->thread->PC);
+            FU_fload(pFrame, PC);
             break;
 
 
@@ -473,7 +473,7 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable *
 
         *******************************************************************************************/
         case 0x18:
-            FU_dload(pFrame, &pJVM->thread->PC);
+            FU_dload(pFrame, PC);
             break;
 
 
@@ -491,7 +491,7 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable *
 
         *******************************************************************************************/
         case 0x19:
-            FU_aload(pFrame, &pJVM->thread->PC);
+            FU_aload(pFrame, PC);
             break;
 
 
@@ -1028,7 +1028,7 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable *
             
         *******************************************************************************************/
         case 0x36:
-            FU_istore(pFrame, &pJVM->thread->PC);
+            FU_istore(pFrame, PC);
             break;
 
 
@@ -1046,7 +1046,7 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable *
 
         *******************************************************************************************/
         case 0x37:
-            FU_lstore(pFrame, &pJVM->thread->PC);
+            FU_lstore(pFrame, PC);
             break;
 
 
@@ -1064,7 +1064,7 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable *
 
         *******************************************************************************************/
         case 0x38:
-            FU_fstore(pFrame, &pJVM->thread->PC);
+            FU_fstore(pFrame, PC);
             break;
 
 
@@ -1082,7 +1082,7 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable *
 
         *******************************************************************************************/
         case 0x39:
-            FU_dstore(pFrame, &pJVM->thread->PC);
+            FU_dstore(pFrame, PC);
             break;
 
 
@@ -1101,7 +1101,7 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable *
 
         *******************************************************************************************/
         case 0x3a:
-            FU_astore(pFrame, &pJVM->thread->PC);
+            FU_astore(pFrame, PC);
             break;
 
 
@@ -2458,7 +2458,7 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable *
 
         *******************************************************************************************/
         case 0x84:
-            FU_iinc(pFrame, &pJVM->thread->PC);
+            FU_iinc(pFrame, PC);
             break;
 
 
@@ -2833,7 +2833,7 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable *
 
         *******************************************************************************************/
         case 0x99:
-            FU_ifeq(pFrame, &pJVM->thread->PC);
+            FU_ifeq(pFrame, PC);
             break;
 
 
@@ -2851,7 +2851,7 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable *
 
         *******************************************************************************************/
         case 0x9a:
-            FU_ifne(pFrame, &pJVM->thread->PC);
+            FU_ifne(pFrame, PC);
             break;
         /********************************************************************************************
         
@@ -2866,7 +2866,7 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable *
 
         *******************************************************************************************/
         case 0x9b:
-            FU_iflt(pFrame, &pJVM->thread->PC);
+            FU_iflt(pFrame, PC);
             break;
         /********************************************************************************************
         
@@ -2881,7 +2881,7 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable *
 
         *******************************************************************************************/
         case 0x9c:
-            FU_ifge(pFrame, &pJVM->thread->PC);
+            FU_ifge(pFrame, PC);
             break;
         /********************************************************************************************
         
@@ -2896,7 +2896,7 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable *
 
         *******************************************************************************************/
         case 0x9d:
-            FU_ifgt(pFrame, &pJVM->thread->PC);
+            FU_ifgt(pFrame, PC);
             break;
         /********************************************************************************************
         
@@ -2911,7 +2911,7 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable *
 
         *******************************************************************************************/
         case 0x9e:
-            FU_ifle(pFrame, &pJVM->thread->PC);
+            FU_ifle(pFrame, PC);
             break;
         /********************************************************************************************
         
@@ -2926,7 +2926,7 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable *
 
         *******************************************************************************************/
         case 0x9f:
-            FU_if_icmpeq(pFrame, &pJVM->thread->PC);
+            FU_if_icmpeq(pFrame, PC);
             break;
         /********************************************************************************************
         
@@ -2941,7 +2941,7 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable *
 
         *******************************************************************************************/
         case 0xa0:
-            FU_if_icmpne(pFrame, &pJVM->thread->PC);
+            FU_if_icmpne(pFrame, PC);
             break;
         /********************************************************************************************
         
@@ -2956,7 +2956,7 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable *
             
         *******************************************************************************************/
         case 0xa1:
-            FU_if_icmplt(pFrame, &pJVM->thread->PC);
+            FU_if_icmplt(pFrame, PC);
             break;
         /********************************************************************************************
         
@@ -2971,7 +2971,7 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable *
             
         *******************************************************************************************/
         case 0xa2:
-            FU_if_icmpge(pFrame, &pJVM->thread->PC);
+            FU_if_icmpge(pFrame, PC);
             break;
         /********************************************************************************************
         
@@ -2986,7 +2986,7 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable *
             
         *******************************************************************************************/
         case 0xa3:
-            FU_if_icmpgt(pFrame, &pJVM->thread->PC);
+            FU_if_icmpgt(pFrame, PC);
             break;
         /********************************************************************************************
         
@@ -3001,7 +3001,7 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable *
             
         *******************************************************************************************/
         case 0xa4:
-            FU_if_icmple(pFrame, &pJVM->thread->PC);
+            FU_if_icmple(pFrame, PC);
             break;
         /********************************************************************************************
         
@@ -3016,7 +3016,7 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable *
 
         *******************************************************************************************/
         case 0xa5:
-            FU_if_acmpeq(pFrame, &pJVM->thread->PC);
+            FU_if_acmpeq(pFrame, PC);
             break;
         /********************************************************************************************
         
@@ -3031,7 +3031,7 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable *
 
         *******************************************************************************************/
         case 0xa6:
-            FU_if_acmpne(pFrame, &pJVM->thread->PC);
+            FU_if_acmpne(pFrame, PC);
             break;
         /********************************************************************************************
         
@@ -3046,7 +3046,7 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable *
 
         *******************************************************************************************/
         case 0xa7:
-            FU_goto(pFrame, &pJVM->thread->PC);
+            FU_goto(pFrame, PC);
             break;
         /********************************************************************************************
         
@@ -3061,7 +3061,7 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable *
 
         *******************************************************************************************/
         case 0xa8:
-            FU_jsr(pFrame, &pJVM->thread->PC);
+            FU_jsr(pFrame, PC);
             break;
 
         /********************************************************************************************
@@ -3077,7 +3077,7 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable *
 
         *******************************************************************************************/
         case 0xa9:
-            FU_ret(pFrame, &pJVM->thread->PC);
+            FU_ret(pFrame, PC);
             break;
 
         /********************************************************************************************
@@ -3095,7 +3095,7 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable *
             throws:
         *******************************************************************************************/
         case 0xaa:
-            FU_tableswitch(pFrame, &pJVM->thread->PC);
+            FU_tableswitch(pFrame, PC);
             break;
 
         /********************************************************************************************
@@ -3112,7 +3112,7 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable *
 
         *******************************************************************************************/
         case 0xab:
-            FU_lookupswitch(pFrame, &pJVM->thread->PC);
+            FU_lookupswitch(pFrame, PC);
             break;
         /********************************************************************************************
         
@@ -3228,7 +3228,7 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable *
 
         *******************************************************************************************/
         case 0xb2:
-            FU_getstatic(pJVM, pFrame, &pJVM->thread->PC);
+            FU_getstatic(pJVM, pFrame, PC);
             break;
         /********************************************************************************************
         
@@ -3246,7 +3246,7 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable *
 
         *******************************************************************************************/
         case 0xb3:
-            FU_putstatic(pJVM, pFrame, &pJVM->thread->PC);
+            FU_putstatic(pJVM, pFrame, PC);
             break;
         /********************************************************************************************
         
@@ -3264,7 +3264,7 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable *
 
         *******************************************************************************************/
         case 0xb4:
-            FU_getfield(pJVM, pFrame, &pJVM->thread->PC);
+            FU_getfield(pJVM, pFrame, PC);
             break;
         /********************************************************************************************
         
@@ -3283,7 +3283,7 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable *
 
         *******************************************************************************************/
         case 0xb5:
-            FU_putfield(pJVM, pFrame, &pJVM->thread->PC);
+            FU_putfield(pJVM, pFrame, PC);
             break;
         /********************************************************************************************
         
@@ -3300,7 +3300,7 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable *
 
         *******************************************************************************************/
         case 0xb6:
-            FU_invokevirtual(pJVM, pFrame, &(pJVM->thread->PC), Retorno);
+            FU_invokevirtual(pJVM, pFrame, PC, Retorno);
             break;
         /********************************************************************************************
         
@@ -3318,7 +3318,7 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable *
 
         *******************************************************************************************/
         case 0xb7:
-            FU_invokespecial(pJVM, pFrame, &(pJVM->thread->PC), Retorno);
+            FU_invokespecial(pJVM, pFrame, PC, Retorno);
             break;
         /********************************************************************************************
         
@@ -3335,7 +3335,7 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable *
 
         *******************************************************************************************/
         case 0xb8:
-            FU_invokestatic(pJVM, pFrame, &(pJVM->thread->PC), Retorno);
+            FU_invokestatic(pJVM, pFrame, PC, Retorno);
             break;
         /********************************************************************************************
         
@@ -3352,7 +3352,7 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable *
 
         *******************************************************************************************/
         case 0xb9:
-            FU_invokeinterface(pJVM, pFrame, &(pJVM->thread->PC), Retorno);
+            FU_invokeinterface(pJVM, pFrame, PC, Retorno);
             break;
         /********************************************************************************************
         
@@ -3389,7 +3389,7 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable *
 
         *******************************************************************************************/
         case 0xbb:
-            FU_new(pJVM, pFrame, &(pJVM->thread->PC));
+            FU_new(pJVM, pFrame, PC);
             break;
         /********************************************************************************************
         
@@ -3405,7 +3405,7 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable *
 
         *******************************************************************************************/
         case 0xbc:
-            FU_newarray(pFrame, &(pJVM->thread->PC));
+            FU_newarray(pFrame, PC);
             break;
         /********************************************************************************************
         
@@ -3422,7 +3422,7 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable *
 
         *******************************************************************************************/
         case 0xbd:
-            FU_anewarray(pFrame, &(pJVM->thread->PC));
+            FU_anewarray(pFrame, PC);
             break;
         /********************************************************************************************
         
@@ -3456,7 +3456,7 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable *
 
         *******************************************************************************************/
         case 0xbf:
-            FU_athrow(pExceptionTable, pFrame->cp, pFrame, &(pJVM->thread->PC));
+            FU_athrow(pExceptionTable, pFrame->cp, pFrame, PC);
             break;
         /********************************************************************************************
         
@@ -3473,7 +3473,7 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable *
 
         *******************************************************************************************/
         case 0xc0:
-            FU_checkcast(pJVM, pFrame, &(pJVM->thread->PC));
+            FU_checkcast(pJVM, pFrame, PC);
             break;
         /********************************************************************************************
         
@@ -3489,7 +3489,7 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable *
 
         *******************************************************************************************/
         case 0xc1:
-            FU_instanceof(pJVM, pFrame,  &(pJVM->thread->PC));
+            FU_instanceof(pJVM, pFrame,  PC);
             break;
         /********************************************************************************************
         
@@ -3545,7 +3545,7 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable *
                 
         *******************************************************************************************/
         case 0xc4:
-            FU_wide(pFrame, &(pJVM->thread->PC));
+            FU_wide(pFrame, PC);
             break;
         /********************************************************************************************
         
@@ -3581,7 +3581,7 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable *
 
         *******************************************************************************************/
         case 0xc6:
-            FU_ifnull(pFrame, &(pJVM->thread->PC));
+            FU_ifnull(pFrame, PC);
             break;
         /********************************************************************************************
         
@@ -3596,7 +3596,7 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable *
 
         *******************************************************************************************/
         case 0xc7:
-            FU_ifnonnull(pFrame, &(pJVM->thread->PC));
+            FU_ifnonnull(pFrame, PC);
             break;
         /********************************************************************************************
         
@@ -3611,7 +3611,7 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable *
 
         *******************************************************************************************/
         case 0xc8:
-            FU_goto_w(&(pJVM->thread->PC));
+            FU_goto_w(PC);
             break;
         /********************************************************************************************
         
@@ -3626,7 +3626,7 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable *
 
         *******************************************************************************************/
         case 0xc9:
-            FU_jsr_w(pFrame, &(pJVM->thread->PC));
+            FU_jsr_w(pFrame, PC);
             break;
         /********************************************************************************************
         
