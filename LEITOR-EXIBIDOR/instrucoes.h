@@ -87,7 +87,7 @@ void FU_dstore_n(ST_tpStackFrame *pFrame, int posicao);
 
 void FU_astore_n(ST_tpStackFrame *pFrame, int posicao);
 
-void FU_return(ST_tpStackFrame *pFrame);
+int FU_return(ST_tpStackFrame *pFrame);
 
 void FU_bipush(ST_tpStackFrame *pFrame, u1 **pc);
 

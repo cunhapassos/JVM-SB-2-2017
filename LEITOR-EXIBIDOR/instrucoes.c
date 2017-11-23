@@ -453,7 +453,6 @@ void FU_new(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
     pConstantPool         = pFrame->cp->constant_pool_table;
     pClasseIndex          = pConstantPool[temp2Byte -1].info.Class.name_index;
     
-    pClasseIndex          = (u2) pConstantPool[pClasseIndex - 1].info.Class.name_index;
     pClasseName = (ST_tpCONSTANT_Utf8_info *)malloc(sizeof(ST_tpCONSTANT_Utf8_info));
     memcpy(pClasseName, &(pConstantPool[pClasseIndex - 1].info.Utf8), sizeof(ST_tpCONSTANT_Utf8_info));
     
@@ -1003,8 +1002,8 @@ void FU_ldc2_w(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
 
 
 
-void FU_return(ST_tpStackFrame *pFrame){
-    //PL_esvaziarPilhaOperandos(&pFrame->operandStack);
+int FU_return(ST_tpStackFrame *pFrame){
+    return 1;
 }
 void FU_bipush(ST_tpStackFrame *pFrame, u1 **pc){
     ST_tpVariable var;

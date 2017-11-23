@@ -129,7 +129,7 @@ ST_tpStackFrame *VM_criarStackFrame(ST_tpJVM *pJVM, ST_tpStackFrame **pJVMStack,
 }
 
 ST_tpVariable *VM_executarMetodo(ST_tpJVM *pJVM, ST_tpClassFile *pClasse, ST_tpParameterStack *pilhaParametros, ST_tpMethod_info *pMetodo){
-    int i;
+    int i, flag;
     u1* end;
     char *name;
     u2 nameIndex;
@@ -198,17 +198,17 @@ ST_tpVariable *VM_executarMetodo(ST_tpJVM *pJVM, ST_tpClassFile *pClasse, ST_tpP
             pCode->attribute_info = (ST_tpAttribute_info *) malloc(pCode->attributes_count); // VERIFICAR SE TEM A MULTIPLICACAO MESMO?
             
             pJVM->thread->PC = (u1 *)pCode->code;
-            end = pJVM->thread->PC + pCode->code_length;
-            while(pJVM->thread->PC < end){
-                IT_executaInstrucao(pJVM, pFrame, &pRetorno, pCode->exception_table); 
+            end = pJVM->thread->PC + (pCode->code_length - 1);
+            
+            
+            
+            while(pJVM->thread->PC <= end){
+                flag = IT_executaInstrucao(pJVM, pFrame, &pRetorno, pCode->exception_table);
+                if (flag == 1) break; // Testa se está vindo de um return
                 pJVM->thread->PC++;
             }
 
-
-            //CRIA ESSA FUNCAO
-           // limparFrame(pJVM->thread->pJVMStack->localVariables);
-            // VERIFICAR COMO FAZER O RETORNO DA FUNCAO
-          SaidaDoMEtodo:
+          SaidaDoMetodo:
             while (pFrame->operandStack != NULL) {
                 pRetorno = PL_popOperando(&pFrame->operandStack);
             }
@@ -262,11 +262,11 @@ ST_tpObjectHeap *VM_alocarMemoriaHeapObjeto(ST_tpJVM *pJVM, ST_tpClassFile *pCla
     int maxVariaveis;
     ST_tpObjectHeap *pObjeto;
     ST_tpClassFile *pAuxClassFile1, *pAuxClassFile2;
-/*
+
     pObjeto = PL_buscaObjetoHeap(pJVM->heap->objects, pClassFile->nomeClasse);
     if(pObjeto != NULL){
         return pObjeto;
-    } */
+    }
 
     pObjeto = (ST_tpObjectHeap *)malloc(sizeof(ST_tpObjectHeap));
     
@@ -714,10 +714,10 @@ void *VM_alocarMemoriaHeapClasse(ST_tpJVM *pJVM, char *pClassName){
     pClassFile1 = PL_buscarClasse(pJVM, pClassName);
     pClassHeap = PL_buscaClassHeap(pJVM->heap->classes, pClassName);
 
-    /*
+
     if (pClassHeap != NULL) {
         return pClassHeap;
-    } */
+    }
     
     while(TRUE){
         pFieldTable = pClassFile1->field_info_table;
@@ -916,11 +916,12 @@ ST_tpClassFile *VM_carregarClasse(char *nomeClasses, ST_tpJVM *pJVM) {
         VM_alocarMemoriaHeapClasse(pJVM, (pClasse)->nomeClasse);
         VM_alocarMemoriaHeapObjeto(pJVM, pClasse);
 
+        /*
         pMetodo = VM_procurarMetodo( pClasse, "()V", "<init>");
         if (pMetodo != NULL){
             ST_tpParameterStack *pPilhaDeParametros = NULL;
             VM_executarMetodo(pJVM, pClasse, pPilhaDeParametros, pMetodo);
-        }
+        }*/
 
         pMetodo = VM_procurarMetodo( pClasse, "()V", "<clinit>");
         if (pMetodo != NULL){

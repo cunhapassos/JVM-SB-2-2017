@@ -15,8 +15,9 @@
 *    Para ler algum argumento do code incremente o PC usando 
     thread->PC ++;
 */
-void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable **Retorno,  ST_tpException_table *pExceptionTable) {
+int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable **Retorno,  ST_tpException_table *pExceptionTable) {
     u1 opcode = *(pJVM->thread->PC);
+    int flag = 0;
     printf("%d = x%0x\t", opcode, opcode);
 
     switch(opcode) {
@@ -3209,7 +3210,7 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
 
         *******************************************************************************************/
         case 0xb1:
-            FU_return(pFrame);
+            flag = FU_return(pFrame);
             break;
         /********************************************************************************************
         
@@ -3660,4 +3661,5 @@ void IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, ST_tpVariable 
             printf("Opcode não encontrado");
     
     }
+    return flag;
 }

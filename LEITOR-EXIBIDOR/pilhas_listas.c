@@ -305,7 +305,7 @@ ST_tpObjectHeap *PL_buscaObjetoHeap(ST_tpObjectHeap *pObjects, char *nomeClasse)
     
     if(pObjects == NULL) return NULL;
     for(pAux = pObjects; pAux != NULL; pAux = pAux->next){
-        if(strcmp(pAux->className, nomeClasse)) return pAux;
+        if(strcmp(pAux->className, nomeClasse) == 0) return pAux;
     }
     return NULL;
 }
@@ -316,7 +316,7 @@ ST_tpClassHeap *PL_buscaClassHeap(ST_tpClassHeap *pClasses, char *nomeClasse){
 
     if(pClasses == NULL) return NULL;
     for(pAux = pClasses; pAux != NULL; pAux = pAux->next){
-        if(strcmp(pAux->pClassName, nomeClasse)) return pAux;
+        if(strcmp(pAux->pClassName, nomeClasse) == 0) return pAux;
     }
     return NULL;
 }
