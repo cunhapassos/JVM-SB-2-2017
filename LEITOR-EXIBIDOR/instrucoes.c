@@ -451,7 +451,7 @@ void FU_new(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc){
     temp2Byte = (parametro1 << 8) + parametro2;
     
     pConstantPool         = pFrame->cp->constant_pool_table;
-    pClasseIndex          = (u2) pConstantPool[temp2Byte - 1].info.Methodref.class_index;
+    pClasseIndex          = pConstantPool[temp2Byte -1].info.Class.name_index;
     
     pClasseIndex          = (u2) pConstantPool[pClasseIndex - 1].info.Class.name_index;
     pClasseName = (ST_tpCONSTANT_Utf8_info *)malloc(sizeof(ST_tpCONSTANT_Utf8_info));
