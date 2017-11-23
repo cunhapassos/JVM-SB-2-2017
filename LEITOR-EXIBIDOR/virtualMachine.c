@@ -203,7 +203,7 @@ ST_tpVariable *VM_executarMetodo(ST_tpJVM *pJVM, ST_tpClassFile *pClasse, ST_tpP
             
 
             while(PC <= end){
-                flag = IT_executaInstrucao(pJVM, pFrame, &pRetorno, pCode->exception_table, &PC);
+                flag = IT_executaInstrucao(pJVM, &pFrame, &pRetorno, pCode->exception_table, &PC);
                 if (flag == 1) break; // Testa se está vindo de um return
                 PC++;
             }
@@ -274,7 +274,7 @@ ST_tpObjectHeap *VM_alocarMemoriaHeapObjeto(ST_tpJVM *pJVM, ST_tpClassFile *pCla
     maxVariaveis = pClassFile->fields_count;
     
     while(pAuxClassFile1->super_class != 0 ){
-        nome = VM_retornaNomeSuperClasse(pClassFile);
+        nome = VM_retornaNomeSuperClasse(pAuxClassFile1);
         /* Verifica se a SuperClasse esta carregada */
         pAuxClassFile2 = PL_buscarClasse(pJVM, (char *) nome);
         
