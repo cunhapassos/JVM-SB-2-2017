@@ -258,7 +258,7 @@ int FU_invokestatic(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc, ST_tpVaria
     memcpy(pMethodDescriptor, &(cpIndx->Utf8), sizeof(ST_tpCONSTANT_Utf8_info));
 
     count                 = FU_retornaNumeroParametrosMetodo(pMethodName, pMethodDescriptor);
-    count++;
+    //count++;
 
     /* Retira todos os valores da pilha de operandos e passa para a pilha de parametros */
     while( count != 0 && pFrame->operandStack != NULL) {
