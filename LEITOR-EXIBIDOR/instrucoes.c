@@ -68,7 +68,7 @@ int FU_invokevirtual(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC, ST_tpVari
     memcpy(pMethodDescriptor, &(cpIndx->Utf8), sizeof(ST_tpCONSTANT_Utf8_info));
 
     count                 = FU_retornaNumeroParametrosMetodo(pMethodName, pMethodDescriptor);
-    count++;
+    //count++;
 
     /* Retira todos os valores da pilha de operandos e passa para a pilha de parametros */
     while( count != 0 && pFrame->operandStack != NULL) {
@@ -76,21 +76,25 @@ int FU_invokevirtual(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC, ST_tpVari
         count --;
     }
     if(!strcmp((const char *)pMethodName, "<init>")){
-        return 1; // Significa um erro
+        return 2; // Significa um erro
     }
 
     pClassFile = PL_buscarClasse(pJVM, (char *) pClasseName->bytes);
-
+    
+    if (pClassFile == NULL) {
+        pClassFile = VM_carregarClasse((char *) pClasseName->bytes, pJVM);
+    }
+    
     if(pClassFile != NULL){
         pMetodoInfo = VM_procurarMetodo(pClassFile, (char *) (pMethodDescriptor->bytes) , (char *) (pMethodName->bytes));
 
         if((pMetodoInfo->access_flags & ACC_ABSTRACT) == ACC_ABSTRACT){
             printf("\nERRO NA INSTRUCAO invokevirtual!\n");
-            return 1; // ERRO
+            return 2; // ERRO
         }
         if((pMetodoInfo->access_flags & ACC_STATIC) == ACC_STATIC){
             printf("\nERRO NA INSTRUCAO invokevirtual!\n");
-            return 1; // ERRO
+            return 2; // ERRO
         }
         if((pMetodoInfo->access_flags & ACC_NATIVE) == ACC_NATIVE){
                 // EXECUTAR METODO NATIVO
@@ -113,7 +117,7 @@ int FU_invokevirtual(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC, ST_tpVari
             //if()
     }
     else{
-        return 1; // ERRO
+        return 2; // ERRO
     }
 
     return 0;
@@ -163,7 +167,7 @@ int FU_invokespecial(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC, ST_tpVari
     memcpy(pMethodDescriptor, &(cpIndx->Utf8), sizeof(ST_tpCONSTANT_Utf8_info));
     
     count                 = FU_retornaNumeroParametrosMetodo(pMethodName, pMethodDescriptor);
-    count++;
+    //count++;
     
     /* Retira todos os valores da pilha de operandos e passa para a pilha de parametros */
     while( count != 0 && pFrame->operandStack != NULL) {
@@ -171,21 +175,25 @@ int FU_invokespecial(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC, ST_tpVari
         count --;
     }
     if(!strcmp((const char *)pMethodName, "<init>")){
-        return 1; // Significa um erro
+        return 2; // Significa um erro
     }
 
     pClassFile = PL_buscarClasse(pJVM, (char *) pClasseName->bytes);
+    
+    if (pClassFile == NULL) {
+        pClassFile = VM_carregarClasse((char *) pClasseName->bytes, pJVM);
+    }
     
     if(pClassFile != NULL){
         pMetodoInfo = VM_procurarMetodo(pClassFile, (char *) (pMethodDescriptor->bytes) , (char *) (pMethodName->bytes));
         
         if((pMetodoInfo->access_flags & ACC_ABSTRACT) == ACC_ABSTRACT){
             printf("\nERRO NA INSTRUCAO invokespecial!\n");
-            return 1; // ERRO
+            return 2; // ERRO
         }
         if((pMetodoInfo->access_flags & ACC_STATIC) == ACC_STATIC){
             printf("\nERRO NA INSTRUCAO invokespecial!\n");
-            return 1; // ERRO
+            return 2; // ERRO
         }
         if((pMetodoInfo->access_flags & ACC_NATIVE) == ACC_NATIVE){
             // EXECUTAR METODO NATIVO
@@ -208,7 +216,7 @@ int FU_invokespecial(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC, ST_tpVari
         //if()
     }
     else{
-        return 1; // ERRO
+        return 2; // ERRO
     }
     
     return 0;
@@ -267,13 +275,17 @@ int FU_invokestatic(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC, ST_tpVaria
     }
 
     pClassFile = PL_buscarClasse(pJVM, (char *) pClasseName->bytes);
+    
+    if (pClassFile == NULL) {
+        pClassFile = VM_carregarClasse((char *) pClasseName->bytes, pJVM);
+    }
 
     if(pClassFile != NULL){
         pMetodoInfo = VM_procurarMetodo(pClassFile, (char *) (pMethodDescriptor->bytes) , (char *) (pMethodName->bytes));
 
         if((pMetodoInfo->access_flags & ACC_STATIC) != ACC_STATIC){
             printf("\nERRO NA INSTRUCAO invokestatic!\n");
-            return 1; // ERRO
+            return 2; // ERRO
         }
         if((pMetodoInfo->access_flags & ACC_NATIVE) == ACC_NATIVE){
                 // EXECUTAR METODO NATIVO
@@ -297,7 +309,7 @@ int FU_invokestatic(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC, ST_tpVaria
     }
     else{
         printf("ERRO NA INSTRUCAO invokestatic!");
-        return 1; // ERRO
+        return 2; // ERRO
     }
 
     return 0;
@@ -353,7 +365,7 @@ int FU_invokeinterface(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC, ST_tpVa
     memcpy(pMethodDescriptor, &(cpIndx->Utf8), sizeof(ST_tpCONSTANT_Utf8_info));
     
     aux                 = FU_retornaNumeroParametrosMetodo(pMethodName, pMethodDescriptor);
-    aux++;
+    //aux++;
     
     /* Retira todos os valores da pilha de operandos e passa para a pilha de parametros */
     while( aux != 0 && pFrame->operandStack != NULL) {
@@ -366,16 +378,20 @@ int FU_invokeinterface(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC, ST_tpVa
     
     pClassFile = PL_buscarClasse(pJVM, (char *) pClasseName->bytes);
     
+    if (pClassFile == NULL) {
+        pClassFile = VM_carregarClasse((char *) pClasseName->bytes, pJVM);
+    }
+    
     if(pClassFile != NULL){
         pMetodoInfo = VM_procurarMetodo(pClassFile, (char *) (pMethodDescriptor->bytes) , (char *) (pMethodName->bytes));
         
         if((pMetodoInfo->access_flags & ACC_ABSTRACT) == ACC_ABSTRACT){
             printf("\nERRO NA INSTRUCAO invokespecial!\n");
-            return 1; // ERRO
+            return 2; // ERRO
         }
         if((pMetodoInfo->access_flags & ACC_PUBLIC) != ACC_PUBLIC){
             printf("\nERRO NA INSTRUCAO invokespecial!\n");
-            return 1; // ERRO
+            return 2; // ERRO
         }
         if((pMetodoInfo->access_flags & ACC_NATIVE) == ACC_NATIVE){
             // EXECUTAR METODO NATIVO
@@ -398,7 +414,7 @@ int FU_invokeinterface(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC, ST_tpVa
         //if()
     }
     else{
-        return 1; // ERRO
+        return 2; // ERRO
     }
     
     return 0;
