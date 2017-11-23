@@ -130,7 +130,7 @@ ST_tpStackFrame *VM_criarStackFrame(ST_tpJVM *pJVM, ST_tpStackFrame **pJVMStack,
 
 ST_tpVariable *VM_executarMetodo(ST_tpJVM *pJVM, ST_tpClassFile *pClasse, ST_tpParameterStack *pilhaParametros, ST_tpMethod_info *pMetodo){
     int i;
-    int end;
+    u1* end;
     char *name;
     u2 nameIndex;
     ST_tpStackFrame *pFrame;
@@ -198,10 +198,10 @@ ST_tpVariable *VM_executarMetodo(ST_tpJVM *pJVM, ST_tpClassFile *pClasse, ST_tpP
             pCode->attribute_info = (ST_tpAttribute_info *) malloc(pCode->attributes_count); // VERIFICAR SE TEM A MULTIPLICACAO MESMO?
             
             pJVM->thread->PC = (u1 *)pCode->code;
-            end = (int)*(pJVM->thread->PC) + (u1)pCode->code_length;
-            while((int)*(pJVM->thread->PC) < end){
+            end = pJVM->thread->PC + pCode->code_length;
+            while(pJVM->thread->PC < end){
                 IT_executaInstrucao(pJVM, pFrame, &pRetorno, pCode->exception_table); 
-                (*pJVM->thread->PC)++;
+                pJVM->thread->PC++;
             }
 
 
