@@ -11,6 +11,7 @@
 #include "virtualMachine.h"
 #include "pilhas_listas.h"
 #include "instrucoes.h"
+#include "decoder.h"
 /*
 *    Para ler algum argumento do code incremente o PC usando 
     thread->PC ++;
@@ -18,7 +19,9 @@
 int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame **pFrame, ST_tpVariable **Retorno,  ST_tpException_table *pExceptionTable, u1 **PC) {
     u1 opcode = **PC;
     int flag = 0;
-    printf("%d = x%0x\t", opcode, opcode);
+    //printf("%d = x%0x\t", opcode, opcode);
+    print_instructionName(opcode);
+    printf("\n");
 
     switch(opcode) {
 

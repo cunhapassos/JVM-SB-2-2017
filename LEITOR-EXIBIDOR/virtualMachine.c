@@ -92,8 +92,8 @@ ST_tpVariable VM_recuperarVariavel(ST_tpVariable *pVariaveisLocais, int posicao)
  @param maxStackSize    - Numero máximo de variaveis que pode ser colocadas na pilha de variaveis locais
  @return                - Retorna o Frame criado
  */
-ST_tpStackFrame *VM_criarStackFrame(ST_tpJVM *pJVM, ST_tpStackFrame **pJVMStack, ST_tpClassFile *pClasse, ST_tpParameterStack *pilhaParametros, long maxStackSize){
-    int i;
+ST_tpStackFrame *VM_criarFrame(ST_tpJVM *pJVM, ST_tpStackFrame **pJVMStack, ST_tpClassFile *pClasse, ST_tpParameterStack *pilhaParametros, long maxStackSize, u2 access_flag){
+    int i = 0;
     ST_tpVariable varTemporaria;
     ST_tpStackFrame *pFrame;
     
@@ -104,12 +104,25 @@ ST_tpStackFrame *VM_criarStackFrame(ST_tpJVM *pJVM, ST_tpStackFrame **pJVMStack,
     pFrame->parameterStack  = NULL;
     pFrame->localVariables  = (ST_tpVariable *) malloc(sizeof(ST_tpVariable) * (maxStackSize + 1));
     
-    varTemporaria.tipo          = JREF;
-
-    varTemporaria.valor.obj_ref = 0;
-    VM_armazenarVariavel(pFrame->localVariables, varTemporaria, 0);
+    /****************************************************
+     *   Verifica se eh um metodo de instancia          *
+     *   Se for coloca o objeto this referente a        *
+     *   classe que contem o metodo corrente na         *
+     *   posicao 0 do vetor de variaveis locais         *
+     ****************************************************/
+    if ((access_flag & ACC_STATIC) != ACC_STATIC) {
+        varTemporaria.tipo          = JREF;
+        varTemporaria.valor.obj_ref = 0;
+        VM_armazenarVariavel(pFrame->localVariables, varTemporaria, 0);
+        i = 1;
+    }
     
-    i = 1;
+    /****************************************************
+     *  Caso seja um metodo de instancia o this ocupa   *
+     *  a posicao 0 do vetor de variaveis locais e o    *
+     *  primeiro parametro a posicao 1, caso contratio  *
+     *  o primeiro paramentro ocupa a posicao 0         *
+     ****************************************************/
     while(pilhaParametros != NULL){
         varTemporaria = *PL_popParametro(&pilhaParametros);
         VM_armazenarVariavel(pFrame->localVariables, varTemporaria, i);
@@ -132,7 +145,7 @@ ST_tpVariable *VM_executarMetodo(ST_tpJVM *pJVM, ST_tpClassFile *pClasse, ST_tpP
     int i, flag;
     u1 *end, *PC;
     char *name;
-    u2 nameIndex;
+    u2 nameIndex, access_flag;
     ST_tpStackFrame *pFrame;
     ST_tpVariable *pRetorno;
     ST_tpCode_attribute *pCode;
@@ -151,13 +164,16 @@ ST_tpVariable *VM_executarMetodo(ST_tpJVM *pJVM, ST_tpClassFile *pClasse, ST_tpP
     pRetorno->valor.array_ref = NULL;
 
     for(i = 0; i < pMetodo->attributes_count; i++){
-        nameIndex = pMetodo->attributes[i].attribute_name_index-1;
-        name = (char *) pClasse->constant_pool_table[nameIndex].info.Utf8.bytes;
+        
+        access_flag = pMetodo->access_flags;
+        nameIndex   = pMetodo->attributes[i].attribute_name_index-1;
+        name        = (char *) pClasse->constant_pool_table[nameIndex].info.Utf8.bytes;
+        
         
         if(strcmp(name, "Code") == 0){
             
             /* Cria uma Stack Frame */
-            pFrame = VM_criarStackFrame(pJVM, &(pJVM->thread->pJVMStack), pClasse, pilhaParametros,  ((ST_tpCode_attribute*)pMetodo->attributes[i].info)->max_stack);
+            pFrame = VM_criarFrame(pJVM, &(pJVM->thread->pJVMStack), pClasse, pilhaParametros,  ((ST_tpCode_attribute*)pMetodo->attributes[i].info)->max_stack, access_flag);
             
             
             // EXECUTAR CODIGO //

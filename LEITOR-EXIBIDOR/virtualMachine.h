@@ -38,7 +38,7 @@ void VM_armazenarVariavel(ST_tpVariable *pVariaveisLocais, ST_tpVariable variave
 
 ST_tpVariable VM_recuperarVariavel(ST_tpVariable *pVariaveisLocais, int posicao);
 
-ST_tpStackFrame *VM_criarStackFrame(ST_tpJVM *pJVM, ST_tpStackFrame **pJVMStack, ST_tpClassFile *pClasse, ST_tpParameterStack *pilhaParametros, long maxStackSize);
+ST_tpStackFrame *VM_criarFrame(ST_tpJVM *pJVM, ST_tpStackFrame **pJVMStack, ST_tpClassFile *pClasse, ST_tpParameterStack *pilhaParametros, long maxStackSize, u2 access_flag);
 
 u1 *VM_retornaNomeSuperClasse(ST_tpClassFile *pClassFile);
 
