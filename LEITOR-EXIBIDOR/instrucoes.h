@@ -75,6 +75,8 @@ void FU_sipush(ST_tpStackFrame *pFrame, u1 **pc);
 
 void FU_ldc(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc);
 
+void FU_ldc_w(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc);
+
 void FU_ldc2_w(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc);
 
 void FU_istore_n(ST_tpStackFrame *pFrame, int posicao);

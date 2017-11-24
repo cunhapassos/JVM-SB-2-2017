@@ -380,12 +380,8 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame **pFrame, ST_tpVariable 
             
         *******************************************************************************************/
         case 0x13:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+            FU_ldc(pJVM, *pFrame, PC);
             break;
-
-
-
         /********************************************************************************************
         
             ldc2_w: Push long or double from run-time constant pool (wide index)
@@ -400,12 +396,7 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame **pFrame, ST_tpVariable 
         *******************************************************************************************/
         case 0x14:
             FU_ldc2_w(pJVM, *pFrame, PC);
-            
-            //FU_ldc2_w(pJVM, *pFrame, &opcode);
             break;
-
-
-
         /********************************************************************************************
         
             iload: Load int from local variable
@@ -511,9 +502,6 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame **pFrame, ST_tpVariable 
         case 0x1a:
             FU_iload_n(*pFrame, 0);
             break;
-
-
-
         /********************************************************************************************
         
             iload_1: Load int from local variable 1
@@ -529,9 +517,6 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame **pFrame, ST_tpVariable 
         case 0x1b:
             FU_iload_n(*pFrame, 1);
             break;
-
-
-
         /********************************************************************************************
         
             iload_2: Load int from local variable 2
@@ -547,9 +532,6 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame **pFrame, ST_tpVariable 
         case 0x1c:
             FU_iload_n(*pFrame, 2);
             break;
-
-
-
         /********************************************************************************************
         
             iload_3: Load int from local variable 3
@@ -565,9 +547,6 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame **pFrame, ST_tpVariable 
         case 0x1d:
             FU_iload_n(*pFrame, 3);
             break;
-
-
-
         /********************************************************************************************
         
             lload_0: Load long from local variable 0
@@ -583,9 +562,6 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame **pFrame, ST_tpVariable 
         case 0x1e:
             FU_lload_n(*pFrame, 0);
             break;
-
-
-
         /********************************************************************************************
         
             lload_1: Load long from local variable 1
@@ -601,9 +577,6 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame **pFrame, ST_tpVariable 
         case 0x1f:
             FU_lload_n(*pFrame, 1);
             break;
-
-
-
         /********************************************************************************************
         
             lload_2: Load long from local variable 2
@@ -619,9 +592,6 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame **pFrame, ST_tpVariable 
         case 0x20:
             FU_lload_n(*pFrame, 2);
             break;
-
-
-
         /********************************************************************************************
         
             lload_3: Load long from local variable 3
@@ -637,9 +607,6 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame **pFrame, ST_tpVariable 
         case 0x21:
             FU_lload_n(*pFrame, 3);
             break;
-
-
-
         /********************************************************************************************
         
             fload_0: Load float from local variable 0
@@ -655,9 +622,6 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame **pFrame, ST_tpVariable 
         case 0x22:
             FU_fload_n(*pFrame, 0);
             break;
-
-
-
         /********************************************************************************************
         
             fload_1: Load float from local variable 1
@@ -673,9 +637,6 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame **pFrame, ST_tpVariable 
         case 0x23:
             FU_fload_n(*pFrame, 1);
             break;
-
-
-
         /********************************************************************************************
         
             fload_2: Load float from local variable 2
@@ -691,9 +652,6 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame **pFrame, ST_tpVariable 
         case 0x24:
             FU_fload_n(*pFrame, 2);
             break;
-
-
-
         /********************************************************************************************
         
             fload_3: Load float from local variable 3
@@ -709,9 +667,6 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame **pFrame, ST_tpVariable 
         case 0x25:
             FU_fload_n(*pFrame, 3);
             break;
-
-
-
         /********************************************************************************************
         
             dload_0: Load double from local variable from local variable 0
@@ -727,9 +682,6 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame **pFrame, ST_tpVariable 
         case 0x26:
             FU_dload_n(*pFrame, 0);
             break;
-
-
-
         /********************************************************************************************
         
             dload_1: Load double from local variable from local variable 1
@@ -745,9 +697,6 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame **pFrame, ST_tpVariable 
         case 0x27:
             FU_dload_n(*pFrame, 1);
             break;
-
-
-
         /********************************************************************************************
         
             dload_2: Load double from local variable from local variable 2
@@ -763,9 +712,6 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame **pFrame, ST_tpVariable 
         case 0x28:
             FU_dload_n(*pFrame, 2);
             break;
-
-
-
         /********************************************************************************************
         
             dload_3: Load double from local variable from local variable 3
@@ -781,9 +727,6 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame **pFrame, ST_tpVariable 
         case 0x29:
             FU_dload_n(*pFrame, 3);
             break;
-
-
-
         /********************************************************************************************
         
             aload_0: Load the 0 index from reference from local variable
@@ -799,9 +742,6 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame **pFrame, ST_tpVariable 
         case 0x2a:
             FU_aload_n(*pFrame, 0);
             break;
-
-
-
         /********************************************************************************************
         
             aload_1: Load the 1 index from reference from local variable

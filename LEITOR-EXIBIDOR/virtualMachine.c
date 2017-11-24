@@ -109,7 +109,7 @@ ST_tpStackFrame *VM_criarStackFrame(ST_tpJVM *pJVM, ST_tpStackFrame **pJVMStack,
     varTemporaria.valor.obj_ref = 0;
     VM_armazenarVariavel(pFrame->localVariables, varTemporaria, 0);
     
-    i = 0;
+    i = 1;
     while(pilhaParametros != NULL){
         varTemporaria = *PL_popParametro(&pilhaParametros);
         VM_armazenarVariavel(pFrame->localVariables, varTemporaria, i);

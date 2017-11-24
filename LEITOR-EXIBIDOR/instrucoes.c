@@ -70,7 +70,7 @@ int FU_invokevirtual(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC, ST_tpVari
     count                 = FU_retornaNumeroParametrosMetodo(pMethodName, pMethodDescriptor);
     //count++;
 
-    /* Retira todos os valores da pilha de operandos e passa para a pilha de parametros */
+    /* Retira valores da pilha de operandos e passa para a pilha de parametros */
     while( count != 0 && pFrame->operandStack != NULL) {
         PL_pushParametro(&pFrame->parameterStack, *PL_popOperando(&pFrame->operandStack));
         count --;
@@ -924,6 +924,96 @@ void FU_ldc(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC){
         PL_pushOperando(&pFrame->operandStack, var2);
     }
 }
+
+void FU_ldc_w(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC){
+    int tipo, i;
+    u2 temp2Byte;
+    u1 parametro1, parametro2;
+    ST_tpVariable var, var1, var2;
+    ST_tpObjectHeap *pObjeto;
+    ST_tpConstantPool *cpIndx;
+    ST_tpCONSTANT_Utf8_info *pUTF8;
+    ST_tpCONSTANT_Float_info *pFloat;
+    ST_tpCONSTANT_String_info *pString;
+    ST_tpCONSTANT_Integer_info *pInteger;
+    
+    (*PC)++;
+    memcpy(&parametro1, *PC, 1);
+    (*PC)++;
+    memcpy(&parametro2, *PC, 1);
+    temp2Byte = (parametro1 << 8) + parametro2;
+    
+    cpIndx = &(pFrame->cp->constant_pool_table[temp2Byte - 1].info);
+    
+    if (cpIndx->Integer.tag == CONSTANT_Integer ) {
+        pInteger = (ST_tpCONSTANT_Integer_info *) cpIndx;
+        var1.tipo = JINT;
+        memcpy((void *)&var1.valor.Int, (void *)&pInteger->bytes, 4);
+        PL_pushOperando(&pFrame->operandStack, var1);
+    }
+    else if (cpIndx->Float.tag == CONSTANT_Float){
+        pFloat = (ST_tpCONSTANT_Float_info *) cpIndx;
+        var1.tipo = JFLOAT;
+        memcpy((void *)&var1.valor.Float, (void *)&pFloat->bytes, 4);
+        PL_pushOperando(&pFrame->operandStack, var1);
+        
+    }
+    else if (cpIndx->String.tag == CONSTANT_String) {
+        
+        char *nomeClasse =  "java/lang/String";
+        
+        pString = (ST_tpCONSTANT_String_info *) cpIndx;
+        
+        if(pString->StringObject == NULL){
+            
+            pUTF8 = (ST_tpCONSTANT_Utf8_info *) &(pFrame->cp->constant_pool_table[pString->string_index-1].info);
+            
+            tipo = T_CHAR;
+            var1.tipo = JAREF;
+            
+            var1.valor.array_ref = VM_criarArray(tipo, "", pUTF8->length);
+            
+            for(i = 0; i < pUTF8->length; i++){
+                var.valor.Char = pUTF8->bytes[i];
+                
+                if ((var.valor.Char & 0xe0) == 0xe0) {
+                    var.valor.Char = ((*(pUTF8->bytes) & 0xf) << 12) + ((*(pUTF8->bytes + 1) & 0x3f) << 6) + (*(pUTF8->bytes + 2) & 0x3f);
+                    i += 2;
+                }
+                else if ((var.valor.Char & 0xc0) == 0xc0){
+                    var.valor.Char = ((*(pUTF8->bytes) & 0x1f) << 12) + (*(pUTF8->bytes + 1) & 0x3f);
+                }
+                VM_armazenarValorArray(var1.valor.array_ref, i, var);
+            }
+            
+            /* Verifica se objeto ja existe */
+            pObjeto = PL_buscaObjetoHeap(pJVM->heap->objects, nomeClasse);
+            if (pObjeto == NULL) {
+                var2.valor.obj_ref = VM_alocarMemoriaHeapObjeto(pJVM, pFrame->cp);
+            }
+            else{
+                var2.valor.obj_ref = pObjeto;
+            }
+            
+            VM_armazenarValorField(pJVM, nomeClasse, "value", "[C", var1, var2);
+            
+            // var.valor.Int = 0;
+            // VM_armazenarValorField(pJVM, nomeClasse, "offset", "I", var, var2);
+            
+            // var.valor.Int = i;
+            // VM_armazenarValorField(pJVM, nomeClasse, "count", "I", var, var2);
+            
+            pString->StringObject = (ST_tpObjectHeap *) var2.valor.obj_ref;
+            
+        }
+        else{
+            tipo = JREF;
+            var2.valor.obj_ref = pString->StringObject;
+        }
+        PL_pushOperando(&pFrame->operandStack, var2);
+    }
+}
+
 
 void FU_ldc2_w(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC){
     
