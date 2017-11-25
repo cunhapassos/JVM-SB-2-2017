@@ -2,6 +2,7 @@ OBJ = LEITOR-EXIBIDOR/exibidor.o LEITOR-EXIBIDOR/leitor.o LEITOR-EXIBIDOR/funcoe
 DEP = LEITOR-EXIBIDOR/exibidor.h LEITOR-EXIBIDOR/leitor.h LEITOR-EXIBIDOR/funcoes.h LEITOR-EXIBIDOR/virtualMachine.h LEITOR-EXIBIDOR/pilhas_listas.h LEITOR-EXIBIDOR/instrucoes.h LEITOR-EXIBIDOR/configuracao.h
 CC = gcc
 CFLAGS = -std=c99 -g
+ASANFLAGS = -fsanitize=address -fno-omit-frame-pointer -static-libasan
 
 run:
 	./main
@@ -25,3 +26,10 @@ all:
 dall:
 	make clean
 	make bild
+
+asan_comp: $(OBJ)
+	$(CC) $(CFLAGS) -o main main.c $(OBJ) -I LEITOR-EXIBIDOR -lm $(ASANFLAGS)
+
+asan: 
+	make clean
+	make asan_comp
