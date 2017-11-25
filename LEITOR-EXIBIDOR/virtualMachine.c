@@ -310,7 +310,7 @@ ST_tpObjectHeap *VM_alocarMemoriaHeapObjeto(ST_tpJVM *pJVM, ST_tpClassFile *pCla
         pAuxClassFile1 = pAuxClassFile2;
     }
     pObjeto->field_area = (ST_tpVariable *)malloc(sizeof(ST_tpVariable ) * (maxVariaveis + 1));
-    
+
     pObjeto->className = malloc(sizeof(char) * strlen(pClassFile->nomeClasse) + 1);
     strcpy(pObjeto->className, pClassFile->nomeClasse);
     //printf("\n %s \n", pObjeto->className);
@@ -658,16 +658,21 @@ void *VM_armazenarValorField(ST_tpJVM *pJVM, char *pClassName, char *pFieldName,
     return pHeap;
 }
 
-void *VM_recuperarValorField(ST_tpJVM *pJVM, char *pClassName, char *pFieldName, char *pFieldDescriptor, ST_tpVariable *var, ST_tpVariable objRef){
+ST_tpVariable *VM_recuperarValorField(ST_tpJVM *pJVM, char *pClassName, char *pFieldName, char *pFieldDescriptor){
 
     int i = 0;
+    ST_tpVariable *var = NULL;
     ST_tpObjectHeap *pHeap;
     ST_tpField_info *pFieldTable;
     ST_tpClassFile *pClassFile;
+    ST_tpVariable objRef;
     char *pNomeClasse = NULL, *pNameField, *pDescriptorField;
     
     pNomeClasse = (char *)malloc(strlen(pClassName)+2);
-    
+
+    objRef.tipo = JREF;
+    objRef.valor.obj_ref = PL_buscaObjetoHeap(pJVM->heap->objects, pClassName);
+
     strcpy(pNomeClasse, pClassName);
     
     if(objRef.valor.obj_ref == 0){

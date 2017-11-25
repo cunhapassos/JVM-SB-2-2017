@@ -2841,15 +2841,16 @@ void FU_putstatic(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC){
 }
 void FU_getfield(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC){
 
-    ST_tpVariable var;
+    ST_tpVariable *var = NULL;
     ST_tpCp_info *pCPInfo;
     ST_tpConstantPool *cpIndx;
     u1 parametro1, parametro2;
     u2 temp2Byte, index1, index2;
+
     ST_tpCONSTANT_Fieldref_info *pFieldref;
     char *nomeClasse, *nomeField, *descritorField;
 
-    var.tipo = 0x99; // inicializa variavel com valor arbitrario
+    //var->tipo = 0x99; // inicializa variavel com valor arbitrario
     pCPInfo = pFrame->cp->constant_pool_table;
 
     (*PC)++;
@@ -2874,9 +2875,9 @@ void FU_getfield(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC){
     index2 = pCPInfo[index1 - 1].info.NameAndType.descriptor_index;
     descritorField = (char *) pCPInfo[index2 - 1].info.Utf8.bytes;
 
-    var = *VM_recuperarValorStaticField(pJVM, nomeClasse, nomeField, descritorField);
+    var = VM_recuperarValorField(pJVM, nomeClasse, nomeField, descritorField);
 
-    PL_pushOperando(&pFrame->operandStack, var);
+    PL_pushOperando(&pFrame->operandStack, *var);
 }
 
 void FU_putfield(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC){
