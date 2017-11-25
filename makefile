@@ -1,5 +1,5 @@
-OBJ = LEITOR-EXIBIDOR/exibidor.o LEITOR-EXIBIDOR/leitor.o LEITOR-EXIBIDOR/funcoes.o LEITOR-EXIBIDOR/virtualMachine.o LEITOR-EXIBIDOR/pilhas_listas.o LEITOR-EXIBIDOR/instrucoes.o
-DEP = LEITOR-EXIBIDOR/exibidor.h LEITOR-EXIBIDOR/leitor.h LEITOR-EXIBIDOR/funcoes.h LEITOR-EXIBIDOR/virtualMachine.h LEITOR-EXIBIDOR/pilhas_listas.h LEITOR-EXIBIDOR/instrucoes.h LEITOR-EXIBIDOR/configuracao.h
+OBJ = LEITOR-EXIBIDOR/exibidor.o LEITOR-EXIBIDOR/leitor.o LEITOR-EXIBIDOR/funcoes.o LEITOR-EXIBIDOR/virtualMachine.o LEITOR-EXIBIDOR/pilhas_listas.o LEITOR-EXIBIDOR/instrucoes.o LEITOR-EXIBIDOR/decoder.o
+DEP = LEITOR-EXIBIDOR/exibidor.h LEITOR-EXIBIDOR/leitor.h LEITOR-EXIBIDOR/funcoes.h LEITOR-EXIBIDOR/virtualMachine.h LEITOR-EXIBIDOR/pilhas_listas.h LEITOR-EXIBIDOR/instrucoes.h LEITOR-EXIBIDOR/configuracao.h LEITOR-EXIBIDOR/decoder.h
 CC = gcc
 CFLAGS = -std=c99 -g
 ASANFLAGS = -fsanitize=address -fno-omit-frame-pointer -static-libasan
