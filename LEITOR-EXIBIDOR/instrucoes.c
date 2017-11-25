@@ -233,9 +233,9 @@ int FU_invokestatic(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC, ST_tpVaria
     ST_tpCONSTANT_Utf8_info *pClasseName = NULL, *pMethodName, *pMethodDescriptor;
     u2 temp2Byte, pClasseIndex, pNameAndTypeIndex,pNomeMetodoIndex, pDescritorMetodoIndex;
 
-    (*PC)++;
+    (PC)++;
     memcpy(&parametro1, *PC, 1);
-    (*PC)++;
+    (PC)++;
     memcpy(&parametro2, *PC, 1);
     temp2Byte = (parametro1 << 8) + parametro2;
 
