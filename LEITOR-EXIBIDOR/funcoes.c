@@ -383,7 +383,7 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame **pFrame, ST_tpVariable 
             
         *******************************************************************************************/
         case 0x13:
-            FU_ldc(pJVM, *pFrame, PC);
+            FU_ldc_w(pJVM, *pFrame, PC);
             break;
         /********************************************************************************************
         
@@ -1624,8 +1624,6 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame **pFrame, ST_tpVariable 
         case 0x59:
             FU_dup(*pFrame);
             break;
-
-
 
         /********************************************************************************************
         

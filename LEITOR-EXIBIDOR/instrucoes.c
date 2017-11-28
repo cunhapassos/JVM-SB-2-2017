@@ -68,13 +68,7 @@ int FU_invokevirtual(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC, ST_tpVari
     memcpy(pMethodDescriptor, &(cpIndx->Utf8), sizeof(ST_tpCONSTANT_Utf8_info));
 
     count                 = FU_retornaNumeroParametrosMetodo(pMethodName, pMethodDescriptor);
-    //count++;
 
-    /* Retira valores da pilha de operandos e passa para a pilha de parametros */
-    while( count != 0 && pFrame->operandStack != NULL) {
-        PL_pushParametro(&pFrame->parameterStack, *PL_popOperando(&pFrame->operandStack));
-        count --;
-    }
     if(!strcmp((const char *)pMethodName, "<init>")){
         return 2; // Significa um erro
     }
@@ -101,6 +95,11 @@ int FU_invokevirtual(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC, ST_tpVari
             printf("\nWARNING! AQUI DEVERIA EXECUTAR UM METODO NATIVO!\n");
         }
         else{
+            /* Retira valores da pilha de operandos e passa para a pilha de parametros */
+            while( count != 0 && pFrame->operandStack != NULL) {
+                PL_pushParametro(&pFrame->parameterStack, *PL_popOperando(&pFrame->operandStack));
+                count --;
+            }
             *Retorno = VM_executarMetodo(pJVM, pClassFile, pFrame->parameterStack, pMetodoInfo);
         }
 
@@ -167,13 +166,7 @@ int FU_invokespecial(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC, ST_tpVari
     memcpy(pMethodDescriptor, &(cpIndx->Utf8), sizeof(ST_tpCONSTANT_Utf8_info));
     
     count                 = FU_retornaNumeroParametrosMetodo(pMethodName, pMethodDescriptor);
-    //count++;
-    
-    /* Retira todos os valores da pilha de operandos e passa para a pilha de parametros */
-    while( count != 0 && pFrame->operandStack != NULL) {
-        PL_pushParametro(&pFrame->parameterStack, *PL_popOperando(&pFrame->operandStack));
-        count --;
-    }
+
     if(!strcmp((const char *)pMethodName, "<init>")){
         return 2; // Significa um erro
     }
@@ -200,6 +193,11 @@ int FU_invokespecial(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC, ST_tpVari
             printf("\nWARNING! AQUI DEVERIA EXECUTAR UM METODO NATIVO!\n");
         }
         else{
+            /* Retira todos os valores da pilha de operandos e passa para a pilha de parametros */
+            while( count != 0 && pFrame->operandStack != NULL) {
+                PL_pushParametro(&pFrame->parameterStack, *PL_popOperando(&pFrame->operandStack));
+                count --;
+            }
             *Retorno = VM_executarMetodo(pJVM, pClassFile, pFrame->parameterStack, pMetodoInfo);
         }
         
@@ -224,18 +222,20 @@ int FU_invokespecial(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC, ST_tpVari
 
 int FU_invokestatic(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC, ST_tpVariable **Retorno){
     int count = 0;
+    
     u1 parametro1, parametro2;
     ST_tpConstantPool *cpIndx;
     ST_tpClassFile *pClassFile;
     ST_tpCp_info *pConstantPool;
     ST_tpMethod_info *pMetodoInfo;
+    ST_tpVariable *varTemp = NULL;
     ST_tpCONSTANT_NameAndType_info *nameTyperef;
     ST_tpCONSTANT_Utf8_info *pClasseName = NULL, *pMethodName, *pMethodDescriptor;
     u2 temp2Byte, pClasseIndex, pNameAndTypeIndex,pNomeMetodoIndex, pDescritorMetodoIndex;
 
-    (PC)++;
+    (*PC)++;
     memcpy(&parametro1, *PC, 1);
-    (PC)++;
+    (*PC)++;
     memcpy(&parametro2, *PC, 1);
     temp2Byte = (parametro1 << 8) + parametro2;
 
@@ -266,13 +266,6 @@ int FU_invokestatic(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC, ST_tpVaria
     memcpy(pMethodDescriptor, &(cpIndx->Utf8), sizeof(ST_tpCONSTANT_Utf8_info));
 
     count                 = FU_retornaNumeroParametrosMetodo(pMethodName, pMethodDescriptor);
-    //count++;
-
-    /* Retira todos os valores da pilha de operandos e passa para a pilha de parametros */
-    while( count != 0 && pFrame->operandStack != NULL) {
-        PL_pushParametro(&pFrame->parameterStack, *PL_popOperando(&pFrame->operandStack));
-        count --;
-    }
 
     pClassFile = PL_buscarClasse(pJVM, (char *) pClasseName->bytes);
     
@@ -288,10 +281,16 @@ int FU_invokestatic(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC, ST_tpVaria
             return 2; // ERRO
         }
         if((pMetodoInfo->access_flags & ACC_NATIVE) == ACC_NATIVE){
-                // EXECUTAR METODO NATIVO
             printf("\nWARNING! AQUI DEVERIA EXECUTAR UM METODO NATIVO!\n");
         }
         else{
+            /* Retira todos os valores da pilha de operandos e passa para a pilha de parametros */
+            while( count != 0 && pFrame->operandStack != NULL) {
+                varTemp =  PL_popOperando(&pFrame->operandStack);
+                PL_pushParametro(&pFrame->parameterStack, *varTemp);
+                count --;
+            }
+            
             *Retorno = VM_executarMetodo(pJVM, pClassFile, pFrame->parameterStack, pMetodoInfo);
         }
 
@@ -365,13 +364,7 @@ int FU_invokeinterface(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC, ST_tpVa
     memcpy(pMethodDescriptor, &(cpIndx->Utf8), sizeof(ST_tpCONSTANT_Utf8_info));
     
     aux                 = FU_retornaNumeroParametrosMetodo(pMethodName, pMethodDescriptor);
-    //aux++;
     
-    /* Retira todos os valores da pilha de operandos e passa para a pilha de parametros */
-    while( aux != 0 && pFrame->operandStack != NULL) {
-        PL_pushParametro(&pFrame->parameterStack, *PL_popOperando(&pFrame->operandStack));
-        aux --;
-    }
     if(!strcmp((const char *)pMethodName, "<init>")){
         return 1; // Significa um erro, goto saidaDoMetodo
     }
@@ -398,6 +391,11 @@ int FU_invokeinterface(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC, ST_tpVa
             printf("\nWARNING! AQUI DEVERIA EXECUTAR UM METODO NATIVO!\n");
         }
         else{
+            /* Retira todos os valores da pilha de operandos e passa para a pilha de parametros */
+            while( aux != 0 && pFrame->operandStack != NULL) {
+                PL_pushParametro(&pFrame->parameterStack, *PL_popOperando(&pFrame->operandStack));
+                aux --;
+            }
             *Retorno = VM_executarMetodo(pJVM, pClassFile, pFrame->parameterStack, pMetodoInfo);
         }
         
@@ -847,10 +845,12 @@ void FU_ldc(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC){
     ST_tpVariable var, var1, var2;
     ST_tpObjectHeap *pObjeto;
     ST_tpConstantPool *cpIndx;
+    ST_tpClassFile *pClassFile;
     ST_tpCONSTANT_Utf8_info *pUTF8;
     ST_tpCONSTANT_Float_info *pFloat;
     ST_tpCONSTANT_String_info *pString;
     ST_tpCONSTANT_Integer_info *pInteger;
+    
 
     (*PC)++;
     memcpy(&parametro1, *PC, 1);
@@ -896,11 +896,13 @@ void FU_ldc(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC){
                 }
                 VM_armazenarValorArray(var1.valor.array_ref, i, var);
             }
-        
+            
+            var2.tipo = JREF;
             /* Verifica se objeto ja existe */
             pObjeto = PL_buscaObjetoHeap(pJVM->heap->objects, nomeClasse);
             if (pObjeto == NULL) {
-                var2.valor.obj_ref = VM_alocarMemoriaHeapObjeto(pJVM, pFrame->cp);
+                pClassFile = PL_buscarClasse(pJVM, nomeClasse);
+                var2.valor.obj_ref = VM_alocarMemoriaHeapObjeto(pJVM, pClassFile);
             }
             else{
                 var2.valor.obj_ref = pObjeto;
@@ -918,7 +920,7 @@ void FU_ldc(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC){
         
         }
         else{
-            tipo = JREF;
+            var2.tipo = JREF;
             var2.valor.obj_ref = pString->StringObject;
         }
         PL_pushOperando(&pFrame->operandStack, var2);

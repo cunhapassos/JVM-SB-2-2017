@@ -224,10 +224,10 @@ ST_tpVariable *VM_executarMetodo(ST_tpJVM *pJVM, ST_tpClassFile *pClasse, ST_tpP
                 PC++;
             }
 
-          SaidaDoMetodo:
+          /*SaidaDoMetodo:
             while (pFrame->operandStack != NULL) {
                 pRetorno = PL_popOperando(&pFrame->operandStack);
-            }
+            }*/
 
         }
     }
