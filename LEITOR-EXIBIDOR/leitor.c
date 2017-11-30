@@ -585,7 +585,7 @@ ST_tpAttribute_info *LE_lerAttribute(FILE *pArq, ST_tpCp_info *cp, ST_tpAttribut
     strcat(arq, nomeArquivo);
     strcat(arq, ".class");
 
-    printf("%s\n", arq);
+    //printf("%s\n", arq);
 
     /* Cria ponteiro para estrutura classFile */
     FILE * pArq = fopen(arq,"rb");

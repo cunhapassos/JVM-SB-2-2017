@@ -27,28 +27,28 @@ void FU_printArray(ST_tpVariable *var){
     for (int i = 0 ; i < var->valor.array_ref->length; i++) {
         switch (var->valor.array_ref->type) {
             case T_BOOLEAN:
-                printf("%s \n", (var->valor.Boolean == 0) ? "FALSE" :"TRUE");
+                printf("%s", (*(int*)(var->valor.array_ref->area+sizeof(char)*i) == 0) ? "FALSE" :"TRUE");
                 break;
             case T_CHAR:
-                printf("%c \n", var->valor.Char);
+                printf("%c", *(char*)(var->valor.array_ref->area+sizeof(u2)*i));
                 break;
             case T_FLOAT:
-                printf("%f \n", var->valor.Float);
+                printf("%f", *(float*)(var->valor.array_ref->area+sizeof(float)*i));
                 break;
             case T_DOUBLE:
-                printf("%lf \n", var->valor.Double);
+                printf("%lf", *(double*)(var->valor.array_ref->area+sizeof(double)*i));
                 break;
             case T_BYTE:
-                printf("%02X \n", var->valor.Byte);
+                printf("%02X", *(int*)(var->valor.array_ref->area+sizeof(char)*i));
                 break;
             case T_SHORT:
-                printf("%d \n", var->valor.Short);
+                printf("%d", *(short*)(var->valor.array_ref->area+sizeof(short int)*i));
                 break;
             case T_INT:
-                printf("%xd \n", var->valor.Int);
+                printf("%d", *(int*)(var->valor.array_ref->area+sizeof(int)*i));
                 break;
             case T_LONG:
-                printf("%lld \n", var->valor.Long);
+                printf("%ld", *(long*)(var->valor.array_ref->area+sizeof(__int64_t)*i));
                 break;
             case T_REF:
                 printf("Nao implementado!");
@@ -79,7 +79,11 @@ static void print(ST_tpVariable *var) {
         case JVOID:
             break;
         case JREF:
-            printf("%x08x \n", (int)var->valor.obj_ref);
+            if(!strcmp(var->valor.obj_ref->className, "java/lang/String")) {
+                FU_printArray(var->valor.obj_ref->field_area);
+                printf("\n");
+            }
+            break;
         case JAREF:
             FU_printArray(var);
             break;
@@ -145,7 +149,7 @@ int FU_invokevirtual(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC, ST_tpVari
     pMethodDescriptor     = (ST_tpCONSTANT_Utf8_info *)malloc(sizeof(ST_tpCONSTANT_Utf8_info));
     memcpy(pMethodDescriptor, &(cpIndx->Utf8), sizeof(ST_tpCONSTANT_Utf8_info));
 
-    printf(" %s %s\n", pMethodName->bytes, pMethodDescriptor->bytes);
+    ////printf(" %s %s\n", pMethodName->bytes, pMethodDescriptor->bytes);
 
     count                 = FU_retornaNumeroParametrosMetodo(pMethodName, pMethodDescriptor);
 
@@ -251,7 +255,7 @@ int FU_invokespecial(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC, ST_tpVari
     pMethodDescriptor     = (ST_tpCONSTANT_Utf8_info *)malloc(sizeof(ST_tpCONSTANT_Utf8_info));
     memcpy(pMethodDescriptor, &(cpIndx->Utf8), sizeof(ST_tpCONSTANT_Utf8_info));
     
-    printf(" %s %s\n", pMethodName->bytes, pMethodDescriptor->bytes);
+    ////printf(" %s %s\n", pMethodName->bytes, pMethodDescriptor->bytes);
 
     count                 = FU_retornaNumeroParametrosMetodo(pMethodName, pMethodDescriptor);
 
@@ -349,7 +353,7 @@ int FU_invokestatic(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC, ST_tpVaria
     pMethodDescriptor     = (ST_tpCONSTANT_Utf8_info *)malloc(sizeof(ST_tpCONSTANT_Utf8_info));
     memcpy(pMethodDescriptor, &(cpIndx->Utf8), sizeof(ST_tpCONSTANT_Utf8_info));
 
-    printf(" %s %s\n", pMethodName->bytes, pMethodDescriptor->bytes);
+    //printf(" %s %s\n", pMethodName->bytes, pMethodDescriptor->bytes);
 
     count                 = FU_retornaNumeroParametrosMetodo(pMethodName, pMethodDescriptor);
 
@@ -449,7 +453,7 @@ int FU_invokeinterface(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC, ST_tpVa
     pMethodDescriptor     = (ST_tpCONSTANT_Utf8_info *)malloc(sizeof(ST_tpCONSTANT_Utf8_info));
     memcpy(pMethodDescriptor, &(cpIndx->Utf8), sizeof(ST_tpCONSTANT_Utf8_info));
     
-    printf(" %s %s\n", pMethodName->bytes, pMethodDescriptor->bytes);
+    //printf(" %s %s\n", pMethodName->bytes, pMethodDescriptor->bytes);
 
     aux                 = FU_retornaNumeroParametrosMetodo(pMethodName, pMethodDescriptor);
     
