@@ -2499,7 +2499,7 @@ void FU_i2b(ST_tpStackFrame *pFrame){
     var1 = *PL_popOperando(&pFrame->operandStack);
     var.valor.Byte = (char) var1.valor.Int;
     var1.valor.Int = (int) var.valor.Byte;
-    var1.tipo = JINT;
+    var1.tipo = JBYTE;
     PL_pushOperando(&pFrame->operandStack, var1);
 }
 
@@ -2508,20 +2508,19 @@ void FU_i2c(ST_tpStackFrame *pFrame){
     var1 = *PL_popOperando(&pFrame->operandStack);
     var.valor.Char = (u2) var1.valor.Int;
     if (var.valor.Char < 0) {
-        var.valor.Char = - var.valor.Char;
+        var.valor.Char = 0 - var.valor.Char;
     }
-    var1.valor.Int = (int) var.valor.Char;
-    var1.tipo = JINT;
-    PL_pushOperando(&pFrame->operandStack, var1);
+    var.tipo = JCHAR;
+    PL_pushOperando(&pFrame->operandStack, var);
 }
 
 void FU_i2s(ST_tpStackFrame *pFrame){
     ST_tpVariable var1, var;
     var1 = *PL_popOperando(&pFrame->operandStack);
     var.valor.Short = (short) var1.valor.Int;
-    var1.valor.Int = (int) var.valor.Byte;
-    var1.tipo = JINT;
-    PL_pushOperando(&pFrame->operandStack, var1);
+    
+    var.tipo = JSHORT;
+    PL_pushOperando(&pFrame->operandStack, var);
 }
 void FU_f2l(ST_tpStackFrame *pFrame){
     ST_tpVariable var1, var;

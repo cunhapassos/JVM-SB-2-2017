@@ -16,7 +16,7 @@
 
 int main(int argc, const char * argv[]) {
     
-    char *aux[] = {"ARQUIVOS PARA TESTES/CountWheat"};
+    char *aux[] = {"ARQUIVOS PARA TESTES/int_cast"};
     if(VIEWER) {
         EX_imprimirClassFile(LE_lerClasse(aux[0]));
         return 0;
