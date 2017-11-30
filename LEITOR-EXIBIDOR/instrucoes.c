@@ -88,7 +88,7 @@ static void print(ST_tpVariable *var) {
             FU_printArray(var);
             break;
         case JINT:
-            printf("%xd \n", var->valor.Int);
+            printf("%d \n", var->valor.Int);
             break;
         case JLONG:
             printf("%lld \n", var->valor.Long);
@@ -177,7 +177,7 @@ int FU_invokevirtual(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC, ST_tpVari
         }
         if((pMetodoInfo->access_flags & ACC_NATIVE) == ACC_NATIVE){
                 // EXECUTAR METODO NATIVO
-            printf("\nWARNING! AQUI DEVERIA EXECUTAR UM METODO NATIVO!\n");
+            //printf("\nWARNING! AQUI DEVERIA EXECUTAR UM METODO NATIVO!\n");
         }
         else{
             /* Retira valores da pilha de operandos e passa para a pilha de parametros */
@@ -278,7 +278,7 @@ int FU_invokespecial(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC, ST_tpVari
         }
         if((pMetodoInfo->access_flags & ACC_NATIVE) == ACC_NATIVE){
             // EXECUTAR METODO NATIVO
-            printf("\nWARNING! AQUI DEVERIA EXECUTAR UM METODO NATIVO!\n");
+            //printf("\nWARNING! AQUI DEVERIA EXECUTAR UM METODO NATIVO!\n");
         }
         else{
             /* Retira todos os valores da pilha de operandos e passa para a pilha de parametros */
@@ -371,7 +371,7 @@ int FU_invokestatic(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC, ST_tpVaria
             return 2; // ERRO
         }
         if((pMetodoInfo->access_flags & ACC_NATIVE) == ACC_NATIVE){
-            printf("\nWARNING! AQUI DEVERIA EXECUTAR UM METODO NATIVO!\n");
+            //printf("\nWARNING! AQUI DEVERIA EXECUTAR UM METODO NATIVO!\n");
         }
         else{
             /* Retira todos os valores da pilha de operandos e passa para a pilha de parametros */
@@ -480,7 +480,7 @@ int FU_invokeinterface(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC, ST_tpVa
         }
         if((pMetodoInfo->access_flags & ACC_NATIVE) == ACC_NATIVE){
             // EXECUTAR METODO NATIVO
-            printf("\nWARNING! AQUI DEVERIA EXECUTAR UM METODO NATIVO!\n");
+            //printf("\nWARNING! AQUI DEVERIA EXECUTAR UM METODO NATIVO!\n");
         }
         else{
             /* Retira todos os valores da pilha de operandos e passa para a pilha de parametros */

@@ -133,7 +133,7 @@ ST_tpVariable *PL_popOperando(ST_tpOperandStack **pPilhaOperandos){
         return var;
     }
     else{
-        printf("ERRO, PILHA VAZIA, NAO PODE RETORNAR VARIAVEL!");
+        //printf("ERRO, PILHA VAZIA, NAO PODE RETORNAR VARIAVEL!");
         var->tipo = 0x99;
         return var;
     }
@@ -181,7 +181,7 @@ ST_tpVariable *PL_popParametro(ST_tpParameterStack **pPilhaParametros){
         return var;
     }
     else{
-        printf("ERRO, PILHA VAZIA, NAO PODE RETORNAR VARIAVEL!");
+        //printf("ERRO, PILHA VAZIA, NAO PODE RETORNAR VARIAVEL!");
         var->tipo = 0x99;
         return var;
     }
