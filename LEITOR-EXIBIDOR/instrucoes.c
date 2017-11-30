@@ -67,9 +67,12 @@ int FU_invokevirtual(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC, ST_tpVari
     pMethodDescriptor     = (ST_tpCONSTANT_Utf8_info *)malloc(sizeof(ST_tpCONSTANT_Utf8_info));
     memcpy(pMethodDescriptor, &(cpIndx->Utf8), sizeof(ST_tpCONSTANT_Utf8_info));
 
+    printf(" %s %s\n", pMethodName->bytes, pMethodDescriptor->bytes);
+
     count                 = FU_retornaNumeroParametrosMetodo(pMethodName, pMethodDescriptor);
 
-    if(!strcmp((const char *)pMethodName, "<init>")){
+    if(!strcmp((const char *)pMethodName->bytes, "<init>")){
+    	printf("Erro metodo é init");
         return 2; // Significa um erro
     }
 
@@ -165,11 +168,9 @@ int FU_invokespecial(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC, ST_tpVari
     pMethodDescriptor     = (ST_tpCONSTANT_Utf8_info *)malloc(sizeof(ST_tpCONSTANT_Utf8_info));
     memcpy(pMethodDescriptor, &(cpIndx->Utf8), sizeof(ST_tpCONSTANT_Utf8_info));
     
-    count                 = FU_retornaNumeroParametrosMetodo(pMethodName, pMethodDescriptor);
+    printf(" %s %s\n", pMethodName->bytes, pMethodDescriptor->bytes);
 
-    if(!strcmp((const char *)pMethodName, "<init>")){
-        return 2; // Significa um erro
-    }
+    count                 = FU_retornaNumeroParametrosMetodo(pMethodName, pMethodDescriptor);
 
     pClassFile = PL_buscarClasse(pJVM, (char *) pClasseName->bytes);
     
@@ -264,6 +265,8 @@ int FU_invokestatic(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC, ST_tpVaria
     cpIndx                = &pConstantPool[temp2Byte-1].info;
     pMethodDescriptor     = (ST_tpCONSTANT_Utf8_info *)malloc(sizeof(ST_tpCONSTANT_Utf8_info));
     memcpy(pMethodDescriptor, &(cpIndx->Utf8), sizeof(ST_tpCONSTANT_Utf8_info));
+
+    printf(" %s %s\n", pMethodName->bytes, pMethodDescriptor->bytes);
 
     count                 = FU_retornaNumeroParametrosMetodo(pMethodName, pMethodDescriptor);
 
@@ -363,9 +366,11 @@ int FU_invokeinterface(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC, ST_tpVa
     pMethodDescriptor     = (ST_tpCONSTANT_Utf8_info *)malloc(sizeof(ST_tpCONSTANT_Utf8_info));
     memcpy(pMethodDescriptor, &(cpIndx->Utf8), sizeof(ST_tpCONSTANT_Utf8_info));
     
+    printf(" %s %s\n", pMethodName->bytes, pMethodDescriptor->bytes);
+
     aux                 = FU_retornaNumeroParametrosMetodo(pMethodName, pMethodDescriptor);
     
-    if(!strcmp((const char *)pMethodName, "<init>")){
+    if(!strcmp((const char *)pMethodName->bytes, "<init>")){
         return 1; // Significa um erro, goto saidaDoMetodo
     }
     
@@ -901,7 +906,7 @@ void FU_ldc(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC){
             /* Verifica se objeto ja existe */
             pObjeto = PL_buscaObjetoHeap(pJVM->heap->objects, nomeClasse);
             if (pObjeto == NULL) {
-                pClassFile = PL_buscarClasse(pJVM, nomeClasse);
+                pClassFile = VM_carregarClasse(nomeClasse, pJVM);
                 var2.valor.obj_ref = VM_alocarMemoriaHeapObjeto(pJVM, pClassFile);
             }
             else{
@@ -930,6 +935,7 @@ void FU_ldc(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC){
 void FU_ldc_w(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC){
     int tipo, i;
     u2 temp2Byte;
+    ST_tpClassFile *pClassFile;
     u1 parametro1, parametro2;
     ST_tpVariable var, var1, var2;
     ST_tpObjectHeap *pObjeto;
@@ -991,7 +997,8 @@ void FU_ldc_w(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC){
             /* Verifica se objeto ja existe */
             pObjeto = PL_buscaObjetoHeap(pJVM->heap->objects, nomeClasse);
             if (pObjeto == NULL) {
-                var2.valor.obj_ref = VM_alocarMemoriaHeapObjeto(pJVM, pFrame->cp);
+            	pClassFile = VM_carregarClasse(nomeClasse, pJVM);
+            	var2.valor.obj_ref = VM_alocarMemoriaHeapObjeto(pJVM, pClassFile);
             }
             else{
                 var2.valor.obj_ref = pObjeto;
@@ -1029,6 +1036,7 @@ void FU_ldc2_w(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC){
     ST_tpCONSTANT_Double_info *pDouble;
     ST_tpCONSTANT_String_info *pString;
     ST_tpVariable var, var1, var2;
+    ST_tpClassFile *pClassFile;
     
     cpIndx = malloc(sizeof(ST_tpConstantPool));
     
@@ -1078,7 +1086,8 @@ void FU_ldc2_w(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC){
             
             pObjeto  = VM_alocarMemoriaHeapObjeto(pJVM, pFrame->cp);
             if (pObjeto == NULL) {
-                var2.valor.obj_ref = VM_alocarMemoriaHeapObjeto(pJVM, pFrame->cp);
+            	pClassFile = VM_carregarClasse(nomeClasse, pJVM);
+            	var2.valor.obj_ref = VM_alocarMemoriaHeapObjeto(pJVM, pClassFile);
             }
             else{
                 var2.valor.obj_ref = pObjeto;

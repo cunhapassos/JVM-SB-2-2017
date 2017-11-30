@@ -21,7 +21,6 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame **pFrame, ST_tpVariable 
     int flag = 0;
     //printf("%d = x%0x\t", opcode, opcode);
     print_instructionName(opcode);
-    printf("\n");
 
     switch(opcode) {
 
@@ -3602,5 +3601,6 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame **pFrame, ST_tpVariable 
             printf("Opcode não encontrado");
     
     }
+    printf("\n");
     return flag;
 }
