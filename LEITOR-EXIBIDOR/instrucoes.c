@@ -2852,7 +2852,7 @@ void FU_putstatic(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC){
 }
 void FU_getfield(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC){
 
-    ST_tpVariable *var = NULL;
+    ST_tpVariable *var = NULL, *var1;
     ST_tpCp_info *pCPInfo;
     ST_tpConstantPool *cpIndx;
     u1 parametro1, parametro2;
@@ -2886,7 +2886,9 @@ void FU_getfield(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC){
     index2 = pCPInfo[index1 - 1].info.NameAndType.descriptor_index;
     descritorField = (char *) pCPInfo[index2 - 1].info.Utf8.bytes;
 
-    var = VM_recuperarValorField(pJVM, nomeClasse, nomeField, descritorField);
+    var1 = PL_popOperando(&pFrame->operandStack);
+
+    var = VM_recuperarValorField(pJVM, nomeClasse, nomeField, descritorField, &var1);
 
     PL_pushOperando(&pFrame->operandStack, *var);
 }

@@ -658,27 +658,28 @@ void *VM_armazenarValorField(ST_tpJVM *pJVM, char *pClassName, char *pFieldName,
     return pHeap;
 }
 
-ST_tpVariable *VM_recuperarValorField(ST_tpJVM *pJVM, char *pClassName, char *pFieldName, char *pFieldDescriptor){
+ST_tpVariable *VM_recuperarValorField(ST_tpJVM *pJVM, char *pClassName, char *pFieldName, char *pFieldDescriptor, ST_tpVariable *objRef){
 
     int i = 0;
     ST_tpVariable *var = NULL;
     ST_tpObjectHeap *pHeap;
     ST_tpField_info *pFieldTable;
     ST_tpClassFile *pClassFile;
-    ST_tpVariable objRef;
+    //ST_tpVariable objRef;
     char *pNomeClasse = NULL, *pNameField, *pDescriptorField;
     
     pNomeClasse = (char *)malloc(strlen(pClassName)+2);
 
-    objRef.tipo = JREF;
-    objRef.valor.obj_ref = PL_buscaObjetoHeap(pJVM->heap->objects, pClassName);
+    //objRef.tipo = JREF;
+    //objRef.valor.obj_ref = PL_buscaObjetoHeap(pJVM->heap->objects, pClassName);
 
     strcpy(pNomeClasse, pClassName);
     
-    if(objRef.valor.obj_ref == 0){
+    if(objRef->valor.obj_ref == 0){
+        printf("ERRO! Objeto nao existe!");
         return NULL; // Lancar um erro
     }
-    
+
     while (TRUE) {
         pClassFile = PL_buscarClasse(pJVM, pNomeClasse);
         if(pClassFile == NULL){
@@ -717,7 +718,7 @@ ST_tpVariable *VM_recuperarValorField(ST_tpJVM *pJVM, char *pClassName, char *pF
         }
     }
     
-    pHeap = (ST_tpObjectHeap *)objRef.valor.obj_ref;
+    pHeap = (ST_tpObjectHeap *)objRef->valor.obj_ref;
     
     memcpy(var, (pHeap->field_area + i), sizeof(ST_tpVariable));
     
