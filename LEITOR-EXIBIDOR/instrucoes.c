@@ -2888,7 +2888,7 @@ void FU_getfield(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC){
 
     var1 = PL_popOperando(&pFrame->operandStack);
 
-    var = VM_recuperarValorField(pJVM, nomeClasse, nomeField, descritorField, &var1);
+    var = VM_recuperarValorField(pJVM, nomeClasse, nomeField, descritorField, var1);
 
     PL_pushOperando(&pFrame->operandStack, *var);
 }
