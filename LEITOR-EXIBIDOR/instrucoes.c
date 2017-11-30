@@ -23,6 +23,83 @@
 #include "pilhas_listas.h"
 #include <limits.h>
 
+void FU_printArray(ST_tpVariable *var){
+    for (int i = 0 ; i < var->valor.array_ref->length; i++) {
+        switch (var->valor.array_ref->type) {
+            case T_BOOLEAN:
+                printf("%s \n", (var->valor.Boolean == 0) ? "FALSE" :"TRUE");
+                break;
+            case T_CHAR:
+                printf("%c \n", var->valor.Char);
+                break;
+            case T_FLOAT:
+                printf("%f \n", var->valor.Float);
+                break;
+            case T_DOUBLE:
+                printf("%lf \n", var->valor.Double);
+                break;
+            case T_BYTE:
+                printf("%02X \n", var->valor.Byte);
+                break;
+            case T_SHORT:
+                printf("%d \n", var->valor.Short);
+                break;
+            case T_INT:
+                printf("%xd \n", var->valor.Int);
+                break;
+            case T_LONG:
+                printf("%lld \n", var->valor.Long);
+                break;
+            case T_REF:
+                printf("Nao implementado!");
+                break;
+            case T_AREF:
+                printf("Nao implementado!");
+                break;
+        }
+    }
+}
+static void print(ST_tpVariable *var) {
+    switch (var->tipo) {
+        case JBOOL:
+            printf("%s \n", (var->valor.Boolean == 0) ? "FALSE" :"TRUE");
+            break;
+        case JBYTE:
+            printf("%02X \n", var->valor.Byte);
+            break;
+        case JCHAR:
+            printf("%c \n", var->valor.Char);
+            break;
+        case JSTRING:
+                //printf("%s \n", var->valor.);
+            break;
+        case JSHORT:
+            printf("%d \n", var->valor.Short);
+            break;
+        case JVOID:
+            break;
+        case JREF:
+            printf("%x08x \n", (int)var->valor.obj_ref);
+        case JAREF:
+            FU_printArray(var);
+            break;
+        case JINT:
+            printf("%xd \n", var->valor.Int);
+            break;
+        case JLONG:
+            printf("%lld \n", var->valor.Long);
+            break;
+        case JFLOAT:
+            printf("%f \n", var->valor.Float);
+            break;
+        case JDOUBLE:
+            printf("%lf \n", var->valor.Double);
+            break;
+        default:
+            break;
+    }
+}
+
 int FU_invokevirtual(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC, ST_tpVariable **Retorno){
     int count = 0;
     u1 parametro1, parametro2;
@@ -34,6 +111,7 @@ int FU_invokevirtual(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC, ST_tpVari
         //char *nomeClasse = NULL, *nomeMetodo, *descritorMetodo;
     ST_tpCONSTANT_Utf8_info *pClasseName = NULL, *pMethodName, *pMethodDescriptor;
     u2 temp2Byte, pClasseIndex, pNameAndTypeIndex,pNomeMetodoIndex, pDescritorMetodoIndex;
+    ST_tpVariable *var;
 
     (*PC)++;
     memcpy(&parametro1, *PC, 1);
@@ -103,7 +181,12 @@ int FU_invokevirtual(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC, ST_tpVari
                 PL_pushParametro(&pFrame->parameterStack, *PL_popOperando(&pFrame->operandStack));
                 count --;
             }
-            *Retorno = VM_executarMetodo(pJVM, pClassFile, pFrame->parameterStack, pMetodoInfo);
+            if(strcmp((char *) (pMethodName->bytes), "println" ) == 0){
+                var = PL_popParametro(&pFrame->parameterStack);
+                print(var);
+            }else{
+                *Retorno = VM_executarMetodo(pJVM, pClassFile, pFrame->parameterStack, pMetodoInfo);
+            }
         }
 
         if((*Retorno)->tipo != JVOID ){
@@ -856,7 +939,6 @@ void FU_ldc(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC){
     ST_tpCONSTANT_String_info *pString;
     ST_tpCONSTANT_Integer_info *pInteger;
     
-
     (*PC)++;
     memcpy(&parametro1, *PC, 1);
     cpIndx = &(pFrame->cp->constant_pool_table[parametro1 - 1].info);
