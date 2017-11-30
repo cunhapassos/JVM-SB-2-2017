@@ -2443,15 +2443,19 @@ void FU_if_acmpne(ST_tpStackFrame *pFrame, u1 **PC){
 void FU_goto(ST_tpStackFrame *pFrame, u1 **PC){
 
     u1 parametro1, parametro2;
-    u2 temp2Byte;
+    int8_t temp1, temp2;
+    int16_t temp2Byte;
     
     (*PC)++;
     memcpy(&parametro1, *PC, 1);
     (*PC)++;
     memcpy(&parametro2, *PC, 1);
-    temp2Byte = (parametro1 << 8) + parametro2;
+    temp1 = (int8_t) parametro1;
+    temp2 = (int8_t) parametro2;
+    temp2Byte = (int16_t) (temp1 << 8);
+    temp2Byte = 256+temp2Byte + temp2;
     
-    *PC += (temp2Byte - 3);
+    (*PC) += (temp2Byte - 3);
 }
 
 void FU_jsr(ST_tpStackFrame *pFrame, u1 **PC){
@@ -3188,6 +3192,7 @@ void FU_iinc(ST_tpStackFrame *pFrame, u1 **PC){
     memcpy(&parametro1, *PC, 1);
     (*PC)++;
     memcpy(&parametro2, *PC, 1);
+    
     var = VM_recuperarVariavel(pFrame->localVariables, (int) parametro1);
     inc = (int8_t) parametro2;
     var.valor.Int += (int) inc;
