@@ -539,61 +539,61 @@ ST_tpVariable VM_recuperarValorArray(ST_tpArrayHeap *pArrayHeap, int posicao){
             pByte  = (char*)pArrayHeap->area;
             pByte += posicao;
             var.tipo = JBYTE;
-            memcpy((void *)&var, (void *)pByte , sizeof(pByte));
+            memcpy(&(var.valor.Byte), pByte, sizeof(pInt));
             break;
         case T_LONG:
             pLong  = (__int64_t *)pArrayHeap->area;
             pLong += posicao;
             var.tipo = JLONG;
-            memcpy((void *)&var, (void *)pLong, sizeof(pLong));
+            memcpy(&(var.valor.Long), pLong, sizeof(pInt));
             break;
         case T_BOOLEAN:
             pBoolean  = (char*) pArrayHeap->area;
             pBoolean += posicao;
             var.tipo = JBOOL;
-            memcpy((void *)&var, (void *)pBoolean, sizeof(pBoolean));
+            memcpy(&(var.valor.Boolean), pBoolean, sizeof(pInt));
             break;
         case T_CHAR:
             pChar  = (u2*)pArrayHeap->area;
             pChar += posicao;
             var.tipo = JCHAR;
-            memcpy((void *)&var, (void *)pChar, sizeof(pChar));
+            memcpy(&(var.valor.Char), pChar, sizeof(pInt));
             break;
         case T_SHORT:
             pShort  = (short int  *)pArrayHeap->area;
             pShort += posicao;
             var.tipo = JSHORT;
-            memcpy((void *)&var, (void *)pShort, sizeof(pShort));
+            memcpy(&(var.valor.Short), pShort, sizeof(pInt));
             break;
         case T_FLOAT:
             pFloat  = (float *)pArrayHeap->area;
             pFloat += posicao;
             var.tipo = JFLOAT;
-            memcpy((void *)&var, (void *)pFloat, sizeof(pFloat));
+            memcpy(&(var.valor.Float), pFloat, sizeof(pInt));
             break;
         case T_INT:
             pInt  = (int *)pArrayHeap->area;
             pInt += posicao;
-            memcpy((void *)&var, (void *)pInt, sizeof(pInt));
+            memcpy(&(var.valor.Int), pInt, sizeof(pInt));
             var.tipo = JINT;
             break;
         case T_DOUBLE:
             pDouble  = (double *)pArrayHeap->area;
             pDouble += posicao;
             var.tipo = JDOUBLE;
-            memcpy((void *)&var, (void *)pDouble, sizeof(pDouble));
+            memcpy(&(var.valor.Double), pDouble, sizeof(pInt));
             break;
         case T_REF:
             pObjRef  = (ST_tpObjectHeap *)pArrayHeap->area;
             pObjRef += posicao;
             var.tipo = JREF;
-            memcpy((void *)&var, (void *)pObjRef, sizeof(pObjRef));
+            memcpy(&(var.valor.obj_ref), pObjRef, sizeof(pInt));
             break;
         case T_AREF:
             pArrayRef  = (ST_tpArrayHeap *)pArrayHeap->area;
             pArrayRef += posicao;
             var.tipo = JAREF;
-            memcpy((void *)&var, (void *)pArrayRef, sizeof(pArrayRef));
+            memcpy(&(var.valor.array_ref), pArrayRef, sizeof(pInt));
             break;
     }
     return var;

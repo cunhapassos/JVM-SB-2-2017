@@ -91,7 +91,7 @@ static void print(ST_tpVariable *var) {
             printf("%d \n", var->valor.Int);
             break;
         case JLONG:
-            printf("%lld \n", var->valor.Long);
+            printf("%ld \n", var->valor.Long);
             break;
         case JFLOAT:
             printf("%f \n", var->valor.Float);
@@ -186,8 +186,12 @@ int FU_invokevirtual(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC, ST_tpVari
                 count --;
             }
             if(strcmp((char *) (pMethodName->bytes), "println" ) == 0){
-                var = PL_popParametro(&pFrame->parameterStack);
-                print(var);
+            	if((char)(pMethodDescriptor->bytes[1]) == ')'){
+            		printf("\n");
+            	} else {
+            		var = PL_popParametro(&pFrame->parameterStack);
+            		print(var);
+            	}
             }else{
                 *Retorno = VM_executarMetodo(pJVM, pClassFile, pFrame->parameterStack, pMetodoInfo);
             }
@@ -211,6 +215,7 @@ int FU_invokevirtual(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC, ST_tpVari
 
     return 0;
 }
+
 int FU_invokespecial(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC, ST_tpVariable **Retorno){
 
     int count = 0;
@@ -1460,8 +1465,8 @@ void FU_caload(ST_tpStackFrame *pFrame){
     if (val.valor.Char<0)
         val.valor.Char=0-val.valor.Char;
 
-    val.valor.Int=(int)val.valor.Char;
-    val.tipo=JINT;
+    val.valor.Int=(char)val.valor.Char;
+    val.tipo=JCHAR;
     PL_pushOperando(&pFrame->operandStack, val);
 }
 
