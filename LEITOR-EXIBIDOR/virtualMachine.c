@@ -278,12 +278,13 @@ ST_tpObjectHeap *VM_alocarMemoriaHeapObjeto(ST_tpJVM *pJVM, ST_tpClassFile *pCla
     int maxVariaveis;
     ST_tpObjectHeap *pObjeto;
     ST_tpClassFile *pAuxClassFile1, *pAuxClassFile2;
-
+    
+    /*
     pObjeto = PL_buscaObjetoHeap(pJVM->heap->objects, pClassFile->nomeClasse);
     if(pObjeto != NULL){
         return pObjeto;
-    }
-
+    }*/
+    
     pObjeto = (ST_tpObjectHeap *)malloc(sizeof(ST_tpObjectHeap));
     
     pAuxClassFile1 = pClassFile;
@@ -574,7 +575,7 @@ ST_tpVariable VM_recuperarValorArray(ST_tpArrayHeap *pArrayHeap, int posicao){
         case T_INT:
             pInt  = (int *)pArrayHeap->area;
             pInt += posicao;
-            memcpy(&(var.valor.Int), pInt, sizeof(pInt));
+            memcpy(&(var.valor.Int), pInt, sizeof(int));
             var.tipo = JINT;
             break;
         case T_DOUBLE:

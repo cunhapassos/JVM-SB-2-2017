@@ -91,7 +91,7 @@ static void print(ST_tpVariable *var) {
             printf("%d \n", var->valor.Int);
             break;
         case JLONG:
-            printf("%ld \n", var->valor.Long);
+            printf("%lld \n", var->valor.Long);
             break;
         case JFLOAT:
             printf("%f \n", var->valor.Float);
@@ -844,7 +844,7 @@ void FU_ifnull(ST_tpStackFrame *pFrame, u1 **PC){
 
     ST_tpVariable *var;
     u1 parametro1, parametro2;
-    u2 temp2Byte;
+    int16_t temp2Byte;
 
 
     (*PC)++;
@@ -864,7 +864,7 @@ void FU_ifnonnull(ST_tpStackFrame *pFrame, u1 **PC){
     
     ST_tpVariable *var;
     u1 parametro1, parametro2;
-    u2 temp2Byte;
+    int16_t temp2Byte;
     
     (*PC)++;
     memcpy(&parametro1, *PC, 1);
@@ -882,7 +882,7 @@ void FU_ifnonnull(ST_tpStackFrame *pFrame, u1 **PC){
 void FU_goto_w(u1 **PC){
 
     u1 parametro1, parametro2, parametro3, parametro4;
-    u4 temp4Byte;
+    int32_t temp4Byte;
     
     (*PC)++;
     memcpy(&parametro1, *PC, 1);
@@ -900,7 +900,7 @@ void FU_goto_w(u1 **PC){
 void FU_jsr_w(ST_tpStackFrame *pFrame, u1 **PC){
     ST_tpVariable *var = NULL;
     u1 parametro1, parametro2, parametro3, parametro4;
-    u4 temp4Byte;
+    int32_t temp4Byte;
     
     (*PC)++;
     memcpy(&parametro1, *PC, 1);
@@ -923,7 +923,7 @@ void FU_jsr_w(ST_tpStackFrame *pFrame, u1 **PC){
 void FU_sipush(ST_tpStackFrame *pFrame, u1 **PC){
     ST_tpVariable var;
     u1 parametro1, parametro2;
-    u2 temp2Byte;
+    int16_t temp2Byte;
     
     (*PC)++;
     memcpy(&parametro1, *PC, 1);
@@ -940,7 +940,6 @@ void FU_ldc(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC){
     int tipo, i;
     u1 parametro1;
     ST_tpVariable var, var1, var2;
-    ST_tpObjectHeap *pObjeto;
     ST_tpConstantPool *cpIndx;
     ST_tpClassFile *pClassFile;
     ST_tpCONSTANT_Utf8_info *pUTF8;
@@ -995,14 +994,14 @@ void FU_ldc(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC){
             
             var2.tipo = JREF;
             /* Verifica se objeto ja existe */
-            pObjeto = PL_buscaObjetoHeap(pJVM->heap->objects, nomeClasse);
-            if (pObjeto == NULL) {
+            //pObjeto = PL_buscaObjetoHeap(pJVM->heap->objects, nomeClasse);
+            //if (pObjeto == NULL) {
                 pClassFile = VM_carregarClasse(nomeClasse, pJVM);
                 var2.valor.obj_ref = VM_alocarMemoriaHeapObjeto(pJVM, pClassFile);
-            }
-            else{
-                var2.valor.obj_ref = pObjeto;
-            }
+            //}
+            //else{
+            //    var2.valor.obj_ref = pObjeto;
+            //}
             
             VM_armazenarValorField(pJVM, nomeClasse, "value", "[C", var1, var2);
         
@@ -1029,7 +1028,6 @@ void FU_ldc_w(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC){
     ST_tpClassFile *pClassFile;
     u1 parametro1, parametro2;
     ST_tpVariable var, var1, var2;
-    ST_tpObjectHeap *pObjeto;
     ST_tpConstantPool *cpIndx;
     ST_tpCONSTANT_Utf8_info *pUTF8;
     ST_tpCONSTANT_Float_info *pFloat;
@@ -1086,14 +1084,14 @@ void FU_ldc_w(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC){
             }
             
             /* Verifica se objeto ja existe */
-            pObjeto = PL_buscaObjetoHeap(pJVM->heap->objects, nomeClasse);
-            if (pObjeto == NULL) {
+            //pObjeto = PL_buscaObjetoHeap(pJVM->heap->objects, nomeClasse);
+            //if (pObjeto == NULL) {
             	pClassFile = VM_carregarClasse(nomeClasse, pJVM);
             	var2.valor.obj_ref = VM_alocarMemoriaHeapObjeto(pJVM, pClassFile);
-            }
-            else{
-                var2.valor.obj_ref = pObjeto;
-            }
+            //}
+            //else{
+            //    var2.valor.obj_ref = pObjeto;
+            //}
             
             VM_armazenarValorField(pJVM, nomeClasse, "value", "[C", var1, var2);
             
@@ -2188,7 +2186,7 @@ void FU_dcmpg(ST_tpStackFrame *pFrame){
 void FU_ifeq(ST_tpStackFrame *pFrame, u1 **PC){
     ST_tpVariable var;
     u1 parametro1, parametro2;
-    u2 temp2Byte;
+    int16_t temp2Byte;
 
     (*PC)++;
     memcpy(&parametro1, *PC, 1);
@@ -2206,7 +2204,7 @@ void FU_ifeq(ST_tpStackFrame *pFrame, u1 **PC){
 void FU_ifne(ST_tpStackFrame *pFrame, u1 **PC){
     ST_tpVariable var;
     u1 parametro1, parametro2;
-    u2 temp2Byte;
+    int16_t temp2Byte;
 
     (*PC)++;
     memcpy(&parametro1, *PC, 1);
@@ -2224,7 +2222,7 @@ void FU_ifne(ST_tpStackFrame *pFrame, u1 **PC){
 void FU_iflt(ST_tpStackFrame *pFrame, u1 **PC){
     ST_tpVariable var;
     u1 parametro1, parametro2;
-    u2 temp2Byte;
+    int16_t temp2Byte;
 
     (*PC)++;
     memcpy(&parametro1, *PC, 1);
@@ -2242,7 +2240,7 @@ void FU_iflt(ST_tpStackFrame *pFrame, u1 **PC){
 void FU_ifge(ST_tpStackFrame *pFrame, u1 **PC){
     ST_tpVariable var;
     u1 parametro1, parametro2;
-    u2 temp2Byte;
+    int16_t temp2Byte;
 
     (*PC)++;
     memcpy(&parametro1, *PC, 1);
@@ -2260,7 +2258,7 @@ void FU_ifge(ST_tpStackFrame *pFrame, u1 **PC){
 void FU_ifgt(ST_tpStackFrame *pFrame, u1 **PC){
     ST_tpVariable var;
     u1 parametro1, parametro2;
-    u2 temp2Byte;
+    int16_t temp2Byte;
 
     (*PC)++;
     memcpy(&parametro1, *PC, 1);
@@ -2278,7 +2276,7 @@ void FU_ifgt(ST_tpStackFrame *pFrame, u1 **PC){
 void FU_ifle(ST_tpStackFrame *pFrame, u1 **PC){
     ST_tpVariable var;
     u1 parametro1, parametro2;
-    u2 temp2Byte;
+    int16_t temp2Byte;
 
     (*PC)++;
     memcpy(&parametro1, *PC, 1);
@@ -2296,7 +2294,7 @@ void FU_ifle(ST_tpStackFrame *pFrame, u1 **PC){
 void FU_if_icmpeq(ST_tpStackFrame *pFrame, u1 **PC){
     ST_tpVariable var1, var2;
     u1 parametro1, parametro2;
-    u2 temp2Byte;
+    int16_t temp2Byte;
 
     (*PC)++;
     memcpy(&parametro1, *PC, 1);
@@ -2315,7 +2313,7 @@ void FU_if_icmpeq(ST_tpStackFrame *pFrame, u1 **PC){
 void FU_if_icmpne(ST_tpStackFrame *pFrame, u1 **PC){
     ST_tpVariable var1, var2;
     u1 parametro1, parametro2;
-    u2 temp2Byte;
+    int16_t temp2Byte;
 
     (*PC)++;
     memcpy(&parametro1, *PC, 1);
@@ -2334,7 +2332,7 @@ void FU_if_icmpne(ST_tpStackFrame *pFrame, u1 **PC){
 void FU_if_icmplt(ST_tpStackFrame *pFrame, u1 **PC){
     ST_tpVariable var1, var2;
     u1 parametro1, parametro2;
-    u2 temp2Byte;
+    int16_t temp2Byte;
 
     (*PC)++;
     memcpy(&parametro1, *PC, 1);
@@ -2353,7 +2351,7 @@ void FU_if_icmplt(ST_tpStackFrame *pFrame, u1 **PC){
 void FU_if_icmpge(ST_tpStackFrame *pFrame, u1 **PC){
     ST_tpVariable var1, var2;
     u1 parametro1, parametro2;
-    u2 temp2Byte;
+    int16_t temp2Byte;
 
     (*PC)++;
     memcpy(&parametro1, *PC, 1);
@@ -2372,7 +2370,7 @@ void FU_if_icmpge(ST_tpStackFrame *pFrame, u1 **PC){
 void FU_if_icmpgt(ST_tpStackFrame *pFrame, u1 **PC){
     ST_tpVariable var1, var2;
     u1 parametro1, parametro2;
-    u2 temp2Byte;
+    int16_t temp2Byte;
 
     (*PC)++;
     memcpy(&parametro1, *PC, 1);
@@ -2391,7 +2389,7 @@ void FU_if_icmpgt(ST_tpStackFrame *pFrame, u1 **PC){
 void FU_if_icmple(ST_tpStackFrame *pFrame, u1 **PC){
     ST_tpVariable var1, var2;
     u1 parametro1, parametro2;
-    u2 temp2Byte;
+    int16_t temp2Byte;
 
     (*PC)++;
     memcpy(&parametro1, *PC, 1);
@@ -2410,7 +2408,7 @@ void FU_if_icmple(ST_tpStackFrame *pFrame, u1 **PC){
 void FU_if_acmpeq(ST_tpStackFrame *pFrame, u1 **PC){
     ST_tpVariable var1, var2;
     u1 parametro1, parametro2;
-    u2 temp2Byte;
+    int16_t temp2Byte;
 
     (*PC)++;
     memcpy(&parametro1, *PC, 1);
@@ -2429,7 +2427,7 @@ void FU_if_acmpeq(ST_tpStackFrame *pFrame, u1 **PC){
 void FU_if_acmpne(ST_tpStackFrame *pFrame, u1 **PC){
     ST_tpVariable var1, var2;
     u1 parametro1, parametro2;
-    u2 temp2Byte;
+    int16_t temp2Byte;
     
     (*PC)++;
     memcpy(&parametro1, *PC, 1);
@@ -2448,17 +2446,13 @@ void FU_if_acmpne(ST_tpStackFrame *pFrame, u1 **PC){
 void FU_goto(ST_tpStackFrame *pFrame, u1 **PC){
 
     u1 parametro1, parametro2;
-    int8_t temp1, temp2;
     int16_t temp2Byte;
     
     (*PC)++;
     memcpy(&parametro1, *PC, 1);
     (*PC)++;
     memcpy(&parametro2, *PC, 1);
-    temp1 = (int8_t) parametro1;
-    temp2 = (int8_t) parametro2;
-    temp2Byte = (int16_t) (temp1 << 8);
-    temp2Byte = 256+temp2Byte + temp2;
+    temp2Byte = (parametro1 << 8) + parametro2;
     
     (*PC) += (temp2Byte - 3);
 }
@@ -2466,7 +2460,7 @@ void FU_goto(ST_tpStackFrame *pFrame, u1 **PC){
 void FU_jsr(ST_tpStackFrame *pFrame, u1 **PC){
     ST_tpVariable var;
     u1 parametro1, parametro2;
-    u2 temp2Byte;
+    int16_t temp2Byte;
     
     (*PC)++;
     memcpy(&parametro1, *PC, 1);
