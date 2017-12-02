@@ -279,11 +279,11 @@ ST_tpObjectHeap *VM_alocarMemoriaHeapObjeto(ST_tpJVM *pJVM, ST_tpClassFile *pCla
     ST_tpObjectHeap *pObjeto;
     ST_tpClassFile *pAuxClassFile1, *pAuxClassFile2;
     
-    /*
+    
     pObjeto = PL_buscaObjetoHeap(pJVM->heap->objects, pClassFile->nomeClasse);
     if(pObjeto != NULL){
         return pObjeto;
-    }*/
+    }
     
     pObjeto = (ST_tpObjectHeap *)malloc(sizeof(ST_tpObjectHeap));
     
