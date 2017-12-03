@@ -38,7 +38,7 @@ void VM_armazenarVariavel(ST_tpVariable *pVariaveisLocais, ST_tpVariable variave
 
 ST_tpVariable VM_recuperarVariavel(ST_tpVariable *pVariaveisLocais, int posicao);
 
-ST_tpStackFrame *VM_criarFrame(ST_tpJVM *pJVM, ST_tpStackFrame **pJVMStack, ST_tpClassFile *pClasse, ST_tpParameterStack *pilhaParametros, long maxStackSize, u2 access_flag);
+ST_tpStackFrame *VM_criarFrame(ST_tpJVM *pJVM, ST_tpStackFrame **pJVMStack, ST_tpClassFile *pClasse, ST_tpParameterStack *pilhaParametros, int maxStackSize, u2 access_flag);
 
 u1 *VM_retornaNomeSuperClasse(ST_tpClassFile *pClassFile);
 
@@ -79,6 +79,8 @@ ST_tpMethod_info *VM_procurarMetodo(ST_tpClassFile *pClassFile, char *descritorM
 void VM_UTF8paraString(ST_tpCONSTANT_Utf8_info *pUTF8, char *string);
 
 int VM_executarThrow(ST_tpException_table *pExceptionTable, ST_tpClassFile *pClassFile, ST_tpVariable refernciaObjeto,  u1 **pc, ST_tpOperandStack *pPilhaOperandos);
+
+int retornarTipoRetorno(u1 *descritor);
 
 #endif /* virtualMachine_h */
 

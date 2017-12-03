@@ -92,7 +92,7 @@ ST_tpVariable VM_recuperarVariavel(ST_tpVariable *pVariaveisLocais, int posicao)
  @param maxStackSize    - Numero máximo de variaveis que pode ser colocadas na pilha de variaveis locais
  @return                - Retorna o Frame criado
  */
-ST_tpStackFrame *VM_criarFrame(ST_tpJVM *pJVM, ST_tpStackFrame **pJVMStack, ST_tpClassFile *pClasse, ST_tpParameterStack *pilhaParametros, long maxStackSize, u2 access_flag){
+ST_tpStackFrame *VM_criarFrame(ST_tpJVM *pJVM, ST_tpStackFrame **pJVMStack, ST_tpClassFile *pClasse, ST_tpParameterStack *pilhaParametros, int maxStackSize, u2 access_flag){
     int i = 0;
     ST_tpVariable varTemporaria;
     ST_tpStackFrame *pFrame;
@@ -110,12 +110,12 @@ ST_tpStackFrame *VM_criarFrame(ST_tpJVM *pJVM, ST_tpStackFrame **pJVMStack, ST_t
      *   classe que contem o metodo corrente na         *
      *   posicao 0 do vetor de variaveis locais         *
      ****************************************************/
-    if ((access_flag & ACC_STATIC) != ACC_STATIC) {
+    /*if ((access_flag & ACC_STATIC) != ACC_STATIC) {
         varTemporaria.tipo          = JREF;
         varTemporaria.valor.obj_ref = 0;
         VM_armazenarVariavel(pFrame->localVariables, varTemporaria, 0);
         i = 1;
-    }
+    }*/
     
     /****************************************************
      *  Caso seja um metodo de instancia o this ocupa   *
@@ -142,9 +142,10 @@ ST_tpStackFrame *VM_criarFrame(ST_tpJVM *pJVM, ST_tpStackFrame **pJVMStack, ST_t
 }
 
 ST_tpVariable *VM_executarMetodo(ST_tpJVM *pJVM, ST_tpClassFile *pClasse, ST_tpParameterStack *pilhaParametros, ST_tpMethod_info *pMetodo){
-    int i, flag;
+    int i, flag, numeroVariaveis, tipoRetorno;
     u1 *end, *PC;
     char *name;
+    u1 *descritorMetodo;
     u2 nameIndex, access_flag;
     ST_tpStackFrame *pFrame;
     ST_tpVariable *pRetorno;
@@ -168,12 +169,14 @@ ST_tpVariable *VM_executarMetodo(ST_tpJVM *pJVM, ST_tpClassFile *pClasse, ST_tpP
         access_flag = pMetodo->access_flags;
         nameIndex   = pMetodo->attributes[i].attribute_name_index-1;
         name        = (char *) pClasse->constant_pool_table[nameIndex].info.Utf8.bytes;
-        
+       descritorMetodo = (pClasse->constant_pool_table[pMetodo->descriptor_index-1].info.Utf8.bytes);
+        tipoRetorno = retornarTipoRetorno(descritorMetodo);
+        pRetorno->tipo = tipoRetorno;
         
         if(strcmp(name, "Code") == 0){
-            
+            numeroVariaveis = ((ST_tpCode_attribute*)pMetodo->attributes[i].info)->max_locals;
             /* Cria uma Stack Frame */
-            pFrame = VM_criarFrame(pJVM, &(pJVM->thread->pJVMStack), pClasse, pilhaParametros,  ((ST_tpCode_attribute*)pMetodo->attributes[i].info)->max_stack, access_flag);
+            pFrame = VM_criarFrame(pJVM, &(pJVM->thread->pJVMStack), pClasse, pilhaParametros,  numeroVariaveis, access_flag);
             
             
             // EXECUTAR CODIGO //
@@ -220,7 +223,10 @@ ST_tpVariable *VM_executarMetodo(ST_tpJVM *pJVM, ST_tpClassFile *pClasse, ST_tpP
 
             while(PC <= end){
                 flag = IT_executaInstrucao(pJVM, &pFrame, &pRetorno, pCode->exception_table, &PC);
-                if (flag == 1) break; // Testa se está vindo de um return
+                if (flag == 1){
+                    PC = end;
+                    break; // Testa se está vindo de um return
+                }
                 PC++;
             }
 
@@ -279,11 +285,11 @@ ST_tpObjectHeap *VM_alocarMemoriaHeapObjeto(ST_tpJVM *pJVM, ST_tpClassFile *pCla
     ST_tpObjectHeap *pObjeto;
     ST_tpClassFile *pAuxClassFile1, *pAuxClassFile2;
     
-    
+    /*
     pObjeto = PL_buscaObjetoHeap(pJVM->heap->objects, pClassFile->nomeClasse);
     if(pObjeto != NULL){
         return pObjeto;
-    }
+    }*/
     
     pObjeto = (ST_tpObjectHeap *)malloc(sizeof(ST_tpObjectHeap));
     
@@ -440,12 +446,18 @@ void VM_armazenarValorArray(ST_tpArrayHeap *pArray, int posicao, ST_tpVariable v
         case T_REF:
             pObjRef  = (ST_tpObjectHeap *)pArray->area;
             pObjRef += posicao;
-            memcpy((void *)pObjRef, (void *)&variavel.valor.obj_ref, sizeof(variavel.valor.obj_ref));
+            if (variavel.valor.obj_ref == NULL) {
+                pObjRef = NULL;
+            }
+            else{
+                memcpy((void *)pObjRef, (void *)variavel.valor.obj_ref, sizeof(ST_tpObjectHeap));
+                
+            }
             break;
         case T_AREF:
             pArrayRef  = (ST_tpArrayHeap *)pArray->area;
             pArrayRef += posicao;
-            memcpy((void *)pArrayRef, (void *)&variavel.valor.array_ref, sizeof(variavel.valor.array_ref));
+            memcpy((void *)pArrayRef, (void *)variavel.valor.array_ref, sizeof(ST_tpArrayHeap));
             break;
     }
 }
@@ -456,7 +468,7 @@ ST_tpArrayHeap *alocarMemoriaArrayMulti(char *nomeClasse, ST_tpOperandStack *pPi
     ST_tpArrayHeap *pArray, *pArray1;
     ST_tpVariable *var, varAux;
     
-    
+    nomeClasse = malloc(sizeof(char)*strlen(nomeClasse));
     aux = strchr(nomeClasse, '[');
     
     if (aux == 0) {
@@ -520,6 +532,40 @@ int retornarTipoString(char *string){
     }
     return 0;
 }
+
+int retornarTipoRetorno(u1 *descritor){
+    char aux;
+    int i = 0;
+    do {
+        aux = descritor[i];
+        i++;
+    } while (aux != ')');
+    
+    aux = descritor[i];
+    switch (aux) {
+        case 'B':
+            return 8;
+        case 'C':
+            return 5;
+        case 'D':
+            return 7;
+        case 'F':
+            return 6;
+        case 'I':
+            return 10;
+        case 'J':
+            return 11;
+        case 'L':
+            return 12;
+        case 'S':
+            return 9;
+        case 'Z':
+            return 4;
+        case 'V':
+            return 5;
+    }
+    return 5;
+}
 ST_tpVariable VM_recuperarValorArray(ST_tpArrayHeap *pArrayHeap, int posicao){
     
     u2 *pChar;
@@ -540,61 +586,64 @@ ST_tpVariable VM_recuperarValorArray(ST_tpArrayHeap *pArrayHeap, int posicao){
             pByte  = (char*)pArrayHeap->area;
             pByte += posicao;
             var.tipo = JBYTE;
-            memcpy(&(var.valor.Byte), pByte, sizeof(pInt));
+            memcpy((void *)&(var.valor.Byte), (void *)pByte, sizeof(var.valor.Byte));
             break;
         case T_LONG:
             pLong  = (__int64_t *)pArrayHeap->area;
             pLong += posicao;
             var.tipo = JLONG;
-            memcpy(&(var.valor.Long), pLong, sizeof(pInt));
+            memcpy((void *)&(var.valor.Long), (void *)pLong, sizeof(var.valor.Long));
             break;
         case T_BOOLEAN:
             pBoolean  = (char*) pArrayHeap->area;
             pBoolean += posicao;
             var.tipo = JBOOL;
-            memcpy(&(var.valor.Boolean), pBoolean, sizeof(pInt));
+            memcpy((void *)&(var.valor.Boolean), (void *)pBoolean, sizeof(var.valor.Boolean));
             break;
         case T_CHAR:
             pChar  = (u2*)pArrayHeap->area;
             pChar += posicao;
             var.tipo = JCHAR;
-            memcpy(&(var.valor.Char), pChar, sizeof(pInt));
+            memcpy((void *)&(var.valor.Char), (void *)pChar, sizeof(var.valor.Char));
             break;
         case T_SHORT:
             pShort  = (short int  *)pArrayHeap->area;
             pShort += posicao;
             var.tipo = JSHORT;
-            memcpy(&(var.valor.Short), pShort, sizeof(pInt));
+            memcpy((void *)&(var.valor.Short), (void *)pShort, sizeof(var.valor.Short));
             break;
         case T_FLOAT:
             pFloat  = (float *)pArrayHeap->area;
             pFloat += posicao;
             var.tipo = JFLOAT;
-            memcpy(&(var.valor.Float), pFloat, sizeof(pInt));
+            memcpy((void *)&(var.valor.Float), (void *)pFloat, sizeof(var.valor.Float));
             break;
         case T_INT:
             pInt  = (int *)pArrayHeap->area;
             pInt += posicao;
-            memcpy(&(var.valor.Int), pInt, sizeof(int));
+            memcpy((void *)&(var.valor.Int), (void *)pInt, sizeof(var.valor.Int));
             var.tipo = JINT;
             break;
         case T_DOUBLE:
             pDouble  = (double *)pArrayHeap->area;
             pDouble += posicao;
             var.tipo = JDOUBLE;
-            memcpy(&(var.valor.Double), pDouble, sizeof(pInt));
+            memcpy((void *)&(var.valor.Double), (void *)pDouble, sizeof(var.valor.Double));
             break;
         case T_REF:
-            pObjRef  = (ST_tpObjectHeap *)pArrayHeap->area;
-            pObjRef += posicao;
+            
+            pObjRef  = (ST_tpObjectHeap *)pArrayHeap->area + posicao;
+            //pObjRef += posicao;
             var.tipo = JREF;
-            memcpy(&(var.valor.obj_ref), pObjRef, sizeof(pInt));
+            var.valor.obj_ref = (ST_tpObjectHeap *) malloc(sizeof(ST_tpObjectHeap));
+            memcpy((void*)var.valor.obj_ref, (void*)pObjRef, sizeof(ST_tpObjectHeap));
             break;
         case T_AREF:
             pArrayRef  = (ST_tpArrayHeap *)pArrayHeap->area;
             pArrayRef += posicao;
             var.tipo = JAREF;
-            memcpy(&(var.valor.array_ref), pArrayRef, sizeof(pInt));
+            var.valor.array_ref = (ST_tpArrayHeap*) malloc(sizeof(ST_tpArrayHeap));
+            memcpy((void*)var.valor.array_ref, (void*)pArrayRef, sizeof(ST_tpArrayHeap));
             break;
     }
     return var;
@@ -610,7 +659,7 @@ void *VM_armazenarValorField(ST_tpJVM *pJVM, char *pClassName, char *pFieldName,
     pNomeClasse = (char *)malloc(strlen(pClassName)+2);
     
     strcpy(pNomeClasse, pClassName);
-
+    
     if(objRef.valor.obj_ref == 0){
         return NULL; // Lancar um erro
     }
@@ -645,8 +694,7 @@ void *VM_armazenarValorField(ST_tpJVM *pJVM, char *pClassName, char *pFieldName,
             break;
         }
         if (pClassFile->super_class == 0) {
-            printf("ERRO! FIELD NAO ENCONTRADO!");
-            return NULL;
+            break;
         }
         else{
             strcpy(pNomeClasse, pClassFile->nomeSuperClasse);
@@ -677,7 +725,6 @@ ST_tpVariable *VM_recuperarValorField(ST_tpJVM *pJVM, char *pClassName, char *pF
     strcpy(pNomeClasse, pClassName);
     
     if(objRef->valor.obj_ref == 0){
-        printf("ERRO! Objeto nao existe!");
         return NULL; // Lancar um erro
     }
 
@@ -720,7 +767,7 @@ ST_tpVariable *VM_recuperarValorField(ST_tpJVM *pJVM, char *pClassName, char *pF
     }
     
     pHeap = (ST_tpObjectHeap *)objRef->valor.obj_ref;
-    
+    var = (ST_tpVariable*)malloc(sizeof(ST_tpVariable));
     memcpy(var, (pHeap->field_area + i), sizeof(ST_tpVariable));
     
     return var;
@@ -975,15 +1022,15 @@ ST_tpJVM *VM_exucutarJVM(int numeroClasses, char *nomeClasses[]){
     VM_executarMetodo(pJVM, pSystemCLass, pSystemStack, pInicializeMethod);
     */
     /* Carregando classes na JVM */
-    for(i = 0; i < numeroClasses; i++){
+    /*for(i = 0; i < numeroClasses; i++){
         pClasse = VM_carregarClasse(nomeClasses[i], pJVM);
-    }
+    }*/
 
     /* Procurando a primeira classe que tem o main */
     for(i = 0 ; i < numeroClasses; i++){
-        pClasse = LE_lerClasse(nomeClasses[i]);
+        //pClasse = LE_lerClasse(nomeClasses[i]);
         //pMetodo = VM_procurarMetodo( pClasse, "()V", "<init>");
-
+        pClasse = VM_carregarClasse(nomeClasses[i], pJVM);
         PL_esvaziarPilhaParametros(&pJVM->thread->pJVMStack->parameterStack);
         
         pMetodo = VM_procurarMetodo( pClasse, "([Ljava/lang/String;)V", "main");

@@ -1,4 +1,4 @@
-/** ********************************************************************************
+ /** ********************************************************************************
  *
  *  Universidade de Brasilia - 02/2017
  *    Software Basico - Turma A
@@ -23,41 +23,46 @@
 #include "pilhas_listas.h"
 #include <limits.h>
 
-void FU_printArray(ST_tpVariable *var){
-    for (int i = 0 ; i < var->valor.array_ref->length; i++) {
-        switch (var->valor.array_ref->type) {
-            case T_BOOLEAN:
-                printf("%s", (*(int*)(var->valor.array_ref->area+sizeof(char)*i) == 0) ? "FALSE" :"TRUE");
-                break;
-            case T_CHAR:
-                printf("%c", *(char*)(var->valor.array_ref->area+sizeof(u2)*i));
-                break;
-            case T_FLOAT:
-                printf("%f", *(float*)(var->valor.array_ref->area+sizeof(float)*i));
-                break;
-            case T_DOUBLE:
-                printf("%lf", *(double*)(var->valor.array_ref->area+sizeof(double)*i));
-                break;
-            case T_BYTE:
-                printf("%02X", *(int*)(var->valor.array_ref->area+sizeof(char)*i));
-                break;
-            case T_SHORT:
-                printf("%d", *(short*)(var->valor.array_ref->area+sizeof(short int)*i));
-                break;
-            case T_INT:
-                printf("%d", *(int*)(var->valor.array_ref->area+sizeof(int)*i));
-                break;
-            case T_LONG:
-                printf("%ld", *(long*)(var->valor.array_ref->area+sizeof(__int64_t)*i));
-                break;
-            case T_REF:
-                printf("Nao implementado!");
-                break;
-            case T_AREF:
-                printf("Nao implementado!");
-                break;
+void FU_printString(ST_tpVariable *var){
+    if (var->valor.array_ref != NULL) {
+        for (int i = 0 ; i < var->valor.array_ref->length; i++) {
+            switch (var->valor.array_ref->type) {
+                case T_BOOLEAN:
+                    printf("%s", (*(int*)(var->valor.array_ref->area+sizeof(char)*i) == 0) ? "FALSE" :"TRUE");
+                    break;
+                case T_CHAR:
+                    printf("%c", *(char*)(var->valor.array_ref->area+sizeof(u2)*i));
+                    break;
+                case T_FLOAT:
+                    printf("%f", *(float*)(var->valor.array_ref->area+sizeof(float)*i));
+                    break;
+                case T_DOUBLE:
+                    printf("%lf", *(double*)(var->valor.array_ref->area+sizeof(double)*i));
+                    break;
+                case T_BYTE:
+                    printf("%02X", *(int*)(var->valor.array_ref->area+sizeof(char)*i));
+                    break;
+                case T_SHORT:
+                    printf("%d", *(short*)(var->valor.array_ref->area+sizeof(short int)*i));
+                    break;
+                case T_INT:
+                    printf("%d", *(int*)(var->valor.array_ref->area+sizeof(int)*i));
+                    break;
+                case T_LONG:
+                    printf("%ld", *(long*)(var->valor.array_ref->area+sizeof(__int64_t)*i));
+                    break;
+                case T_REF:
+                    printf("Nao implementado!");
+                    
+                    //FU_printArray((ST_tpVariable*)(var->valor.array_ref->area));
+                    break;
+                case T_AREF:
+                    printf("Nao implementado!");
+                    break;
+            }
         }
     }
+   
 }
 static void print(ST_tpVariable *var) {
     switch (var->tipo) {
@@ -80,12 +85,15 @@ static void print(ST_tpVariable *var) {
             break;
         case JREF:
             if(!strcmp(var->valor.obj_ref->className, "java/lang/String")) {
-                FU_printArray(var->valor.obj_ref->field_area);
+                FU_printString(var->valor.obj_ref->field_area);
                 printf("\n");
             }
             break;
         case JAREF:
-            FU_printArray(var);
+            if(!strcmp(var->valor.obj_ref->className, "java/lang/String")) {
+                FU_printString(var->valor.obj_ref->field_area);
+                printf("\n");
+            }
             break;
         case JINT:
             printf("%d \n", var->valor.Int);
@@ -112,6 +120,7 @@ int FU_invokevirtual(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC, ST_tpVari
     ST_tpCp_info *pConstantPool;
     ST_tpMethod_info *pMetodoInfo;
     ST_tpCONSTANT_NameAndType_info *nameTyperef;
+    ST_tpParameterStack *novaPilhaParametros = NULL;
         //char *nomeClasse = NULL, *nomeMetodo, *descritorMetodo;
     ST_tpCONSTANT_Utf8_info *pClasseName = NULL, *pMethodName, *pMethodDescriptor;
     u2 temp2Byte, pClasseIndex, pNameAndTypeIndex,pNomeMetodoIndex, pDescritorMetodoIndex;
@@ -181,19 +190,25 @@ int FU_invokevirtual(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC, ST_tpVari
         }
         else{
             /* Retira valores da pilha de operandos e passa para a pilha de parametros */
+            
             while( count != 0 && pFrame->operandStack != NULL) {
-                PL_pushParametro(&pFrame->parameterStack, *PL_popOperando(&pFrame->operandStack));
+                PL_pushParametro(&novaPilhaParametros, *PL_popOperando(&pFrame->operandStack));
                 count --;
             }
             if(strcmp((char *) (pMethodName->bytes), "println" ) == 0){
             	if((char)(pMethodDescriptor->bytes[1]) == ')'){
             		printf("\n");
             	} else {
-            		var = PL_popParametro(&pFrame->parameterStack);
+            		var = PL_popParametro(&novaPilhaParametros);
             		print(var);
             	}
             }else{
-                *Retorno = VM_executarMetodo(pJVM, pClassFile, pFrame->parameterStack, pMetodoInfo);
+                count++;
+                while( count != 0 && pFrame->operandStack != NULL) {
+                    PL_pushParametro(&novaPilhaParametros, *PL_popOperando(&pFrame->operandStack));
+                    count --;
+                }
+                *Retorno = VM_executarMetodo(pJVM, pClassFile, novaPilhaParametros, pMetodoInfo);
             }
         }
 
@@ -225,6 +240,7 @@ int FU_invokespecial(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC, ST_tpVari
     ST_tpCp_info *pConstantPool;
     ST_tpMethod_info *pMetodoInfo;
     ST_tpCONSTANT_NameAndType_info *nameTyperef;
+    ST_tpParameterStack *novaPilhaParametros = NULL;
     ST_tpCONSTANT_Utf8_info *pClasseName = NULL, *pMethodName, *pMethodDescriptor;
     u2 temp2Byte, pClasseIndex, pNameAndTypeIndex,pNomeMetodoIndex, pDescritorMetodoIndex;
 
@@ -287,11 +303,15 @@ int FU_invokespecial(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC, ST_tpVari
         }
         else{
             /* Retira todos os valores da pilha de operandos e passa para a pilha de parametros */
+            count++;
             while( count != 0 && pFrame->operandStack != NULL) {
-                PL_pushParametro(&pFrame->parameterStack, *PL_popOperando(&pFrame->operandStack));
+                PL_pushParametro(&novaPilhaParametros, *PL_popOperando(&pFrame->operandStack));
                 count --;
             }
-            *Retorno = VM_executarMetodo(pJVM, pClassFile, pFrame->parameterStack, pMetodoInfo);
+            *Retorno = VM_executarMetodo(pJVM, pClassFile, novaPilhaParametros, pMetodoInfo);
+            /*while (pFrame->parameterStack != NULL) {
+                PL_pushOperando(&pFrame->operandStack, *PL_popParametro(&pFrame->parameterStack));
+            }*/
         }
         
         if((*Retorno)->tipo != JVOID ){
@@ -322,6 +342,7 @@ int FU_invokestatic(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC, ST_tpVaria
     ST_tpCp_info *pConstantPool;
     ST_tpMethod_info *pMetodoInfo;
     ST_tpVariable *varTemp = NULL;
+    ST_tpParameterStack *novaPilhaParametros = NULL;
     ST_tpCONSTANT_NameAndType_info *nameTyperef;
     ST_tpCONSTANT_Utf8_info *pClasseName = NULL, *pMethodName, *pMethodDescriptor;
     u2 temp2Byte, pClasseIndex, pNameAndTypeIndex,pNomeMetodoIndex, pDescritorMetodoIndex;
@@ -382,11 +403,11 @@ int FU_invokestatic(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC, ST_tpVaria
             /* Retira todos os valores da pilha de operandos e passa para a pilha de parametros */
             while( count != 0 && pFrame->operandStack != NULL) {
                 varTemp =  PL_popOperando(&pFrame->operandStack);
-                PL_pushParametro(&pFrame->parameterStack, *varTemp);
+                PL_pushParametro(&novaPilhaParametros, *varTemp);
                 count --;
             }
             
-            *Retorno = VM_executarMetodo(pJVM, pClassFile, pFrame->parameterStack, pMetodoInfo);
+            *Retorno = VM_executarMetodo(pJVM, pClassFile, novaPilhaParametros, pMetodoInfo);
         }
 
         if((*Retorno)->tipo != JVOID ){
@@ -418,6 +439,7 @@ int FU_invokeinterface(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC, ST_tpVa
     ST_tpCp_info *pConstantPool;
     ST_tpMethod_info *pMetodoInfo;
     ST_tpCONSTANT_NameAndType_info *nameTyperef;
+    ST_tpParameterStack *novaPilhaParametros = NULL;
     ST_tpCONSTANT_Utf8_info *pClasseName = NULL, *pMethodName, *pMethodDescriptor;
     u2 temp2Byte, pClasseIndex, pNameAndTypeIndex,pNomeMetodoIndex, pDescritorMetodoIndex;
     
@@ -490,10 +512,10 @@ int FU_invokeinterface(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC, ST_tpVa
         else{
             /* Retira todos os valores da pilha de operandos e passa para a pilha de parametros */
             while( aux != 0 && pFrame->operandStack != NULL) {
-                PL_pushParametro(&pFrame->parameterStack, *PL_popOperando(&pFrame->operandStack));
+                PL_pushParametro(&novaPilhaParametros, *PL_popOperando(&pFrame->operandStack));
                 aux --;
             }
-            *Retorno = VM_executarMetodo(pJVM, pClassFile, pFrame->parameterStack, pMetodoInfo);
+            *Retorno = VM_executarMetodo(pJVM, pClassFile, novaPilhaParametros, pMetodoInfo);
         }
         
         if((*Retorno)->tipo != JVOID ){
@@ -839,7 +861,37 @@ void FU_wide(ST_tpStackFrame *pFrame, u1 **PC){
             PL_pushOperando(&pFrame->operandStack, var);
     }
 }
-
+void FU_multianewarray(ST_tpStackFrame *pFrame, u1 **PC){
+    ST_tpVariable *var, *var1 = NULL;
+    u1 parametro1, parametro2, parametro3;
+    ST_tpCp_info *pConstantPool;
+    u4 *pClasseNameIndex;
+    int16_t temp2Byte;
+    char *tem_ptr;
+    
+    
+    (*PC)++;
+    memcpy(&parametro1, *PC, 1);
+    (*PC)++;
+    memcpy(&parametro2, *PC, 1);
+    temp2Byte = (parametro1 << 8) + parametro2;
+    
+    pConstantPool         = pFrame->cp->constant_pool_table;
+    pClasseNameIndex          = &pConstantPool[temp2Byte -1].info.Class.name_index;
+    
+    tem_ptr = strchr((char *)pClasseNameIndex, '[');
+    tem_ptr++;
+    
+    (*PC)++;
+     memcpy(&parametro3, *PC, 1);
+    
+    var = PL_popOperando(&pFrame->operandStack);
+    var1->valor.array_ref = alocarMemoriaArrayMulti(tem_ptr, pFrame->operandStack, var->valor.Int);
+    
+    var1->tipo = JAREF;
+    
+    PL_pushOperando(&pFrame->operandStack, *var1);
+}
 void FU_ifnull(ST_tpStackFrame *pFrame, u1 **PC){
 
     ST_tpVariable *var;
@@ -1005,11 +1057,11 @@ void FU_ldc(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC){
             
             VM_armazenarValorField(pJVM, nomeClasse, "value", "[C", var1, var2);
         
-           // var.valor.Int = 0;
-           // VM_armazenarValorField(pJVM, nomeClasse, "offset", "I", var, var2);
+            //var.valor.Int = 0;
+            //VM_armazenarValorField(pJVM, nomeClasse, "offset", "I", var, var2);
         
-           // var.valor.Int = i;
-           // VM_armazenarValorField(pJVM, nomeClasse, "count", "I", var, var2);
+            //var.valor.Int = i;
+            //VM_armazenarValorField(pJVM, nomeClasse, "count", "I", var, var2);
         
             pString->StringObject = (ST_tpObjectHeap *) var2.valor.obj_ref;
         
@@ -1224,11 +1276,11 @@ void FU_bipush(ST_tpStackFrame *pFrame, u1 **PC){
 
 void FU_pushNull(ST_tpStackFrame *pFrame) {
 
-    ST_tpVariable var;
+    ST_tpVariable *var = (ST_tpVariable*) malloc(sizeof(ST_tpVariable));
     
-    var.valor.obj_ref = 0;
-    var.tipo = JREF;
-    PL_pushOperando(&pFrame->operandStack, var);
+    var->valor.obj_ref = 0;
+    var->tipo = JREF;
+    PL_pushOperando(&pFrame->operandStack, *var);
 }
 
 
@@ -1378,6 +1430,7 @@ void FU_aload_n(ST_tpStackFrame *pFrame, int index) {
 
     var = VM_recuperarVariavel(pFrame->localVariables,  index);
     var.tipo = JREF;
+    
     PL_pushOperando(&pFrame->operandStack, var);
 }
 
@@ -1432,7 +1485,7 @@ void FU_aaload(ST_tpStackFrame *pFrame){
 
     val = VM_recuperarValorArray (var2.valor.array_ref , var1.valor.Int);
     val.tipo=JAREF;
-    
+    //print(&val);
     PL_pushOperando(&pFrame->operandStack, val);
 }
 
@@ -2838,11 +2891,13 @@ void FU_dreturn(ST_tpStackFrame *pFrame, ST_tpVariable **Retorno){
     (*Retorno)->tipo = JDOUBLE;
 }
 
-void FU_areturn(ST_tpStackFrame *pFrame, ST_tpVariable **Retorno){
+int FU_areturn(ST_tpStackFrame *pFrame, ST_tpVariable **Retorno){
     *Retorno = PL_popOperando(&pFrame->operandStack);
     if ((*Retorno)->valor.obj_ref != 0) {
         (*Retorno)->valor.obj_ref->ref_count++;
+        return 1;
     }
+    return 1;
     // Sair do metodo
 }
 
@@ -2882,7 +2937,6 @@ void FU_getstatic(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC){
     descritorField = (char *) pCPInfo[index2 - 1].info.Utf8.bytes;
 
     var = *VM_recuperarValorStaticField(pJVM, nomeClasse, nomeField, descritorField);
-
     PL_pushOperando(&pFrame->operandStack, var);
 
 }
@@ -2938,7 +2992,7 @@ void FU_putstatic(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC){
     VM_armazenarValorStaticField(pJVM, nomeClasse, nomeField, descritorField, *var1);
 
 }
-void FU_getfield(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC){
+int FU_getfield(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC){
 
     ST_tpVariable *var = NULL, *var1;
     ST_tpCp_info *pCPInfo;
@@ -2977,8 +3031,13 @@ void FU_getfield(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC){
     var1 = PL_popOperando(&pFrame->operandStack);
 
     var = VM_recuperarValorField(pJVM, nomeClasse, nomeField, descritorField, var1);
-
-    PL_pushOperando(&pFrame->operandStack, *var);
+    if (var == NULL) {
+        return 1;
+    }
+    else{
+        PL_pushOperando(&pFrame->operandStack, *var);
+        return 0;
+    }
 }
 
 void FU_putfield(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC){
@@ -3020,6 +3079,7 @@ void FU_putfield(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC){
     var1 = (ST_tpVariable *)malloc(sizeof(ST_tpVariable));
     
     memcpy((void*) var1, PL_popOperando(&pFrame->operandStack), sizeof(ST_tpVariable));
+    memcpy((void*) var2, PL_popOperando(&pFrame->operandStack), sizeof(ST_tpVariable));
     
     if(var1->tipo == JBOOL || var1->tipo == JBYTE || var1->tipo == JSHORT){
         if(var1->tipo == JBOOL) var2->valor.Int = var1->valor.Boolean;

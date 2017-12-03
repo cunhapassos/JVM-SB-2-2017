@@ -640,7 +640,7 @@ ST_tpAttribute_info *LE_lerAttribute(FILE *pArq, ST_tpCp_info *cp, ST_tpAttribut
      
      index   = arqPontoClass->constant_pool_table[arqPontoClass->this_class - 1].info.Class.name_index;
      tamanho = arqPontoClass->constant_pool_table[index - 1].info.Utf8.length;
-     memcpy(&arqPontoClass->nomeClasse, &(arqPontoClass->constant_pool_table[index - 1].info.Utf8.bytes), tamanho + 1);
+     memcpy((void *)&arqPontoClass->nomeClasse, (void*)&(arqPontoClass->constant_pool_table[index - 1].info.Utf8.bytes), tamanho + 1);
      
      
      //wprintf(L"%s", arqPontoClass->nomeClasse);
@@ -650,7 +650,7 @@ ST_tpAttribute_info *LE_lerAttribute(FILE *pArq, ST_tpCp_info *cp, ST_tpAttribut
          index   = arqPontoClass->constant_pool_table[arqPontoClass->super_class - 1].info.Class.name_index;
          tamanho = arqPontoClass->constant_pool_table[index - 1].info.Utf8.length;
          
-         memcpy(&arqPontoClass->nomeSuperClasse, &(arqPontoClass->constant_pool_table[index - 1].info.Utf8.bytes), tamanho + 1);
+         memcpy((void *)&arqPontoClass->nomeSuperClasse, (void *)&(arqPontoClass->constant_pool_table[index - 1].info.Utf8.bytes), tamanho + 1);
      }
      
      //wprintf(L"%s", arqPontoClass->nomeSuperClasse);

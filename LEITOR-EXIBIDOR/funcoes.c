@@ -145,6 +145,7 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame **pFrame, ST_tpVariable 
         *******************************************************************************************/
         case 0x06:
             FU_pushConstInt(*pFrame, 3);
+
             break;
 
 
@@ -163,6 +164,7 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame **pFrame, ST_tpVariable 
         *******************************************************************************************/
         case 0x07:
             FU_pushConstInt(*pFrame, 4);
+ 
             break;
 
 
@@ -363,6 +365,7 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame **pFrame, ST_tpVariable 
         *******************************************************************************************/
         case 0x12:
             FU_ldc(pJVM, *pFrame, PC);
+            //FU_printString((*pFrame)->operandStack->variable.valor.obj_ref->field_area);
             break;
 
 
@@ -3134,7 +3137,7 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame **pFrame, ST_tpVariable 
 
         *******************************************************************************************/
         case 0xb0:
-            FU_areturn(*pFrame, Retorno);
+            flag = FU_areturn(*pFrame, Retorno);
             break;
         /********************************************************************************************
         
@@ -3204,7 +3207,7 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame **pFrame, ST_tpVariable 
 
         *******************************************************************************************/
         case 0xb4:
-            FU_getfield(pJVM, *pFrame, PC);
+            flag = FU_getfield(pJVM, *pFrame, PC);
             break;
         /********************************************************************************************
         
@@ -3503,8 +3506,7 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame **pFrame, ST_tpVariable 
 
         *******************************************************************************************/
         case 0xc5:
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+            FU_multianewarray(*pFrame, PC);
             break;
 
 

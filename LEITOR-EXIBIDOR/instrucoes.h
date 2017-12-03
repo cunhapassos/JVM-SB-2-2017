@@ -59,6 +59,8 @@ void FU_monitorexit(ST_tpStackFrame *pFrame);
 
 void FU_wide(ST_tpStackFrame *pFrame, u1 **pc);
 
+void FU_multianewarray(ST_tpStackFrame *pFrame, u1 **PC);
+
 void FU_ifnull(ST_tpStackFrame *pFrame, u1 **pc);
 
 void FU_ifnonnull(ST_tpStackFrame *pFrame, u1 **pc);
@@ -319,9 +321,9 @@ void FU_freturn(ST_tpStackFrame *pFrame, ST_tpVariable **Retorno);
 
 void FU_dreturn(ST_tpStackFrame *pFrame, ST_tpVariable **Retorno);
 
-void FU_areturn(ST_tpStackFrame *pFrame, ST_tpVariable **Retorno);
+int FU_areturn(ST_tpStackFrame *pFrame, ST_tpVariable **Retorno);
 
-void FU_getfield(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc);
+int FU_getfield(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc);
 
 void FU_putfield(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **pc);
 
@@ -350,4 +352,12 @@ void FU_ixor(ST_tpStackFrame *pFrame);
 void FU_lxor(ST_tpStackFrame *pFrame);
 
 void FU_iinc(ST_tpStackFrame *pFrame, u1 **pc);
+
+void FU_printString(ST_tpVariable *var);
+
+static void print(ST_tpVariable *var);
+
+ST_tpArrayHeap *alocarMemoriaArrayMulti(char *nomeClasse, ST_tpOperandStack *pPilhaOperandos, int dimensao);
+
+
 #endif /* instrucoes_h */
