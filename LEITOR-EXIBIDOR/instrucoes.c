@@ -99,7 +99,7 @@ static void print(ST_tpVariable *var) {
             printf("%d \n", var->valor.Int);
             break;
         case JLONG:
-            printf("%lld \n", var->valor.Long);
+            printf("%lld \n", (long long int)var->valor.Long);
             break;
         case JFLOAT:
             printf("%f \n", var->valor.Float);
@@ -2826,6 +2826,9 @@ void FU_ireturn(ST_tpStackFrame *pFrame, ST_tpVariable **Retorno){
     else if (pTempRetorno.tipo == JCHAR){
         (*Retorno)->valor.Int = (int) pTempRetorno.valor.Char;
     }
+    else if (pTempRetorno.tipo == JINT){
+		(*Retorno)->valor.Int = (int) pTempRetorno.valor.Int;
+	}
     (*Retorno)->tipo = JINT;
     // Sair do metodo
 }
@@ -2844,6 +2847,9 @@ void FU_lreturn(ST_tpStackFrame *pFrame, ST_tpVariable **Retorno){
     }
     else if (pTempRetorno.tipo == JDOUBLE){
         (*Retorno)->valor.Long = (int64_t) pTempRetorno.valor.Double;
+    }
+    else if (pTempRetorno.tipo == JLONG){
+		(*Retorno)->valor.Long = (int64_t) pTempRetorno.valor.Long;
     }
 
 
@@ -2866,6 +2872,9 @@ void FU_freturn(ST_tpStackFrame *pFrame, ST_tpVariable **Retorno){
     else if (pTempRetorno.tipo == JLONG){
         (*Retorno)->valor.Float = (float) pTempRetorno.valor.Long;
     }
+    else if (pTempRetorno.tipo == JFLOAT){
+		(*Retorno)->valor.Float = (float) pTempRetorno.valor.Float;
+	}
 
     (*Retorno)->tipo = JFLOAT;
 }
@@ -2887,6 +2896,9 @@ void FU_dreturn(ST_tpStackFrame *pFrame, ST_tpVariable **Retorno){
     else if (pTempRetorno.tipo == JLONG){
         (*Retorno)->valor.Double = (double) pTempRetorno.valor.Long;
     }
+    else if (pTempRetorno.tipo == JDOUBLE){
+		(*Retorno)->valor.Double = (double) pTempRetorno.valor.Double;
+	}
 
     (*Retorno)->tipo = JDOUBLE;
 }
