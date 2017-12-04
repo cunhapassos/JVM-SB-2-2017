@@ -468,18 +468,17 @@ ST_tpArrayHeap *alocarMemoriaArrayMulti(char *nomeClasse, ST_tpOperandStack *pPi
     ST_tpArrayHeap *pArray, *pArray1;
     ST_tpVariable *var, varAux;
     
-    nomeClasse = malloc(sizeof(char)*strlen(nomeClasse));
     aux = strchr(nomeClasse, '[');
-    
+
     if (aux == 0) {
         tipo = retornarTipoString(nomeClasse);
-        if (tipo == T_REF) {
-            aux = nomeClasse;
-            aux++;
-            memset(nome, 0, strlen(aux));
-            memcpy((void *) nome, (void *) nomeClasse, strlen(aux)-1);
-        }
-        pArray = VM_criarArray(tipo, nome, dimensao);
+//        if (tipo == T_REF) {
+//            aux = nomeClasse;
+//            aux++;
+//            memset(nome, 0, strlen(aux));
+//            memcpy((void *) nome, (void *) nomeClasse, strlen(aux)-1);
+//        }
+        pArray = VM_criarArray(tipo, nomeClasse, dimensao);
         
         return pArray;
     }
@@ -495,7 +494,7 @@ ST_tpArrayHeap *alocarMemoriaArrayMulti(char *nomeClasse, ST_tpOperandStack *pPi
             VM_armazenarValorArray(pArray1, i, varAux);
         }
         var->tipo = JINT;
-        PL_pushOperando(&pPilhaOperandos, *var);
+        PL_pushOperando(&pPilhaOperandos, varAux);
         
         return pArray1;
     }

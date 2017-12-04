@@ -867,6 +867,7 @@ void FU_multianewarray(ST_tpStackFrame *pFrame, u1 **PC){
     ST_tpCp_info *pConstantPool;
     u4 *pClasseNameIndex;
     int16_t temp2Byte;
+    ST_tpCONSTANT_Utf8_info* pClasseName;
     char *tem_ptr;
     
     
@@ -879,19 +880,24 @@ void FU_multianewarray(ST_tpStackFrame *pFrame, u1 **PC){
     pConstantPool         = pFrame->cp->constant_pool_table;
     pClasseNameIndex          = &pConstantPool[temp2Byte -1].info.Class.name_index;
     
-    tem_ptr = strchr((char *)pClasseNameIndex, '[');
+    pClasseName = (ST_tpCONSTANT_Utf8_info *)malloc(sizeof(ST_tpCONSTANT_Utf8_info));
+    memcpy(pClasseName, &(pConstantPool[(int)(*pClasseNameIndex) - 1].info.Utf8), sizeof(ST_tpCONSTANT_Utf8_info));
+
+    tem_ptr = strchr((char *)pClasseName->bytes, '[');
     tem_ptr++;
-    
+
     (*PC)++;
-     memcpy(&parametro3, *PC, 1);
+    memcpy(&parametro3, *PC, 1);
     
-    var = PL_popOperando(&pFrame->operandStack);
-    var1->valor.array_ref = alocarMemoriaArrayMulti(tem_ptr, pFrame->operandStack, var->valor.Int);
+    var1 = (ST_tpVariable*)malloc(sizeof(ST_tpVariable));
+    var1->valor.array_ref = alocarMemoriaArrayMulti(tem_ptr, pFrame->operandStack, (int)parametro3);
     
     var1->tipo = JAREF;
     
     PL_pushOperando(&pFrame->operandStack, *var1);
 }
+
+
 void FU_ifnull(ST_tpStackFrame *pFrame, u1 **PC){
 
     ST_tpVariable *var;
