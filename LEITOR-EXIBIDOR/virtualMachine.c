@@ -124,18 +124,16 @@ ST_tpVariable VM_recuperarVariavel(ST_tpVariable *pVariaveisLocais, int posicao)
 
 
 /**
-* Descrição da função:
-*       Cria um Frame para o metodo que sera executado e insere esse frame na pilha de
-*       frames da thread
-*
-* @param pJVM            - Ponteiro para a JVM
-* @param pJVMStack       - Pilha de Frames da thread
-* @param pClasse         - Classe corrente do metodo
-* @param pilhaParametros - Pilha de parametros que é passada para o metodo que sera executado
-* @param maxStackSize    - Numero máximo de variaveis que pode ser colocadas na pilha de variaveis locais
-* @return                - Retorna o Frame criado
-**/
-ST_tpStackFrame *VM_criarFrame(ST_tpJVM *pJVM, ST_tpStackFrame **pJVMStack, ST_tpClassFile *pClasse, ST_tpParameterStack *pilhaParametros, long maxStackSize, u2 access_flag){
+ Cria um Frame para o metodo que sera executado e isere esse frame na pilha de
+ frames da thread
+
+ @param pJVMStack       - Pilha de Frames da thread
+ @param pClasse         - Classe corrente do metodo
+ @param pilhaParametros - Pilha de parametros que é passada para o metodo que sera executado
+ @param maxStackSize    - Numero máximo de variaveis que pode ser colocadas na pilha de variaveis locais
+ @return                - Retorna o Frame criado
+ */
+ST_tpStackFrame *VM_criarFrame(ST_tpJVM *pJVM, ST_tpStackFrame **pJVMStack, ST_tpClassFile *pClasse, ST_tpParameterStack *pilhaParametros, int maxStackSize, u2 access_flag){
     int i = 0;
     ST_tpVariable varTemporaria;
     ST_tpStackFrame *pFrame;
