@@ -1,14 +1,29 @@
-//
-//  decoder.c
-//  JVM-SB-2-2017
-//
-//  Created by Daniel Matias on 21/11/17.
-//  Copyright © 2017 Paulo Passos. All rights reserved.
-//
-
+   /** ********************************************************************************
+ *
+ *  Universidade de Brasilia - 02/2017
+ *  Software Basico - Turma A
+ *
+ *  @defgroup MODULO DECODER
+ *  @{
+ *  @ingroup MOD_DE
+ *
+ *  @file decoder.c
+ *  @brief
+ *            depreciado?
+ *
+ * @author ALON MOTA        - MAT. 13/0005002
+ * @author DANIEL MATIAS    - MAT. 12/0139804
+ * @author GABRIEL TOLLINI  - MAT. 14/0020454
+ * @author PAULO PASSOS     - MAT. 10/0118577
+ *
+ * @version 1.0
+ * @since ??/??/17
+ *
+ @}********************************************************************************/
 #include "decoder.h"
 #include "structures.h"
 #include <stdio.h>
+
 
 char* DE_instruction_name[] = { //10 instrucoes por linha
     "nop", "aconst_null", "iconst_m1", "iconst_0", "iconst_1", "iconst_2", "iconst_3", "iconst_4", "iconst_5", "lconst_0", //0 ao 9

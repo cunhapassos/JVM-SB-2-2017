@@ -12,9 +12,10 @@
  *            Modulo de implementacao: Modulo Exibidor
  *            Implementa as funcoes que exibem o conteudo do arquivo .class.
  *
- * @author PAULO DA CUNHA PASSOS - MAT. 10/0118577
- * @author DANIEL MATIAS
- * @author ALON MOTA
+ * @author ALON MOTA        - MAT. 13/0005002
+ * @author DANIEL MATIAS    - MAT. 12/0139804
+ * @author GABRIEL TOLLINI  - MAT. 14/0020454
+ * @author PAULO PASSOS     - MAT. 10/0118577
  *
  * @version 1.0
  * @since 30/09/2017
@@ -239,6 +240,7 @@ void EX_imprimirMethods(ST_tpClassFile *pClassFile) {
  *  Descrição da função:
  *       Imprime atributos contidos na Tabela de Atributos
  *
+ *  @param  pClassFile - ponteiro para uma estrutura Classfile
  *  @param  pAttributeInfoTable - Ponteiro para a Tabela de Atributos
  *  @param  attributesCount - quantidades de atributos da Tabela de Atributos
  */
@@ -311,6 +313,7 @@ void EX_imprimirAtributos(ST_tpClassFile *pClassFile, ST_tpAttribute_info *pAttr
             printf("\tMax_locals: %d\n",((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->max_locals);
             printf("\tCode_length: %d\n",((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->code_length);
             printf("\n\tBytecode:\n\n");
+            
             printCode(((ST_tpCode_attribute *) pAttributeInfoTable[i].info));
             printf("\n\tException_table_length: %d\n",((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->exception_table_length);
             for (int j=0; j < ((ST_tpCode_attribute *) pAttributeInfoTable[i].info)->exception_table_length; j++) {
@@ -324,12 +327,27 @@ void EX_imprimirAtributos(ST_tpClassFile *pClassFile, ST_tpAttribute_info *pAttr
         }
     }
 }
+/**
+ *  Descrição da função:
+ *       Imprime cabeçalho, e então chama a função EX_imprimirAtributos
+ *
+ *  @param  pClassFile - Ponteiro para a estrutura do ClassFile
+ *  @param  pAttributeInfoTable - Ponteiro para a Tabela de Atributos
+ *  @param  attributesCount - Quantidades de atributos da Tabela de Atributos
+ */
 void EX_imprimirAtributosClasse(ST_tpClassFile *pClassFile, ST_tpAttribute_info *pAttributeInfoTable, u2 attributesCount){
     printf("\n===================================\n              ATRIBUTOS\n===================================\n\n");
     EX_imprimirAtributos(pClassFile, pAttributeInfoTable, attributesCount);
 
 }
 
+/**
+ *  Descrição da função:
+ *       Imprime os elementos constantes de una certa classe
+ *
+ *  @param  cp - Ponteiro para classes
+ *  @param  index - Índice da classe que será lida, incrementado de um
+ */
 void EX_imprimirConstantElement(ST_tpCp_info* cp, int index){
     if (cp[index-1].tag == CONSTANT_Utf8)
     {
@@ -403,6 +421,12 @@ void EX_imprimirConstantElement(ST_tpCp_info* cp, int index){
     }
 }
 
+/**
+ *  Descrição da função:
+ *       Imprime o valor de uma flag de acesso 
+ *
+ *  @param access_flags - a flag de acesso que terá seu tipo impresso
+ */
 void EX_imprimirAccessFlags(u2 access_flags) {
     printf("[");
     if (access_flags & ACC_PUBLIC) printf("public");

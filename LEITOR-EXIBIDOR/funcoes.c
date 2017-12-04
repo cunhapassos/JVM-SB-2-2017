@@ -1,9 +1,27 @@
-/**
-* UnB - 2/2017 - Software Basico
-* Funcoes a serem utilizadas pela jvm
-* Autor: Alon Mota
-*
-*/
+ /** ********************************************************************************
+ *
+ *  Universidade de Brasilia - 02/2017
+ *  Software Basico - Turma A
+ *
+ *  @defgroup MODULO FUNCOES
+ *  @{
+ *  @ingroup MOD_IT
+ *
+ *  @file funcoes.c
+ *  @brief
+ *            Modulo de implementacao: ?
+ *            Seleciona qual instrução será executada
+ *
+ * @author ALON MOTA        - MAT. 13/0005002
+ * @author DANIEL MATIAS    - MAT. 12/0139804
+ * @author GABRIEL TOLLINI  - MAT. 14/0020454
+ * @author PAULO PASSOS     - MAT. 10/0118577
+ *
+ * @version 1.0
+ * @since ??/??/2017
+ *
+ @}********************************************************************************/
+
 
 #include "structures.h"
 #include <stdio.h>
@@ -12,10 +30,19 @@
 #include "pilhas_listas.h"
 #include "instrucoes.h"
 #include "decoder.h"
-/*
-*    Para ler algum argumento do code incremente o PC usando 
-    thread->PC ++;
-*/
+/**
+ *  Descrição da função:
+ *       Chama a instrução a partir de seu opcode 
+ *
+ *  @param  pJVM - Ponteiro para a JVM
+ *  @param  pFrame - Frame, utilizado em certas instruções 
+ *  @param  Retorno - Variável de retorno
+ *  @param  pExceptionTable -  Tabela de excessões
+ *  @param  PC - Contador de programa
+ *
+ *  
+ *  @return flag - Retorno da instrução return
+ */
 int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame **pFrame, ST_tpVariable **Retorno,  ST_tpException_table *pExceptionTable, u1 **PC) {
     u1 opcode = **PC;
     int flag = 0;
@@ -145,7 +172,6 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame **pFrame, ST_tpVariable 
         *******************************************************************************************/
         case 0x06:
             FU_pushConstInt(*pFrame, 3);
-
             break;
 
 
@@ -164,7 +190,6 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame **pFrame, ST_tpVariable 
         *******************************************************************************************/
         case 0x07:
             FU_pushConstInt(*pFrame, 4);
- 
             break;
 
 

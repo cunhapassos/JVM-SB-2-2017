@@ -1,16 +1,20 @@
 /** ********************************************************************************
  *
  *  Universidade de Brasilia - 02/2017
- *    Software Basico - Turma A
+ *  Software Basico - Turma A
  *
- *  MODULO: PL_
+ *  @defgroup MODULO PILHAS_LISTAS
+ *  @{
+ *  @ingroup MOD_PL
+ *
  *  @file pilha.c
  *  @brief
- *            Descricao:  Implementa as funcoes de pilha.
+ *            Implementa as funções de pilha.
  *
- * @author PAULO DA CUNHA PASSOS - MAT. 10/0118577
- * @author DANIEL MATIAS
- * @author ALON MOTA
+ * @author ALON MOTA        - MAT. 13/0005002
+ * @author DANIEL MATIAS    - MAT. 12/0139804
+ * @author GABRIEL TOLLINI  - MAT. 14/0020454
+ * @author PAULO PASSOS     - MAT. 10/0118577
  *
  * @version 1.0
  * @since 30/10/2017
@@ -28,7 +32,7 @@
  *  Descricao da funcao:
  *       Inicializa a pilha
  *
- *  @param  ePilha - Ponteiro para a cabeça da pilha
+ *  @param  ePilha - Endereço do topo da pilha
  *
  */
 void PL_inicializarPilha(ST_tpPilha **ePilha){
@@ -39,7 +43,7 @@ void PL_inicializarPilha(ST_tpPilha **ePilha){
  *  Descricao da funcao:
  *       Verifica se uma pilha esta vazia
  *
- *  @param  pPilha - Ponteiro para a cabeça da pilha
+ *  @param  pPilha - Endereço do topo da pilha
  *
  *  @return       - 0 se a pilha nao esta vazia
  *                  1 se a pilha esta vazia
@@ -52,9 +56,9 @@ int PL_pilhaVazia(ST_tpPilha *pPilha){
  *  Descricao da funcao:
  *       Retorna o elemento do topo da pilha
  *
- *  @param  pPilha - Ponteiro para a cabeça da pilha
+ *  @param  pPilha - Endereço do topo da pilha
  *
- *  @return       - ponteiro para o elemento do topo da pilha
+ *  @return        - Endereço do valor no topo da pilha
  */
 void *PL_topoPilha(ST_tpPilha *pPilha){
     return pPilha->dado;
@@ -64,7 +68,7 @@ void *PL_topoPilha(ST_tpPilha *pPilha){
  *  Descricao da funcao:
  *       Insere elemento no topo da pilha
  *
- *  @param  ePilha   - Ponteiro para a cabeça da pilha
+ *  @param  ePilha   - Endereço do topo da pilha
  *  @param  dadoNovo - Novo elemento da pilha
  */
 void PL_push(ST_tpPilha **ePilha, void *dadoNovo){
@@ -83,9 +87,9 @@ void PL_push(ST_tpPilha **ePilha, void *dadoNovo){
  *  Descricao da funcao:
  *       Retira um elemento do topo da pilha
  *
- *  @param  ePilha - Ponteiro para a cabeça da pilha
+ *  @param    ePilha - Endereço do topo da pilha
  *
- *  @return   dado - Ponteiro para o elemento retirado do topo da pilha
+ *  @return   dado   - Endereço do elemento retirado do topo da pilha
  */
 void *PL_pop(ST_tpPilha **ePilha){
     ST_tpPilha *p1;
@@ -97,7 +101,13 @@ void *PL_pop(ST_tpPilha **ePilha){
     
     return dado;
 }
-
+/*
+ *  Descrição da função:
+ *       Faz o Push na pilha de operandos
+ *
+ *  @param  pPilhaOperandos - Endereço da pilha de operandos
+ *  @param  var - valor a ser adicionado na pilha de operandos 
+ */
 
 void PL_pushOperando(ST_tpOperandStack **pPilhaOperandos, ST_tpVariable var){
     ST_tpOperandStack *pAux = (ST_tpOperandStack*)malloc(sizeof(ST_tpOperandStack));
@@ -113,7 +123,14 @@ void PL_pushOperando(ST_tpOperandStack **pPilhaOperandos, ST_tpVariable var){
         *pPilhaOperandos = pAux;
     }
 }
-
+/*
+ *  Descrição da função:
+ *       Faz o Pop na pilha de operandos
+ *
+ *  @param  pPilhaOperandos - Endereço da pilha de operandos
+ *
+ *  @return var - Valor removido da pilha
+ */
 ST_tpVariable *PL_popOperando(ST_tpOperandStack **pPilhaOperandos){
     ST_tpVariable *var;
     ST_tpOperandStack *pAux;
@@ -138,19 +155,36 @@ ST_tpVariable *PL_popOperando(ST_tpOperandStack **pPilhaOperandos){
         return var;
     }
 }
-
+/*
+ *  Descrição da função:
+ *       Esvazia a pilha de operandos
+ *
+ *  @param  pPilhaOperandos - Endereço da pilha de operandos
+ */
 void PL_esvaziarPilhaOperandos(ST_tpOperandStack **pPilhaOperandos){
     while (*pPilhaOperandos != NULL) {
         PL_popOperando(pPilhaOperandos);
     }
 }
+/*
+ *  Descrição da função:
+ *       Esvazia a pilha de parâmetros
+ *
+ *  @param  pPilhaParametros - Endereço da pilha de parâmetros
+ */
 
 void PL_esvaziarPilhaParametros(ST_tpParameterStack**pPilhaParemetros ){
     while (*pPilhaParemetros != NULL) {
         PL_popParametro(pPilhaParemetros);
     }
 }
-
+/*
+ *  Descrição da função:
+ *       Faz o Push na pilha de parâmetros
+ *
+ *  @param  pPilhaParametros - Endereço da pilha de parâmetros
+ *  @param  var - valor a ser adicionado na pilha de parâmetros 
+ */
 void PL_pushParametro(ST_tpParameterStack **pPilhaParametros, ST_tpVariable var){
     ST_tpParameterStack *pAux = (ST_tpParameterStack *)malloc(sizeof(ST_tpParameterStack));
     
@@ -165,6 +199,15 @@ void PL_pushParametro(ST_tpParameterStack **pPilhaParametros, ST_tpVariable var)
         *pPilhaParametros = pAux;
     }
 }
+
+/*
+ *  Descrição da função:
+ *       Faz o Pop na pilha de parâmetros
+ *
+ *  @param  pPilhaParametros - Endereço da pilha de parâmetros
+ *
+ *  @return var - Valor removido da pilha
+ */
 
 ST_tpVariable *PL_popParametro(ST_tpParameterStack **pPilhaParametros){
     ST_tpVariable *var;
@@ -196,7 +239,7 @@ ST_tpVariable *PL_popParametro(ST_tpParameterStack **pPilhaParametros){
  *           A lista é uma lista eh duplamente encadeada de classes
  *
  *  @param pJvm    - Ponteiro para a JVM
- *  @param pClasse - Ponteiro para a classe a ser inserida na JVM
+ *  @param pClasse - Endereço da classe a ser inserida na JVM
  * 
  */
 void PL_inserirClasseTopo(ST_tpJVM *pJvm, ST_tpClassFile *pClasse){
@@ -213,6 +256,14 @@ void PL_inserirClasseTopo(ST_tpJVM *pJvm, ST_tpClassFile *pClasse){
         pJvm->methodArea->classFile = pClasse;
     }
 }
+
+/*
+ *  Descrição da função:
+ *       Insere uma classe no final da lista de Classes
+ *
+ *  @param  pClasses - Lista de Classes
+ *  @param  pJvm - Java Virtual Machine, de se recebe a classe a ser adicionada
+ */
 
 void PL_inserirClasseFundo(ST_tpJVM *pJvm, ST_tpClassFile *pClasse){
     ST_tpClassFile *pAux = pJvm->methodArea->classFile;
@@ -267,6 +318,9 @@ int PL_removerClasseTopo(ST_tpJVM *pJVM){
  *
  *  @param pJVM         - Ponteiro para a JVM
  *  @param nomeClasse   - Nome da classe a ser procurada
+ * 
+ * @return NULL      - Se a Classe nao foi encontrado
+ *         pAux      - Endereço da Classe econtrada
  *
  */
 ST_tpClassFile *PL_buscarClasse(ST_tpJVM *pJVM, char *nomeClasse){
@@ -292,13 +346,13 @@ ST_tpClassFile *PL_buscarClasse(ST_tpJVM *pJVM, char *nomeClasse){
 
 
 /**
- Retorna um pontero para um Objeto de classe
-
- @param pObjects   - Ponteiro para a pilha de Objetos do ObjectHeap
- @param nomeClasse - Nome da classe referente ao objeto a ser procurado
- @return NULL      - Se o objeto nao foi encontrado
-         pAux      - Ponteiro para o objeto encontrado
- */
+* Retorna um pontero para um Objeto de classe
+*
+* @param pObjects   - Ponteiro para a pilha de Objetos do ObjectHeap
+* @param nomeClasse - Nome da classe referente ao objeto a ser procurado
+* @return NULL      - Se o objeto nao foi encontrado
+*         pAux      - Endereço do objeto encontrado
+**/
 ST_tpObjectHeap *PL_buscaObjetoHeap(ST_tpObjectHeap *pObjects, char *nomeClasse){
  
     ST_tpObjectHeap *pAux;
@@ -309,6 +363,16 @@ ST_tpObjectHeap *PL_buscaObjetoHeap(ST_tpObjectHeap *pObjects, char *nomeClasse)
     }
     return NULL;
 }
+/*
+ *  Descrição da função:
+ *       Busca, na pilha de Classes, uma Classe por seu nome
+ *
+ *  @param  pClasses - Lista de Classes
+ *  @param  nomeClasse - Nome da Classe a ser procurada 
+ *
+ *  @return NULL - Se a classe não foi encontrada
+ *          pAux - Endereço da classe encontrada
+ */
 
 ST_tpClassHeap *PL_buscaClassHeap(ST_tpClassHeap *pClasses, char *nomeClasse){
 

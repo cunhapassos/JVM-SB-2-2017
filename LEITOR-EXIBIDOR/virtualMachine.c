@@ -1,16 +1,20 @@
    /** ********************************************************************************
  *
  *  Universidade de Brasilia - 02/2017
- *    Software Basico - Turma A
+ *  Software Basico - Turma A
  *
- *  MODULO: VM_
- *  @file virtualMachine
+ *  @defgroup MODULO VIRTUAL_MACHINE
+ *  @{
+ *  @ingroup MOD_VM
+ *
+ *  @file virtualMachine.c
  *  @brief
- *            Descricao: Implementacao das estruturas de incicializacao da JVM
+ *            Implementacao das estruturas de incicialização da JVM
  *
- * @author ALON MOTA     - MAT. 13/0005002
- * @author DANIEL MATIAS - MAT. 12/0139804
- * @author PAULO PASSOS  - MAT. 10/0118577
+ * @author ALON MOTA        - MAT. 13/0005002
+ * @author DANIEL MATIAS    - MAT. 12/0139804
+ * @author GABRIEL TOLLINI  - MAT. 14/0020454
+ * @author PAULO PASSOS     - MAT. 10/0118577
  *
  * @version 1.0
  * @since 31/10/17
@@ -26,7 +30,12 @@
 #include "virtualMachine.h"
 #include "funcoes.h"
 
-
+/**
+ *  Descricao da funcao:
+ *       Aloca memória para um método
+ *
+ *  @return pAreaMetodo - Endereço da área alocada para o método
+ */
 ST_tpMethodArea *VM_criarAreaMetodo(){
     ST_tpMethodArea *pAreaMetodo;
     
@@ -36,6 +45,12 @@ ST_tpMethodArea *VM_criarAreaMetodo(){
     return pAreaMetodo;
 }
 
+/**
+ *  Descricao da funcao:
+ *       Aloca memória para um Heap
+ *
+ *  @return pHeap - Endereço da área alocada para o Heap
+ */
 ST_tpHeap *VM_criarHeap(){
     ST_tpHeap *pHeap;
     
@@ -46,7 +61,12 @@ ST_tpHeap *VM_criarHeap(){
     
     return pHeap;
 }
-
+/**
+ *  Descricao da funcao:
+ *       Aloca memória para uma Thread
+ *
+ *  @return pThread - Endereço da área alocada para a Thread
+ */
 ST_tpThread *VM_criarThread(){
     ST_tpThread *pThread;
     
@@ -56,7 +76,12 @@ ST_tpThread *VM_criarThread(){
     
     return pThread;
 }
-
+/**
+ *  Descricao da funcao:
+ *       Aloca memória para a JVM, e a inicializa
+ *
+ *  @return pHeap - Endereço da área alocada para a JVM
+ */
 ST_tpJVM *VM_criarJVM(){
     ST_tpJVM *pJvm;
     
@@ -67,11 +92,27 @@ ST_tpJVM *VM_criarJVM(){
     
     return pJvm;
 }
-
+/**
+ *  Descricao da funcao:
+ *       Armazena uma variável na lista de variáveis locais
+ *
+ *  @param  pVariaveisLocais - Endereço base da lista de variáveis locais
+ *  @param  variavel - variável a ser adicionada na lista
+ *  @param  posicao - deslocamento a partir do endereço base onde será salva a variável
+ *
+ */
 void VM_armazenarVariavel(ST_tpVariable *pVariaveisLocais, ST_tpVariable variavel, int posicao){
     memcpy((void *)(pVariaveisLocais + posicao), (void *) &variavel, sizeof(variavel));
 }
-
+/**
+ *  Descricao da funcao:
+ *       Lê a variável em uma certa posição na lista de variáveis locais
+ *
+ *  @param  pVariaveisLocais - Endereço base da lista de variáveis locais
+ *  @param  posicao - deslocamento a partir do endereço base de onde será lida a variável 
+ *
+ *  @return varTemporaria - variável lida
+ */
 
 ST_tpVariable VM_recuperarVariavel(ST_tpVariable *pVariaveisLocais, int posicao){
     ST_tpVariable varTemporaria;
@@ -83,16 +124,18 @@ ST_tpVariable VM_recuperarVariavel(ST_tpVariable *pVariaveisLocais, int posicao)
 
 
 /**
- Cria um Frame para o metodo que sera executado e isere esse frame na pilha de
- frames da thread
-
- @param pJVMStack       - Pilha de Frames da thread
- @param pClasse         - Classe corrente do metodo
- @param pilhaParametros - Pilha de parametros que é passada para o metodo que sera executado
- @param maxStackSize    - Numero máximo de variaveis que pode ser colocadas na pilha de variaveis locais
- @return                - Retorna o Frame criado
- */
-ST_tpStackFrame *VM_criarFrame(ST_tpJVM *pJVM, ST_tpStackFrame **pJVMStack, ST_tpClassFile *pClasse, ST_tpParameterStack *pilhaParametros, int maxStackSize, u2 access_flag){
+* Descrição da função:
+*       Cria um Frame para o metodo que sera executado e insere esse frame na pilha de
+*       frames da thread
+*
+* @param pJVM            - Ponteiro para a JVM
+* @param pJVMStack       - Pilha de Frames da thread
+* @param pClasse         - Classe corrente do metodo
+* @param pilhaParametros - Pilha de parametros que é passada para o metodo que sera executado
+* @param maxStackSize    - Numero máximo de variaveis que pode ser colocadas na pilha de variaveis locais
+* @return                - Retorna o Frame criado
+**/
+ST_tpStackFrame *VM_criarFrame(ST_tpJVM *pJVM, ST_tpStackFrame **pJVMStack, ST_tpClassFile *pClasse, ST_tpParameterStack *pilhaParametros, long maxStackSize, u2 access_flag){
     int i = 0;
     ST_tpVariable varTemporaria;
     ST_tpStackFrame *pFrame;
@@ -140,7 +183,17 @@ ST_tpStackFrame *VM_criarFrame(ST_tpJVM *pJVM, ST_tpStackFrame **pJVMStack, ST_t
     
     return pFrame;
 }
-
+/**
+* Descrição da função:
+*       Executa um método
+*
+* @param pJVM            - Ponteiro para a JVM
+* @param pClasse         - Classe de onde são lidos os dados para a execução
+* @param pilhaParametros - Pilha de parametros que é passada para o metodo que sera executado
+* @param pMetodo         - Método a ser executado
+*
+* @return                - Retorna o resultado, caso a instrução seja return
+**/
 ST_tpVariable *VM_executarMetodo(ST_tpJVM *pJVM, ST_tpClassFile *pClasse, ST_tpParameterStack *pilhaParametros, ST_tpMethod_info *pMetodo){
     int i, flag, numeroVariaveis, tipoRetorno;
     u1 *end, *PC;
@@ -240,6 +293,18 @@ ST_tpVariable *VM_executarMetodo(ST_tpJVM *pJVM, ST_tpClassFile *pClasse, ST_tpP
     return pRetorno;
 }
 
+/**
+* Descrição da função:
+*       Busca um método pelo seu nome e descritor
+*
+* @param pClasseFile     - ClassFile onde se procurará o método
+* @param descritorMetodo - Descritor do método a ser procurado
+* @param nomeMetodo      - Nome do método a ser procurado
+*
+* @return NULL                              - Se o método não foi encontrado
+*         pClassFile->method_info_table[i]  - Tabela contendo as informações do método procurado
+**/
+
 ST_tpMethod_info *VM_procurarMetodo(ST_tpClassFile *pClassFile, char *descritorMetodo, char *nomeMetodo) {
     char *name, *descritor;
     u2 nameIndex, descritorIndex;
@@ -256,6 +321,17 @@ ST_tpMethod_info *VM_procurarMetodo(ST_tpClassFile *pClassFile, char *descritorM
     }
     return NULL;
 }
+
+/**
+* Descrição da função:
+*       Dado um ClassFile, retorna o nome de sua Super Classe
+*
+* @param pClasseFile        - ClassFile de onde se lerá o nome da Super Classe
+*
+* @return superClasseString - O nome da Super Classe
+*         
+**/
+
 u1 *VM_retornaNomeSuperClasse(ST_tpClassFile *pClassFile){
     u1 *superClasseString;
     u2 classNameIndex;
@@ -267,7 +343,15 @@ u1 *VM_retornaNomeSuperClasse(ST_tpClassFile *pClassFile){
     
     return superClasseString;
 }
-
+/**
+* Descrição da função:
+*       Dado um ClassFile, retorna o nome de sua Classe
+*
+* @param pClasseFile        - ClassFile de onde se lerá o nome da Classe
+*
+* @return superClasseString - O nome da Classe
+*         
+**/
 u1 *VM_retornarNomeClasse(ST_tpClassFile *pClassFile){
     u1 *classeString;
     u2 classNameIndex;
@@ -279,6 +363,17 @@ u1 *VM_retornarNomeClasse(ST_tpClassFile *pClassFile){
     
     return classeString;
 }
+/**
+* Descrição da função:
+*       Aloca a memória de um Heap para objeto, e o inicializa
+*
+* @param  pJVM          - Ponteiro para a JVM
+* @param  pClasseFile   - ClassFile de onde se lerá o alguns dos dados do objeto
+*
+* @return NULL          - Caso haja erro ao carregar a classe
+*         pObjeto       - Endereço do Heap para objeto alocado
+*         
+**/
 ST_tpObjectHeap *VM_alocarMemoriaHeapObjeto(ST_tpJVM *pJVM, ST_tpClassFile *pClassFile){
     u1 *nome;
     int maxVariaveis;
@@ -336,6 +431,18 @@ ST_tpObjectHeap *VM_alocarMemoriaHeapObjeto(ST_tpJVM *pJVM, ST_tpClassFile *pCla
     return pObjeto;
 }
 
+/**
+* Descrição da função:
+*       Busca um objeto, pelo seu nome, na pilha de Objetos
+*
+* @param  pObejectHeap  - Pilha de Objetos
+* @param  nomeObjeto    - Nome do objeto a ser buscado
+*
+* @return pObejec       - Endereço do objeto buscado
+*         
+*         
+**/
+
 ST_tpObjectHeap *VM_recuperarObjeto(ST_tpObjectHeap *pObejectHeap, char *nomeObjeto){
     ST_tpObjectHeap *pObejec;
     
@@ -346,6 +453,20 @@ ST_tpObjectHeap *VM_recuperarObjeto(ST_tpObjectHeap *pObejectHeap, char *nomeObj
     }
     return pObejec;
 }
+
+/**
+* Descrição da função:
+*       Aloca memória para um Array e o inicializa
+*
+* @param  tipo          - Tipo do Array a ser inicializado
+* @param  nomeClasse    - Valor que será colocado no atributo className
+* @param  tamanho       - Tamanho do Array a ser alocado
+*
+* @return pArray        - Endereço do Array alocado e inicializado
+*         
+*         
+**/
+
 ST_tpArrayHeap *VM_criarArray(u1 tipo, char *nomeClasse, int tamanho){
     ST_tpArrayHeap *pArray = ( ST_tpArrayHeap *) malloc(sizeof( ST_tpArrayHeap)); // VERIFICAR SE EH PRECISO MULTIPLICAR POR TAMANHO
     
@@ -390,6 +511,19 @@ ST_tpArrayHeap *VM_criarArray(u1 tipo, char *nomeClasse, int tamanho){
     return pArray;
     
 }
+
+/**
+* Descrição da função:
+*       Adiciona um novo termo a um array
+*
+* @param  pArray        - Arrays aonde será adicionado o novo termo 
+* @param  posicao       - Posição do Array aonde será adicionado o novo termo
+* @param  variavel      - Termo que será adicionado
+*
+*         
+*         
+**/
+
 void VM_armazenarValorArray(ST_tpArrayHeap *pArray, int posicao, ST_tpVariable variavel){
     u2 *pChar;
     int *pInt;
@@ -461,12 +595,25 @@ void VM_armazenarValorArray(ST_tpArrayHeap *pArray, int posicao, ST_tpVariable v
             break;
     }
 }
+/**
+* Descrição da função: ??????
+*       Aloca memória para um Array e o inicializa ?
+*
+* @param  nomeClasse        - Valor que será colocado no atributo className ?
+* @param  pPilhaOperandos   - ?
+* @param  dimensao          - Tamanho do Array a ser alocado
+*
+* @return pArray            - Endereço do Array alocado e inicializado ?
+*         
+*         
+**/
 
 ST_tpArrayHeap *alocarMemoriaArrayMulti(char *nomeClasse, ST_tpOperandStack *pPilhaOperandos, int dimensao){
     int tipo, i;
     char *aux, *nome = NULL;
     ST_tpArrayHeap *pArray, *pArray1;
     ST_tpVariable *var, varAux;
+    
     
     aux = strchr(nomeClasse, '[');
 
@@ -500,6 +647,15 @@ ST_tpArrayHeap *alocarMemoriaArrayMulti(char *nomeClasse, ST_tpOperandStack *pPi
     }
 }
 
+/**
+* Descrição da função:
+*       Dada uma string, retorna o seu tipo
+*
+* @param  string        - String a ser analizada
+*
+* @return               - Tipo da String
+*         
+**/
 int retornarTipoString(char *string){
     char aux;
     int tam;
@@ -565,6 +721,16 @@ int retornarTipoRetorno(u1 *descritor){
     }
     return 5;
 }
+/**
+* Descrição da função:
+*       Retorna o valor em uma dada posição de um Array
+*
+* @param  pArrayHeap    - Array a ser lido
+* @param  posicao       - Posição do valor a ser lido
+*
+* @return var           - Valor lido
+*         
+**/
 ST_tpVariable VM_recuperarValorArray(ST_tpArrayHeap *pArrayHeap, int posicao){
     
     u2 *pChar;
@@ -647,7 +813,21 @@ ST_tpVariable VM_recuperarValorArray(ST_tpArrayHeap *pArrayHeap, int posicao){
     }
     return var;
 }
-
+/**
+* Descrição da função: ??????
+*       Armazena o valor de um Field
+*
+* @param  pJVM              - Ponteiro para a JVM
+* @param  pClassName        - Nome da classe que será carregada ?
+* @param  pFieldName        - Nome do Field a ser salvo ?
+* @param  pFieldDescriptor  - Descritor do Field a ser salvo ?
+* @param  var               - Nem ideia ?
+* @param  objRef            - 
+*
+* @return NULL             - Em caso de erro
+*         pHeap            - Ponteiro para o Heap de objeto ?
+*         
+**/
 void *VM_armazenarValorField(ST_tpJVM *pJVM, char *pClassName, char *pFieldName, char *pFieldDescriptor, ST_tpVariable var, ST_tpVariable objRef){
     int i = 0;
     ST_tpObjectHeap *pHeap;
@@ -705,7 +885,18 @@ void *VM_armazenarValorField(ST_tpJVM *pJVM, char *pClassName, char *pFieldName,
     
     return pHeap;
 }
-
+/**
+* Descrição da função: ?????
+*       Retorna o valor em uma dada posição de um Array
+*
+* @param pJVM           - Ponteiro para a JVM
+* @param  pArrayHeap    - Array a ser lido
+* @param  posicao       - Posição do valor a ser lido
+*
+* @return NULL          - Em caso de erro 
+*         var           - Valor lido
+*         
+**/
 ST_tpVariable *VM_recuperarValorField(ST_tpJVM *pJVM, char *pClassName, char *pFieldName, char *pFieldDescriptor, ST_tpVariable *objRef){
 
     int i = 0;
@@ -771,7 +962,16 @@ ST_tpVariable *VM_recuperarValorField(ST_tpJVM *pJVM, char *pClassName, char *pF
     
     return var;
 }
-
+/**
+* Descrição da função: 
+*       Aloca memória e inicializa um Heap de Classes
+*
+* @param  pJVM          - Ponteiro para a JVM
+* @param  pClassName    - Nome da Classe com a qual se inicializará os valores da memória alocada
+*
+* @return pClassHeap    - Endereço aonde se alocou a memória
+*         
+**/
 void *VM_alocarMemoriaHeapClasse(ST_tpJVM *pJVM, char *pClassName){
     
     int maxStaticVar = 0;
@@ -847,7 +1047,20 @@ ST_tpVariable VM_resolveField(ST_tpCONSTANT_Utf8_info *decritorFieldUtf8){
     }
 }
 */
-
+/**
+* Descrição da função: 
+*       Armazena valor em campo de Statics ?????
+*
+* @param  pJVM              - Ponteiro para a JVM
+* @param  pClassName        - Nome da Classe que ?
+* @param  pFieldName        - Nome do campo que será lido?
+* @param  pFieldDescritor   - Descritor do campo que será lido?
+* @param  var               - Valor a ser armazenado
+*
+* @return NULL              - Em caso de erro 
+* pJVM->heap->classes       - ?
+*         
+**/
 void *VM_armazenarValorStaticField(ST_tpJVM *pJVM, char *pClassName, char *pFieldName, char *pFieldDescritor, ST_tpVariable var){
     int i = 0;
     ST_tpClassFile *pClassFile1;
@@ -909,7 +1122,19 @@ void *VM_armazenarValorStaticField(ST_tpJVM *pJVM, char *pClassName, char *pFiel
     return pJVM->heap->classes;
     
 }
-
+/**
+* Descrição da função: 
+*       Ler valor em campo de Statics ?????
+*
+* @param  pJVM              - Ponteiro para a JVM
+* @param  pClassName        - Nome da Classe que ?
+* @param  pFieldName        - Nome do campo que será lido?
+* @param  pFieldDescritor   - Descritor do campo que será lido?
+*
+* @return NULL              - Em caso de erro 
+*         var               - Valor lido?
+*         
+**/
 ST_tpVariable  *VM_recuperarValorStaticField(ST_tpJVM *pJVM, char *pClassName, char *pFieldName, char *pFieldDescritor){
     
     int i = 0;
@@ -974,7 +1199,17 @@ ST_tpVariable  *VM_recuperarValorStaticField(ST_tpJVM *pJVM, char *pClassName, c
     return var;
 }
 
-
+/**
+* Descrição da função: 
+*       Carrega uma classe
+*
+* @param  nomeClasses       - Nome da Classe que será carregada
+* @param  pJVM              - Ponteiro para a JVM
+*
+* @return pClasse           - Endereço aonde for carregada a classe em questão
+*         
+*         
+**/
 ST_tpClassFile *VM_carregarClasse(char *nomeClasses, ST_tpJVM *pJVM) {
     ST_tpClassFile *pClasse;
     ST_tpMethod_info *pMetodo;
@@ -1004,15 +1239,36 @@ ST_tpClassFile *VM_carregarClasse(char *nomeClasses, ST_tpJVM *pJVM) {
     }
     return pClasse;
 }
-
+/**
+* Descrição da função: 
+*       Executa a JVM
+*
+* @param  numeroClasses     - Número de Classes que serão carregadas e lidas
+* @param  nomeClasses       - Nome das Classes que serão carregadas e lidas
+*
+* @return pJVM              - Ponteiro para a JVM
+*         
+*         
+**/
 ST_tpJVM *VM_exucutarJVM(int numeroClasses, char *nomeClasses[]){
     int i;
 
     ST_tpJVM *pJVM;
     ST_tpClassFile *pClasse; //*pSystemCLass;
     ST_tpMethod_info *pMetodo; //*pInicializeMethod;
-
+    //ST_tpParameterStack *pSystemStack = NULL;
+    
+    /* Cria a maquina virtual, a area de metodos, o heap e uma thread*/
     pJVM = VM_criarJVM();
+    /*
+    pSystemCLass = VM_carregarClasse("java/lang/System", pJVM);
+    pInicializeMethod = VM_procurarMetodo( pSystemCLass, "()V", "initializeSystemClass");
+    VM_executarMetodo(pJVM, pSystemCLass, pSystemStack, pInicializeMethod);
+    */
+    /* Carregando classes na JVM */
+    /*for(i = 0; i < numeroClasses; i++){
+        pClasse = VM_carregarClasse(nomeClasses[i], pJVM);
+    }*/
 
     /* Procurando a primeira classe que tem o main */
     for(i = 0 ; i < numeroClasses; i++){
@@ -1031,6 +1287,21 @@ ST_tpJVM *VM_exucutarJVM(int numeroClasses, char *nomeClasses[]){
     
     return pJVM;
 }
+
+/**
+* Descrição da função:      ?????
+*       Executa um Throw
+*
+* @param  pExceptionTable   - Tabela de excessões que ?
+* @param  pClassFile        - ClassFile de onde se lêem o indice e o nome da classe usados para ?
+* @param  refernciaObjeto   - ?
+* @param  pc                - Contador de Programa
+* @param  pPilhaOperandos   - Pilha de Operandos, onde ?
+*
+* @return 0 ou 1            - ?
+*         
+*         
+**/
 int VM_executarThrow(ST_tpException_table *pExceptionTable, ST_tpClassFile *pClassFile, ST_tpVariable refernciaObjeto,  u1 **pc, ST_tpOperandStack *pPilhaOperandos){
     ST_tpVariable catch;
     ST_tpException_table *pException;

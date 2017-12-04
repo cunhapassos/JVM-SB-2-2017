@@ -2918,6 +2918,7 @@ int FU_areturn(ST_tpStackFrame *pFrame, ST_tpVariable **Retorno){
         return 1;
     }
     return 1;
+    // Sair do metodo
 }
 
 void FU_getstatic(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC){

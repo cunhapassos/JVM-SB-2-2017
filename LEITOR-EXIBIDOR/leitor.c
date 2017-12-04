@@ -12,10 +12,10 @@
  *			Modulo de implementaco: Modulo Leitor-Exibidor:
  *         	Implementa as funcoes de leitura do bytecode.
  *
- * @author PAULO DA CUNHA PASSOS - MAT. 10/0118577
- * @author DANIEL MATIAS
- * @author ALON MOTA
- * @author JURAMIR
+ * @author ALON MOTA        - MAT. 13/0005002
+ * @author DANIEL MATIAS    - MAT. 12/0139804
+ * @author GABRIEL TOLLINI  - MAT. 14/0020454
+ * @author PAULO PASSOS     - MAT. 10/0118577
  *
  * @version 1.0
  * @since 07/09/2017
@@ -169,7 +169,7 @@ ST_tpCp_info *LE_lerConstant_pool(FILE *pArq, u2 constant_pool_count){
  *       Le Tabela de Interfaces do bytecode .class
  *
  *  @param  pArq            - Ponteiro para o arquivo a ser lido
- *  @param interfaces_count - Numero de elementos da Tabela de Interfaces a ser lida
+ *  @param  interfaces_count - Numero de elementos da Tabela de Interfaces a ser lida
  *
  *  @return pinterfaces     - Ponteiro para a Tabela de Interfaces lida
  */
@@ -188,7 +188,7 @@ u2 *LE_lerInterfaces(FILE *pArq, ST_tpCp_info *cp, u2 interfaces_count) {
  *       Le Tabela de Fields do bytecode .class
  *
  *  @param  pArq        - Ponteiro para o arquivo a ser lido
- *  @param fields_count - Numero de elementos da Tabela de Fields a ser lida
+ *  @param  fields_count - Numero de elementos da Tabela de Fields a ser lida
  *
  *  @return pfields     - Ponteiro para a Tabela de Fields lida
  */
@@ -233,7 +233,7 @@ ST_tpField_info *LE_lerFields(FILE *pArq, ST_tpCp_info *cp, u2 fields_count) {
  *       Le Tabela de Metodos do bytecode .class
  *
  *  @param  pArq         - Ponteiro para o arquivo a ser lido
- *  @param methods_count - Numero de elementos da Tabela de Metodos a ser lida
+ *  @param  methods_count - Numero de elementos da Tabela de Metodos a ser lida
  *
  *  @return pmethods     - Ponteiro para a Tabela de Metodos lida
  */
@@ -493,7 +493,7 @@ ST_tpLocalVariableTable_attribute *LE_lerLocalVariableAttribute(FILE *pArq){
  *       Le Tabela de Atributos do bytecode .class
  *
  *  @param  pArq            - Ponteiro para o arquivo a ser lido
- *  @param pAttributes      - Ponteiro para a Tabela de Atributos
+ *  @param  pAttributes      - Ponteiro para a Tabela de Atributos
  *
  */
 ST_tpAttribute_info *LE_lerAttribute(FILE *pArq, ST_tpCp_info *cp, ST_tpAttribute_info *pAttributes) {
