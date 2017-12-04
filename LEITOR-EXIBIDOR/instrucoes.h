@@ -313,13 +313,13 @@ void FU_tableswitch(ST_tpStackFrame *pFrame, u1 **pc);
 
 void FU_lookupswitch(ST_tpStackFrame *pFrame, u1 **pc);
 
-void FU_ireturn(ST_tpStackFrame *pFrame, ST_tpVariable **Retorno);
+int FU_ireturn(ST_tpStackFrame *pFrame, ST_tpVariable **Retorno);
 
-void FU_lreturn(ST_tpStackFrame *pFrame, ST_tpVariable **Retorno);
+int FU_lreturn(ST_tpStackFrame *pFrame, ST_tpVariable **Retorno);
 
-void FU_freturn(ST_tpStackFrame *pFrame, ST_tpVariable **Retorno);
+int FU_freturn(ST_tpStackFrame *pFrame, ST_tpVariable **Retorno);
 
-void FU_dreturn(ST_tpStackFrame *pFrame, ST_tpVariable **Retorno);
+int FU_dreturn(ST_tpStackFrame *pFrame, ST_tpVariable **Retorno);
 
 int FU_areturn(ST_tpStackFrame *pFrame, ST_tpVariable **Retorno);
 

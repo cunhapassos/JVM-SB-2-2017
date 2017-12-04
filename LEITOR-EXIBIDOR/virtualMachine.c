@@ -1012,19 +1012,8 @@ ST_tpJVM *VM_exucutarJVM(int numeroClasses, char *nomeClasses[]){
     ST_tpJVM *pJVM;
     ST_tpClassFile *pClasse; //*pSystemCLass;
     ST_tpMethod_info *pMetodo; //*pInicializeMethod;
-    //ST_tpParameterStack *pSystemStack = NULL;
-    
-    /* Cria a maquina virtual, a area de metodos, o heap e uma thread*/
+
     pJVM = VM_criarJVM();
-    /*
-    pSystemCLass = VM_carregarClasse("java/lang/System", pJVM);
-    pInicializeMethod = VM_procurarMetodo( pSystemCLass, "()V", "initializeSystemClass");
-    VM_executarMetodo(pJVM, pSystemCLass, pSystemStack, pInicializeMethod);
-    */
-    /* Carregando classes na JVM */
-    /*for(i = 0; i < numeroClasses; i++){
-        pClasse = VM_carregarClasse(nomeClasses[i], pJVM);
-    }*/
 
     /* Procurando a primeira classe que tem o main */
     for(i = 0 ; i < numeroClasses; i++){

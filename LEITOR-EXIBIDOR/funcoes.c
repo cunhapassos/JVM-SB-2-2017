@@ -3071,7 +3071,7 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame **pFrame, ST_tpVariable 
 
         *******************************************************************************************/
         case 0xac:
-            FU_ireturn(*pFrame, Retorno);
+            flag = FU_ireturn(*pFrame, Retorno);
             break;
         /********************************************************************************************
         
@@ -3087,7 +3087,7 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame **pFrame, ST_tpVariable 
 
         *******************************************************************************************/
         case 0xad:
-            FU_lreturn(*pFrame, Retorno);
+            flag =  FU_lreturn(*pFrame, Retorno);
             break;
         /********************************************************************************************
         
@@ -3103,7 +3103,7 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame **pFrame, ST_tpVariable 
 
         *******************************************************************************************/
         case 0xae:
-            FU_freturn(*pFrame, Retorno);
+            flag =  FU_freturn(*pFrame, Retorno);
             break;
 
         /********************************************************************************************
@@ -3120,7 +3120,7 @@ int IT_executaInstrucao(ST_tpJVM *pJVM, ST_tpStackFrame **pFrame, ST_tpVariable 
 
         *******************************************************************************************/
         case 0xaf:
-            FU_dreturn(*pFrame, Retorno);
+            flag =  FU_dreturn(*pFrame, Retorno);
             break;
 
         /********************************************************************************************

@@ -2707,8 +2707,8 @@ void FU_f2i(ST_tpStackFrame *pFrame){
 }
 
 void FU_tableswitch(ST_tpStackFrame *pFrame, u1 **PC){
-    u1 **tempPC, aux, parametro1, parametro2, parametro3, parametro4;
-    u4 valorDefalt, valorLow, valorHigh;
+    u1 **tempPC = NULL, aux, parametro1, parametro2, parametro3, parametro4;
+    int32_t valorDefalt, valorLow, valorHigh;
     ST_tpVariable var1, var2, var3;
 
     tempPC = PC;
@@ -2810,7 +2810,7 @@ void FU_lookupswitch(ST_tpStackFrame *pFrame, u1 **PC){
     }
 }
 
-void FU_ireturn(ST_tpStackFrame *pFrame, ST_tpVariable **Retorno){
+int FU_ireturn(ST_tpStackFrame *pFrame, ST_tpVariable **Retorno){
     ST_tpVariable pTempRetorno;
 
     pTempRetorno = *PL_popOperando(&pFrame->operandStack);
@@ -2830,10 +2830,10 @@ void FU_ireturn(ST_tpStackFrame *pFrame, ST_tpVariable **Retorno){
 		(*Retorno)->valor.Int = (int) pTempRetorno.valor.Int;
 	}
     (*Retorno)->tipo = JINT;
-    // Sair do metodo
+    return 1;
 }
 
-void FU_lreturn(ST_tpStackFrame *pFrame, ST_tpVariable **Retorno){
+int FU_lreturn(ST_tpStackFrame *pFrame, ST_tpVariable **Retorno){
     ST_tpVariable pTempRetorno;
 
     pTempRetorno = *PL_popOperando(&pFrame->operandStack);
@@ -2854,9 +2854,10 @@ void FU_lreturn(ST_tpStackFrame *pFrame, ST_tpVariable **Retorno){
 
 
     (*Retorno)->tipo = JLONG;
+    return 1;
 }
 
-void FU_freturn(ST_tpStackFrame *pFrame, ST_tpVariable **Retorno){
+int FU_freturn(ST_tpStackFrame *pFrame, ST_tpVariable **Retorno){
     ST_tpVariable pTempRetorno;
 
     pTempRetorno = *PL_popOperando(&pFrame->operandStack);
@@ -2877,10 +2878,10 @@ void FU_freturn(ST_tpStackFrame *pFrame, ST_tpVariable **Retorno){
 	}
 
     (*Retorno)->tipo = JFLOAT;
+    return 1;
 }
 
-            
-void FU_dreturn(ST_tpStackFrame *pFrame, ST_tpVariable **Retorno){
+int FU_dreturn(ST_tpStackFrame *pFrame, ST_tpVariable **Retorno){
     ST_tpVariable pTempRetorno;
 
     pTempRetorno = *PL_popOperando(&pFrame->operandStack);
@@ -2901,6 +2902,7 @@ void FU_dreturn(ST_tpStackFrame *pFrame, ST_tpVariable **Retorno){
 	}
 
     (*Retorno)->tipo = JDOUBLE;
+    return 1;
 }
 
 int FU_areturn(ST_tpStackFrame *pFrame, ST_tpVariable **Retorno){
@@ -2910,7 +2912,6 @@ int FU_areturn(ST_tpStackFrame *pFrame, ST_tpVariable **Retorno){
         return 1;
     }
     return 1;
-    // Sair do metodo
 }
 
 void FU_getstatic(ST_tpJVM *pJVM, ST_tpStackFrame *pFrame, u1 **PC){
