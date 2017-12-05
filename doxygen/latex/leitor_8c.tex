@@ -1,0 +1,340 @@
+\hypertarget{leitor_8c}{}\section{leitor.\+c File Reference}
+\label{leitor_8c}\index{leitor.\+c@{leitor.\+c}}
+
+
+
+
+  
+
+
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$string.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}leitor.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}configuracao.\+h\char`\"{}}\newline
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structures_8h_ad9f4cdb6757615aae2fad89dab3c5470}{u1}} \mbox{\hyperlink{leitor_8c_ad49a442f8dcb8ab00af0642c41742d0b}{L\+E\+\_\+ler\+U1}} (F\+I\+LE $\ast$p\+Arq)
+\begin{DoxyCompactList}\small\item\em 
+
+ Inclusao do compilador \end{DoxyCompactList}\item 
+u2 \mbox{\hyperlink{leitor_8c_a046f80fe671ca81ff5cb63c07266d4c3}{L\+E\+\_\+ler\+U2}} (F\+I\+LE $\ast$p\+Arq)
+\begin{DoxyCompactList}\small\item\em Descri��o da fun��o\+: Le dois bytes de um arquivo apontado por p\+Arq. \end{DoxyCompactList}\item 
+u4 \mbox{\hyperlink{leitor_8c_a8072ae4207f1830d781bcfd928f81ae7}{L\+E\+\_\+ler\+U4}} (F\+I\+LE $\ast$p\+Arq)
+\begin{DoxyCompactList}\small\item\em Descri��o da fun��o\+: Le quatro bytes de um arquivo apontado por p\+Arq. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structST__tpCp__info}{S\+T\+\_\+tp\+Cp\+\_\+info}} $\ast$ \mbox{\hyperlink{leitor_8c_a2d25378faf2cfed7ee3a3463c6eb6167}{L\+E\+\_\+ler\+Constant\+\_\+pool}} (F\+I\+LE $\ast$p\+Arq, u2 constant\+\_\+pool\+\_\+count)
+\begin{DoxyCompactList}\small\item\em Descri��o da fun��o\+: Le a Tabela de Constantes do bytecode .class. \end{DoxyCompactList}\item 
+u2 $\ast$ \mbox{\hyperlink{leitor_8c_a9b466c8b70beddf0072b0ce7bbb6c0b3}{L\+E\+\_\+ler\+Interfaces}} (F\+I\+LE $\ast$p\+Arq, \mbox{\hyperlink{structST__tpCp__info}{S\+T\+\_\+tp\+Cp\+\_\+info}} $\ast$cp, u2 interfaces\+\_\+count)
+\begin{DoxyCompactList}\small\item\em Descri��o da fun��o\+: Le Tabela de Interfaces do bytecode .class. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structures_8h_abff2812b91e543d80445931e2e81c1cf}{S\+T\+\_\+tp\+Field\+\_\+info}} $\ast$ \mbox{\hyperlink{leitor_8c_a67539638bf944dd0e069dace6d222b80}{L\+E\+\_\+ler\+Fields}} (F\+I\+LE $\ast$p\+Arq, \mbox{\hyperlink{structST__tpCp__info}{S\+T\+\_\+tp\+Cp\+\_\+info}} $\ast$cp, u2 fields\+\_\+count)
+\begin{DoxyCompactList}\small\item\em Descri��o da fun��o\+: Le Tabela de Fields do bytecode .class. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structures_8h_a39bc7f27824c19378efe14999e0623c8}{S\+T\+\_\+tp\+Method\+\_\+info}} $\ast$ \mbox{\hyperlink{leitor_8c_a7f73c9ab4b2acc8a576daf4dd1ffc3cf}{L\+E\+\_\+ler\+Methods}} (F\+I\+LE $\ast$p\+Arq, \mbox{\hyperlink{structST__tpCp__info}{S\+T\+\_\+tp\+Cp\+\_\+info}} $\ast$cp, u2 methods\+\_\+count)
+\begin{DoxyCompactList}\small\item\em Descri��o da fun��o\+: Le Tabela de Metodos do bytecode .class. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structST__tpConstantValue__attribute}{S\+T\+\_\+tp\+Constant\+Value\+\_\+attribute}} $\ast$ \mbox{\hyperlink{leitor_8c_a2b72d938576f1fffb175626ad06341b1}{L\+E\+\_\+ler\+Constant\+Value\+Attribute}} (F\+I\+LE $\ast$p\+Arq)
+\begin{DoxyCompactList}\small\item\em Descri��o da fun��o\+: Le um atributo Constant\+Value. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structST__tpCode__attribute}{S\+T\+\_\+tp\+Code\+\_\+attribute}} $\ast$ \mbox{\hyperlink{leitor_8c_a6c6e0fadf6cd57e1f1a8eab2d41a6328}{L\+E\+\_\+ler\+Code\+Attribute}} (F\+I\+LE $\ast$p\+Arq, \mbox{\hyperlink{structST__tpCp__info}{S\+T\+\_\+tp\+Cp\+\_\+info}} $\ast$cp, \mbox{\hyperlink{structures_8h_a4ad50728b2ffc8af625f1237e03bc9e0}{S\+T\+\_\+tp\+Attribute\+\_\+info}} $\ast$p\+Attributes)
+\begin{DoxyCompactList}\small\item\em Descri��o da fun��o\+: Le uma Exception\+Table. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structST__tpExceptions__attribute}{S\+T\+\_\+tp\+Exceptions\+\_\+attribute}} $\ast$ \mbox{\hyperlink{leitor_8c_a5c06b3aa974db3788e15e1f659ecb757}{L\+E\+\_\+ler\+Exceptions\+Attribute}} (F\+I\+LE $\ast$p\+Arq)
+\begin{DoxyCompactList}\small\item\em Descri��o da fun��o\+: Le os atributos de excecao do bytecode .class. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{leitor_8c_a45e7ac88b891b7c814e2b3cabfd7f8a4}\label{leitor_8c_a45e7ac88b891b7c814e2b3cabfd7f8a4}} 
+\mbox{\hyperlink{structST__tpInnerClasses__attribute}{S\+T\+\_\+tp\+Inner\+Classes\+\_\+attribute}} $\ast$ {\bfseries L\+E\+\_\+ler\+Inner\+Classes\+Attribute} (F\+I\+LE $\ast$p\+Arq)
+\item 
+\mbox{\hyperlink{structST__tpSourceFile__attribute}{S\+T\+\_\+tp\+Source\+File\+\_\+attribute}} $\ast$ \mbox{\hyperlink{leitor_8c_a60e9b9600d0be86d63fa1256fb53298a}{L\+E\+\_\+ler\+Source\+File\+Attribute}} (F\+I\+LE $\ast$p\+Arq)
+\begin{DoxyCompactList}\small\item\em Descri��o da fun��o\+: Le Tabela de Atributo Source\+File do bytecode .class. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{leitor_8c_a6fbfe4bcf89f4aca37442848d3ecb865}\label{leitor_8c_a6fbfe4bcf89f4aca37442848d3ecb865}} 
+\mbox{\hyperlink{structST__tpLineNumberTable__attribute}{S\+T\+\_\+tp\+Line\+Number\+Table\+\_\+attribute}} $\ast$ {\bfseries L\+E\+\_\+ler\+Line\+Number\+Attribute} (F\+I\+LE $\ast$p\+Arq)
+\item 
+\mbox{\Hypertarget{leitor_8c_a2af77bcfbdef8aa9093fa37d6a7d1880}\label{leitor_8c_a2af77bcfbdef8aa9093fa37d6a7d1880}} 
+\mbox{\hyperlink{structST__tpLocalVariableTable__attribute}{S\+T\+\_\+tp\+Local\+Variable\+Table\+\_\+attribute}} $\ast$ {\bfseries L\+E\+\_\+ler\+Local\+Variable\+Attribute} (F\+I\+LE $\ast$p\+Arq)
+\item 
+\mbox{\hyperlink{structures_8h_a4ad50728b2ffc8af625f1237e03bc9e0}{S\+T\+\_\+tp\+Attribute\+\_\+info}} $\ast$ \mbox{\hyperlink{leitor_8c_a430f7cf7ce4b0ae9035f6b3b025dc918}{L\+E\+\_\+ler\+Attribute}} (F\+I\+LE $\ast$p\+Arq, \mbox{\hyperlink{structST__tpCp__info}{S\+T\+\_\+tp\+Cp\+\_\+info}} $\ast$cp, \mbox{\hyperlink{structures_8h_a4ad50728b2ffc8af625f1237e03bc9e0}{S\+T\+\_\+tp\+Attribute\+\_\+info}} $\ast$p\+Attributes)
+\begin{DoxyCompactList}\small\item\em Descri��o da fun��o\+: Le Tabela de Atributos do bytecode .class. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structures_8h_a300c8e4693c608a0fc0d5f210b5448b5}{S\+T\+\_\+tp\+Class\+File}} $\ast$ \mbox{\hyperlink{leitor_8c_a9481e3d853af942d28aeda9abb3db47c}{L\+E\+\_\+ler\+Classe}} (char $\ast$nome\+Arquivo)
+\begin{DoxyCompactList}\small\item\em Descri��o da fun��o\+: Fun��o que recebe o nome qualificado do arquivo .class e carrega o seu conte�do, retornando o ponteiro para a estrutura class\+File. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+
+
+ 
+
+Universidade de Brasilia -\/ 02/2017 Software Basico -\/ Turma A
+
+M\+O\+D\+U\+LO L\+E\+I\+T\+O\+R\+\_\+\+E\+X\+I\+B\+I\+D\+OR
+
+\begin{DoxyVerb}        Modulo de implementaco: Modulo Leitor-Exibidor:
+        Implementa as funcoes de leitura do bytecode.
+\end{DoxyVerb}
+
+
+\begin{DoxyAuthor}{Author}
+A\+L\+ON M\+O\+TA -\/ M\+AT. 13/0005002 
+
+D\+A\+N\+I\+EL M\+A\+T\+I\+AS -\/ M\+AT. 12/0139804 
+
+G\+A\+B\+R\+I\+EL T\+O\+L\+L\+I\+NI -\/ M\+AT. 14/0020454 
+
+P\+A\+U\+LO P\+A\+S\+S\+OS -\/ M\+AT. 10/0118577
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+1.\+0 
+\end{DoxyVersion}
+\begin{DoxySince}{Since}
+07/09/2017 
+\end{DoxySince}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{leitor_8c_a430f7cf7ce4b0ae9035f6b3b025dc918}\label{leitor_8c_a430f7cf7ce4b0ae9035f6b3b025dc918}} 
+\index{leitor.\+c@{leitor.\+c}!L\+E\+\_\+ler\+Attribute@{L\+E\+\_\+ler\+Attribute}}
+\index{L\+E\+\_\+ler\+Attribute@{L\+E\+\_\+ler\+Attribute}!leitor.\+c@{leitor.\+c}}
+\subsubsection{\texorpdfstring{L\+E\+\_\+ler\+Attribute()}{LE\_lerAttribute()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structures_8h_a4ad50728b2ffc8af625f1237e03bc9e0}{S\+T\+\_\+tp\+Attribute\+\_\+info}}$\ast$ L\+E\+\_\+ler\+Attribute (\begin{DoxyParamCaption}\item[{F\+I\+LE $\ast$}]{p\+Arq,  }\item[{\mbox{\hyperlink{structST__tpCp__info}{S\+T\+\_\+tp\+Cp\+\_\+info}} $\ast$}]{cp,  }\item[{\mbox{\hyperlink{structures_8h_a4ad50728b2ffc8af625f1237e03bc9e0}{S\+T\+\_\+tp\+Attribute\+\_\+info}} $\ast$}]{p\+Attributes }\end{DoxyParamCaption})}
+
+
+
+Descri��o da fun��o\+: Le Tabela de Atributos do bytecode .class. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em p\+Arq} & -\/ Ponteiro para o arquivo a ser lido \\
+\hline
+{\em p\+Attributes} & -\/ Ponteiro para a Tabela de Atributos \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{leitor_8c_a9481e3d853af942d28aeda9abb3db47c}\label{leitor_8c_a9481e3d853af942d28aeda9abb3db47c}} 
+\index{leitor.\+c@{leitor.\+c}!L\+E\+\_\+ler\+Classe@{L\+E\+\_\+ler\+Classe}}
+\index{L\+E\+\_\+ler\+Classe@{L\+E\+\_\+ler\+Classe}!leitor.\+c@{leitor.\+c}}
+\subsubsection{\texorpdfstring{L\+E\+\_\+ler\+Classe()}{LE\_lerClasse()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structures_8h_a300c8e4693c608a0fc0d5f210b5448b5}{S\+T\+\_\+tp\+Class\+File}}$\ast$ L\+E\+\_\+ler\+Classe (\begin{DoxyParamCaption}\item[{char $\ast$}]{nome\+Arquivo }\end{DoxyParamCaption})}
+
+
+
+Descri��o da fun��o\+: Fun��o que recebe o nome qualificado do arquivo .class e carrega o seu conte�do, retornando o ponteiro para a estrutura class\+File. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em nome\+Arquivo} & -\/ Nome do arquivo a ser carregado\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+arq\+Ponto\+Class -\/ Ponteiro para a a estrutura do .class carregada em memoria 
+\end{DoxyReturn}
+\mbox{\Hypertarget{leitor_8c_a6c6e0fadf6cd57e1f1a8eab2d41a6328}\label{leitor_8c_a6c6e0fadf6cd57e1f1a8eab2d41a6328}} 
+\index{leitor.\+c@{leitor.\+c}!L\+E\+\_\+ler\+Code\+Attribute@{L\+E\+\_\+ler\+Code\+Attribute}}
+\index{L\+E\+\_\+ler\+Code\+Attribute@{L\+E\+\_\+ler\+Code\+Attribute}!leitor.\+c@{leitor.\+c}}
+\subsubsection{\texorpdfstring{L\+E\+\_\+ler\+Code\+Attribute()}{LE\_lerCodeAttribute()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structST__tpCode__attribute}{S\+T\+\_\+tp\+Code\+\_\+attribute}}$\ast$ L\+E\+\_\+ler\+Code\+Attribute (\begin{DoxyParamCaption}\item[{F\+I\+LE $\ast$}]{p\+Arq,  }\item[{\mbox{\hyperlink{structST__tpCp__info}{S\+T\+\_\+tp\+Cp\+\_\+info}} $\ast$}]{cp,  }\item[{\mbox{\hyperlink{structures_8h_a4ad50728b2ffc8af625f1237e03bc9e0}{S\+T\+\_\+tp\+Attribute\+\_\+info}} $\ast$}]{p\+Attributes }\end{DoxyParamCaption})}
+
+
+
+Descri��o da fun��o\+: Le uma Exception\+Table. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em p\+Arq} & -\/ Ponteiro para o arquivo de onde sera lido a Exception\+Table\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+p\+Exception\+Table -\/ Ponteiro para a Exception\+Table lida Descri��o da fun��o\+: Le um atributo Code\+Attribute
+\end{DoxyReturn}
+
+\begin{DoxyParams}{Parameters}
+{\em p\+Arq} & -\/ Ponteiro para o arquivo de onde sera lido o Code\+Attribute\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+p\+Code -\/ Ponteiro para o Code lido 
+\end{DoxyReturn}
+\mbox{\Hypertarget{leitor_8c_a2d25378faf2cfed7ee3a3463c6eb6167}\label{leitor_8c_a2d25378faf2cfed7ee3a3463c6eb6167}} 
+\index{leitor.\+c@{leitor.\+c}!L\+E\+\_\+ler\+Constant\+\_\+pool@{L\+E\+\_\+ler\+Constant\+\_\+pool}}
+\index{L\+E\+\_\+ler\+Constant\+\_\+pool@{L\+E\+\_\+ler\+Constant\+\_\+pool}!leitor.\+c@{leitor.\+c}}
+\subsubsection{\texorpdfstring{L\+E\+\_\+ler\+Constant\+\_\+pool()}{LE\_lerConstant\_pool()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structST__tpCp__info}{S\+T\+\_\+tp\+Cp\+\_\+info}}$\ast$ L\+E\+\_\+ler\+Constant\+\_\+pool (\begin{DoxyParamCaption}\item[{F\+I\+LE $\ast$}]{p\+Arq,  }\item[{u2}]{constant\+\_\+pool\+\_\+count }\end{DoxyParamCaption})}
+
+
+
+Descri��o da fun��o\+: Le a Tabela de Constantes do bytecode .class. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em p\+Arq} & -\/ Ponteiro para o arquivo a ser lido \\
+\hline
+{\em constant\+\_\+pool\+\_\+count} & -\/ Numero de elementos da Tabela de Constantes a ser lida\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+constant\+Pool -\/ Ponteiro para a Tabela de Constantes lida 
+\end{DoxyReturn}
+\mbox{\Hypertarget{leitor_8c_a2b72d938576f1fffb175626ad06341b1}\label{leitor_8c_a2b72d938576f1fffb175626ad06341b1}} 
+\index{leitor.\+c@{leitor.\+c}!L\+E\+\_\+ler\+Constant\+Value\+Attribute@{L\+E\+\_\+ler\+Constant\+Value\+Attribute}}
+\index{L\+E\+\_\+ler\+Constant\+Value\+Attribute@{L\+E\+\_\+ler\+Constant\+Value\+Attribute}!leitor.\+c@{leitor.\+c}}
+\subsubsection{\texorpdfstring{L\+E\+\_\+ler\+Constant\+Value\+Attribute()}{LE\_lerConstantValueAttribute()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structST__tpConstantValue__attribute}{S\+T\+\_\+tp\+Constant\+Value\+\_\+attribute}}$\ast$ L\+E\+\_\+ler\+Constant\+Value\+Attribute (\begin{DoxyParamCaption}\item[{F\+I\+LE $\ast$}]{p\+Arq }\end{DoxyParamCaption})}
+
+
+
+Descri��o da fun��o\+: Le um atributo Constant\+Value. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em p\+Arq} & -\/ Ponteiro para o arquivo de onde sera lido o Constant\+Value\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+constant\+Value -\/ Ponteiro para o atributo Constant\+Value lido 
+\end{DoxyReturn}
+\mbox{\Hypertarget{leitor_8c_a5c06b3aa974db3788e15e1f659ecb757}\label{leitor_8c_a5c06b3aa974db3788e15e1f659ecb757}} 
+\index{leitor.\+c@{leitor.\+c}!L\+E\+\_\+ler\+Exceptions\+Attribute@{L\+E\+\_\+ler\+Exceptions\+Attribute}}
+\index{L\+E\+\_\+ler\+Exceptions\+Attribute@{L\+E\+\_\+ler\+Exceptions\+Attribute}!leitor.\+c@{leitor.\+c}}
+\subsubsection{\texorpdfstring{L\+E\+\_\+ler\+Exceptions\+Attribute()}{LE\_lerExceptionsAttribute()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structST__tpExceptions__attribute}{S\+T\+\_\+tp\+Exceptions\+\_\+attribute}}$\ast$ L\+E\+\_\+ler\+Exceptions\+Attribute (\begin{DoxyParamCaption}\item[{F\+I\+LE $\ast$}]{p\+Arq }\end{DoxyParamCaption})}
+
+
+
+Descri��o da fun��o\+: Le os atributos de excecao do bytecode .class. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em p\+Arq} & -\/ Ponteiro para o arquivo a ser lido\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+p\+Exceptions; -\/ Ponteiro para a Exceptions\+Attribute lida 
+\end{DoxyReturn}
+\mbox{\Hypertarget{leitor_8c_a67539638bf944dd0e069dace6d222b80}\label{leitor_8c_a67539638bf944dd0e069dace6d222b80}} 
+\index{leitor.\+c@{leitor.\+c}!L\+E\+\_\+ler\+Fields@{L\+E\+\_\+ler\+Fields}}
+\index{L\+E\+\_\+ler\+Fields@{L\+E\+\_\+ler\+Fields}!leitor.\+c@{leitor.\+c}}
+\subsubsection{\texorpdfstring{L\+E\+\_\+ler\+Fields()}{LE\_lerFields()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structures_8h_abff2812b91e543d80445931e2e81c1cf}{S\+T\+\_\+tp\+Field\+\_\+info}}$\ast$ L\+E\+\_\+ler\+Fields (\begin{DoxyParamCaption}\item[{F\+I\+LE $\ast$}]{p\+Arq,  }\item[{\mbox{\hyperlink{structST__tpCp__info}{S\+T\+\_\+tp\+Cp\+\_\+info}} $\ast$}]{cp,  }\item[{u2}]{fields\+\_\+count }\end{DoxyParamCaption})}
+
+
+
+Descri��o da fun��o\+: Le Tabela de Fields do bytecode .class. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em p\+Arq} & -\/ Ponteiro para o arquivo a ser lido \\
+\hline
+{\em fields\+\_\+count} & -\/ Numero de elementos da Tabela de Fields a ser lida\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+pfields -\/ Ponteiro para a Tabela de Fields lida 
+\end{DoxyReturn}
+\mbox{\Hypertarget{leitor_8c_a9b466c8b70beddf0072b0ce7bbb6c0b3}\label{leitor_8c_a9b466c8b70beddf0072b0ce7bbb6c0b3}} 
+\index{leitor.\+c@{leitor.\+c}!L\+E\+\_\+ler\+Interfaces@{L\+E\+\_\+ler\+Interfaces}}
+\index{L\+E\+\_\+ler\+Interfaces@{L\+E\+\_\+ler\+Interfaces}!leitor.\+c@{leitor.\+c}}
+\subsubsection{\texorpdfstring{L\+E\+\_\+ler\+Interfaces()}{LE\_lerInterfaces()}}
+{\footnotesize\ttfamily u2$\ast$ L\+E\+\_\+ler\+Interfaces (\begin{DoxyParamCaption}\item[{F\+I\+LE $\ast$}]{p\+Arq,  }\item[{\mbox{\hyperlink{structST__tpCp__info}{S\+T\+\_\+tp\+Cp\+\_\+info}} $\ast$}]{cp,  }\item[{u2}]{interfaces\+\_\+count }\end{DoxyParamCaption})}
+
+
+
+Descri��o da fun��o\+: Le Tabela de Interfaces do bytecode .class. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em p\+Arq} & -\/ Ponteiro para o arquivo a ser lido \\
+\hline
+{\em interfaces\+\_\+count} & -\/ Numero de elementos da Tabela de Interfaces a ser lida\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+pinterfaces -\/ Ponteiro para a Tabela de Interfaces lida 
+\end{DoxyReturn}
+\mbox{\Hypertarget{leitor_8c_a7f73c9ab4b2acc8a576daf4dd1ffc3cf}\label{leitor_8c_a7f73c9ab4b2acc8a576daf4dd1ffc3cf}} 
+\index{leitor.\+c@{leitor.\+c}!L\+E\+\_\+ler\+Methods@{L\+E\+\_\+ler\+Methods}}
+\index{L\+E\+\_\+ler\+Methods@{L\+E\+\_\+ler\+Methods}!leitor.\+c@{leitor.\+c}}
+\subsubsection{\texorpdfstring{L\+E\+\_\+ler\+Methods()}{LE\_lerMethods()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structures_8h_a39bc7f27824c19378efe14999e0623c8}{S\+T\+\_\+tp\+Method\+\_\+info}}$\ast$ L\+E\+\_\+ler\+Methods (\begin{DoxyParamCaption}\item[{F\+I\+LE $\ast$}]{p\+Arq,  }\item[{\mbox{\hyperlink{structST__tpCp__info}{S\+T\+\_\+tp\+Cp\+\_\+info}} $\ast$}]{cp,  }\item[{u2}]{methods\+\_\+count }\end{DoxyParamCaption})}
+
+
+
+Descri��o da fun��o\+: Le Tabela de Metodos do bytecode .class. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em p\+Arq} & -\/ Ponteiro para o arquivo a ser lido \\
+\hline
+{\em methods\+\_\+count} & -\/ Numero de elementos da Tabela de Metodos a ser lida\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+pmethods -\/ Ponteiro para a Tabela de Metodos lida 
+\end{DoxyReturn}
+\mbox{\Hypertarget{leitor_8c_a60e9b9600d0be86d63fa1256fb53298a}\label{leitor_8c_a60e9b9600d0be86d63fa1256fb53298a}} 
+\index{leitor.\+c@{leitor.\+c}!L\+E\+\_\+ler\+Source\+File\+Attribute@{L\+E\+\_\+ler\+Source\+File\+Attribute}}
+\index{L\+E\+\_\+ler\+Source\+File\+Attribute@{L\+E\+\_\+ler\+Source\+File\+Attribute}!leitor.\+c@{leitor.\+c}}
+\subsubsection{\texorpdfstring{L\+E\+\_\+ler\+Source\+File\+Attribute()}{LE\_lerSourceFileAttribute()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structST__tpSourceFile__attribute}{S\+T\+\_\+tp\+Source\+File\+\_\+attribute}}$\ast$ L\+E\+\_\+ler\+Source\+File\+Attribute (\begin{DoxyParamCaption}\item[{F\+I\+LE $\ast$}]{p\+Arq }\end{DoxyParamCaption})}
+
+
+
+Descri��o da fun��o\+: Le Tabela de Atributo Source\+File do bytecode .class. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em p\+Arq} & -\/ Ponteiro para o arquivo a ser lido \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+p\+Source\+File -\/ Ponteiro para o Source\+File lido 
+\end{DoxyReturn}
+\mbox{\Hypertarget{leitor_8c_ad49a442f8dcb8ab00af0642c41742d0b}\label{leitor_8c_ad49a442f8dcb8ab00af0642c41742d0b}} 
+\index{leitor.\+c@{leitor.\+c}!L\+E\+\_\+ler\+U1@{L\+E\+\_\+ler\+U1}}
+\index{L\+E\+\_\+ler\+U1@{L\+E\+\_\+ler\+U1}!leitor.\+c@{leitor.\+c}}
+\subsubsection{\texorpdfstring{L\+E\+\_\+ler\+U1()}{LE\_lerU1()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structures_8h_ad9f4cdb6757615aae2fad89dab3c5470}{u1}} L\+E\+\_\+ler\+U1 (\begin{DoxyParamCaption}\item[{F\+I\+LE $\ast$}]{p\+Arq }\end{DoxyParamCaption})}
+
+
+
+
+
+ Inclusao do compilador 
+
+Descri��o da fun��o\+: Le um byte de um arquivo apontado por p\+Arq
+
+
+\begin{DoxyParams}{Parameters}
+{\em p\+Arq} & -\/ Ponteiro para o arquivo a ser lido\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+retorno -\/ Quatro bytes lidos do bytecode 
+\end{DoxyReturn}
+\mbox{\Hypertarget{leitor_8c_a046f80fe671ca81ff5cb63c07266d4c3}\label{leitor_8c_a046f80fe671ca81ff5cb63c07266d4c3}} 
+\index{leitor.\+c@{leitor.\+c}!L\+E\+\_\+ler\+U2@{L\+E\+\_\+ler\+U2}}
+\index{L\+E\+\_\+ler\+U2@{L\+E\+\_\+ler\+U2}!leitor.\+c@{leitor.\+c}}
+\subsubsection{\texorpdfstring{L\+E\+\_\+ler\+U2()}{LE\_lerU2()}}
+{\footnotesize\ttfamily u2 L\+E\+\_\+ler\+U2 (\begin{DoxyParamCaption}\item[{F\+I\+LE $\ast$}]{p\+Arq }\end{DoxyParamCaption})}
+
+
+
+Descri��o da fun��o\+: Le dois bytes de um arquivo apontado por p\+Arq. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em p\+Arq} & -\/ Ponteiro para o arquivo a ser lido\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+retorno -\/ Dois bytes lidos do bytecode 
+\end{DoxyReturn}
+\mbox{\Hypertarget{leitor_8c_a8072ae4207f1830d781bcfd928f81ae7}\label{leitor_8c_a8072ae4207f1830d781bcfd928f81ae7}} 
+\index{leitor.\+c@{leitor.\+c}!L\+E\+\_\+ler\+U4@{L\+E\+\_\+ler\+U4}}
+\index{L\+E\+\_\+ler\+U4@{L\+E\+\_\+ler\+U4}!leitor.\+c@{leitor.\+c}}
+\subsubsection{\texorpdfstring{L\+E\+\_\+ler\+U4()}{LE\_lerU4()}}
+{\footnotesize\ttfamily u4 L\+E\+\_\+ler\+U4 (\begin{DoxyParamCaption}\item[{F\+I\+LE $\ast$}]{p\+Arq }\end{DoxyParamCaption})}
+
+
+
+Descri��o da fun��o\+: Le quatro bytes de um arquivo apontado por p\+Arq. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em p\+Arq} & -\/ Ponteiro para o arquivo a ser lido\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+retorno -\/ Quatro bytes lidos do bytecode 
+\end{DoxyReturn}

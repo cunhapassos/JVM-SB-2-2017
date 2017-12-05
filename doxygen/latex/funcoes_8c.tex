@@ -1,0 +1,67 @@
+\hypertarget{funcoes_8c}{}\section{funcoes.\+c File Reference}
+\label{funcoes_8c}\index{funcoes.\+c@{funcoes.\+c}}
+
+
+\begin{DoxyVerb}         Seleciona qual instrução será executada\end{DoxyVerb}
+  
+
+
+{\ttfamily \#include \char`\"{}structures.\+h\char`\"{}}\newline
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}virtual\+Machine.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}pilhas\+\_\+listas.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}instrucoes.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}decoder.\+h\char`\"{}}\newline
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{funcoes_8c_ac87aed2830eb9a54ab0eabeb687e3de2}{I\+T\+\_\+executa\+Instrucao}} (\mbox{\hyperlink{structST__tpJVM}{S\+T\+\_\+tp\+J\+VM}} $\ast$p\+J\+VM, \mbox{\hyperlink{structures_8h_a6488b2ebbc0216565a0c4de6a5d08a5e}{S\+T\+\_\+tp\+Stack\+Frame}} $\ast$$\ast$p\+Frame, \mbox{\hyperlink{structVariable}{S\+T\+\_\+tp\+Variable}} $\ast$$\ast$Retorno, \mbox{\hyperlink{structures_8h_a19e8dd42ee1a3c672cdde6ef9287cbc5}{S\+T\+\_\+tp\+Exception\+\_\+table}} $\ast$p\+Exception\+Table, \mbox{\hyperlink{structures_8h_ad9f4cdb6757615aae2fad89dab3c5470}{u1}} $\ast$$\ast$PC)
+\begin{DoxyCompactList}\small\item\em Descrição da função\+: Chama a instrução a partir de seu opcode. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\begin{DoxyVerb}         Seleciona qual instrução será executada\end{DoxyVerb}
+ 
+
+\begin{DoxyAuthor}{Author}
+A\+L\+ON M\+O\+TA -\/ M\+AT. 13/0005002 
+
+D\+A\+N\+I\+EL M\+A\+T\+I\+AS -\/ M\+AT. 12/0139804 
+
+G\+A\+B\+R\+I\+EL T\+O\+L\+L\+I\+NI -\/ M\+AT. 14/0020454 
+
+P\+A\+U\+LO P\+A\+S\+S\+OS -\/ M\+AT. 10/0118577
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+1.\+0 
+\end{DoxyVersion}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{funcoes_8c_ac87aed2830eb9a54ab0eabeb687e3de2}\label{funcoes_8c_ac87aed2830eb9a54ab0eabeb687e3de2}} 
+\index{funcoes.\+c@{funcoes.\+c}!I\+T\+\_\+executa\+Instrucao@{I\+T\+\_\+executa\+Instrucao}}
+\index{I\+T\+\_\+executa\+Instrucao@{I\+T\+\_\+executa\+Instrucao}!funcoes.\+c@{funcoes.\+c}}
+\subsubsection{\texorpdfstring{I\+T\+\_\+executa\+Instrucao()}{IT\_executaInstrucao()}}
+{\footnotesize\ttfamily int I\+T\+\_\+executa\+Instrucao (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structST__tpJVM}{S\+T\+\_\+tp\+J\+VM}} $\ast$}]{p\+J\+VM,  }\item[{\mbox{\hyperlink{structures_8h_a6488b2ebbc0216565a0c4de6a5d08a5e}{S\+T\+\_\+tp\+Stack\+Frame}} $\ast$$\ast$}]{p\+Frame,  }\item[{\mbox{\hyperlink{structVariable}{S\+T\+\_\+tp\+Variable}} $\ast$$\ast$}]{Retorno,  }\item[{\mbox{\hyperlink{structures_8h_a19e8dd42ee1a3c672cdde6ef9287cbc5}{S\+T\+\_\+tp\+Exception\+\_\+table}} $\ast$}]{p\+Exception\+Table,  }\item[{\mbox{\hyperlink{structures_8h_ad9f4cdb6757615aae2fad89dab3c5470}{u1}} $\ast$$\ast$}]{PC }\end{DoxyParamCaption})}
+
+
+
+Descrição da função\+: Chama a instrução a partir de seu opcode. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em p\+J\+VM} & -\/ Ponteiro para a J\+VM \\
+\hline
+{\em p\+Frame} & -\/ Frame, utilizado em certas instruções \\
+\hline
+{\em Retorno} & -\/ Variável de retorno \\
+\hline
+{\em p\+Exception\+Table} & -\/ Tabela de excessões \\
+\hline
+{\em PC} & -\/ Contador de programa\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+flag -\/ Retorno da instrução return 
+\end{DoxyReturn}
