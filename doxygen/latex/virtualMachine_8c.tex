@@ -1,0 +1,623 @@
+\hypertarget{virtualMachine_8c}{}\section{virtual\+Machine.\+c File Reference}
+\label{virtualMachine_8c}\index{virtual\+Machine.\+c@{virtual\+Machine.\+c}}
+
+
+\begin{DoxyVerb}         Implementacao das estruturas de incicialização da JVM\end{DoxyVerb}
+  
+
+
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$string.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}leitor.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}pilhas\+\_\+listas.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}virtual\+Machine.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}funcoes.\+h\char`\"{}}\newline
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structST__tpMethodArea}{S\+T\+\_\+tp\+Method\+Area}} $\ast$ \mbox{\hyperlink{virtualMachine_8c_ab6a6d4c955fca9a6534723c2bba7443d}{V\+M\+\_\+criar\+Area\+Metodo}} ()
+\begin{DoxyCompactList}\small\item\em Descricao da funcao\+: Aloca memória para um método. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structST__tpHeap}{S\+T\+\_\+tp\+Heap}} $\ast$ \mbox{\hyperlink{virtualMachine_8c_a572a145715a015bd5fb3df445e5887c6}{V\+M\+\_\+criar\+Heap}} ()
+\begin{DoxyCompactList}\small\item\em Descricao da funcao\+: Aloca memória para um Heap. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structures_8h_afd892ddd9ad4b7f9600350a3d42d683e}{S\+T\+\_\+tp\+Thread}} $\ast$ \mbox{\hyperlink{virtualMachine_8c_a022e064afc413700c7d5de31b46c69d5}{V\+M\+\_\+criar\+Thread}} ()
+\begin{DoxyCompactList}\small\item\em Descricao da funcao\+: Aloca memória para uma Thread. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structST__tpJVM}{S\+T\+\_\+tp\+J\+VM}} $\ast$ \mbox{\hyperlink{virtualMachine_8c_a8fdbb685fbf06e9a679cf8872ff293d9}{V\+M\+\_\+criar\+J\+VM}} ()
+\begin{DoxyCompactList}\small\item\em Descricao da funcao\+: Aloca memória para a J\+VM, e a inicializa. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{virtualMachine_8c_a308eb7ce35638fde2a393713fde2480c}{V\+M\+\_\+armazenar\+Variavel}} (\mbox{\hyperlink{structVariable}{S\+T\+\_\+tp\+Variable}} $\ast$p\+Variaveis\+Locais, \mbox{\hyperlink{structVariable}{S\+T\+\_\+tp\+Variable}} variavel, int posicao)
+\begin{DoxyCompactList}\small\item\em Descricao da funcao\+: Armazena uma variável na lista de variáveis locais. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structVariable}{S\+T\+\_\+tp\+Variable}} \mbox{\hyperlink{virtualMachine_8c_a6ae1f3324d82e8f4de421eb71741a548}{V\+M\+\_\+recuperar\+Variavel}} (\mbox{\hyperlink{structVariable}{S\+T\+\_\+tp\+Variable}} $\ast$p\+Variaveis\+Locais, int posicao)
+\begin{DoxyCompactList}\small\item\em Descricao da funcao\+: Lê a variável em uma certa posição na lista de variáveis locais. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structures_8h_a6488b2ebbc0216565a0c4de6a5d08a5e}{S\+T\+\_\+tp\+Stack\+Frame}} $\ast$ \mbox{\hyperlink{virtualMachine_8c_ae13fbd36ef04a545a7e02deb2d1b232b}{V\+M\+\_\+criar\+Frame}} (\mbox{\hyperlink{structST__tpJVM}{S\+T\+\_\+tp\+J\+VM}} $\ast$p\+J\+VM, \mbox{\hyperlink{structures_8h_a6488b2ebbc0216565a0c4de6a5d08a5e}{S\+T\+\_\+tp\+Stack\+Frame}} $\ast$$\ast$p\+J\+V\+M\+Stack, \mbox{\hyperlink{structures_8h_a300c8e4693c608a0fc0d5f210b5448b5}{S\+T\+\_\+tp\+Class\+File}} $\ast$p\+Classe, \mbox{\hyperlink{structures_8h_ae2d273f61e0f30cd3071067bff6987ce}{S\+T\+\_\+tp\+Parameter\+Stack}} $\ast$pilha\+Parametros, int max\+Stack\+Size, u2 access\+\_\+flag)
+\begin{DoxyCompactList}\small\item\em ~\newline
+Cria um Frame para o metodo que sera executado e isere esse frame na pilha de frames da thread \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structVariable}{S\+T\+\_\+tp\+Variable}} $\ast$ \mbox{\hyperlink{virtualMachine_8c_ad2d703b021df142d9ece8d7d4ca3c37c}{V\+M\+\_\+executar\+Metodo}} (\mbox{\hyperlink{structST__tpJVM}{S\+T\+\_\+tp\+J\+VM}} $\ast$p\+J\+VM, \mbox{\hyperlink{structures_8h_a300c8e4693c608a0fc0d5f210b5448b5}{S\+T\+\_\+tp\+Class\+File}} $\ast$p\+Classe, \mbox{\hyperlink{structures_8h_ae2d273f61e0f30cd3071067bff6987ce}{S\+T\+\_\+tp\+Parameter\+Stack}} $\ast$pilha\+Parametros, \mbox{\hyperlink{structures_8h_a39bc7f27824c19378efe14999e0623c8}{S\+T\+\_\+tp\+Method\+\_\+info}} $\ast$p\+Metodo)
+\begin{DoxyCompactList}\small\item\em Descrição da função\+: Executa um método. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structures_8h_a39bc7f27824c19378efe14999e0623c8}{S\+T\+\_\+tp\+Method\+\_\+info}} $\ast$ \mbox{\hyperlink{virtualMachine_8c_a4478dff30ceacb9bb04a16403a43a6e6}{V\+M\+\_\+procurar\+Metodo}} (\mbox{\hyperlink{structures_8h_a300c8e4693c608a0fc0d5f210b5448b5}{S\+T\+\_\+tp\+Class\+File}} $\ast$p\+Class\+File, char $\ast$descritor\+Metodo, char $\ast$nome\+Metodo)
+\begin{DoxyCompactList}\small\item\em Descrição da função\+: Busca um método pelo seu nome e descritor. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structures_8h_ad9f4cdb6757615aae2fad89dab3c5470}{u1}} $\ast$ \mbox{\hyperlink{virtualMachine_8c_ae16204bceb543b0699aa0056559d0c84}{V\+M\+\_\+retorna\+Nome\+Super\+Classe}} (\mbox{\hyperlink{structures_8h_a300c8e4693c608a0fc0d5f210b5448b5}{S\+T\+\_\+tp\+Class\+File}} $\ast$p\+Class\+File)
+\begin{DoxyCompactList}\small\item\em Descrição da função\+: Dado um \mbox{\hyperlink{structClassFile}{Class\+File}}, retorna o nome de sua Super Classe. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structures_8h_ad9f4cdb6757615aae2fad89dab3c5470}{u1}} $\ast$ \mbox{\hyperlink{virtualMachine_8c_a217d02f6186d40258f9a6da4cf913f41}{V\+M\+\_\+retornar\+Nome\+Classe}} (\mbox{\hyperlink{structures_8h_a300c8e4693c608a0fc0d5f210b5448b5}{S\+T\+\_\+tp\+Class\+File}} $\ast$p\+Class\+File)
+\begin{DoxyCompactList}\small\item\em Descrição da função\+: Dado um \mbox{\hyperlink{structClassFile}{Class\+File}}, retorna o nome de sua Classe. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structures_8h_a3900130849091c366c32df1a3af32bfe}{S\+T\+\_\+tp\+Object\+Heap}} $\ast$ \mbox{\hyperlink{virtualMachine_8c_a27264f5359d2c8920fccb3154bab8fd8}{V\+M\+\_\+alocar\+Memoria\+Heap\+Objeto}} (\mbox{\hyperlink{structST__tpJVM}{S\+T\+\_\+tp\+J\+VM}} $\ast$p\+J\+VM, \mbox{\hyperlink{structures_8h_a300c8e4693c608a0fc0d5f210b5448b5}{S\+T\+\_\+tp\+Class\+File}} $\ast$p\+Class\+File)
+\begin{DoxyCompactList}\small\item\em Descrição da função\+: Aloca a memória de um Heap para objeto, e o inicializa. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structures_8h_a3900130849091c366c32df1a3af32bfe}{S\+T\+\_\+tp\+Object\+Heap}} $\ast$ \mbox{\hyperlink{virtualMachine_8c_a627436033ffe22506cf1b739af07ccf4}{V\+M\+\_\+recuperar\+Objeto}} (\mbox{\hyperlink{structures_8h_a3900130849091c366c32df1a3af32bfe}{S\+T\+\_\+tp\+Object\+Heap}} $\ast$p\+Obeject\+Heap, char $\ast$nome\+Objeto)
+\begin{DoxyCompactList}\small\item\em Descrição da função\+: Busca um objeto, pelo seu nome, na pilha de Objetos. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structures_8h_a9da06389548e0b5bfa02d07cf8b5c99e}{S\+T\+\_\+tp\+Array\+Heap}} $\ast$ \mbox{\hyperlink{virtualMachine_8c_a35fab68fab3e6266b42823997cc05a4d}{V\+M\+\_\+criar\+Array}} (\mbox{\hyperlink{structures_8h_ad9f4cdb6757615aae2fad89dab3c5470}{u1}} tipo, char $\ast$nome\+Classe, int tamanho)
+\begin{DoxyCompactList}\small\item\em Descrição da função\+: Aloca memória para um Array e o inicializa. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{virtualMachine_8c_aab7f49cf6fe58d1860697fbe00b79063}{V\+M\+\_\+armazenar\+Valor\+Array}} (\mbox{\hyperlink{structures_8h_a9da06389548e0b5bfa02d07cf8b5c99e}{S\+T\+\_\+tp\+Array\+Heap}} $\ast$p\+Array, int posicao, \mbox{\hyperlink{structVariable}{S\+T\+\_\+tp\+Variable}} variavel)
+\begin{DoxyCompactList}\small\item\em Descrição da função\+: Adiciona um novo termo a um array. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structures_8h_a9da06389548e0b5bfa02d07cf8b5c99e}{S\+T\+\_\+tp\+Array\+Heap}} $\ast$ \mbox{\hyperlink{virtualMachine_8c_a54ccd392ecc3879573efc9801f6ac19f}{alocar\+Memoria\+Array\+Multi}} (char $\ast$nome\+Classe, \mbox{\hyperlink{structures_8h_a2da65ddc00e0495a51dcce6007aedfb7}{S\+T\+\_\+tp\+Operand\+Stack}} $\ast$p\+Pilha\+Operandos, int dimensao)
+\begin{DoxyCompactList}\small\item\em Descrição da função\+: Aloca memória para um Array multiplo e o inicializa. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{virtualMachine_8c_a4cd04519d0a26ba3d3c272400fa0b1e2}{retornar\+Tipo\+String}} (char $\ast$string)
+\begin{DoxyCompactList}\small\item\em Descrição da função\+: Dada uma string, retorna o seu tipo. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{virtualMachine_8c_adf02d08179aa11477097ddedb6846431}\label{virtualMachine_8c_adf02d08179aa11477097ddedb6846431}} 
+int {\bfseries retornar\+Tipo\+Retorno} (\mbox{\hyperlink{structures_8h_ad9f4cdb6757615aae2fad89dab3c5470}{u1}} $\ast$descritor)
+\item 
+\mbox{\hyperlink{structVariable}{S\+T\+\_\+tp\+Variable}} \mbox{\hyperlink{virtualMachine_8c_a177836d2f0cbb29eb1c60caa5b9ef03d}{V\+M\+\_\+recuperar\+Valor\+Array}} (\mbox{\hyperlink{structures_8h_a9da06389548e0b5bfa02d07cf8b5c99e}{S\+T\+\_\+tp\+Array\+Heap}} $\ast$p\+Array\+Heap, int posicao)
+\begin{DoxyCompactList}\small\item\em Descrição da função\+: Retorna o valor em uma dada posição de um Array. \end{DoxyCompactList}\item 
+void $\ast$ \mbox{\hyperlink{virtualMachine_8c_a27871f248a64ac49ea49440f7de8210a}{V\+M\+\_\+armazenar\+Valor\+Field}} (\mbox{\hyperlink{structST__tpJVM}{S\+T\+\_\+tp\+J\+VM}} $\ast$p\+J\+VM, char $\ast$p\+Class\+Name, char $\ast$p\+Field\+Name, char $\ast$p\+Field\+Descriptor, \mbox{\hyperlink{structVariable}{S\+T\+\_\+tp\+Variable}} var, \mbox{\hyperlink{structVariable}{S\+T\+\_\+tp\+Variable}} obj\+Ref)
+\begin{DoxyCompactList}\small\item\em Descrição da função\+: Armazena o valor de um Field. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structVariable}{S\+T\+\_\+tp\+Variable}} $\ast$ \mbox{\hyperlink{virtualMachine_8c_a3c1a9606e9952fa2de261600cb133eec}{V\+M\+\_\+recuperar\+Valor\+Field}} (\mbox{\hyperlink{structST__tpJVM}{S\+T\+\_\+tp\+J\+VM}} $\ast$p\+J\+VM, char $\ast$p\+Class\+Name, char $\ast$p\+Field\+Name, char $\ast$p\+Field\+Descriptor, \mbox{\hyperlink{structVariable}{S\+T\+\_\+tp\+Variable}} $\ast$obj\+Ref)
+\begin{DoxyCompactList}\small\item\em Descrição da função\+: ????? Retorna o valor em uma dada posição de um Array. \end{DoxyCompactList}\item 
+void $\ast$ \mbox{\hyperlink{virtualMachine_8c_a9741512302657644c9ddc9f99d7569a6}{V\+M\+\_\+alocar\+Memoria\+Heap\+Classe}} (\mbox{\hyperlink{structST__tpJVM}{S\+T\+\_\+tp\+J\+VM}} $\ast$p\+J\+VM, char $\ast$p\+Class\+Name)
+\begin{DoxyCompactList}\small\item\em Descrição da função\+: Aloca memória e inicializa um Heap de Classes. \end{DoxyCompactList}\item 
+void $\ast$ \mbox{\hyperlink{virtualMachine_8c_aa0d02c0e4d6d29ef0ccbf02c73a51981}{V\+M\+\_\+armazenar\+Valor\+Static\+Field}} (\mbox{\hyperlink{structST__tpJVM}{S\+T\+\_\+tp\+J\+VM}} $\ast$p\+J\+VM, char $\ast$p\+Class\+Name, char $\ast$p\+Field\+Name, char $\ast$p\+Field\+Descritor, \mbox{\hyperlink{structVariable}{S\+T\+\_\+tp\+Variable}} var)
+\begin{DoxyCompactList}\small\item\em Descrição da função\+: Armazena valor em campo de Statics ????? \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structVariable}{S\+T\+\_\+tp\+Variable}} $\ast$ \mbox{\hyperlink{virtualMachine_8c_abed6c39b7b8ea6c74987ce695427f15c}{V\+M\+\_\+recuperar\+Valor\+Static\+Field}} (\mbox{\hyperlink{structST__tpJVM}{S\+T\+\_\+tp\+J\+VM}} $\ast$p\+J\+VM, char $\ast$p\+Class\+Name, char $\ast$p\+Field\+Name, char $\ast$p\+Field\+Descritor)
+\begin{DoxyCompactList}\small\item\em Descrição da função\+: Ler valor em campo de Statics ????? \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structures_8h_a300c8e4693c608a0fc0d5f210b5448b5}{S\+T\+\_\+tp\+Class\+File}} $\ast$ \mbox{\hyperlink{virtualMachine_8c_ae05f967f610a4eae3ce309444b4cd5bf}{V\+M\+\_\+carregar\+Classe}} (char $\ast$nome\+Classes, \mbox{\hyperlink{structST__tpJVM}{S\+T\+\_\+tp\+J\+VM}} $\ast$p\+J\+VM)
+\begin{DoxyCompactList}\small\item\em Descrição da função\+: Carrega uma classe. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structST__tpJVM}{S\+T\+\_\+tp\+J\+VM}} $\ast$ \mbox{\hyperlink{virtualMachine_8c_af88ed6bc26f533269ea755e641467845}{V\+M\+\_\+exucutar\+J\+VM}} (int numero\+Classes, char $\ast$nome\+Classes\mbox{[}$\,$\mbox{]})
+\begin{DoxyCompactList}\small\item\em Descrição da função\+: Executa a J\+VM. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{virtualMachine_8c_aea65b5c274e622e0994b0eb95f4db3f5}{V\+M\+\_\+executar\+Throw}} (\mbox{\hyperlink{structures_8h_a19e8dd42ee1a3c672cdde6ef9287cbc5}{S\+T\+\_\+tp\+Exception\+\_\+table}} $\ast$p\+Exception\+Table, \mbox{\hyperlink{structures_8h_a300c8e4693c608a0fc0d5f210b5448b5}{S\+T\+\_\+tp\+Class\+File}} $\ast$p\+Class\+File, \mbox{\hyperlink{structVariable}{S\+T\+\_\+tp\+Variable}} referncia\+Objeto, \mbox{\hyperlink{structures_8h_ad9f4cdb6757615aae2fad89dab3c5470}{u1}} $\ast$$\ast$pc, \mbox{\hyperlink{structures_8h_a2da65ddc00e0495a51dcce6007aedfb7}{S\+T\+\_\+tp\+Operand\+Stack}} $\ast$p\+Pilha\+Operandos)
+\begin{DoxyCompactList}\small\item\em Descrição da função\+: ????? Executa um Throw. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\begin{DoxyVerb}         Implementacao das estruturas de incicialização da JVM\end{DoxyVerb}
+ 
+
+\begin{DoxyAuthor}{Author}
+A\+L\+ON M\+O\+TA -\/ M\+AT. 13/0005002 
+
+D\+A\+N\+I\+EL M\+A\+T\+I\+AS -\/ M\+AT. 12/0139804 
+
+G\+A\+B\+R\+I\+EL T\+O\+L\+L\+I\+NI -\/ M\+AT. 14/0020454 
+
+P\+A\+U\+LO P\+A\+S\+S\+OS -\/ M\+AT. 10/0118577
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+1.\+0 
+\end{DoxyVersion}
+\begin{DoxySince}{Since}
+31/10/17 
+\end{DoxySince}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{virtualMachine_8c_a54ccd392ecc3879573efc9801f6ac19f}\label{virtualMachine_8c_a54ccd392ecc3879573efc9801f6ac19f}} 
+\index{virtual\+Machine.\+c@{virtual\+Machine.\+c}!alocar\+Memoria\+Array\+Multi@{alocar\+Memoria\+Array\+Multi}}
+\index{alocar\+Memoria\+Array\+Multi@{alocar\+Memoria\+Array\+Multi}!virtual\+Machine.\+c@{virtual\+Machine.\+c}}
+\subsubsection{\texorpdfstring{alocar\+Memoria\+Array\+Multi()}{alocarMemoriaArrayMulti()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structures_8h_a9da06389548e0b5bfa02d07cf8b5c99e}{S\+T\+\_\+tp\+Array\+Heap}}$\ast$ alocar\+Memoria\+Array\+Multi (\begin{DoxyParamCaption}\item[{char $\ast$}]{nome\+Classe,  }\item[{\mbox{\hyperlink{structures_8h_a2da65ddc00e0495a51dcce6007aedfb7}{S\+T\+\_\+tp\+Operand\+Stack}} $\ast$}]{p\+Pilha\+Operandos,  }\item[{int}]{dimensao }\end{DoxyParamCaption})}
+
+
+
+Descrição da função\+: Aloca memória para um Array multiplo e o inicializa. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em nome\+Classe} & -\/ Nome da classe lida \\
+\hline
+{\em p\+Pilha\+Operandos} & -\/ Pilha de operandos \\
+\hline
+{\em dimensao} & -\/ Tamanho do Array a ser alocado\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+p\+Array -\/ Endereço do Array alocado e inicializado 
+\end{DoxyReturn}
+\mbox{\Hypertarget{virtualMachine_8c_a4cd04519d0a26ba3d3c272400fa0b1e2}\label{virtualMachine_8c_a4cd04519d0a26ba3d3c272400fa0b1e2}} 
+\index{virtual\+Machine.\+c@{virtual\+Machine.\+c}!retornar\+Tipo\+String@{retornar\+Tipo\+String}}
+\index{retornar\+Tipo\+String@{retornar\+Tipo\+String}!virtual\+Machine.\+c@{virtual\+Machine.\+c}}
+\subsubsection{\texorpdfstring{retornar\+Tipo\+String()}{retornarTipoString()}}
+{\footnotesize\ttfamily int retornar\+Tipo\+String (\begin{DoxyParamCaption}\item[{char $\ast$}]{string }\end{DoxyParamCaption})}
+
+
+
+Descrição da função\+: Dada uma string, retorna o seu tipo. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em string} & -\/ String a ser analizada\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+-\/ Tipo da String 
+\end{DoxyReturn}
+\mbox{\Hypertarget{virtualMachine_8c_a9741512302657644c9ddc9f99d7569a6}\label{virtualMachine_8c_a9741512302657644c9ddc9f99d7569a6}} 
+\index{virtual\+Machine.\+c@{virtual\+Machine.\+c}!V\+M\+\_\+alocar\+Memoria\+Heap\+Classe@{V\+M\+\_\+alocar\+Memoria\+Heap\+Classe}}
+\index{V\+M\+\_\+alocar\+Memoria\+Heap\+Classe@{V\+M\+\_\+alocar\+Memoria\+Heap\+Classe}!virtual\+Machine.\+c@{virtual\+Machine.\+c}}
+\subsubsection{\texorpdfstring{V\+M\+\_\+alocar\+Memoria\+Heap\+Classe()}{VM\_alocarMemoriaHeapClasse()}}
+{\footnotesize\ttfamily void$\ast$ V\+M\+\_\+alocar\+Memoria\+Heap\+Classe (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structST__tpJVM}{S\+T\+\_\+tp\+J\+VM}} $\ast$}]{p\+J\+VM,  }\item[{char $\ast$}]{p\+Class\+Name }\end{DoxyParamCaption})}
+
+
+
+Descrição da função\+: Aloca memória e inicializa um Heap de Classes. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em p\+J\+VM} & -\/ Ponteiro para a J\+VM \\
+\hline
+{\em p\+Class\+Name} & -\/ Nome da Classe com a qual se inicializará os valores da memória alocada\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+p\+Class\+Heap -\/ Endereço aonde se alocou a memória 
+\end{DoxyReturn}
+\mbox{\Hypertarget{virtualMachine_8c_a27264f5359d2c8920fccb3154bab8fd8}\label{virtualMachine_8c_a27264f5359d2c8920fccb3154bab8fd8}} 
+\index{virtual\+Machine.\+c@{virtual\+Machine.\+c}!V\+M\+\_\+alocar\+Memoria\+Heap\+Objeto@{V\+M\+\_\+alocar\+Memoria\+Heap\+Objeto}}
+\index{V\+M\+\_\+alocar\+Memoria\+Heap\+Objeto@{V\+M\+\_\+alocar\+Memoria\+Heap\+Objeto}!virtual\+Machine.\+c@{virtual\+Machine.\+c}}
+\subsubsection{\texorpdfstring{V\+M\+\_\+alocar\+Memoria\+Heap\+Objeto()}{VM\_alocarMemoriaHeapObjeto()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structures_8h_a3900130849091c366c32df1a3af32bfe}{S\+T\+\_\+tp\+Object\+Heap}}$\ast$ V\+M\+\_\+alocar\+Memoria\+Heap\+Objeto (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structST__tpJVM}{S\+T\+\_\+tp\+J\+VM}} $\ast$}]{p\+J\+VM,  }\item[{\mbox{\hyperlink{structures_8h_a300c8e4693c608a0fc0d5f210b5448b5}{S\+T\+\_\+tp\+Class\+File}} $\ast$}]{p\+Class\+File }\end{DoxyParamCaption})}
+
+
+
+Descrição da função\+: Aloca a memória de um Heap para objeto, e o inicializa. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em p\+J\+VM} & -\/ Ponteiro para a J\+VM \\
+\hline
+{\em p\+Classe\+File} & -\/ \mbox{\hyperlink{structClassFile}{Class\+File}} de onde se lerá o alguns dos dados do objeto\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+N\+U\+LL -\/ Caso haja erro ao carregar a classe p\+Objeto -\/ Endereço do Heap para objeto alocado 
+\end{DoxyReturn}
+\mbox{\Hypertarget{virtualMachine_8c_aab7f49cf6fe58d1860697fbe00b79063}\label{virtualMachine_8c_aab7f49cf6fe58d1860697fbe00b79063}} 
+\index{virtual\+Machine.\+c@{virtual\+Machine.\+c}!V\+M\+\_\+armazenar\+Valor\+Array@{V\+M\+\_\+armazenar\+Valor\+Array}}
+\index{V\+M\+\_\+armazenar\+Valor\+Array@{V\+M\+\_\+armazenar\+Valor\+Array}!virtual\+Machine.\+c@{virtual\+Machine.\+c}}
+\subsubsection{\texorpdfstring{V\+M\+\_\+armazenar\+Valor\+Array()}{VM\_armazenarValorArray()}}
+{\footnotesize\ttfamily void V\+M\+\_\+armazenar\+Valor\+Array (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structures_8h_a9da06389548e0b5bfa02d07cf8b5c99e}{S\+T\+\_\+tp\+Array\+Heap}} $\ast$}]{p\+Array,  }\item[{int}]{posicao,  }\item[{\mbox{\hyperlink{structVariable}{S\+T\+\_\+tp\+Variable}}}]{variavel }\end{DoxyParamCaption})}
+
+
+
+Descrição da função\+: Adiciona um novo termo a um array. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em p\+Array} & -\/ Arrays aonde será adicionado o novo termo \\
+\hline
+{\em posicao} & -\/ Posição do Array aonde será adicionado o novo termo \\
+\hline
+{\em variavel} & -\/ Termo que será adicionado \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{virtualMachine_8c_a27871f248a64ac49ea49440f7de8210a}\label{virtualMachine_8c_a27871f248a64ac49ea49440f7de8210a}} 
+\index{virtual\+Machine.\+c@{virtual\+Machine.\+c}!V\+M\+\_\+armazenar\+Valor\+Field@{V\+M\+\_\+armazenar\+Valor\+Field}}
+\index{V\+M\+\_\+armazenar\+Valor\+Field@{V\+M\+\_\+armazenar\+Valor\+Field}!virtual\+Machine.\+c@{virtual\+Machine.\+c}}
+\subsubsection{\texorpdfstring{V\+M\+\_\+armazenar\+Valor\+Field()}{VM\_armazenarValorField()}}
+{\footnotesize\ttfamily void$\ast$ V\+M\+\_\+armazenar\+Valor\+Field (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structST__tpJVM}{S\+T\+\_\+tp\+J\+VM}} $\ast$}]{p\+J\+VM,  }\item[{char $\ast$}]{p\+Class\+Name,  }\item[{char $\ast$}]{p\+Field\+Name,  }\item[{char $\ast$}]{p\+Field\+Descriptor,  }\item[{\mbox{\hyperlink{structVariable}{S\+T\+\_\+tp\+Variable}}}]{var,  }\item[{\mbox{\hyperlink{structVariable}{S\+T\+\_\+tp\+Variable}}}]{obj\+Ref }\end{DoxyParamCaption})}
+
+
+
+Descrição da função\+: Armazena o valor de um Field. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em p\+J\+VM} & -\/ Ponteiro para a J\+VM \\
+\hline
+{\em p\+Class\+Name} & -\/ Nome da classe lida \\
+\hline
+{\em p\+Field\+Name} & -\/ Nome do Field a ser salvo \\
+\hline
+{\em p\+Field\+Descriptor} & -\/ Descritor do Field a ser salvo \\
+\hline
+{\em var} & -\/ Área do Field \\
+\hline
+{\em obj\+Ref} & -\/ Referencia para o objeto lido\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+N\+U\+LL -\/ Em caso de erro p\+Heap -\/ Ponteiro para o Heap de objeto ? 
+\end{DoxyReturn}
+\mbox{\Hypertarget{virtualMachine_8c_aa0d02c0e4d6d29ef0ccbf02c73a51981}\label{virtualMachine_8c_aa0d02c0e4d6d29ef0ccbf02c73a51981}} 
+\index{virtual\+Machine.\+c@{virtual\+Machine.\+c}!V\+M\+\_\+armazenar\+Valor\+Static\+Field@{V\+M\+\_\+armazenar\+Valor\+Static\+Field}}
+\index{V\+M\+\_\+armazenar\+Valor\+Static\+Field@{V\+M\+\_\+armazenar\+Valor\+Static\+Field}!virtual\+Machine.\+c@{virtual\+Machine.\+c}}
+\subsubsection{\texorpdfstring{V\+M\+\_\+armazenar\+Valor\+Static\+Field()}{VM\_armazenarValorStaticField()}}
+{\footnotesize\ttfamily void$\ast$ V\+M\+\_\+armazenar\+Valor\+Static\+Field (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structST__tpJVM}{S\+T\+\_\+tp\+J\+VM}} $\ast$}]{p\+J\+VM,  }\item[{char $\ast$}]{p\+Class\+Name,  }\item[{char $\ast$}]{p\+Field\+Name,  }\item[{char $\ast$}]{p\+Field\+Descritor,  }\item[{\mbox{\hyperlink{structVariable}{S\+T\+\_\+tp\+Variable}}}]{var }\end{DoxyParamCaption})}
+
+
+
+Descrição da função\+: Armazena valor em campo de Statics ????? 
+
+
+\begin{DoxyParams}{Parameters}
+{\em p\+J\+VM} & -\/ Ponteiro para a J\+VM \\
+\hline
+{\em p\+Class\+Name} & -\/ Nome da Classe que ? \\
+\hline
+{\em p\+Field\+Name} & -\/ Nome do campo que será lido? \\
+\hline
+{\em p\+Field\+Descritor} & -\/ Descritor do campo que será lido? \\
+\hline
+{\em var} & -\/ Valor a ser armazenado\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+N\+U\+LL -\/ Em caso de erro p\+J\+V\+M-\/$>$heap-\/$>$classes -\/ ? 
+\end{DoxyReturn}
+\mbox{\Hypertarget{virtualMachine_8c_a308eb7ce35638fde2a393713fde2480c}\label{virtualMachine_8c_a308eb7ce35638fde2a393713fde2480c}} 
+\index{virtual\+Machine.\+c@{virtual\+Machine.\+c}!V\+M\+\_\+armazenar\+Variavel@{V\+M\+\_\+armazenar\+Variavel}}
+\index{V\+M\+\_\+armazenar\+Variavel@{V\+M\+\_\+armazenar\+Variavel}!virtual\+Machine.\+c@{virtual\+Machine.\+c}}
+\subsubsection{\texorpdfstring{V\+M\+\_\+armazenar\+Variavel()}{VM\_armazenarVariavel()}}
+{\footnotesize\ttfamily void V\+M\+\_\+armazenar\+Variavel (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structVariable}{S\+T\+\_\+tp\+Variable}} $\ast$}]{p\+Variaveis\+Locais,  }\item[{\mbox{\hyperlink{structVariable}{S\+T\+\_\+tp\+Variable}}}]{variavel,  }\item[{int}]{posicao }\end{DoxyParamCaption})}
+
+
+
+Descricao da funcao\+: Armazena uma variável na lista de variáveis locais. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em p\+Variaveis\+Locais} & -\/ Endereço base da lista de variáveis locais \\
+\hline
+{\em variavel} & -\/ variável a ser adicionada na lista \\
+\hline
+{\em posicao} & -\/ deslocamento a partir do endereço base onde será salva a variável \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{virtualMachine_8c_ae05f967f610a4eae3ce309444b4cd5bf}\label{virtualMachine_8c_ae05f967f610a4eae3ce309444b4cd5bf}} 
+\index{virtual\+Machine.\+c@{virtual\+Machine.\+c}!V\+M\+\_\+carregar\+Classe@{V\+M\+\_\+carregar\+Classe}}
+\index{V\+M\+\_\+carregar\+Classe@{V\+M\+\_\+carregar\+Classe}!virtual\+Machine.\+c@{virtual\+Machine.\+c}}
+\subsubsection{\texorpdfstring{V\+M\+\_\+carregar\+Classe()}{VM\_carregarClasse()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structures_8h_a300c8e4693c608a0fc0d5f210b5448b5}{S\+T\+\_\+tp\+Class\+File}}$\ast$ V\+M\+\_\+carregar\+Classe (\begin{DoxyParamCaption}\item[{char $\ast$}]{nome\+Classes,  }\item[{\mbox{\hyperlink{structST__tpJVM}{S\+T\+\_\+tp\+J\+VM}} $\ast$}]{p\+J\+VM }\end{DoxyParamCaption})}
+
+
+
+Descrição da função\+: Carrega uma classe. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em nome\+Classes} & -\/ Nome da Classe que será carregada \\
+\hline
+{\em p\+J\+VM} & -\/ Ponteiro para a J\+VM\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+p\+Classe -\/ Endereço aonde for carregada a classe em questão 
+\end{DoxyReturn}
+\mbox{\Hypertarget{virtualMachine_8c_ab6a6d4c955fca9a6534723c2bba7443d}\label{virtualMachine_8c_ab6a6d4c955fca9a6534723c2bba7443d}} 
+\index{virtual\+Machine.\+c@{virtual\+Machine.\+c}!V\+M\+\_\+criar\+Area\+Metodo@{V\+M\+\_\+criar\+Area\+Metodo}}
+\index{V\+M\+\_\+criar\+Area\+Metodo@{V\+M\+\_\+criar\+Area\+Metodo}!virtual\+Machine.\+c@{virtual\+Machine.\+c}}
+\subsubsection{\texorpdfstring{V\+M\+\_\+criar\+Area\+Metodo()}{VM\_criarAreaMetodo()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structST__tpMethodArea}{S\+T\+\_\+tp\+Method\+Area}}$\ast$ V\+M\+\_\+criar\+Area\+Metodo (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Descricao da funcao\+: Aloca memória para um método. 
+
+\begin{DoxyReturn}{Returns}
+p\+Area\+Metodo -\/ Endereço da área alocada para o método 
+\end{DoxyReturn}
+\mbox{\Hypertarget{virtualMachine_8c_a35fab68fab3e6266b42823997cc05a4d}\label{virtualMachine_8c_a35fab68fab3e6266b42823997cc05a4d}} 
+\index{virtual\+Machine.\+c@{virtual\+Machine.\+c}!V\+M\+\_\+criar\+Array@{V\+M\+\_\+criar\+Array}}
+\index{V\+M\+\_\+criar\+Array@{V\+M\+\_\+criar\+Array}!virtual\+Machine.\+c@{virtual\+Machine.\+c}}
+\subsubsection{\texorpdfstring{V\+M\+\_\+criar\+Array()}{VM\_criarArray()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structures_8h_a9da06389548e0b5bfa02d07cf8b5c99e}{S\+T\+\_\+tp\+Array\+Heap}}$\ast$ V\+M\+\_\+criar\+Array (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structures_8h_ad9f4cdb6757615aae2fad89dab3c5470}{u1}}}]{tipo,  }\item[{char $\ast$}]{nome\+Classe,  }\item[{int}]{tamanho }\end{DoxyParamCaption})}
+
+
+
+Descrição da função\+: Aloca memória para um Array e o inicializa. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em tipo} & -\/ Tipo do Array a ser inicializado \\
+\hline
+{\em nome\+Classe} & -\/ Valor que será colocado no atributo class\+Name \\
+\hline
+{\em tamanho} & -\/ Tamanho do Array a ser alocado\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+p\+Array -\/ Endereço do Array alocado e inicializado 
+\end{DoxyReturn}
+\mbox{\Hypertarget{virtualMachine_8c_ae13fbd36ef04a545a7e02deb2d1b232b}\label{virtualMachine_8c_ae13fbd36ef04a545a7e02deb2d1b232b}} 
+\index{virtual\+Machine.\+c@{virtual\+Machine.\+c}!V\+M\+\_\+criar\+Frame@{V\+M\+\_\+criar\+Frame}}
+\index{V\+M\+\_\+criar\+Frame@{V\+M\+\_\+criar\+Frame}!virtual\+Machine.\+c@{virtual\+Machine.\+c}}
+\subsubsection{\texorpdfstring{V\+M\+\_\+criar\+Frame()}{VM\_criarFrame()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structures_8h_a6488b2ebbc0216565a0c4de6a5d08a5e}{S\+T\+\_\+tp\+Stack\+Frame}}$\ast$ V\+M\+\_\+criar\+Frame (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structST__tpJVM}{S\+T\+\_\+tp\+J\+VM}} $\ast$}]{p\+J\+VM,  }\item[{\mbox{\hyperlink{structures_8h_a6488b2ebbc0216565a0c4de6a5d08a5e}{S\+T\+\_\+tp\+Stack\+Frame}} $\ast$$\ast$}]{p\+J\+V\+M\+Stack,  }\item[{\mbox{\hyperlink{structures_8h_a300c8e4693c608a0fc0d5f210b5448b5}{S\+T\+\_\+tp\+Class\+File}} $\ast$}]{p\+Classe,  }\item[{\mbox{\hyperlink{structures_8h_ae2d273f61e0f30cd3071067bff6987ce}{S\+T\+\_\+tp\+Parameter\+Stack}} $\ast$}]{pilha\+Parametros,  }\item[{int}]{max\+Stack\+Size,  }\item[{u2}]{access\+\_\+flag }\end{DoxyParamCaption})}
+
+
+
+~\newline
+Cria um Frame para o metodo que sera executado e isere esse frame na pilha de frames da thread 
+
+
+\begin{DoxyParams}{Parameters}
+{\em p\+J\+V\+M\+Stack} & -\/ Pilha de Frames da thread \\
+\hline
+{\em p\+Classe} & -\/ Classe corrente do metodo \\
+\hline
+{\em pilha\+Parametros} & -\/ Pilha de parametros que é passada para o metodo que sera executado \\
+\hline
+{\em max\+Stack\+Size} & -\/ Numero máximo de variaveis que pode ser colocadas na pilha de variaveis locais \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+-\/ Retorna o Frame criado 
+\end{DoxyReturn}
+\mbox{\Hypertarget{virtualMachine_8c_a572a145715a015bd5fb3df445e5887c6}\label{virtualMachine_8c_a572a145715a015bd5fb3df445e5887c6}} 
+\index{virtual\+Machine.\+c@{virtual\+Machine.\+c}!V\+M\+\_\+criar\+Heap@{V\+M\+\_\+criar\+Heap}}
+\index{V\+M\+\_\+criar\+Heap@{V\+M\+\_\+criar\+Heap}!virtual\+Machine.\+c@{virtual\+Machine.\+c}}
+\subsubsection{\texorpdfstring{V\+M\+\_\+criar\+Heap()}{VM\_criarHeap()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structST__tpHeap}{S\+T\+\_\+tp\+Heap}}$\ast$ V\+M\+\_\+criar\+Heap (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Descricao da funcao\+: Aloca memória para um Heap. 
+
+\begin{DoxyReturn}{Returns}
+p\+Heap -\/ Endereço da área alocada para o Heap 
+\end{DoxyReturn}
+\mbox{\Hypertarget{virtualMachine_8c_a8fdbb685fbf06e9a679cf8872ff293d9}\label{virtualMachine_8c_a8fdbb685fbf06e9a679cf8872ff293d9}} 
+\index{virtual\+Machine.\+c@{virtual\+Machine.\+c}!V\+M\+\_\+criar\+J\+VM@{V\+M\+\_\+criar\+J\+VM}}
+\index{V\+M\+\_\+criar\+J\+VM@{V\+M\+\_\+criar\+J\+VM}!virtual\+Machine.\+c@{virtual\+Machine.\+c}}
+\subsubsection{\texorpdfstring{V\+M\+\_\+criar\+J\+V\+M()}{VM\_criarJVM()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structST__tpJVM}{S\+T\+\_\+tp\+J\+VM}}$\ast$ V\+M\+\_\+criar\+J\+VM (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Descricao da funcao\+: Aloca memória para a J\+VM, e a inicializa. 
+
+\begin{DoxyReturn}{Returns}
+p\+Heap -\/ Endereço da área alocada para a J\+VM 
+\end{DoxyReturn}
+\mbox{\Hypertarget{virtualMachine_8c_a022e064afc413700c7d5de31b46c69d5}\label{virtualMachine_8c_a022e064afc413700c7d5de31b46c69d5}} 
+\index{virtual\+Machine.\+c@{virtual\+Machine.\+c}!V\+M\+\_\+criar\+Thread@{V\+M\+\_\+criar\+Thread}}
+\index{V\+M\+\_\+criar\+Thread@{V\+M\+\_\+criar\+Thread}!virtual\+Machine.\+c@{virtual\+Machine.\+c}}
+\subsubsection{\texorpdfstring{V\+M\+\_\+criar\+Thread()}{VM\_criarThread()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structures_8h_afd892ddd9ad4b7f9600350a3d42d683e}{S\+T\+\_\+tp\+Thread}}$\ast$ V\+M\+\_\+criar\+Thread (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Descricao da funcao\+: Aloca memória para uma Thread. 
+
+\begin{DoxyReturn}{Returns}
+p\+Thread -\/ Endereço da área alocada para a Thread 
+\end{DoxyReturn}
+\mbox{\Hypertarget{virtualMachine_8c_ad2d703b021df142d9ece8d7d4ca3c37c}\label{virtualMachine_8c_ad2d703b021df142d9ece8d7d4ca3c37c}} 
+\index{virtual\+Machine.\+c@{virtual\+Machine.\+c}!V\+M\+\_\+executar\+Metodo@{V\+M\+\_\+executar\+Metodo}}
+\index{V\+M\+\_\+executar\+Metodo@{V\+M\+\_\+executar\+Metodo}!virtual\+Machine.\+c@{virtual\+Machine.\+c}}
+\subsubsection{\texorpdfstring{V\+M\+\_\+executar\+Metodo()}{VM\_executarMetodo()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structVariable}{S\+T\+\_\+tp\+Variable}}$\ast$ V\+M\+\_\+executar\+Metodo (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structST__tpJVM}{S\+T\+\_\+tp\+J\+VM}} $\ast$}]{p\+J\+VM,  }\item[{\mbox{\hyperlink{structures_8h_a300c8e4693c608a0fc0d5f210b5448b5}{S\+T\+\_\+tp\+Class\+File}} $\ast$}]{p\+Classe,  }\item[{\mbox{\hyperlink{structures_8h_ae2d273f61e0f30cd3071067bff6987ce}{S\+T\+\_\+tp\+Parameter\+Stack}} $\ast$}]{pilha\+Parametros,  }\item[{\mbox{\hyperlink{structures_8h_a39bc7f27824c19378efe14999e0623c8}{S\+T\+\_\+tp\+Method\+\_\+info}} $\ast$}]{p\+Metodo }\end{DoxyParamCaption})}
+
+
+
+Descrição da função\+: Executa um método. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em p\+J\+VM} & -\/ Ponteiro para a J\+VM \\
+\hline
+{\em p\+Classe} & -\/ Classe de onde são lidos os dados para a execução \\
+\hline
+{\em pilha\+Parametros} & -\/ Pilha de parametros que é passada para o metodo que sera executado \\
+\hline
+{\em p\+Metodo} & -\/ Método a ser executado\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+-\/ Retorna o resultado, caso a instrução seja return 
+\end{DoxyReturn}
+\mbox{\Hypertarget{virtualMachine_8c_aea65b5c274e622e0994b0eb95f4db3f5}\label{virtualMachine_8c_aea65b5c274e622e0994b0eb95f4db3f5}} 
+\index{virtual\+Machine.\+c@{virtual\+Machine.\+c}!V\+M\+\_\+executar\+Throw@{V\+M\+\_\+executar\+Throw}}
+\index{V\+M\+\_\+executar\+Throw@{V\+M\+\_\+executar\+Throw}!virtual\+Machine.\+c@{virtual\+Machine.\+c}}
+\subsubsection{\texorpdfstring{V\+M\+\_\+executar\+Throw()}{VM\_executarThrow()}}
+{\footnotesize\ttfamily int V\+M\+\_\+executar\+Throw (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structures_8h_a19e8dd42ee1a3c672cdde6ef9287cbc5}{S\+T\+\_\+tp\+Exception\+\_\+table}} $\ast$}]{p\+Exception\+Table,  }\item[{\mbox{\hyperlink{structures_8h_a300c8e4693c608a0fc0d5f210b5448b5}{S\+T\+\_\+tp\+Class\+File}} $\ast$}]{p\+Class\+File,  }\item[{\mbox{\hyperlink{structVariable}{S\+T\+\_\+tp\+Variable}}}]{referncia\+Objeto,  }\item[{\mbox{\hyperlink{structures_8h_ad9f4cdb6757615aae2fad89dab3c5470}{u1}} $\ast$$\ast$}]{pc,  }\item[{\mbox{\hyperlink{structures_8h_a2da65ddc00e0495a51dcce6007aedfb7}{S\+T\+\_\+tp\+Operand\+Stack}} $\ast$}]{p\+Pilha\+Operandos }\end{DoxyParamCaption})}
+
+
+
+Descrição da função\+: ????? Executa um Throw. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em p\+Exception\+Table} & -\/ Tabela de excessões que ? \\
+\hline
+{\em p\+Class\+File} & -\/ \mbox{\hyperlink{structClassFile}{Class\+File}} de onde se lêem o indice e o nome da classe usados para ? \\
+\hline
+{\em referncia\+Objeto} & -\/ ? \\
+\hline
+{\em pc} & -\/ Contador de Programa \\
+\hline
+{\em p\+Pilha\+Operandos} & -\/ Pilha de Operandos, onde ?\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 ou 1 -\/ ? 
+\end{DoxyReturn}
+\mbox{\Hypertarget{virtualMachine_8c_af88ed6bc26f533269ea755e641467845}\label{virtualMachine_8c_af88ed6bc26f533269ea755e641467845}} 
+\index{virtual\+Machine.\+c@{virtual\+Machine.\+c}!V\+M\+\_\+exucutar\+J\+VM@{V\+M\+\_\+exucutar\+J\+VM}}
+\index{V\+M\+\_\+exucutar\+J\+VM@{V\+M\+\_\+exucutar\+J\+VM}!virtual\+Machine.\+c@{virtual\+Machine.\+c}}
+\subsubsection{\texorpdfstring{V\+M\+\_\+exucutar\+J\+V\+M()}{VM\_exucutarJVM()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structST__tpJVM}{S\+T\+\_\+tp\+J\+VM}}$\ast$ V\+M\+\_\+exucutar\+J\+VM (\begin{DoxyParamCaption}\item[{int}]{numero\+Classes,  }\item[{char $\ast$}]{nome\+Classes\mbox{[}$\,$\mbox{]} }\end{DoxyParamCaption})}
+
+
+
+Descrição da função\+: Executa a J\+VM. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em numero\+Classes} & -\/ Número de Classes que serão carregadas e lidas \\
+\hline
+{\em nome\+Classes} & -\/ Nome das Classes que serão carregadas e lidas\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+p\+J\+VM -\/ Ponteiro para a J\+VM 
+\end{DoxyReturn}
+\mbox{\Hypertarget{virtualMachine_8c_a4478dff30ceacb9bb04a16403a43a6e6}\label{virtualMachine_8c_a4478dff30ceacb9bb04a16403a43a6e6}} 
+\index{virtual\+Machine.\+c@{virtual\+Machine.\+c}!V\+M\+\_\+procurar\+Metodo@{V\+M\+\_\+procurar\+Metodo}}
+\index{V\+M\+\_\+procurar\+Metodo@{V\+M\+\_\+procurar\+Metodo}!virtual\+Machine.\+c@{virtual\+Machine.\+c}}
+\subsubsection{\texorpdfstring{V\+M\+\_\+procurar\+Metodo()}{VM\_procurarMetodo()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structures_8h_a39bc7f27824c19378efe14999e0623c8}{S\+T\+\_\+tp\+Method\+\_\+info}}$\ast$ V\+M\+\_\+procurar\+Metodo (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structures_8h_a300c8e4693c608a0fc0d5f210b5448b5}{S\+T\+\_\+tp\+Class\+File}} $\ast$}]{p\+Class\+File,  }\item[{char $\ast$}]{descritor\+Metodo,  }\item[{char $\ast$}]{nome\+Metodo }\end{DoxyParamCaption})}
+
+
+
+Descrição da função\+: Busca um método pelo seu nome e descritor. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em p\+Classe\+File} & -\/ \mbox{\hyperlink{structClassFile}{Class\+File}} onde se procurará o método \\
+\hline
+{\em descritor\+Metodo} & -\/ Descritor do método a ser procurado \\
+\hline
+{\em nome\+Metodo} & -\/ Nome do método a ser procurado\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+N\+U\+LL -\/ Se o método não foi encontrado p\+Class\+File-\/$>$method\+\_\+info\+\_\+table\mbox{[}i\mbox{]} -\/ Tabela contendo as informações do método procurado 
+\end{DoxyReturn}
+\mbox{\Hypertarget{virtualMachine_8c_a627436033ffe22506cf1b739af07ccf4}\label{virtualMachine_8c_a627436033ffe22506cf1b739af07ccf4}} 
+\index{virtual\+Machine.\+c@{virtual\+Machine.\+c}!V\+M\+\_\+recuperar\+Objeto@{V\+M\+\_\+recuperar\+Objeto}}
+\index{V\+M\+\_\+recuperar\+Objeto@{V\+M\+\_\+recuperar\+Objeto}!virtual\+Machine.\+c@{virtual\+Machine.\+c}}
+\subsubsection{\texorpdfstring{V\+M\+\_\+recuperar\+Objeto()}{VM\_recuperarObjeto()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structures_8h_a3900130849091c366c32df1a3af32bfe}{S\+T\+\_\+tp\+Object\+Heap}}$\ast$ V\+M\+\_\+recuperar\+Objeto (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structures_8h_a3900130849091c366c32df1a3af32bfe}{S\+T\+\_\+tp\+Object\+Heap}} $\ast$}]{p\+Obeject\+Heap,  }\item[{char $\ast$}]{nome\+Objeto }\end{DoxyParamCaption})}
+
+
+
+Descrição da função\+: Busca um objeto, pelo seu nome, na pilha de Objetos. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em p\+Obeject\+Heap} & -\/ Pilha de Objetos \\
+\hline
+{\em nome\+Objeto} & -\/ Nome do objeto a ser buscado\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+p\+Obejec -\/ Endereço do objeto buscado 
+\end{DoxyReturn}
+\mbox{\Hypertarget{virtualMachine_8c_a177836d2f0cbb29eb1c60caa5b9ef03d}\label{virtualMachine_8c_a177836d2f0cbb29eb1c60caa5b9ef03d}} 
+\index{virtual\+Machine.\+c@{virtual\+Machine.\+c}!V\+M\+\_\+recuperar\+Valor\+Array@{V\+M\+\_\+recuperar\+Valor\+Array}}
+\index{V\+M\+\_\+recuperar\+Valor\+Array@{V\+M\+\_\+recuperar\+Valor\+Array}!virtual\+Machine.\+c@{virtual\+Machine.\+c}}
+\subsubsection{\texorpdfstring{V\+M\+\_\+recuperar\+Valor\+Array()}{VM\_recuperarValorArray()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structVariable}{S\+T\+\_\+tp\+Variable}} V\+M\+\_\+recuperar\+Valor\+Array (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structures_8h_a9da06389548e0b5bfa02d07cf8b5c99e}{S\+T\+\_\+tp\+Array\+Heap}} $\ast$}]{p\+Array\+Heap,  }\item[{int}]{posicao }\end{DoxyParamCaption})}
+
+
+
+Descrição da função\+: Retorna o valor em uma dada posição de um Array. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em p\+Array\+Heap} & -\/ Array a ser lido \\
+\hline
+{\em posicao} & -\/ Posição do valor a ser lido\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+var -\/ Valor lido 
+\end{DoxyReturn}
+\mbox{\Hypertarget{virtualMachine_8c_a3c1a9606e9952fa2de261600cb133eec}\label{virtualMachine_8c_a3c1a9606e9952fa2de261600cb133eec}} 
+\index{virtual\+Machine.\+c@{virtual\+Machine.\+c}!V\+M\+\_\+recuperar\+Valor\+Field@{V\+M\+\_\+recuperar\+Valor\+Field}}
+\index{V\+M\+\_\+recuperar\+Valor\+Field@{V\+M\+\_\+recuperar\+Valor\+Field}!virtual\+Machine.\+c@{virtual\+Machine.\+c}}
+\subsubsection{\texorpdfstring{V\+M\+\_\+recuperar\+Valor\+Field()}{VM\_recuperarValorField()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structVariable}{S\+T\+\_\+tp\+Variable}}$\ast$ V\+M\+\_\+recuperar\+Valor\+Field (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structST__tpJVM}{S\+T\+\_\+tp\+J\+VM}} $\ast$}]{p\+J\+VM,  }\item[{char $\ast$}]{p\+Class\+Name,  }\item[{char $\ast$}]{p\+Field\+Name,  }\item[{char $\ast$}]{p\+Field\+Descriptor,  }\item[{\mbox{\hyperlink{structVariable}{S\+T\+\_\+tp\+Variable}} $\ast$}]{obj\+Ref }\end{DoxyParamCaption})}
+
+
+
+Descrição da função\+: ????? Retorna o valor em uma dada posição de um Array. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em p\+J\+VM} & -\/ Ponteiro para a J\+VM \\
+\hline
+{\em p\+Array\+Heap} & -\/ Array a ser lido \\
+\hline
+{\em posicao} & -\/ Posição do valor a ser lido\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+N\+U\+LL -\/ Em caso de erro var -\/ Valor lido 
+\end{DoxyReturn}
+\mbox{\Hypertarget{virtualMachine_8c_abed6c39b7b8ea6c74987ce695427f15c}\label{virtualMachine_8c_abed6c39b7b8ea6c74987ce695427f15c}} 
+\index{virtual\+Machine.\+c@{virtual\+Machine.\+c}!V\+M\+\_\+recuperar\+Valor\+Static\+Field@{V\+M\+\_\+recuperar\+Valor\+Static\+Field}}
+\index{V\+M\+\_\+recuperar\+Valor\+Static\+Field@{V\+M\+\_\+recuperar\+Valor\+Static\+Field}!virtual\+Machine.\+c@{virtual\+Machine.\+c}}
+\subsubsection{\texorpdfstring{V\+M\+\_\+recuperar\+Valor\+Static\+Field()}{VM\_recuperarValorStaticField()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structVariable}{S\+T\+\_\+tp\+Variable}}$\ast$ V\+M\+\_\+recuperar\+Valor\+Static\+Field (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structST__tpJVM}{S\+T\+\_\+tp\+J\+VM}} $\ast$}]{p\+J\+VM,  }\item[{char $\ast$}]{p\+Class\+Name,  }\item[{char $\ast$}]{p\+Field\+Name,  }\item[{char $\ast$}]{p\+Field\+Descritor }\end{DoxyParamCaption})}
+
+
+
+Descrição da função\+: Ler valor em campo de Statics ????? 
+
+
+\begin{DoxyParams}{Parameters}
+{\em p\+J\+VM} & -\/ Ponteiro para a J\+VM \\
+\hline
+{\em p\+Class\+Name} & -\/ Nome da Classe que ? \\
+\hline
+{\em p\+Field\+Name} & -\/ Nome do campo que será lido? \\
+\hline
+{\em p\+Field\+Descritor} & -\/ Descritor do campo que será lido?\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+N\+U\+LL -\/ Em caso de erro var -\/ Valor lido? 
+\end{DoxyReturn}
+\mbox{\Hypertarget{virtualMachine_8c_a6ae1f3324d82e8f4de421eb71741a548}\label{virtualMachine_8c_a6ae1f3324d82e8f4de421eb71741a548}} 
+\index{virtual\+Machine.\+c@{virtual\+Machine.\+c}!V\+M\+\_\+recuperar\+Variavel@{V\+M\+\_\+recuperar\+Variavel}}
+\index{V\+M\+\_\+recuperar\+Variavel@{V\+M\+\_\+recuperar\+Variavel}!virtual\+Machine.\+c@{virtual\+Machine.\+c}}
+\subsubsection{\texorpdfstring{V\+M\+\_\+recuperar\+Variavel()}{VM\_recuperarVariavel()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structVariable}{S\+T\+\_\+tp\+Variable}} V\+M\+\_\+recuperar\+Variavel (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structVariable}{S\+T\+\_\+tp\+Variable}} $\ast$}]{p\+Variaveis\+Locais,  }\item[{int}]{posicao }\end{DoxyParamCaption})}
+
+
+
+Descricao da funcao\+: Lê a variável em uma certa posição na lista de variáveis locais. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em p\+Variaveis\+Locais} & -\/ Endereço base da lista de variáveis locais \\
+\hline
+{\em posicao} & -\/ deslocamento a partir do endereço base de onde será lida a variável\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+var\+Temporaria -\/ variável lida 
+\end{DoxyReturn}
+\mbox{\Hypertarget{virtualMachine_8c_ae16204bceb543b0699aa0056559d0c84}\label{virtualMachine_8c_ae16204bceb543b0699aa0056559d0c84}} 
+\index{virtual\+Machine.\+c@{virtual\+Machine.\+c}!V\+M\+\_\+retorna\+Nome\+Super\+Classe@{V\+M\+\_\+retorna\+Nome\+Super\+Classe}}
+\index{V\+M\+\_\+retorna\+Nome\+Super\+Classe@{V\+M\+\_\+retorna\+Nome\+Super\+Classe}!virtual\+Machine.\+c@{virtual\+Machine.\+c}}
+\subsubsection{\texorpdfstring{V\+M\+\_\+retorna\+Nome\+Super\+Classe()}{VM\_retornaNomeSuperClasse()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structures_8h_ad9f4cdb6757615aae2fad89dab3c5470}{u1}}$\ast$ V\+M\+\_\+retorna\+Nome\+Super\+Classe (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structures_8h_a300c8e4693c608a0fc0d5f210b5448b5}{S\+T\+\_\+tp\+Class\+File}} $\ast$}]{p\+Class\+File }\end{DoxyParamCaption})}
+
+
+
+Descrição da função\+: Dado um \mbox{\hyperlink{structClassFile}{Class\+File}}, retorna o nome de sua Super Classe. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em p\+Classe\+File} & -\/ \mbox{\hyperlink{structClassFile}{Class\+File}} de onde se lerá o nome da Super Classe\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+super\+Classe\+String -\/ O nome da Super Classe 
+\end{DoxyReturn}
+\mbox{\Hypertarget{virtualMachine_8c_a217d02f6186d40258f9a6da4cf913f41}\label{virtualMachine_8c_a217d02f6186d40258f9a6da4cf913f41}} 
+\index{virtual\+Machine.\+c@{virtual\+Machine.\+c}!V\+M\+\_\+retornar\+Nome\+Classe@{V\+M\+\_\+retornar\+Nome\+Classe}}
+\index{V\+M\+\_\+retornar\+Nome\+Classe@{V\+M\+\_\+retornar\+Nome\+Classe}!virtual\+Machine.\+c@{virtual\+Machine.\+c}}
+\subsubsection{\texorpdfstring{V\+M\+\_\+retornar\+Nome\+Classe()}{VM\_retornarNomeClasse()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structures_8h_ad9f4cdb6757615aae2fad89dab3c5470}{u1}}$\ast$ V\+M\+\_\+retornar\+Nome\+Classe (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structures_8h_a300c8e4693c608a0fc0d5f210b5448b5}{S\+T\+\_\+tp\+Class\+File}} $\ast$}]{p\+Class\+File }\end{DoxyParamCaption})}
+
+
+
+Descrição da função\+: Dado um \mbox{\hyperlink{structClassFile}{Class\+File}}, retorna o nome de sua Classe. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em p\+Classe\+File} & -\/ \mbox{\hyperlink{structClassFile}{Class\+File}} de onde se lerá o nome da Classe\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+super\+Classe\+String -\/ O nome da Classe 
+\end{DoxyReturn}

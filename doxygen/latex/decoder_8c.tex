@@ -1,0 +1,88 @@
+\hypertarget{decoder_8c}{}\section{decoder.\+c File Reference}
+\label{decoder_8c}\index{decoder.\+c@{decoder.\+c}}
+
+
+\begin{DoxyVerb}         Relaciona o nome da instrução com seu hexadecimal\end{DoxyVerb}
+  
+
+
+{\ttfamily \#include \char`\"{}decoder.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}structures.\+h\char`\"{}}\newline
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{decoder_8c_ad7cd5ca3628b1720768600349cf8e2eb}\label{decoder_8c_ad7cd5ca3628b1720768600349cf8e2eb}} 
+int {\bfseries print\+\_\+instruction\+Name} (int opcode)
+\item 
+\mbox{\Hypertarget{decoder_8c_ad501048255b7c557e6b926a5dc724131}\label{decoder_8c_ad501048255b7c557e6b926a5dc724131}} 
+int {\bfseries print\+Code} (\mbox{\hyperlink{structST__tpCode__attribute}{S\+T\+\_\+tp\+Code\+\_\+attribute}} $\ast$p\+Codigo)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+char $\ast$ {\bfseries D\+E\+\_\+instruction\+\_\+name} \mbox{[}$\,$\mbox{]}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\begin{DoxyVerb}         Relaciona o nome da instrução com seu hexadecimal\end{DoxyVerb}
+ 
+
+\begin{DoxyAuthor}{Author}
+A\+L\+ON M\+O\+TA -\/ M\+AT. 13/0005002 
+
+D\+A\+N\+I\+EL M\+A\+T\+I\+AS -\/ M\+AT. 12/0139804 
+
+G\+A\+B\+R\+I\+EL T\+O\+L\+L\+I\+NI -\/ M\+AT. 14/0020454 
+
+P\+A\+U\+LO P\+A\+S\+S\+OS -\/ M\+AT. 10/0118577
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+1.\+0 
+\end{DoxyVersion}
+
+
+\subsection{Variable Documentation}
+\mbox{\Hypertarget{decoder_8c_a65b71c9938fe9af5c5c18a448c9936b3}\label{decoder_8c_a65b71c9938fe9af5c5c18a448c9936b3}} 
+\index{decoder.\+c@{decoder.\+c}!D\+E\+\_\+instruction\+\_\+name@{D\+E\+\_\+instruction\+\_\+name}}
+\index{D\+E\+\_\+instruction\+\_\+name@{D\+E\+\_\+instruction\+\_\+name}!decoder.\+c@{decoder.\+c}}
+\subsubsection{\texorpdfstring{D\+E\+\_\+instruction\+\_\+name}{DE\_instruction\_name}}
+{\footnotesize\ttfamily char$\ast$ D\+E\+\_\+instruction\+\_\+name\mbox{[}$\,$\mbox{]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}
+= \{ 
+    \textcolor{stringliteral}{"nop"}, \textcolor{stringliteral}{"aconst\_null"}, \textcolor{stringliteral}{"iconst\_m1"}, \textcolor{stringliteral}{"iconst\_0"}, \textcolor{stringliteral}{"iconst\_1"}, \textcolor{stringliteral}{"iconst\_2"}, \textcolor{stringliteral}{"iconst\_3"}, \textcolor{stringliteral}{"iconst\_4"}, \textcolor{stringliteral}{"
+      iconst\_5"}, \textcolor{stringliteral}{"lconst\_0"}, 
+    \textcolor{stringliteral}{"lconst\_1"}, \textcolor{stringliteral}{"fconst\_0"}, \textcolor{stringliteral}{"fconst\_1"}, \textcolor{stringliteral}{"fconst\_2"}, \textcolor{stringliteral}{"dconst\_0"}, \textcolor{stringliteral}{"dconst\_1"}, \textcolor{stringliteral}{"bipush"}, \textcolor{stringliteral}{"sipush"}, \textcolor{stringliteral}{"ldc"}, \textcolor{stringliteral}{"
+      ldc\_w"},
+    \textcolor{stringliteral}{"ldc2\_w"}, \textcolor{stringliteral}{"iload"}, \textcolor{stringliteral}{"lload"}, \textcolor{stringliteral}{"fload"},\textcolor{stringliteral}{"dload"}, \textcolor{stringliteral}{"aload"}, \textcolor{stringliteral}{"iload\_0"}, \textcolor{stringliteral}{"iload\_1"}, \textcolor{stringliteral}{"iload\_2"}, \textcolor{stringliteral}{"iload\_3"},
+    \textcolor{stringliteral}{"lload\_0"}, \textcolor{stringliteral}{"lload\_1"}, \textcolor{stringliteral}{"lload\_2"}, \textcolor{stringliteral}{"lload\_3"}, \textcolor{stringliteral}{"fload\_0"}, \textcolor{stringliteral}{"fload\_1"}, \textcolor{stringliteral}{"fload\_2"}, \textcolor{stringliteral}{"fload\_3"}, \textcolor{stringliteral}{"dload\_0"}, \textcolor{stringliteral}{"
+      dload\_1"},
+    \textcolor{stringliteral}{"dload\_2"}, \textcolor{stringliteral}{"dload\_3"}, \textcolor{stringliteral}{"aload\_0"}, \textcolor{stringliteral}{"aload\_1"}, \textcolor{stringliteral}{"aload\_2"}, \textcolor{stringliteral}{"aload\_3"}, \textcolor{stringliteral}{"iaload"}, \textcolor{stringliteral}{"laload"}, \textcolor{stringliteral}{"faload"}, \textcolor{stringliteral}{"daload
+      "},
+    \textcolor{stringliteral}{"aaload"}, \textcolor{stringliteral}{"baload"}, \textcolor{stringliteral}{"caload"}, \textcolor{stringliteral}{"saload"}, \textcolor{stringliteral}{"istore"}, \textcolor{stringliteral}{"lstore"}, \textcolor{stringliteral}{"fstore"}, \textcolor{stringliteral}{"dstore"}, \textcolor{stringliteral}{"astore"}, \textcolor{stringliteral}{"istore\_0"},
+    \textcolor{stringliteral}{"istore\_1"}, \textcolor{stringliteral}{"istore\_2"}, \textcolor{stringliteral}{"istore\_3"}, \textcolor{stringliteral}{"lstore\_0"}, \textcolor{stringliteral}{"lstore\_1"}, \textcolor{stringliteral}{"lstore\_2"}, \textcolor{stringliteral}{"lstore\_3"}, \textcolor{stringliteral}{"fstore\_0"}, \textcolor{stringliteral}{"
+      fstore\_1"}, \textcolor{stringliteral}{"fstore\_2"},
+    \textcolor{stringliteral}{"fstore\_3"}, \textcolor{stringliteral}{"dstore\_0"}, \textcolor{stringliteral}{"dstore\_1"}, \textcolor{stringliteral}{"dstore\_2"}, \textcolor{stringliteral}{"dstore\_3"}, \textcolor{stringliteral}{"astore\_0"}, \textcolor{stringliteral}{"astore\_1"}, \textcolor{stringliteral}{"astore\_2"}, \textcolor{stringliteral}{"
+      astore\_3"}, \textcolor{stringliteral}{"iastore"},
+    \textcolor{stringliteral}{"lastore"}, \textcolor{stringliteral}{"fastore"}, \textcolor{stringliteral}{"dastore"}, \textcolor{stringliteral}{"aastore"}, \textcolor{stringliteral}{"bastore"}, \textcolor{stringliteral}{"castore"}, \textcolor{stringliteral}{"sastore"}, \textcolor{stringliteral}{"pop"}, \textcolor{stringliteral}{"pop2"}, \textcolor{stringliteral}{"dup"},
+    \textcolor{stringliteral}{"dup\_x1"}, \textcolor{stringliteral}{"dup\_x2"}, \textcolor{stringliteral}{"dup2"}, \textcolor{stringliteral}{"dup2\_x1"}, \textcolor{stringliteral}{"dup2\_x2"}, \textcolor{stringliteral}{"swap"}, \textcolor{stringliteral}{"iadd"}, \textcolor{stringliteral}{"ladd"}, \textcolor{stringliteral}{"fadd"}, \textcolor{stringliteral}{"dadd"},
+    \textcolor{stringliteral}{"isub"}, \textcolor{stringliteral}{"lsub"}, \textcolor{stringliteral}{"fsub"}, \textcolor{stringliteral}{"dsub"}, \textcolor{stringliteral}{"imul"}, \textcolor{stringliteral}{"lmul"}, \textcolor{stringliteral}{"fmul"}, \textcolor{stringliteral}{"dmul"}, \textcolor{stringliteral}{"idiv"}, \textcolor{stringliteral}{"ldiv"}, 
+    \textcolor{stringliteral}{"fdiv"}, \textcolor{stringliteral}{"ddiv"}, \textcolor{stringliteral}{"irem"}, \textcolor{stringliteral}{"lrem"}, \textcolor{stringliteral}{"frem"}, \textcolor{stringliteral}{"drem"}, \textcolor{stringliteral}{"ineg"}, \textcolor{stringliteral}{"lneg"}, \textcolor{stringliteral}{"fneg"}, \textcolor{stringliteral}{"dneg"},
+    \textcolor{stringliteral}{"ishl"}, \textcolor{stringliteral}{"lshl"}, \textcolor{stringliteral}{"ishr"}, \textcolor{stringliteral}{"lshr"}, \textcolor{stringliteral}{"iushr"}, \textcolor{stringliteral}{"lushr"}, \textcolor{stringliteral}{"iand"}, \textcolor{stringliteral}{"land"}, \textcolor{stringliteral}{"ior"}, \textcolor{stringliteral}{"lor"},
+    \textcolor{stringliteral}{"ixor"}, \textcolor{stringliteral}{"lxor"}, \textcolor{stringliteral}{"iinc"}, \textcolor{stringliteral}{"i2l"}, \textcolor{stringliteral}{"i2f"}, \textcolor{stringliteral}{"i2d"}, \textcolor{stringliteral}{"l2i"}, \textcolor{stringliteral}{"l2f"}, \textcolor{stringliteral}{"l2d"}, \textcolor{stringliteral}{"f2i"},
+    \textcolor{stringliteral}{"f2l"}, \textcolor{stringliteral}{"f2d"}, \textcolor{stringliteral}{"d2i"}, \textcolor{stringliteral}{"d2l"}, \textcolor{stringliteral}{"d2f"}, \textcolor{stringliteral}{"i2b"}, \textcolor{stringliteral}{"i2c"}, \textcolor{stringliteral}{"i2s"}, \textcolor{stringliteral}{"lcmp"}, \textcolor{stringliteral}{"fcmpl"},
+    \textcolor{stringliteral}{"fcmpg"}, \textcolor{stringliteral}{"dcmpl"}, \textcolor{stringliteral}{"dcmpg"}, \textcolor{stringliteral}{"ifeq"}, \textcolor{stringliteral}{"ifne"}, \textcolor{stringliteral}{"iflt"}, \textcolor{stringliteral}{"ifge"},\textcolor{stringliteral}{"ifgt"}, \textcolor{stringliteral}{"ifle"}, \textcolor{stringliteral}{"if\_icmpeq"}, 
+    \textcolor{stringliteral}{"if\_icmpne"}, \textcolor{stringliteral}{"if\_icmplt"}, \textcolor{stringliteral}{"if\_icmpge"}, \textcolor{stringliteral}{"if\_icmpgt"}, \textcolor{stringliteral}{"if\_icmple"}, \textcolor{stringliteral}{"if\_acmpeq"}, \textcolor{stringliteral}{"if\_acmpne"}, \textcolor{stringliteral}{"goto"}, \textcolor{stringliteral}{"jsr
+      "}, \textcolor{stringliteral}{"ret"},
+    \textcolor{stringliteral}{"tableswitch"}, \textcolor{stringliteral}{"lookupswitch"}, \textcolor{stringliteral}{"ireturn"}, \textcolor{stringliteral}{"lreturn"}, \textcolor{stringliteral}{"freturn"}, \textcolor{stringliteral}{"dreturn"}, \textcolor{stringliteral}{"areturn"}, \textcolor{stringliteral}{"return"}, \textcolor{stringliteral}{"
+      getstatic"}, \textcolor{stringliteral}{"putstatic"},
+    \textcolor{stringliteral}{"getfield"}, \textcolor{stringliteral}{"putfield"}, \textcolor{stringliteral}{"invokevirtual"}, \textcolor{stringliteral}{"invokespecial"}, \textcolor{stringliteral}{"invokestatic"}, \textcolor{stringliteral}{"invokeinterface"}, \textcolor{stringliteral}{"
+      invokedynamic"}, \textcolor{stringliteral}{"new"}, \textcolor{stringliteral}{"newarray"}, \textcolor{stringliteral}{"anewarray"},
+    \textcolor{stringliteral}{"arraylength"}, \textcolor{stringliteral}{"athrow"}, \textcolor{stringliteral}{"checkcast"}, \textcolor{stringliteral}{"instanceof"}, \textcolor{stringliteral}{"monitorenter"}, \textcolor{stringliteral}{"monitorexit"}, \textcolor{stringliteral}{"wide"}, \textcolor{stringliteral}{"
+      multianewarray"}, \textcolor{stringliteral}{"ifnull"}, \textcolor{stringliteral}{"ifnonnull"},
+    \textcolor{stringliteral}{"goto\_w"}, \textcolor{stringliteral}{"jsr\_w"}, \textcolor{stringliteral}{"breakpoint"}
+\}
+\end{DoxyCode}

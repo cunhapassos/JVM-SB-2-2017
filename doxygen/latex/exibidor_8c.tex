@@ -1,0 +1,222 @@
+\hypertarget{exibidor_8c}{}\section{exibidor.\+c File Reference}
+\label{exibidor_8c}\index{exibidor.\+c@{exibidor.\+c}}
+
+
+\begin{DoxyVerb}         Modulo de implementacao: Modulo Exibidor
+         Implementa as funcoes que exibem o conteudo do arquivo .class.\end{DoxyVerb}
+  
+
+
+{\ttfamily \#include \char`\"{}exibidor.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}string.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}structures.\+h\char`\"{}}\newline
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}decoder.\+h\char`\"{}}\newline
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{exibidor_8c_a24699088cbf692f741884d01e3e74550}{E\+X\+\_\+imprimir\+Class\+File}} (\mbox{\hyperlink{structures_8h_a300c8e4693c608a0fc0d5f210b5448b5}{S\+T\+\_\+tp\+Class\+File}} $\ast$p\+Class\+File)
+\begin{DoxyCompactList}\small\item\em Descrição da função\+: Imprime todo o conteudo contido na \mbox{\hyperlink{structClassFile}{Class\+File}}. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{exibidor_8c_af9be92bd44c26f08835ad9ca852187b1}{E\+X\+\_\+imprimir\+General\+Information}} (\mbox{\hyperlink{structures_8h_a300c8e4693c608a0fc0d5f210b5448b5}{S\+T\+\_\+tp\+Class\+File}} $\ast$p\+Class\+File)
+\begin{DoxyCompactList}\small\item\em Descrição da função\+: Imprime as Informacoes Gerais da Classe. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{exibidor_8c_a4066d0b0bf8e6268c373a7359f0809b5}{E\+X\+\_\+imprimir\+Constant\+Pool}} (\mbox{\hyperlink{structures_8h_a300c8e4693c608a0fc0d5f210b5448b5}{S\+T\+\_\+tp\+Class\+File}} $\ast$p\+Class\+File)
+\begin{DoxyCompactList}\small\item\em Descrição da função\+: Imprime todo o conteudo da Tabela de Constantes. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{exibidor_8c_ad8bab51e41eaf171b7b969085f5094c2}{E\+X\+\_\+imprimir\+Interfaces}} (\mbox{\hyperlink{structures_8h_a300c8e4693c608a0fc0d5f210b5448b5}{S\+T\+\_\+tp\+Class\+File}} $\ast$p\+Class\+File)
+\begin{DoxyCompactList}\small\item\em Descrição da função\+: Imprime a Tabela de Interfaces. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{exibidor_8c_a6d0bad79541fe69c5bbec107adb42aea}{E\+X\+\_\+imprimir\+Fields}} (\mbox{\hyperlink{structures_8h_a300c8e4693c608a0fc0d5f210b5448b5}{S\+T\+\_\+tp\+Class\+File}} $\ast$p\+Class\+File)
+\begin{DoxyCompactList}\small\item\em Descrição da função\+: Imprime a Tabela de Fields. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{exibidor_8c_a0a535d62d32cdba5c4c8ab3e59590c74}{E\+X\+\_\+imprimir\+Methods}} (\mbox{\hyperlink{structures_8h_a300c8e4693c608a0fc0d5f210b5448b5}{S\+T\+\_\+tp\+Class\+File}} $\ast$p\+Class\+File)
+\begin{DoxyCompactList}\small\item\em Descrição da função\+: Imprime a Tabela de Metodos. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{exibidor_8c_a04fb11b5f54c7cb6b350fef613073d6f}{E\+X\+\_\+imprimir\+Atributos}} (\mbox{\hyperlink{structures_8h_a300c8e4693c608a0fc0d5f210b5448b5}{S\+T\+\_\+tp\+Class\+File}} $\ast$p\+Class\+File, \mbox{\hyperlink{structures_8h_a4ad50728b2ffc8af625f1237e03bc9e0}{S\+T\+\_\+tp\+Attribute\+\_\+info}} $\ast$p\+Attribute\+Info\+Table, u2 attributes\+Count)
+\begin{DoxyCompactList}\small\item\em Descrição da função\+: Imprime atributos contidos na Tabela de Atributos. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{exibidor_8c_a63e7dc1223f4c3124964357d00920551}{E\+X\+\_\+imprimir\+Atributos\+Classe}} (\mbox{\hyperlink{structures_8h_a300c8e4693c608a0fc0d5f210b5448b5}{S\+T\+\_\+tp\+Class\+File}} $\ast$p\+Class\+File, \mbox{\hyperlink{structures_8h_a4ad50728b2ffc8af625f1237e03bc9e0}{S\+T\+\_\+tp\+Attribute\+\_\+info}} $\ast$p\+Attribute\+Info\+Table, u2 attributes\+Count)
+\begin{DoxyCompactList}\small\item\em Descrição da função\+: Imprime cabeçalho, e então chama a função E\+X\+\_\+imprimir\+Atributos. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{exibidor_8c_af470e975aa63ec2daee17f6aa982dd86}{E\+X\+\_\+imprimir\+Constant\+Element}} (\mbox{\hyperlink{structST__tpCp__info}{S\+T\+\_\+tp\+Cp\+\_\+info}} $\ast$cp, int index)
+\begin{DoxyCompactList}\small\item\em Descrição da função\+: Imprime os elementos constantes de una certa classe. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{exibidor_8c_a41b112fb2cd4a06920536acb18ff4c99}{E\+X\+\_\+imprimir\+Access\+Flags}} (u2 access\+\_\+flags)
+\begin{DoxyCompactList}\small\item\em Descrição da função\+: Imprime o valor de uma flag de acesso. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\begin{DoxyVerb}         Modulo de implementacao: Modulo Exibidor
+         Implementa as funcoes que exibem o conteudo do arquivo .class.\end{DoxyVerb}
+ 
+
+\begin{DoxyAuthor}{Author}
+A\+L\+ON M\+O\+TA -\/ M\+AT. 13/0005002 
+
+D\+A\+N\+I\+EL M\+A\+T\+I\+AS -\/ M\+AT. 12/0139804 
+
+G\+A\+B\+R\+I\+EL T\+O\+L\+L\+I\+NI -\/ M\+AT. 14/0020454 
+
+P\+A\+U\+LO P\+A\+S\+S\+OS -\/ M\+AT. 10/0118577
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+1.\+0 
+\end{DoxyVersion}
+\begin{DoxySince}{Since}
+30/09/2017 
+\end{DoxySince}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{exibidor_8c_a41b112fb2cd4a06920536acb18ff4c99}\label{exibidor_8c_a41b112fb2cd4a06920536acb18ff4c99}} 
+\index{exibidor.\+c@{exibidor.\+c}!E\+X\+\_\+imprimir\+Access\+Flags@{E\+X\+\_\+imprimir\+Access\+Flags}}
+\index{E\+X\+\_\+imprimir\+Access\+Flags@{E\+X\+\_\+imprimir\+Access\+Flags}!exibidor.\+c@{exibidor.\+c}}
+\subsubsection{\texorpdfstring{E\+X\+\_\+imprimir\+Access\+Flags()}{EX\_imprimirAccessFlags()}}
+{\footnotesize\ttfamily void E\+X\+\_\+imprimir\+Access\+Flags (\begin{DoxyParamCaption}\item[{u2}]{access\+\_\+flags }\end{DoxyParamCaption})}
+
+
+
+Descrição da função\+: Imprime o valor de uma flag de acesso. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em access\+\_\+flags} & -\/ a flag de acesso que terá seu tipo impresso \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{exibidor_8c_a04fb11b5f54c7cb6b350fef613073d6f}\label{exibidor_8c_a04fb11b5f54c7cb6b350fef613073d6f}} 
+\index{exibidor.\+c@{exibidor.\+c}!E\+X\+\_\+imprimir\+Atributos@{E\+X\+\_\+imprimir\+Atributos}}
+\index{E\+X\+\_\+imprimir\+Atributos@{E\+X\+\_\+imprimir\+Atributos}!exibidor.\+c@{exibidor.\+c}}
+\subsubsection{\texorpdfstring{E\+X\+\_\+imprimir\+Atributos()}{EX\_imprimirAtributos()}}
+{\footnotesize\ttfamily void E\+X\+\_\+imprimir\+Atributos (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structures_8h_a300c8e4693c608a0fc0d5f210b5448b5}{S\+T\+\_\+tp\+Class\+File}} $\ast$}]{p\+Class\+File,  }\item[{\mbox{\hyperlink{structures_8h_a4ad50728b2ffc8af625f1237e03bc9e0}{S\+T\+\_\+tp\+Attribute\+\_\+info}} $\ast$}]{p\+Attribute\+Info\+Table,  }\item[{u2}]{attributes\+Count }\end{DoxyParamCaption})}
+
+
+
+Descrição da função\+: Imprime atributos contidos na Tabela de Atributos. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em p\+Class\+File} & -\/ ponteiro para uma estrutura Classfile \\
+\hline
+{\em p\+Attribute\+Info\+Table} & -\/ Ponteiro para a Tabela de Atributos \\
+\hline
+{\em attributes\+Count} & -\/ quantidades de atributos da Tabela de Atributos \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{exibidor_8c_a63e7dc1223f4c3124964357d00920551}\label{exibidor_8c_a63e7dc1223f4c3124964357d00920551}} 
+\index{exibidor.\+c@{exibidor.\+c}!E\+X\+\_\+imprimir\+Atributos\+Classe@{E\+X\+\_\+imprimir\+Atributos\+Classe}}
+\index{E\+X\+\_\+imprimir\+Atributos\+Classe@{E\+X\+\_\+imprimir\+Atributos\+Classe}!exibidor.\+c@{exibidor.\+c}}
+\subsubsection{\texorpdfstring{E\+X\+\_\+imprimir\+Atributos\+Classe()}{EX\_imprimirAtributosClasse()}}
+{\footnotesize\ttfamily void E\+X\+\_\+imprimir\+Atributos\+Classe (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structures_8h_a300c8e4693c608a0fc0d5f210b5448b5}{S\+T\+\_\+tp\+Class\+File}} $\ast$}]{p\+Class\+File,  }\item[{\mbox{\hyperlink{structures_8h_a4ad50728b2ffc8af625f1237e03bc9e0}{S\+T\+\_\+tp\+Attribute\+\_\+info}} $\ast$}]{p\+Attribute\+Info\+Table,  }\item[{u2}]{attributes\+Count }\end{DoxyParamCaption})}
+
+
+
+Descrição da função\+: Imprime cabeçalho, e então chama a função E\+X\+\_\+imprimir\+Atributos. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em p\+Class\+File} & -\/ Ponteiro para a estrutura do \mbox{\hyperlink{structClassFile}{Class\+File}} \\
+\hline
+{\em p\+Attribute\+Info\+Table} & -\/ Ponteiro para a Tabela de Atributos \\
+\hline
+{\em attributes\+Count} & -\/ Quantidades de atributos da Tabela de Atributos \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{exibidor_8c_a24699088cbf692f741884d01e3e74550}\label{exibidor_8c_a24699088cbf692f741884d01e3e74550}} 
+\index{exibidor.\+c@{exibidor.\+c}!E\+X\+\_\+imprimir\+Class\+File@{E\+X\+\_\+imprimir\+Class\+File}}
+\index{E\+X\+\_\+imprimir\+Class\+File@{E\+X\+\_\+imprimir\+Class\+File}!exibidor.\+c@{exibidor.\+c}}
+\subsubsection{\texorpdfstring{E\+X\+\_\+imprimir\+Class\+File()}{EX\_imprimirClassFile()}}
+{\footnotesize\ttfamily void E\+X\+\_\+imprimir\+Class\+File (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structures_8h_a300c8e4693c608a0fc0d5f210b5448b5}{S\+T\+\_\+tp\+Class\+File}} $\ast$}]{p\+Class\+File }\end{DoxyParamCaption})}
+
+
+
+Descrição da função\+: Imprime todo o conteudo contido na \mbox{\hyperlink{structClassFile}{Class\+File}}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em p\+Class\+File} & -\/ Ponteiro para a estrutura do \mbox{\hyperlink{structClassFile}{Class\+File}} \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{exibidor_8c_af470e975aa63ec2daee17f6aa982dd86}\label{exibidor_8c_af470e975aa63ec2daee17f6aa982dd86}} 
+\index{exibidor.\+c@{exibidor.\+c}!E\+X\+\_\+imprimir\+Constant\+Element@{E\+X\+\_\+imprimir\+Constant\+Element}}
+\index{E\+X\+\_\+imprimir\+Constant\+Element@{E\+X\+\_\+imprimir\+Constant\+Element}!exibidor.\+c@{exibidor.\+c}}
+\subsubsection{\texorpdfstring{E\+X\+\_\+imprimir\+Constant\+Element()}{EX\_imprimirConstantElement()}}
+{\footnotesize\ttfamily void E\+X\+\_\+imprimir\+Constant\+Element (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structST__tpCp__info}{S\+T\+\_\+tp\+Cp\+\_\+info}} $\ast$}]{cp,  }\item[{int}]{index }\end{DoxyParamCaption})}
+
+
+
+Descrição da função\+: Imprime os elementos constantes de una certa classe. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em cp} & -\/ Ponteiro para classes \\
+\hline
+{\em index} & -\/ Índice da classe que será lida, incrementado de um \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{exibidor_8c_a4066d0b0bf8e6268c373a7359f0809b5}\label{exibidor_8c_a4066d0b0bf8e6268c373a7359f0809b5}} 
+\index{exibidor.\+c@{exibidor.\+c}!E\+X\+\_\+imprimir\+Constant\+Pool@{E\+X\+\_\+imprimir\+Constant\+Pool}}
+\index{E\+X\+\_\+imprimir\+Constant\+Pool@{E\+X\+\_\+imprimir\+Constant\+Pool}!exibidor.\+c@{exibidor.\+c}}
+\subsubsection{\texorpdfstring{E\+X\+\_\+imprimir\+Constant\+Pool()}{EX\_imprimirConstantPool()}}
+{\footnotesize\ttfamily void E\+X\+\_\+imprimir\+Constant\+Pool (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structures_8h_a300c8e4693c608a0fc0d5f210b5448b5}{S\+T\+\_\+tp\+Class\+File}} $\ast$}]{p\+Class\+File }\end{DoxyParamCaption})}
+
+
+
+Descrição da função\+: Imprime todo o conteudo da Tabela de Constantes. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em p\+Class\+File} & -\/ Ponteiro para a estrutura do \mbox{\hyperlink{structClassFile}{Class\+File}} \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{exibidor_8c_a6d0bad79541fe69c5bbec107adb42aea}\label{exibidor_8c_a6d0bad79541fe69c5bbec107adb42aea}} 
+\index{exibidor.\+c@{exibidor.\+c}!E\+X\+\_\+imprimir\+Fields@{E\+X\+\_\+imprimir\+Fields}}
+\index{E\+X\+\_\+imprimir\+Fields@{E\+X\+\_\+imprimir\+Fields}!exibidor.\+c@{exibidor.\+c}}
+\subsubsection{\texorpdfstring{E\+X\+\_\+imprimir\+Fields()}{EX\_imprimirFields()}}
+{\footnotesize\ttfamily void E\+X\+\_\+imprimir\+Fields (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structures_8h_a300c8e4693c608a0fc0d5f210b5448b5}{S\+T\+\_\+tp\+Class\+File}} $\ast$}]{p\+Class\+File }\end{DoxyParamCaption})}
+
+
+
+Descrição da função\+: Imprime a Tabela de Fields. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em p\+Class\+File} & -\/ Ponteiro para a estrutura do \mbox{\hyperlink{structClassFile}{Class\+File}} \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{exibidor_8c_af9be92bd44c26f08835ad9ca852187b1}\label{exibidor_8c_af9be92bd44c26f08835ad9ca852187b1}} 
+\index{exibidor.\+c@{exibidor.\+c}!E\+X\+\_\+imprimir\+General\+Information@{E\+X\+\_\+imprimir\+General\+Information}}
+\index{E\+X\+\_\+imprimir\+General\+Information@{E\+X\+\_\+imprimir\+General\+Information}!exibidor.\+c@{exibidor.\+c}}
+\subsubsection{\texorpdfstring{E\+X\+\_\+imprimir\+General\+Information()}{EX\_imprimirGeneralInformation()}}
+{\footnotesize\ttfamily void E\+X\+\_\+imprimir\+General\+Information (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structures_8h_a300c8e4693c608a0fc0d5f210b5448b5}{S\+T\+\_\+tp\+Class\+File}} $\ast$}]{p\+Class\+File }\end{DoxyParamCaption})}
+
+
+
+Descrição da função\+: Imprime as Informacoes Gerais da Classe. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em p\+Class\+File} & -\/ Ponteiro para a estrutura do \mbox{\hyperlink{structClassFile}{Class\+File}} \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{exibidor_8c_ad8bab51e41eaf171b7b969085f5094c2}\label{exibidor_8c_ad8bab51e41eaf171b7b969085f5094c2}} 
+\index{exibidor.\+c@{exibidor.\+c}!E\+X\+\_\+imprimir\+Interfaces@{E\+X\+\_\+imprimir\+Interfaces}}
+\index{E\+X\+\_\+imprimir\+Interfaces@{E\+X\+\_\+imprimir\+Interfaces}!exibidor.\+c@{exibidor.\+c}}
+\subsubsection{\texorpdfstring{E\+X\+\_\+imprimir\+Interfaces()}{EX\_imprimirInterfaces()}}
+{\footnotesize\ttfamily void E\+X\+\_\+imprimir\+Interfaces (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structures_8h_a300c8e4693c608a0fc0d5f210b5448b5}{S\+T\+\_\+tp\+Class\+File}} $\ast$}]{p\+Class\+File }\end{DoxyParamCaption})}
+
+
+
+Descrição da função\+: Imprime a Tabela de Interfaces. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em p\+Class\+File} & -\/ Ponteiro para a estrutura do \mbox{\hyperlink{structClassFile}{Class\+File}} \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{exibidor_8c_a0a535d62d32cdba5c4c8ab3e59590c74}\label{exibidor_8c_a0a535d62d32cdba5c4c8ab3e59590c74}} 
+\index{exibidor.\+c@{exibidor.\+c}!E\+X\+\_\+imprimir\+Methods@{E\+X\+\_\+imprimir\+Methods}}
+\index{E\+X\+\_\+imprimir\+Methods@{E\+X\+\_\+imprimir\+Methods}!exibidor.\+c@{exibidor.\+c}}
+\subsubsection{\texorpdfstring{E\+X\+\_\+imprimir\+Methods()}{EX\_imprimirMethods()}}
+{\footnotesize\ttfamily void E\+X\+\_\+imprimir\+Methods (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structures_8h_a300c8e4693c608a0fc0d5f210b5448b5}{S\+T\+\_\+tp\+Class\+File}} $\ast$}]{p\+Class\+File }\end{DoxyParamCaption})}
+
+
+
+Descrição da função\+: Imprime a Tabela de Metodos. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em p\+Class\+File} & -\/ Ponteiro para a estrutura do \mbox{\hyperlink{structClassFile}{Class\+File}} \\
+\hline
+\end{DoxyParams}

@@ -1,0 +1,261 @@
+\hypertarget{pilhas__listas_8h}{}\section{pilhas\+\_\+listas.\+h File Reference}
+\label{pilhas__listas_8h}\index{pilhas\+\_\+listas.\+h@{pilhas\+\_\+listas.\+h}}
+
+
+
+
+  
+
+
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}structures.\+h\char`\"{}}\newline
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{pilhas__listas_8h_adc6eb89f6e9afcdbf16ad2178da7da2c}{P\+L\+\_\+inicializar\+Pilha}} (\mbox{\hyperlink{structures_8h_a5f905336fce82d42d99ef42a53f8eb0c}{S\+T\+\_\+tp\+Pilha}} $\ast$$\ast$e\+Pilha)
+\begin{DoxyCompactList}\small\item\em 
+
+ E\+S\+T\+R\+U\+T\+U\+R\+AS E F\+U\+N\+C\+O\+ES DE P\+I\+L\+HA \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{pilhas__listas_8h_ab1bf62900b61ee44ca2ac8c7dc981103}{P\+L\+\_\+pilha\+Vazia}} (\mbox{\hyperlink{structures_8h_a5f905336fce82d42d99ef42a53f8eb0c}{S\+T\+\_\+tp\+Pilha}} $\ast$p\+Pilha)
+\begin{DoxyCompactList}\small\item\em Descricao da funcao\+: Verifica se uma pilha esta vazia. \end{DoxyCompactList}\item 
+void $\ast$ \mbox{\hyperlink{pilhas__listas_8h_ab6272f4e08e527ce95a0092039b08901}{P\+L\+\_\+topo\+Pilha}} (\mbox{\hyperlink{structures_8h_a5f905336fce82d42d99ef42a53f8eb0c}{S\+T\+\_\+tp\+Pilha}} $\ast$p\+Pilha)
+\begin{DoxyCompactList}\small\item\em Descricao da funcao\+: Retorna o elemento do topo da pilha. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{pilhas__listas_8h_a3467c45dbbd8ec3164aaea4d9a7727e1}{P\+L\+\_\+push}} (\mbox{\hyperlink{structures_8h_a5f905336fce82d42d99ef42a53f8eb0c}{S\+T\+\_\+tp\+Pilha}} $\ast$$\ast$e\+Pilha, void $\ast$dado\+Novo)
+\begin{DoxyCompactList}\small\item\em Descricao da funcao\+: Insere elemento no topo da pilha. \end{DoxyCompactList}\item 
+void $\ast$ \mbox{\hyperlink{pilhas__listas_8h_a6234448e6bf6c0678f34d24f463cb71d}{P\+L\+\_\+pop}} (\mbox{\hyperlink{structures_8h_a5f905336fce82d42d99ef42a53f8eb0c}{S\+T\+\_\+tp\+Pilha}} $\ast$$\ast$e\+Pilha)
+\begin{DoxyCompactList}\small\item\em Descricao da funcao\+: Retira um elemento do topo da pilha. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{pilhas__listas_8h_a98d249cec07fa91904cd636fba24fab9}\label{pilhas__listas_8h_a98d249cec07fa91904cd636fba24fab9}} 
+void {\bfseries P\+L\+\_\+push\+Operando} (\mbox{\hyperlink{structures_8h_a2da65ddc00e0495a51dcce6007aedfb7}{S\+T\+\_\+tp\+Operand\+Stack}} $\ast$$\ast$p\+Pilha\+Operandos, \mbox{\hyperlink{structVariable}{S\+T\+\_\+tp\+Variable}} var)
+\item 
+\mbox{\Hypertarget{pilhas__listas_8h_a791fe492c0dba69df222e5fbf5e69d5d}\label{pilhas__listas_8h_a791fe492c0dba69df222e5fbf5e69d5d}} 
+\mbox{\hyperlink{structVariable}{S\+T\+\_\+tp\+Variable}} $\ast$ {\bfseries P\+L\+\_\+pop\+Operando} (\mbox{\hyperlink{structures_8h_a2da65ddc00e0495a51dcce6007aedfb7}{S\+T\+\_\+tp\+Operand\+Stack}} $\ast$$\ast$p\+Pilha\+Operandos)
+\item 
+\mbox{\Hypertarget{pilhas__listas_8h_a93145eb21ec03f2ed01ccac6a8e85ce4}\label{pilhas__listas_8h_a93145eb21ec03f2ed01ccac6a8e85ce4}} 
+void {\bfseries P\+L\+\_\+esvaziar\+Pilha\+Operandos} (\mbox{\hyperlink{structures_8h_a2da65ddc00e0495a51dcce6007aedfb7}{S\+T\+\_\+tp\+Operand\+Stack}} $\ast$$\ast$p\+Pilha\+Operandos)
+\item 
+\mbox{\Hypertarget{pilhas__listas_8h_a6e517c355ae82f652958e23a23ac35a3}\label{pilhas__listas_8h_a6e517c355ae82f652958e23a23ac35a3}} 
+void {\bfseries P\+L\+\_\+push\+Parametro} (\mbox{\hyperlink{structures_8h_ae2d273f61e0f30cd3071067bff6987ce}{S\+T\+\_\+tp\+Parameter\+Stack}} $\ast$$\ast$p\+Pilha\+Parametros, \mbox{\hyperlink{structVariable}{S\+T\+\_\+tp\+Variable}} var)
+\item 
+\mbox{\Hypertarget{pilhas__listas_8h_afb32d043de1d0b80d3aa7b08f54928ec}\label{pilhas__listas_8h_afb32d043de1d0b80d3aa7b08f54928ec}} 
+\mbox{\hyperlink{structVariable}{S\+T\+\_\+tp\+Variable}} $\ast$ {\bfseries P\+L\+\_\+pop\+Parametro} (\mbox{\hyperlink{structures_8h_ae2d273f61e0f30cd3071067bff6987ce}{S\+T\+\_\+tp\+Parameter\+Stack}} $\ast$$\ast$p\+Pilha\+Parametros)
+\item 
+\mbox{\Hypertarget{pilhas__listas_8h_af432d3bff9e75dd865ff9cf01b02d73f}\label{pilhas__listas_8h_af432d3bff9e75dd865ff9cf01b02d73f}} 
+void {\bfseries P\+L\+\_\+esvaziar\+Pilha\+Parametros} (\mbox{\hyperlink{structures_8h_ae2d273f61e0f30cd3071067bff6987ce}{S\+T\+\_\+tp\+Parameter\+Stack}} $\ast$$\ast$p\+Pilha\+Paremetros)
+\item 
+void \mbox{\hyperlink{pilhas__listas_8h_ad90b1d019a954438448b4a2e829c7565}{P\+L\+\_\+inserir\+Classe\+Topo}} (\mbox{\hyperlink{structST__tpJVM}{S\+T\+\_\+tp\+J\+VM}} $\ast$p\+Jvm, \mbox{\hyperlink{structures_8h_a300c8e4693c608a0fc0d5f210b5448b5}{S\+T\+\_\+tp\+Class\+File}} $\ast$p\+Classe)
+\begin{DoxyCompactList}\small\item\em 
+
+ E\+S\+T\+R\+U\+T\+U\+R\+AS E F\+U\+N\+C\+O\+ES DE L\+I\+S\+TA \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{pilhas__listas_8h_a77ae7829badbf8d46b3aba853ee719cd}\label{pilhas__listas_8h_a77ae7829badbf8d46b3aba853ee719cd}} 
+void {\bfseries P\+L\+\_\+inserir\+Classe\+Fundo} (\mbox{\hyperlink{structST__tpJVM}{S\+T\+\_\+tp\+J\+VM}} $\ast$p\+Jvm, \mbox{\hyperlink{structures_8h_a300c8e4693c608a0fc0d5f210b5448b5}{S\+T\+\_\+tp\+Class\+File}} $\ast$p\+Classe)
+\item 
+int \mbox{\hyperlink{pilhas__listas_8h_a1f26c4ce1cd24d119856e91b35e8cd3a}{P\+L\+\_\+remover\+Classe\+Topo}} (\mbox{\hyperlink{structST__tpJVM}{S\+T\+\_\+tp\+J\+VM}} $\ast$p\+J\+VM)
+\begin{DoxyCompactList}\small\item\em Descricao da funcao\+: Remove classe do topo da lista de classes carregadas da J\+VM A lista é uma lista eh duplamente encadeada de classes. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structures_8h_a300c8e4693c608a0fc0d5f210b5448b5}{S\+T\+\_\+tp\+Class\+File}} $\ast$ \mbox{\hyperlink{pilhas__listas_8h_add36f4ad480b31c137d5155dd940d5f9}{P\+L\+\_\+buscar\+Classe}} (\mbox{\hyperlink{structST__tpJVM}{S\+T\+\_\+tp\+J\+VM}} $\ast$p\+J\+VM, char $\ast$nome\+Classe)
+\begin{DoxyCompactList}\small\item\em Descricao da funcao\+: Busca uma classe na lista de classes carregadas da J\+VM A lista é uma lista duplamente encadeada de classes. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structures_8h_a3900130849091c366c32df1a3af32bfe}{S\+T\+\_\+tp\+Object\+Heap}} $\ast$ \mbox{\hyperlink{pilhas__listas_8h_ae14dfa5e83aae5e47d8cd52b525f1cc4}{P\+L\+\_\+busca\+Objeto\+Heap}} (\mbox{\hyperlink{structures_8h_a3900130849091c366c32df1a3af32bfe}{S\+T\+\_\+tp\+Object\+Heap}} $\ast$p\+Objects, char $\ast$nome\+Classe)
+\begin{DoxyCompactList}\small\item\em Retorna um pontero para um Objeto de classe. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{pilhas__listas_8h_a04baed50a69b661072ee6a67864544a7}\label{pilhas__listas_8h_a04baed50a69b661072ee6a67864544a7}} 
+\mbox{\hyperlink{structures_8h_a36c151ce2aec3e5a7150c6d3478723a5}{S\+T\+\_\+tp\+Class\+Heap}} $\ast$ {\bfseries P\+L\+\_\+busca\+Class\+Heap} (\mbox{\hyperlink{structures_8h_a36c151ce2aec3e5a7150c6d3478723a5}{S\+T\+\_\+tp\+Class\+Heap}} $\ast$p\+Classes, char $\ast$nome\+Classe)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+
+
+ 
+
+Universidade de Brasilia -\/ 02/2017 Software Basico -\/ Turma A
+
+M\+O\+D\+U\+LO\+: PL
+
+\begin{DoxyVerb}         Descricao:  Definicao das funcoes de pilha.
+\end{DoxyVerb}
+
+
+\begin{DoxyAuthor}{Author}
+P\+A\+U\+LO DA C\+U\+N\+HA P\+A\+S\+S\+OS -\/ M\+AT. 10/0118577 
+
+D\+A\+N\+I\+EL M\+A\+T\+I\+AS 
+
+A\+L\+ON M\+O\+TA
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+1.\+0 
+\end{DoxyVersion}
+\begin{DoxySince}{Since}
+30/10/2017 
+\end{DoxySince}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{pilhas__listas_8h_ae14dfa5e83aae5e47d8cd52b525f1cc4}\label{pilhas__listas_8h_ae14dfa5e83aae5e47d8cd52b525f1cc4}} 
+\index{pilhas\+\_\+listas.\+h@{pilhas\+\_\+listas.\+h}!P\+L\+\_\+busca\+Objeto\+Heap@{P\+L\+\_\+busca\+Objeto\+Heap}}
+\index{P\+L\+\_\+busca\+Objeto\+Heap@{P\+L\+\_\+busca\+Objeto\+Heap}!pilhas\+\_\+listas.\+h@{pilhas\+\_\+listas.\+h}}
+\subsubsection{\texorpdfstring{P\+L\+\_\+busca\+Objeto\+Heap()}{PL\_buscaObjetoHeap()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structures_8h_a3900130849091c366c32df1a3af32bfe}{S\+T\+\_\+tp\+Object\+Heap}}$\ast$ P\+L\+\_\+busca\+Objeto\+Heap (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structures_8h_a3900130849091c366c32df1a3af32bfe}{S\+T\+\_\+tp\+Object\+Heap}} $\ast$}]{p\+Objects,  }\item[{char $\ast$}]{nome\+Classe }\end{DoxyParamCaption})}
+
+
+
+Retorna um pontero para um Objeto de classe. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em p\+Objects} & -\/ Ponteiro para a pilha de Objetos do \mbox{\hyperlink{structObjectHeap}{Object\+Heap}} \\
+\hline
+{\em nome\+Classe} & -\/ Nome da classe referente ao objeto a ser procurado \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+N\+U\+LL -\/ Se o objeto nao foi encontrado p\+Aux -\/ Endereço do objeto encontrado 
+\end{DoxyReturn}
+\mbox{\Hypertarget{pilhas__listas_8h_add36f4ad480b31c137d5155dd940d5f9}\label{pilhas__listas_8h_add36f4ad480b31c137d5155dd940d5f9}} 
+\index{pilhas\+\_\+listas.\+h@{pilhas\+\_\+listas.\+h}!P\+L\+\_\+buscar\+Classe@{P\+L\+\_\+buscar\+Classe}}
+\index{P\+L\+\_\+buscar\+Classe@{P\+L\+\_\+buscar\+Classe}!pilhas\+\_\+listas.\+h@{pilhas\+\_\+listas.\+h}}
+\subsubsection{\texorpdfstring{P\+L\+\_\+buscar\+Classe()}{PL\_buscarClasse()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structures_8h_a300c8e4693c608a0fc0d5f210b5448b5}{S\+T\+\_\+tp\+Class\+File}}$\ast$ P\+L\+\_\+buscar\+Classe (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structST__tpJVM}{S\+T\+\_\+tp\+J\+VM}} $\ast$}]{p\+J\+VM,  }\item[{char $\ast$}]{nome\+Classe }\end{DoxyParamCaption})}
+
+
+
+Descricao da funcao\+: Busca uma classe na lista de classes carregadas da J\+VM A lista é uma lista duplamente encadeada de classes. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em p\+J\+VM} & -\/ Ponteiro para a J\+VM \\
+\hline
+{\em nome\+Classe} & -\/ Nome da classe a ser procurada\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+N\+U\+LL -\/ Se a Classe nao foi encontrado p\+Aux -\/ Endereço da Classe econtrada 
+\end{DoxyReturn}
+\mbox{\Hypertarget{pilhas__listas_8h_adc6eb89f6e9afcdbf16ad2178da7da2c}\label{pilhas__listas_8h_adc6eb89f6e9afcdbf16ad2178da7da2c}} 
+\index{pilhas\+\_\+listas.\+h@{pilhas\+\_\+listas.\+h}!P\+L\+\_\+inicializar\+Pilha@{P\+L\+\_\+inicializar\+Pilha}}
+\index{P\+L\+\_\+inicializar\+Pilha@{P\+L\+\_\+inicializar\+Pilha}!pilhas\+\_\+listas.\+h@{pilhas\+\_\+listas.\+h}}
+\subsubsection{\texorpdfstring{P\+L\+\_\+inicializar\+Pilha()}{PL\_inicializarPilha()}}
+{\footnotesize\ttfamily void P\+L\+\_\+inicializar\+Pilha (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structures_8h_a5f905336fce82d42d99ef42a53f8eb0c}{S\+T\+\_\+tp\+Pilha}} $\ast$$\ast$}]{e\+Pilha }\end{DoxyParamCaption})}
+
+
+
+
+
+ E\+S\+T\+R\+U\+T\+U\+R\+AS E F\+U\+N\+C\+O\+ES DE P\+I\+L\+HA 
+
+Descricao da funcao\+: Inicializa a pilha
+
+
+\begin{DoxyParams}{Parameters}
+{\em e\+Pilha} & -\/ Endereço do topo da pilha \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{pilhas__listas_8h_ad90b1d019a954438448b4a2e829c7565}\label{pilhas__listas_8h_ad90b1d019a954438448b4a2e829c7565}} 
+\index{pilhas\+\_\+listas.\+h@{pilhas\+\_\+listas.\+h}!P\+L\+\_\+inserir\+Classe\+Topo@{P\+L\+\_\+inserir\+Classe\+Topo}}
+\index{P\+L\+\_\+inserir\+Classe\+Topo@{P\+L\+\_\+inserir\+Classe\+Topo}!pilhas\+\_\+listas.\+h@{pilhas\+\_\+listas.\+h}}
+\subsubsection{\texorpdfstring{P\+L\+\_\+inserir\+Classe\+Topo()}{PL\_inserirClasseTopo()}}
+{\footnotesize\ttfamily void P\+L\+\_\+inserir\+Classe\+Topo (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structST__tpJVM}{S\+T\+\_\+tp\+J\+VM}} $\ast$}]{p\+Jvm,  }\item[{\mbox{\hyperlink{structures_8h_a300c8e4693c608a0fc0d5f210b5448b5}{S\+T\+\_\+tp\+Class\+File}} $\ast$}]{p\+Classe }\end{DoxyParamCaption})}
+
+
+
+
+
+ E\+S\+T\+R\+U\+T\+U\+R\+AS E F\+U\+N\+C\+O\+ES DE L\+I\+S\+TA 
+
+Descricao da funcao\+: Insere classe carregada no topo da lista de classes carregadas da J\+VM A lista é uma lista eh duplamente encadeada de classes
+
+
+\begin{DoxyParams}{Parameters}
+{\em p\+Jvm} & -\/ Ponteiro para a J\+VM \\
+\hline
+{\em p\+Classe} & -\/ Endereço da classe a ser inserida na J\+VM \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{pilhas__listas_8h_ab1bf62900b61ee44ca2ac8c7dc981103}\label{pilhas__listas_8h_ab1bf62900b61ee44ca2ac8c7dc981103}} 
+\index{pilhas\+\_\+listas.\+h@{pilhas\+\_\+listas.\+h}!P\+L\+\_\+pilha\+Vazia@{P\+L\+\_\+pilha\+Vazia}}
+\index{P\+L\+\_\+pilha\+Vazia@{P\+L\+\_\+pilha\+Vazia}!pilhas\+\_\+listas.\+h@{pilhas\+\_\+listas.\+h}}
+\subsubsection{\texorpdfstring{P\+L\+\_\+pilha\+Vazia()}{PL\_pilhaVazia()}}
+{\footnotesize\ttfamily int P\+L\+\_\+pilha\+Vazia (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structures_8h_a5f905336fce82d42d99ef42a53f8eb0c}{S\+T\+\_\+tp\+Pilha}} $\ast$}]{p\+Pilha }\end{DoxyParamCaption})}
+
+
+
+Descricao da funcao\+: Verifica se uma pilha esta vazia. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em p\+Pilha} & -\/ Endereço do topo da pilha\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+-\/ 0 se a pilha nao esta vazia 1 se a pilha esta vazia 
+\end{DoxyReturn}
+\mbox{\Hypertarget{pilhas__listas_8h_a6234448e6bf6c0678f34d24f463cb71d}\label{pilhas__listas_8h_a6234448e6bf6c0678f34d24f463cb71d}} 
+\index{pilhas\+\_\+listas.\+h@{pilhas\+\_\+listas.\+h}!P\+L\+\_\+pop@{P\+L\+\_\+pop}}
+\index{P\+L\+\_\+pop@{P\+L\+\_\+pop}!pilhas\+\_\+listas.\+h@{pilhas\+\_\+listas.\+h}}
+\subsubsection{\texorpdfstring{P\+L\+\_\+pop()}{PL\_pop()}}
+{\footnotesize\ttfamily void$\ast$ P\+L\+\_\+pop (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structures_8h_a5f905336fce82d42d99ef42a53f8eb0c}{S\+T\+\_\+tp\+Pilha}} $\ast$$\ast$}]{e\+Pilha }\end{DoxyParamCaption})}
+
+
+
+Descricao da funcao\+: Retira um elemento do topo da pilha. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em e\+Pilha} & -\/ Endereço do topo da pilha\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+dado -\/ Endereço do elemento retirado do topo da pilha 
+\end{DoxyReturn}
+\mbox{\Hypertarget{pilhas__listas_8h_a3467c45dbbd8ec3164aaea4d9a7727e1}\label{pilhas__listas_8h_a3467c45dbbd8ec3164aaea4d9a7727e1}} 
+\index{pilhas\+\_\+listas.\+h@{pilhas\+\_\+listas.\+h}!P\+L\+\_\+push@{P\+L\+\_\+push}}
+\index{P\+L\+\_\+push@{P\+L\+\_\+push}!pilhas\+\_\+listas.\+h@{pilhas\+\_\+listas.\+h}}
+\subsubsection{\texorpdfstring{P\+L\+\_\+push()}{PL\_push()}}
+{\footnotesize\ttfamily void P\+L\+\_\+push (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structures_8h_a5f905336fce82d42d99ef42a53f8eb0c}{S\+T\+\_\+tp\+Pilha}} $\ast$$\ast$}]{e\+Pilha,  }\item[{void $\ast$}]{dado\+Novo }\end{DoxyParamCaption})}
+
+
+
+Descricao da funcao\+: Insere elemento no topo da pilha. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em e\+Pilha} & -\/ Endereço do topo da pilha \\
+\hline
+{\em dado\+Novo} & -\/ Novo elemento da pilha \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{pilhas__listas_8h_a1f26c4ce1cd24d119856e91b35e8cd3a}\label{pilhas__listas_8h_a1f26c4ce1cd24d119856e91b35e8cd3a}} 
+\index{pilhas\+\_\+listas.\+h@{pilhas\+\_\+listas.\+h}!P\+L\+\_\+remover\+Classe\+Topo@{P\+L\+\_\+remover\+Classe\+Topo}}
+\index{P\+L\+\_\+remover\+Classe\+Topo@{P\+L\+\_\+remover\+Classe\+Topo}!pilhas\+\_\+listas.\+h@{pilhas\+\_\+listas.\+h}}
+\subsubsection{\texorpdfstring{P\+L\+\_\+remover\+Classe\+Topo()}{PL\_removerClasseTopo()}}
+{\footnotesize\ttfamily int P\+L\+\_\+remover\+Classe\+Topo (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structST__tpJVM}{S\+T\+\_\+tp\+J\+VM}} $\ast$}]{p\+J\+VM }\end{DoxyParamCaption})}
+
+
+
+Descricao da funcao\+: Remove classe do topo da lista de classes carregadas da J\+VM A lista é uma lista eh duplamente encadeada de classes. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em p\+J\+VM} & -\/ Ponteiro para a J\+VM \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 ou 1 -\/ retorno de controle 
+\end{DoxyReturn}
+\mbox{\Hypertarget{pilhas__listas_8h_ab6272f4e08e527ce95a0092039b08901}\label{pilhas__listas_8h_ab6272f4e08e527ce95a0092039b08901}} 
+\index{pilhas\+\_\+listas.\+h@{pilhas\+\_\+listas.\+h}!P\+L\+\_\+topo\+Pilha@{P\+L\+\_\+topo\+Pilha}}
+\index{P\+L\+\_\+topo\+Pilha@{P\+L\+\_\+topo\+Pilha}!pilhas\+\_\+listas.\+h@{pilhas\+\_\+listas.\+h}}
+\subsubsection{\texorpdfstring{P\+L\+\_\+topo\+Pilha()}{PL\_topoPilha()}}
+{\footnotesize\ttfamily void$\ast$ P\+L\+\_\+topo\+Pilha (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structures_8h_a5f905336fce82d42d99ef42a53f8eb0c}{S\+T\+\_\+tp\+Pilha}} $\ast$}]{p\+Pilha }\end{DoxyParamCaption})}
+
+
+
+Descricao da funcao\+: Retorna o elemento do topo da pilha. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em p\+Pilha} & -\/ Endereço do topo da pilha\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+-\/ Endereço do valor no topo da pilha 
+\end{DoxyReturn}
